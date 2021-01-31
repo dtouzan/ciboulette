@@ -11,7 +11,7 @@ setuptools.setup(
     description="Ciboulette package for astronomy",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/dtouzan/ciboulette",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
