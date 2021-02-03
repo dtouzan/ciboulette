@@ -1,5 +1,0 @@
-""" Package tables
-
-"""
-
-import os
