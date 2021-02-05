@@ -6,7 +6,7 @@ from astropy.io import fits
 from astropy.table import Table
 
 
-class ciboulette :
+class Ciboulette :
 
     driver_name = 'FITS astropy 4.2'
     server = '192.168.1.18:11111'
@@ -14,6 +14,7 @@ class ciboulette :
     focale = 100.0
     site_lat = 49.5961
     site_long = -0.3531
+    site_elev = 100
     instrument = 'Atik 383L+'
     naxis1 = 3326
     naxis2 = 2504
@@ -28,7 +29,7 @@ class ciboulette :
     dec = 90.0 # degrees
     object_name = 'INIT'
         
-    def __init__(self) :
+    def __init__(self):
         
         self.data = []
 
@@ -41,6 +42,7 @@ class ciboulette :
         tfocale = [self.focale]
         tsite_lat = [self.site_lat]
         tsite_long = [self.site_long]
+        tsite_elev = [self.site_elev]
         tinstrument = [self.instrument]
         tnaxis1 = [self.naxis1]
         tnaxis2 = [self.naxis2]
@@ -55,8 +57,18 @@ class ciboulette :
         tdec = [self.dec]                                        # degrees
         tobject_name = [self.object_name]
         
-        return Table([tdriver_name,tserver,tdevice,tfocale,tsite_lat,tsite_long,tinstrument,tnaxis1,tnaxis2,
+        return Table([tdriver_name,tserver,tdevice,tfocale,tsite_lat,tsite_long,tsite_elev,tinstrument,tnaxis1,tnaxis2,
                       tbinXY,tpixelXY,tfilter_name,ttelescope_name,tobserver_name,tdataset,tarchive_table,tra,tdec,tobject_name], 
-                      names=['DRV_NAME','SERVER','DEVICE','FOCAL','SITE_LAT','SITE_LONG','INSTRUME','NAXIS1','NAXIS2',
+                      names=['DRV_NAME','SERVER','DEVICE','FOCAL','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBECT'])
 
+
+    def ephemccgetobserver(self):
+        """Return site ephemcc format
+            Ex.: -0.3531%2049.5961%20100.0
+        
+        """
+        
+        key_space = '%20'     
+        
+        return  str(self.site_long)+key_space+str(self.site_lat)+key_space+str(self.site_elev)
