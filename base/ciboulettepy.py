@@ -11,7 +11,7 @@ class Ciboulette :
     driver_name = 'FITS astropy 4.2'
     server = '192.168.1.18:11111'
     device = 0
-    focale = 100.0
+    focale = 85.0
     site_lat = 49.5961
     site_long = -0.3531
     site_elev = 100
@@ -35,27 +35,30 @@ class Ciboulette :
 
     
     def ciboulettetable(self):
+        """Return table of ciboulette values
+        
+        """
     
-        tdriver_name = [self.driver_name]
-        tserver = [self.server]
-        tdevice = [self.device]
-        tfocale = [self.focale]
-        tsite_lat = [self.site_lat]
-        tsite_long = [self.site_long]
-        tsite_elev = [self.site_elev]
-        tinstrument = [self.instrument]
-        tnaxis1 = [self.naxis1]
-        tnaxis2 = [self.naxis2]
-        tbinXY = [self.binXY]
-        tpixelXY = [self.pixelXY]
-        tfilter_name = [self.filter_name]
-        ttelescope_name = [self.telescope_name]
-        tobserver_name = [self.observer_name]
-        tdataset = [self.dataset]
-        tarchive_table = [self.archive_table]
-        tra = [self.ra]                                          # hours
-        tdec = [self.dec]                                        # degrees
-        tobject_name = [self.object_name]
+        tdriver_name = [self.driver_name]                        # Astropy driver
+        tserver = [self.server]                                  # Server IP:port
+        tdevice = [self.device]                                  # Device for alpaca
+        tfocale = [self.focale]                                  # Focal millimeter
+        tsite_lat = [self.site_lat]                              # Site latitude degrees
+        tsite_long = [self.site_long]                            # Site longitude degrees
+        tsite_elev = [self.site_elev]                            # Site elevation meter
+        tinstrument = [self.instrument]                          # Instrument name
+        tnaxis1 = [self.naxis1]                                  # Size naxis1
+        tnaxis2 = [self.naxis2]                                  # Size naxis2
+        tbinXY = [self.binXY]                                    # Binning
+        tpixelXY = [self.pixelXY]                                # Pixel size X and Y
+        tfilter_name = [self.filter_name]                        # Filter name
+        ttelescope_name = [self.telescope_name]                  # Telescope name
+        tobserver_name = [self.observer_name]                    # Observer name
+        tdataset = [self.dataset]                                # Dataset repository
+        tarchive_table = [self.archive_table]                    # Archives repository
+        tra = [self.ra]                                          # Hours
+        tdec = [self.dec]                                        # Degrees
+        tobject_name = [self.object_name]                        # Object name
         
         return Table([tdriver_name,tserver,tdevice,tfocale,tsite_lat,tsite_long,tsite_elev,tinstrument,tnaxis1,tnaxis2,
                       tbinXY,tpixelXY,tfilter_name,ttelescope_name,tobserver_name,tdataset,tarchive_table,tra,tdec,tobject_name], 
