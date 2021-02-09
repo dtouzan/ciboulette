@@ -14,7 +14,7 @@ class Exposure:
         
             self.data = []
        
-        def gettime(self):
+        def getexptime(self):
             """Return exposure time                  
 
             """
@@ -40,6 +40,7 @@ class Exposure:
             self.exptime = exptime
             
             return True
+      
         
         def setnumber(self,number):
             """Initialization serial number
