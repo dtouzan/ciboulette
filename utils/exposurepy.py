@@ -2,8 +2,7 @@
 
 """
 
-import time
-
+from datetime import datetime
 
 class Exposure:
         
@@ -55,13 +54,19 @@ class Exposure:
             return True
 
         def incnumber(self):
-            """Initialization serial number
+            """Increment serial number
                  
-            Attributes:
-                number (int): Serial number.
-                
             """
                     
             self.number = self.number + 1
+            
+            return True
+        
+        def todaytonumber(self):
+            """Initialization serial number whit date end time
+                                 
+            """
+            today = datetime.today()        
+            self.number = today.strftime('%Y%m%d%H%M%S')
             
             return True
