@@ -13,8 +13,10 @@ from astropy import units as u
 from astropy import wcs
 from astropy.utils.data import get_pkg_data_filename
 from alpaca import Telescope, Camera, FilterWheel
+from ciboulette.base import constent
 from ciboulette.sector import sectorpy as Sct
 from ciboulette.utils import exposurepy as Exp
+from ciboulette.utils import planningpy as Pln
 from astropy import wcs
 
 
@@ -198,11 +200,20 @@ class Ciboulette:
         
         
     def startexposurealpaca(self,exposure,ccd,telescope,filterwheel):
+        """Get CCD and write fits file 
+
+        Attributes:
+            exposure (Exposure): Exposure object.
+            ccd (Camera): CCD alpaca object.
+            telescope (Telescope): Telescope alpaca object.
+            filterwheel (Filterwheel): Filterwheel alpaca object.
+            
+        """
 
         # Shoot
         exptime = exposure.gettime()
         frameid = exposure.getnumber()
-        ccd.startexposure(exposure.gettime(),True)
+        ccd.startexposure(exptime,True)
 
         while not ccd.imageready():
             time.sleep(1)
@@ -311,3 +322,35 @@ class Ciboulette:
         fits.writeto(file_name, data, hdr, overwrite=True)
         
         return frameid
+    
+    
+    def setfilteralpaca(self,filterwheel,filter_name):
+        """Set filter of filterweel
+
+        Attributes:
+            filterwheel (Filterwheel): Filterwheel alpaca object.
+            filter_name (str): Filter name.
+            
+        """
+       
+        filter_number = 0  
+        self.filter_name = filter_name
+        filter_names = filterwheel.names()
+        filter_number = filter_names.index(self.filter_name)
+        filterwheel.position(filter_number)
+        
+        return True
+    
+    def slewtocoordinatesalpaca(self,telescope,ra,dec):
+        """Set RA and DEC to telescope 
+        
+        Attributes:
+            telescope (Telescope): Telescope alpaca object.
+            ra (float): Hours.
+            dec (float): Degrees
+            
+        """
+        
+        telescope.slewtocoordinates(ra,dec)
+        
+        return True

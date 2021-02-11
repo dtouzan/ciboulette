@@ -5,6 +5,7 @@
 from astropy.table import Table
 import os
 import wget
+from ciboulette.base import constent
 
 
 class Planning:
@@ -31,6 +32,7 @@ class Planning:
         url = 'https://docs.google.com/uc?export=download&id='+self.idgoogledrive
         filedownload = wget.download(url,out=self.fileoutput)
         
+        # For MAST data_start=3
         planningtable = Table.read(self.fileoutput, format='ascii.csv')
     
         return planningtable
@@ -60,3 +62,95 @@ class Planning:
         self.fileoutput = fileoutput
         
         return True
+    
+    def getfilter(self,plan):
+        """Return filter name of plan
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+        """
+        filter_name = 'L'
+        filter_name = plan[constent.MAST_filters] 
+        
+        return filter_name
+        
+    def getRA(self,plan):
+        """Return RA of plan
+            Format: Hours H.HHHH
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+        """
+        
+        ra = 0.0
+        ra = plan[constent.MAST_s_ra] 
+        
+        return ra
+
+    def getDEC(self,plan):
+        """Return RA of plan
+            Format: Degrees D.DDDD
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+        """
+        
+        dec = 0.0
+        dec = plan[constent.MAST_s_dec] 
+        
+        return dec
+
+    def getobservationID(self,plan):
+        """Return observation ID of plan
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+            
+        """
+        obs_id = 0
+        obs_id = plan[constent.MAST_obs_id] 
+        
+        return obs_id
+    
+    def getexptime(self,plan):
+        """Return exposure of plan
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+        """
+        
+        exptime = 0
+        exptime = plan[constent.MAST_t_exptime] 
+        
+        return exptime
+    
+    def getobservaiontitle(self,plan):
+        """Return observaion title of plan
+
+        Attributes:
+            plan (Table): plan of planning.
+            
+        """
+        
+        obs_title = 'none'
+        obs_title = plan[constent.MAST_obs_title] 
+        
+        return obs_title
+    
+    def getdataproducttype(self,plan):
+        """Return dataproduct type of plan
+
+        Attributes:
+            plan (table): plan of planning.
+            
+        """
+        
+        dataproduct_type = 'Intensity'
+        dataproduct_type = plan[constent.MAST_dataproduct_type] 
+        
+        return dataproduct_type
