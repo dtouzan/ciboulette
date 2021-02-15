@@ -37,6 +37,7 @@ sudo reboot
 ```sh
 sudo apt install jupyter
 pip install jupyterlab
+jupyter notebook --generate-config
 ```      
 
 **Package for astronomy**
