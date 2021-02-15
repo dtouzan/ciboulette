@@ -19,7 +19,7 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Raspberry pi 4 or PC
   
 ### Installation
-**Operating System**
+**Operating system**
 ```sh
 sudo apt update
 sudo apt upgrade
@@ -40,7 +40,7 @@ pip install jupyterlab
 jupyter notebook --generate-config
 ```      
 
-**Package for astronomy**
+**Astronomy Packages**
 ```sh
 pip install matplotlib
 pip install numpy
