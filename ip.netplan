@@ -1,0 +1,18 @@
+# File /etc/netplan/*.yaml
+# For IP static configuration
+# Upgrade the file
+# sudo netplan try (if ok)
+# sudo netplan apply
+
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    *****:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.30/24]
+      gateway4: 192.168.1.1
+      nameservers:
+              addresses: [8.8.8.8,8.8.4.4]
+  version: 2
+

@@ -1,0 +1,20 @@
+# file /etc/systemd/system/jupyterlab.service
+# Create the file
+# sudo systemctl enable jupyterlab.service
+# sudo systemctl start jupyterlab.service
+
+Unit]
+Description=Jupyter server
+
+[Service]
+Type=simple
+PIDFile=/run/jupyter.pid
+User=ubuntu
+Group=ubuntu
+PAMName=login
+ExecStart=/home/ubuntu/.local/bin/jupyter-lab --config=/home/ubuntu/.jupyter/jupyter_notebook_config.py --ip 192.168.1.30
+WorkingDirectory=/home/ubuntu
+
+
+[Install]
+WantedBy=multi-user.target

@@ -51,10 +51,11 @@ pip install reproject
 pip install alpyca
 ```      
 
-**Ubuntu service**
+**Ubuntu service & IP static**
 
   - See [indiserver service](./indiserver.service) file for more details.
   - See [jupyterlab service](./jupyterlab.service) file for more details.
+  - See [IP Netplan](./ip.netplan) file for more details.
 
 
 ## Authors and Contributors
