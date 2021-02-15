@@ -1,15 +1,15 @@
 ## Ciboulette
 Astronomy packages for CCD/CMOS and photographic lens
 
-## Prerequisite:
+## Prerequisite
   - Astropy 4.2
   - Alpyca 1.0.0
   - Astroquery 0.4.1
-  - indiclient (sources https://github.com/MMTObservatory/indiclient), no package 
+  - indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
   - wget
   - Internet connexion
 
-## Configuration:
+## Configuration
 ### OS and hardware
   - Ubuntu server 20.10
   - Raspberry pi 4 or PC
@@ -25,7 +25,7 @@ sudo apt-get install -y nodejs
 sudo reboot
 ```
 
-**upyter lab**
+**Jupyter lab**
 ```sh
 sudo apt install jupyter
 pip install jupyterlab
@@ -34,8 +34,21 @@ pip install jupyterlab
 **Package for astronomy**
 ```sh
 pip install matplotlib
+pip install numpy
+pip install wget
 pip install astropy
 pip install astroquery
 pip install reproject
 pip install alpyca
 ```      
+
+## Authors and Contributors
+
+<table><tbody>
+<tr><th align="left">Dominique Touzan</th><td><a href="https://github.com/dtouzan">GitHub/dtouzan</a></td><td><a href="http://twitter.com/dominiquetouzan">Twitter/@dominiquetouzan</a></td></tr>
+</tbody></table>
+
+
+## License
+
+Under the MIT license. See the included [LICENSE.md](./LICENSE.md) file for more details.
