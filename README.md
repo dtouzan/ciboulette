@@ -1,7 +1,7 @@
-# Ciboulette
+## Ciboulette
 Astronomy packages for CCD/CMOS and photographic lens
 
-# Prerequisite:
+## Prerequisite:
   - Astropy 4.2
   - Alpyca 1.0.0
   - Astroquery 0.4.1
@@ -9,13 +9,13 @@ Astronomy packages for CCD/CMOS and photographic lens
   - wget
   - Internet connexion
 
-# Configuration
+## Configuration:
 ### OS and hardware
   - Ubuntu server 20.10
   - Raspberry pi 4 or PC
   
 ### Installation
-**OS**:
+**OS**
 ```sh
 sudo apt update
 sudo apt upgrade
@@ -25,13 +25,13 @@ sudo apt-get install -y nodejs
 sudo reboot
 ```
 
-**upyter lab**:
+**upyter lab**
 ```sh
 sudo apt install jupyter
 pip install jupyterlab
 ```      
 
-**Package for astronomy**:
+**Package for astronomy**
 ```sh
 pip install matplotlib
 pip install astropy
