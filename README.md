@@ -50,6 +50,12 @@ pip install reproject
 pip install alpyca
 ```      
 
+**Ubuntu service**
+
+See [indiserver.service](./indiserver.service) file for more details.
+See [jupyterlab.service](./jupyterlab.service) file for more details.
+
+
 ## Authors and Contributors
 
 <table><tbody>
