@@ -19,7 +19,7 @@ Astronomy packages for CCD/CMOS and photographic lens
 ```sh
 sudo apt update
 sudo apt upgrade
-sudo install pip
+sudo apt install pip
 curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo reboot
