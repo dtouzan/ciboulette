@@ -45,7 +45,7 @@ pip install alpyca
 ## Authors and Contributors
 
 <table><tbody>
-<tr><th align="left">Dominique Touzan</th><td><a href="https://github.com/dtouzan">GitHub/dtouzan</a></td><td><a href="http://twitter.com/dominiquetouzan">Twitter/@dominiquetouzan</a></td></tr>
+<tr><th align="left">Dominique Touzan</th><td><a href="https://github.com/dtouzan/ciboulette">GitHub/dtouzan</a></td><td><a href="http://twitter.com/dominiquetouzan">Twitter/@dominiquetouzan</a></td></tr>
 </tbody></table>
 
 
