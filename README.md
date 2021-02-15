@@ -19,7 +19,7 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Raspberry pi 4 or PC
   
 ### Installation
-**OS**
+**Operating System**
 ```sh
 sudo apt update
 sudo apt upgrade
