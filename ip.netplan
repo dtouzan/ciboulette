@@ -4,15 +4,25 @@
 # sudo netplan try (if ok)
 # sudo netplan apply
 
-# This is the network config written by 'subiquity'
+
+# This file is generated from information provided by the datasource.  Changes
+# to it will not persist across an instance reboot.  To disable cloud-init's
+# network configuration capabilities, write a file
+# /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
+# network: {config: disabled}
 network:
-  ethernets:
-    *****:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.30/24]
-      gateway4: 192.168.1.1
-      nameservers:
+    ethernets:
+        eth0:
+            dhcp4: false
+            dhcp6: false
+            match:
+                driver: bcmgenet smsc95xx lan78xx
+            optional: true
+            set-name: eth0
+            addresses: [192.168.1.30/24]
+            gateway4: 192.168.1.1
+            nameservers:
               addresses: [8.8.8.8,8.8.4.4]
-  version: 2
+
+    version: 2
 
