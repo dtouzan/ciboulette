@@ -15,21 +15,27 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Raspberry pi 4 or PC
   
 ### Installation
-  - OS
-     - sudo apt update
-     - sudo apt upgrade
-     - sudo install pip
-     - sudo reboot
-      
-  - Jupyter lab
-     - sudo apt install jupyter
-     - pip install jupyterlab
-      
-  
-  - Package for astronomy
-     - pip install matplotlib
-     - pip install astropy
-     - pip install astroquery
-     - pip install reproject
-     - pip install alpyca
-      
+**OS**:
+```sh
+sudo apt update
+sudo apt upgrade
+sudo install pip
+curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo reboot
+```
+
+**upyter lab**:
+```sh
+sudo apt install jupyter
+pip install jupyterlab
+```      
+
+**Package for astronomy**:
+```sh
+pip install matplotlib
+pip install astropy
+pip install astroquery
+pip install reproject
+pip install alpyca
+```      
