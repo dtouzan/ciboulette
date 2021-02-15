@@ -25,6 +25,10 @@ sudo apt-get install -y nodejs
 sudo reboot
 ```
 
+**Indilib**
+  
+  - Indilib.org site: https://indilib.org/download.html
+
 **Jupyter lab**
 ```sh
 sudo apt install jupyter
