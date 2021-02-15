@@ -79,7 +79,21 @@ class FILTERWheel(indiclient):
     def filtername(self, string):      
         if string in self.filters:
             filters = self.filters
-            self.filter = filters.index(string)              
+            self.filter = filters.index(string)        
+            
+    @filter.setter
+    def filternames(self, string):
+        """Initialization filters table
+            Ex: ['B','Ha','H_alpha', etc]
+        Attributes:
+            filters (list): Name filters list.
+        """
+        slot = 1
+        if len(string) > 0:
+            for name in string:
+                self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), name)
+                slot +=1
+            
                 
     def connect(self):
         """
