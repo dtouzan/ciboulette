@@ -1,6 +1,10 @@
 ## Ciboulette
 Astronomy packages for CCD/CMOS and photographic lens
 
+[![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/) 
+[![indilib](http://img.shields.io/badge/powered%20by-Indilib-orange.svg?style=flat)](http://www.indilib.org)
+[![alpaca](http://img.shields.io/badge/powered%20by-Alpaca-orange.svg?style=flat)](https://ascom-standards.org/Developer/Alpaca.htm) 
+
 ## Prerequisite
   - Astropy 4.2
   - Alpyca 1.0.0
