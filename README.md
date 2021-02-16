@@ -53,9 +53,9 @@ pip install alpyca
 
 **Ubuntu service & IP static**
 
-  - See [indiserver service](./indiserver.service) file for more details.
-  - See [jupyterlab service](./jupyterlab.service) file for more details.
-  - See [IP Netplan](./ip.netplan) file for more details.
+  - See [indiserver service](./configuration/indiserver.service) file for more details.
+  - See [jupyterlab service](./configuration/jupyterlab.service) file for more details.
+  - See [IP Netplan](./configuration/ip.netplan) file for more details.
 
 
 ## Authors and Contributors
