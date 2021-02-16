@@ -59,12 +59,8 @@ class FILTERWheel(indiclient):
 
     @property
     def filter(self):
-        slot = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE")) - 1  # filter slots 1-indexed
-        if slot >= 0 and slot < len(self.filters):
-            f = self.filters[slot]
-        else:
-            f = None
-        return f
+        slot = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE"))  # filter slots 1-indexed
+        return slot
 
     @filter.setter
     def filter(self, f):
@@ -75,22 +71,46 @@ class FILTERWheel(indiclient):
             if f in self.filters:
                 self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", self.filters.index(f)+1)
 
-    @filter.setter
+    @property
+    def filtername(self):
+        """
+        Return name of filter selected
+        """
+        slot = self.filter
+        if slot >= 0 and slot <= len(self.filters):
+            f = self.filters[slot-1]
+        else:
+            f = None
+        return f
+    
+    @filtername.setter
     def filtername(self, string):      
+        """Initialization filters name
+            Ex: 'Blue'
+        Attributes:
+            filters (string): Name filter.
+        """
         if string in self.filters:
             filters = self.filters
             self.filter = filters.index(string)        
-            
-    @filter.setter
-    def filternames(self, string):
+
+    @property
+    def filternames(self):
+        """
+        Return list of names of installed filters
+        """
+        return self.filters
+
+    @filternames.setter
+    def filternames(self, name_list):
         """Initialization filters table
             Ex: ['B','Ha','H_alpha', etc]
         Attributes:
             filters (list): Name filters list.
         """
         slot = 1
-        if len(string) > 0:
-            for name in string:
+        if len(name_list) > 0:
+            for name in name_list:
                 self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), name)
                 slot +=1
             
