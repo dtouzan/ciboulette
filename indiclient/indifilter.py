@@ -26,7 +26,7 @@ class FILTERWheel(indiclient):
     """
     def __init__(self, host, port, driver="Filter Simulator", debug=True):
         super(FILTERWheel, self).__init__(host, port)
-        self.filter_name = "Filter" Default"
+        self.filter_name = "Filter Default"
         self.driver = driver
         self.debug = debug
         if not self.connected:

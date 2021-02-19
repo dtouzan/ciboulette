@@ -35,6 +35,14 @@ class FILTERWheelATIK(FILTERWheel):
     """
     def __init__(self, host='localhost', port=7624):
         super(FILTERWheelATIK, self).__init__(host, port, driver="Atik EFW2")
-        self.filter_name = "Atik"
+        self.filter_name = "Atik EFW2"
         self.process_events()
 
+class FILTERWheelASI(FILTERWheel):
+    """
+    Wrap FILTERWheel, set driver to FILTERWHEEL ASI, and point to localhost by default.
+    """
+    def __init__(self, host='localhost', port=7624):
+        super(FILTERWheelASI, self).__init__(host, port, driver="ASI EFW")
+        self.filter_name = "ASI EFW"
+        self.process_events()
