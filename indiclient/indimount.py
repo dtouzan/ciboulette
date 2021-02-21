@@ -225,52 +225,73 @@ class Telescope(indiclient):
                 vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TARGETPIERSIDE", "East (pointing west)")
             if string =='W':
                 vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TARGETPIERSIDE", "West (pointing east)")
-        
-            if self.debug:
-                vec.tell()
-            return vec
-
+                
     @property
     def telescope_park_position(self):
         """
-        Return TELESCOPE_PARK_POSITION RA and DEC, return astropy table
+        Return TELESCOPE_PARK_POSITION in astropy table
         """
         p = Table()
         p['RA'] = [self.get_float(self.driver, "TELESCOPE_PARK_POSITION", "PARK_RA")]
         p['DEC'] = [self.get_float(self.driver, "TELESCOPE_PARK_POSITION", "PARK_DEC")]
         return p
-   
-    #@synctocoordinates.setter
+
+    @property
+    def on_coord_set(self):
+        """
+        Return ON_COORD_SET in astropy table
+        """
+        p = Table()
+        p['TRACK'] = [self.get_text(self.driver, "ON_COORD_SET", "TRACK")]
+        p['SLEW'] = [self.get_text(self.driver, "ON_COORD_SET", "SLEW")]
+        p['SYNC'] = [self.get_text(self.driver, "ON_COORD_SET", "SYNC")]
+        return p
+
+    @on_coord_set.setter
+    def on_coord_set(self,label):
+        """
+        Set ON_COORD_SET to Track, Slew or Sync
+        """
+        if label in ('Track','Slew','Sync'):             
+                vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", label)       
+                if self.debug:
+                    vec.tell() 
+
     def synctocoordinates(self,ra,dec):
         """
         Synchronizes the telescope positions with the initialized coordinates
-         ra: Hours HH.HHHHHH, dec: degrees DDD.DDDDDD
+        ra (float): HH.HHHHHH
+        dec (float): DD.DDDDDD
         """
         if ra >= 0 and ra < 24:
             if dec >= -90 and dec <=90:
-                self.tracking              
-                vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "Sync")       
-                if self.debug:
-                    vec.tell()           
-                value = ';DEC='+str(ra)+';'+str(dec)
-                self.set_and_send_float(self.driver, 'EQUATORIAL_EOD_COORD', 'RA', ra)
-                self.set_and_send_float(self.driver, 'EQUATORIAL_EOD_COORD', 'DEC', dec)             
+                self.tracking
+                self.on_coord_set = 'Sync'
+                string = str(ra)
+                self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'RA', string)
+                string = str(dec)
+                self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'DEC', string)
+        self.on_coord_set = 'Track'
  
-                    
     def slewtocoordinates(self,ra,dec):
         """
-        Slew to the initialized coordinates
-         ra: Hours, dec: degrees
+        Slew the telescope positions with the initialized coordinates
+        ra (float): HH.HHHHHH
+        dec (float): DD.DDDDDD
         """
         if ra >= 0 and ra < 24:
             if dec >= -90 and dec <=90:
-                self.tracking              
-                vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "Slew")       
+                self.tracking                  
+                self.on_coord_set = 'Track'
+                self.unpark
+                vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_SLEW_RATE", '32x')       
                 if self.debug:
                     vec.tell()               
-                self.set_and_send_float(self.driver, 'EQUATORIAL_EOD_COORD', 'RA', ra)
-                self.set_and_send_float(self.driver, 'EQUATORIAL_EOD_COORD', 'DEC', dec)             
-                   
+                sra = str(ra)
+                self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'RA', sra)
+                sdec = str(dec)
+                self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'DEC', sdec)    
+                  
     @property
     def telescope_track_mode(self):
         """

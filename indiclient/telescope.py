@@ -19,6 +19,27 @@ from ciboulette.indiclient.indimount import Telescope
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
 
+class telescopesimul(Telescope):
+    """
+    Wrap Mount, set driver to Simulator mount, and point to localhost by default.
+    """
+    def __init__(self, host='localhost', port=7624):
+        super(telescopesimul, self).__init__(host, port, driver="Telescope Simulator")
+        self.mount_name = "Telescope Simulator"
+        self.process_events()
+    
+    @property
+    def target_pier_side(self):
+        return ["N/A"]
+
+    @target_pier_side.setter
+    def target_pier_side(self,string):
+        pass
+
+    @property
+    def telescope_park_position(self):
+        return ["N/A"]
+    
 class EQMod(Telescope):
     """
     Wrap Mount, set driver to EQMod mount, and point to localhost by default.

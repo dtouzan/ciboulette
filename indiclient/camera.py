@@ -27,6 +27,7 @@ class ASICam120Mini(CCDCam):
         super(ASICam120Mini, self).__init__(host, port, driver="ZWO CCD ASI120MM Mini")
         self.camera_name = "ZWO ASI Camera"
         self.process_events()
+        self.raw16()
 
     @property
     def filters(self):
@@ -45,6 +46,19 @@ class ASICam120Mini(CCDCam):
         self.process_events()
         gain = self.get_float(self.driver, "CCD_CONTROLS", "Gain")
         return gain
+
+    @gain.setter
+    def gain(self,f):
+        if f >=0 and f <=100:
+            self.set_and_send_float(self.driver, 'CCD_CONTROLS', 'Gain', f) 
+            self.process_events()
+
+    @property
+    def raw16(self):
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_VIDEO_FORMAT", "Raw 16 bit")
+        if self.debug:
+            vec.tell()
+        return vec
 
 class ATIKCam383L(CCDCam):
     """
