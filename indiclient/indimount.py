@@ -310,3 +310,4 @@ class Telescope(indiclient):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_TRACK_MODE", label)       
             if self.debug:
                 vec.tell()               
+

@@ -59,7 +59,7 @@ class EQMod(Telescope):
         For ubuntu server 20.10 , configure the /dev/ttyUSB0 for set 115200 baud rate
         https://stackoverflow.com/questions/42290052/how-to-set-baud-rate-automatically-when-device-connects
         
-        Create file rules /etc/udev/rules.d/cat 99-eqmod.rules and reboot
+        Create file rules /etc/udev/rules.d/99-eqmod.rules and reboot
         
         #99-eqmod.rules
         ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", RUN+="/bin/stty -F /dev/%k 115200"
@@ -103,6 +103,52 @@ class EQMod(Telescope):
             if self.debug:
                 vec.tell()               
 
+    @property
+    def telescope_slew_rate(self):    
+        """
+        Return TELESCOPE_SLEW_RATE mode, return astropy table
+        """
+        p = Table()
+        p['1x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "1x")]
+        p['2x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "2x")]
+        p['3x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "3x")]
+        p['4x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "4x")]
+        p['5x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "5x")]
+        p['6x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "6x")]
+        p['7x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "7x")]
+        p['8x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "8x")]
+        p['9x'] = [self.get_text(self.driver, "TELESCOPE_SLEW_RATE", "9x")]
+        return p
+
+    @telescope_slew_rate.setter
+    def telescope_slew_rate(self,f):
+        """
+        Set TELESCOPE_SLEW_RATE. 1 to 9
+        """
+        if f >= 1 and f <=9:       
+            if f == 1:
+                label ='1x'
+            if f == 2:
+                label ='2x'
+            if f == 3:
+                label ='4x'    
+            if f == 4:
+                label ='8x'    
+            if f == 5:
+                label ='32x'       
+            if f == 6:
+                label ='64x'
+            if f == 7:
+                label ='128x'
+            if f == 8:
+                label ='600x'
+            if f == 9:
+                label ='700x'            
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_SLEW_RATE", label)       
+            if self.debug:
+                vec.tell()               
+               
+                
 class LX200Generic(Telescope):
     """
     Wrap Mount, set driver to LX200 mount, and point to localhost by default.
