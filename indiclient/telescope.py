@@ -12,6 +12,7 @@ import logging
 import logging.handlers
 
 from astropy.io import fits
+from astropy.table import Table
 
 from .indiclient import indiclient
 from ciboulette.indiclient.indimount import Telescope
@@ -48,4 +49,33 @@ class EQMod(Telescope):
         super(EQMod, self).__init__(host, port, driver="EQMod Mount")
         self.mount_name = "EQMod"
         self.process_events()
+        """
+        Set BAUD_RATE at 115200 : https://www.indilib.org/devices/telescopes/eqmod.html
+        """
+        self.baud_rate = '115200'
         
+    @property    
+    def baud_rate(self):
+        """
+        Return BAUD_RATE mode, return astropy table
+        9600, 19200, 38400, 57600, 115200, 230400
+        """        
+        p = Table()
+        p['9600'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "9600")]
+        p['19200'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "19200")]
+        p['38400'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "38400")]
+        p['57600'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "57600")]
+        p['115200'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "115200")]
+        p['230400'] = [self.get_text(self.driver, "DEVICE_BAUD_RATE", "230400")]
+        return p
+
+    @baud_rate.setter
+    def baud_rate(self,label):
+        """
+        Set BAUD_RATE 
+        """
+        if label in ('9600','19200','38400','57600','115200','23040'):
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "DEVICE_BAUD_RATE", label)       
+            if self.debug:
+                vec.tell()               
+            

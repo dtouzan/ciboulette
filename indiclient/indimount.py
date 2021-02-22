@@ -282,15 +282,12 @@ class Telescope(indiclient):
         if ra >= 0 and ra < 24:
             if dec >= -90 and dec <=90:
                 self.tracking                  
-                self.on_coord_set = 'Track'
-                self.unpark
-                vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_SLEW_RATE", '32x')       
-                if self.debug:
-                    vec.tell()               
+                self.on_coord_set = 'Slew'
                 sra = str(ra)
                 self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'RA', sra)
                 sdec = str(dec)
                 self.set_and_send_text(self.driver, 'EQUATORIAL_EOD_COORD', 'DEC', sdec)    
+        self.on_coord_set = 'Track'
                   
     @property
     def telescope_track_mode(self):
@@ -313,4 +310,3 @@ class Telescope(indiclient):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_TRACK_MODE", label)       
             if self.debug:
                 vec.tell()               
-            
