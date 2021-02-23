@@ -311,3 +311,90 @@ class Telescope(indiclient):
             if self.debug:
                 vec.tell()               
 
+    @property
+    def telescope_info(self):
+        """
+        Return TELESCOPE_INFO in astropy table
+        """
+        p = Table()
+        p['APERTURE'] = [self.get_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_APERTURE")]
+        p['FOCAL'] = [self.get_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_FOCAL_LENGTH")]
+        p['G_APERTURE'] = [self.get_float(self.driver, "TELESCOPE_INFO", "GUIDER_APERTURE")]
+        p['G_FOCAL'] = [self.get_float(self.driver, "TELESCOPE_INFO", "GUIDER_FOCAL_LENGTH")]
+        return p
+        
+        
+    def telescope_aperture(self, f, instrument = 'P'): 
+        """
+        Set TELESCOPE_INFO_APERTURE values
+         instrument (string): P or G. Principal or Guider
+         f (float): Diameter mm
+        """
+        if f > 0 and f < 50000
+            if instrument in ('P','G')
+                if instrument == 'P':
+                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_APERTURE", f)
+                if instrument == 'G':
+                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_APERTURE", f)
+     
+    def telescope_focal(self, f, instrument = 'P'): 
+        """
+        Set TELESCOPE_INFO_FOCAL values
+         instrument (string): P or G. Principal or Guider
+         f (float): Focal mm
+        """
+        if f > 0 and f < 50000
+            if instrument in ('P','G')
+                if instrument == 'P':
+                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_FOCAL_LENGTH", f)
+                if instrument == 'G':
+                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_FOCAL_LENGTH", f)
+    
+     
+    def abort(self):
+        """
+        Set TELESCOPE_ABORT_MOTION
+        """
+        self.set_and_send_text(self.driver, "TELESCOPE_ABORT_MOTION", "ABORT", "On")
+      
+    
+    @property
+    def telescope_motion(self):
+        """
+        Return TELESCOPE_MOTION NS and WE in astropy table
+        """
+        p = Table()
+        p['NORTH'] = [self.get_text(self.driver, "TELESCOPE_MOTION_NS", "MOTION_NORTH")]
+        p['SOUTH'] = [self.get_text(self.driver, "TELESCOPE_MOTION_NS", "MOTION_SOUTH")]
+        p['EAST'] = [self.get_text(self.driver, "TELESCOPE_MOTION_WE", "MOTION_EAST")]
+        p['WEST'] = [self.get_text(self.driver, "TELESCOPE_MOTION_WE", "MOTION_WEST")]
+        return p    
+    
+    @telescope_motion.setter
+    def telescope_motion(self,label = 'N'):
+        """
+        Set TELESCOPE_MOTION_NS North or South
+        """
+        if label == 'N':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_MOTION_NS", 'North')       
+            if self.debug:
+                vec.tell()
+        if label == 'S':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_MOTION_NS", 'South')       
+            if self.debug:
+                vec.tell()
+        if label == 'E':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_MOTION_WE", 'East')       
+            if self.debug:
+                vec.tell()
+        if label == 'W':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_MOTION_WE", 'West')       
+            if self.debug:
+                vec.tell()
+      
+    def horizon_limits_alt(self,f):
+        """
+        Set HORIZONLIMITSPOINT ALT
+        """
+        if f >= 0 and f <= 90
+            self.set_and_send_float(self.driver, "HORIZONLIMITSPOINT", "HORIZONLIMITS_POINT_ALT", f)

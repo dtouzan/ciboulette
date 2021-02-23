@@ -125,25 +125,9 @@ class EQMod(Telescope):
         """
         Set TELESCOPE_SLEW_RATE. 1 to 9
         """
-        if f >= 1 and f <=9:       
-            if f == 1:
-                label ='1x'
-            if f == 2:
-                label ='2x'
-            if f == 3:
-                label ='4x'    
-            if f == 4:
-                label ='8x'    
-            if f == 5:
-                label ='32x'       
-            if f == 6:
-                label ='64x'
-            if f == 7:
-                label ='128x'
-            if f == 8:
-                label ='600x'
-            if f == 9:
-                label ='700x'            
+        if f >= 1 and f <=9:                
+            labels = ['1x','2x','4x','8x','32x','64x','128x','600x','700x']
+            label = labels[f - 1]  
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_SLEW_RATE", label)       
             if self.debug:
                 vec.tell()               
