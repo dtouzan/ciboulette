@@ -136,7 +136,24 @@ class EQMod(Telescope):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_SLEW_RATE", label)       
             if self.debug:
                 vec.tell()               
-               
+
+    @property
+    def auxencoder(self,label = 'N'):
+        return None
+
+    @auxencoder.setter
+    def auxencoder(self,label = 'N'):
+        """
+        Set AUXENCODER Yes or No
+        """
+        if label == 'Y':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "AUXENCODER", "On")       
+            if self.debug:
+                vec.tell()      
+        if label == 'N':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "AUXENCODER", "Off")       
+            if self.debug:
+                vec.tell()                         
                 
 class LX200Generic(Telescope):
     """

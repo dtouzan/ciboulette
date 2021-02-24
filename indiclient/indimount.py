@@ -330,12 +330,11 @@ class Telescope(indiclient):
          instrument (string): P or G. Principal or Guider
          f (float): Diameter mm
         """
-        if f > 0 and f < 50000
-            if instrument in ('P','G')
-                if instrument == 'P':
-                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_APERTURE", f)
-                if instrument == 'G':
-                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_APERTURE", f)
+        if f > 0 and f < 50000:
+            if instrument == 'P':
+                self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_APERTURE", f)
+            if instrument == 'G':
+                self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_APERTURE", f)
      
     def telescope_focal(self, f, instrument = 'P'): 
         """
@@ -343,19 +342,20 @@ class Telescope(indiclient):
          instrument (string): P or G. Principal or Guider
          f (float): Focal mm
         """
-        if f > 0 and f < 50000
-            if instrument in ('P','G')
-                if instrument == 'P':
-                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_FOCAL_LENGTH", f)
-                if instrument == 'G':
-                    self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_FOCAL_LENGTH", f)
+        if f > 0 and f < 50000:
+            if instrument == 'P':
+                self.set_and_send_float(self.driver, "TELESCOPE_INFO", "TELESCOPE_FOCAL_LENGTH", f)
+            if instrument == 'G':
+                self.set_and_send_float(self.driver, "TELESCOPE_INFO", "GUIDER_FOCAL_LENGTH", f)
     
-     
+    @property 
     def abort(self):
         """
         Set TELESCOPE_ABORT_MOTION
         """
-        self.set_and_send_text(self.driver, "TELESCOPE_ABORT_MOTION", "ABORT", "On")
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_ABORT_MOTION", 'Abort')       
+        if self.debug:
+            vec.tell()
       
     
     @property
@@ -391,10 +391,53 @@ class Telescope(indiclient):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "TELESCOPE_MOTION_WE", 'West')       
             if self.debug:
                 vec.tell()
-      
+
+    @property  
+    def horizon_limits_alt(self,f):
+        """
+        Return HORIZONLIMITSPOINT ALT
+        """
+        f = self.get_float(self.driver, "HORIZONLIMITSPOINT", "HORIZONLIMITS_POINT_ALT")
+        return f
+    
+    @horizon_limits_alt.setter
     def horizon_limits_alt(self,f):
         """
         Set HORIZONLIMITSPOINT ALT
         """
-        if f >= 0 and f <= 90
+        if f >= 0 and f <= 90:
             self.set_and_send_float(self.driver, "HORIZONLIMITSPOINT", "HORIZONLIMITS_POINT_ALT", f)
+
+    @property  
+    def hemisphere(self):
+        """
+        Return HEMISPHERE North or South : read-only
+        """
+        p = Table()
+        p['NORTH'] = [self.get_text(self.driver, "HEMISPHERE", "NORTH")]
+        p['SOUTH'] = [self.get_text(self.driver, "HEMISPHERE", "SOUTH")]
+        return p    
+
+    @property  
+    def reversedec(self):
+        """
+        Return REVERSEDEC ENABLE or DISABLE
+        """
+        p = Table()
+        p['ENABLE'] = [self.get_text(self.driver, "REVERSEDEC", "ENABLE")]
+        p['DISABLE'] = [self.get_text(self.driver, "REVERSEDEC", "DISABLE")]
+        return p    
+
+    @reversedec.setter
+    def reversedec(self,label = 'D'):
+        """
+        Set REVERSEDEC Enable or Disable
+        """
+        if label == 'E':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "REVERSEDEC", 'Enable')       
+            if self.debug:
+                vec.tell()
+        if label == 'D':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "REVERSEDEC", 'Disable')       
+            if self.debug:
+                vec.tell()
