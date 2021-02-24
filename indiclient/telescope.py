@@ -72,6 +72,11 @@ class EQMod(Telescope):
         Bus 001 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
         Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
         
+        https://github.com/indilib/indi-3rdparty/tree/master/indi-eqmod:
+        ================================================================
+        The mount is supposed to be parked in the home position (pointing to the celestial pole) 
+        at the first connection, or after each reset of the mount.
+        
         /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
         /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
         /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
