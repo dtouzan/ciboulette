@@ -14,6 +14,7 @@ import logging.handlers
 from astropy.io import fits
 
 from .indiclient import indiclient
+from astropy.table import Table
 
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
@@ -308,6 +309,101 @@ class CCDCam(indiclient):
                 break
             time.sleep(0.1)
         return fitsdata
+
+    @property
+    def activedevices(self):
+        """
+        Return ACTIVE_DEVICES mode, return astropy table
+        """
+        p = Table()
+        p['TELESCOPE'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_TELESCOPE")]
+        p['ROTATOR'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_ROTATOR")]
+        p['FOCUSER'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_FOCUSER")]
+        p['FILTER'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_FILTER")]
+        p['SKYQUALITY'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_SKYQUALITY")]
+        return p
+                    
+    @property
+    def activedevicetelescope(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_TELESCOPE, return astropy table
+        """
+        p = Table()
+        p['TELESCOPE'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_TELESCOPE")]
+        return p
+
+    @activedevicetelescope.setter
+    def activedevicetelescope(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_TELESCOPE
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_TELESCOPE', string)
+
+    @property
+    def activedevicerotator(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_FOCUSER, return astropy table
+        """
+        p = Table()
+        p['ROTATOR'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_ROTATOR")]
+        return p
+
+    @activedevicerotator.setter
+    def activedevicerotator(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_ROTATOR
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_ROTATOR', string)
+    
+    @property
+    def activedevicefocuser(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_FOCUSER, return astropy table
+        """
+        p = Table()
+        p['FOCUSER'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_FOCUSER")]
+        return p
+ 
+    @activedevicefocuser.setter
+    def activedevicefocuser(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_FOCUSER
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_FOCUSER', string)
+
+    @property
+    def activedevicefilter(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_FILTER, return astropy table
+        """
+        p = Table()
+        p['FILTER'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_FILTER")]
+        return p
+ 
+    @activedevicefilter.setter
+    def activedevicefilter(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_FILTER
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_FILTER', string)
+
+   
+    @property
+    def activedeviceskyquality(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_SKYQUALITY, return astropy table
+        """
+        p = Table()
+        p['SKYQUALITY'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_SKYQUALITY")]
+        return p
+       
+        
+    @activedeviceskyquality.setter
+    def activedeviceskyquality(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_SKYQUALITY
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_SKYQUALITY', string)
 
 
 class ASICam(CCDCam):

@@ -15,12 +15,20 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Internet connexion
 
 ## Configuration
-### OS and hardware
+
+### OS and hardware for development
+  - Windows 10
+  - PC
+
+### OS and hardware for observatory
   - Ubuntu server 20.10
   - Raspberry pi 4 or PC
   
 ### Installation
-**Operating system**
+**Operating system (Windows)**
+  - miniconda site : https://docs.conda.io/en/latest/miniconda.html
+
+**Operating system (Ubuntu)**
 ```sh
 sudo apt update
 sudo apt upgrade
@@ -30,18 +38,18 @@ sudo apt-get install -y nodejs
 sudo reboot
 ```
 
-**Indilib**
+**Indilib for (Ubuntu)**
   
   - Indilib.org site: https://indilib.org/download.html
 
-**Jupyter lab**
+**Jupyter lab (All)**
 ```sh
 sudo apt install jupyter
 pip install jupyterlab
 jupyter notebook --generate-config
 ```      
 
-**Astronomy Packages**
+**Astronomy Packages (All)**
 ```sh
 pip install matplotlib
 pip install numpy

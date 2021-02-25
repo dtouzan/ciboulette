@@ -441,3 +441,63 @@ class Telescope(indiclient):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "REVERSEDEC", 'Disable')       
             if self.debug:
                 vec.tell()
+
+    @property
+    def actidedevicesgps(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_GPS, return astropy table
+        """
+        p = Table()
+        p['GPS'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_GPS")]
+        return p
+       
+        
+    @actidedevicesgps.setter
+    def actidedevicesgps(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_GPS
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_GPS', string)
+
+    @property
+    def actidedevicesdome(self):
+        """
+        Return ACTIVE_DEVICES ACTIVE_DOME, return astropy table
+        """
+        p = Table()
+        p['DOME'] = [self.get_text(self.driver, "ACTIVE_DEVICES", "ACTIVE_DOME")]
+        return p
+       
+        
+    @actidedevicesdome.setter
+    def actidedevicesdome(self,string):
+        """
+        Set ACTIVE_DEVICES ACTIVE_DOME
+        """
+        self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_DOME', string)
+
+    @property
+    def domepolicy(self):
+        """
+        Return DOME_POLICY return astropy table
+        """
+        p = Table()
+        p['IGNORED'] = [self.get_text(self.driver, "DOME_POLICY", "DOME_IGNORED")]
+        p['LOCKS'] = [self.get_text(self.driver, "DOME_POLICY", "DOME_LOCKS")]
+        return p
+
+    @domepolicy.setter
+    def domepolicy(self,label):
+        """
+        Set DOME_POLICY Ignored or Locks
+        """
+        if label == 'I':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "DOME_POLICY", "Dome ignored")
+            if self.debug:
+                vec.tell()
+         
+        if label == 'L':
+            vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "DOME_POLICY", "Dome locks")
+            if self.debug:
+                vec.tell()
+ 

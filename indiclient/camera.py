@@ -27,7 +27,7 @@ class ASICam120Mini(CCDCam):
         super(ASICam120Mini, self).__init__(host, port, driver="ZWO CCD ASI120MM Mini")
         self.camera_name = "ZWO ASI Camera"
         self.process_events()
-        self.raw16()
+        self.raw16
 
     @property
     def filters(self):
