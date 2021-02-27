@@ -1,72 +1,57 @@
-"""Exposure class
-
+"""
+Exposure class
 """
 
 from datetime import datetime
 
-class Exposure:
-        
-        exptime = 0
-        number = 1       
+class Exposure(object):
+    
+    def __init__(self):
+        self.data = []
+        self.exptime = 0
+        self.label = 1       
 
-        def __init__(self):
-        
-            self.data = []
-       
-        def getexptime(self):
-            """Return exposure time                  
+    @property
+    def exp_time(self):
+        """
+        Return exposure time                  
+        """            
+        return self.exptime
+    
+    @property
+    def exp_label(self):
+        """
+        Return label of frame
+        """
+        return self.label
 
-            """
-            
-            return self.exptime
-        
-        def getnumber(self):
-            """Return number of frame
-                
-            """
- 
-            return self.number
+    @exp_time.setter
+    def exp_time(self,exptime):
+        """
+        Initialization exposure time
+        exptime (float): Exposure time second.
+        """                    
+        self.exptime = exptime            
 
+    @exp_label.setter  
+    def exp_label(self,label):
+        """
+        Initialization serial number
+         label (int): Serial number.
+        """
+        self.number = label
 
-        def setexptime(self,exptime):
-            """Initialization exposure time
-                 
-            Attributes:
-                exptime (float): Exposure time.
-                
-            """
-                    
-            self.exptime = exptime
-            
-            return True
-      
-        
-        def setnumber(self,number):
-            """Initialization serial number
-                 
-            Attributes:
-                number (int): Serial number.
-                
-            """
-                    
-            self.number = number
-            
-            return True
-
-        def incnumber(self):
-            """Increment serial number
-                 
-            """
-                    
-            self.number = self.number + 1
-            
-            return True
-        
-        def todaytonumber(self):
-            """Initialization serial number whit date end time
-                                 
-            """
-            today = datetime.today()        
-            self.number = today.strftime('%Y%m%d%H%M%S')
-            
-            return True
+    @property    
+    def inc_label(self):
+        """
+        Increment serial number
+        """
+        self.number = self.number + 1
+     
+    @property
+    def today_to_label(self):
+        """
+        Initialization serial number whit date end time                         
+        """
+        today = datetime.today()        
+        self.label = today.strftime('%Y%m%d%H%M%S')
