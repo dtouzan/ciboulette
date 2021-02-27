@@ -8,8 +8,7 @@ from astropy.coordinates import SkyCoord
 
 class astroQ(object):
     
-    def __init__(self) :
-        
+    def __init__(self):      
         self.data = []
 
     def positionsbyname(self,string):
