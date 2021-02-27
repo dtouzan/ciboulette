@@ -6,7 +6,7 @@ from astropy import units as u
 from astroquery.simbad import Simbad
 from astropy.coordinates import SkyCoord  
 
-class astroQ:
+class astroQ(object):
     
     def __init__(self) :
         

@@ -1,4 +1,5 @@
-"""Planning class
+"""
+Planning class
 
 """
 
@@ -8,149 +9,129 @@ import wget
 from ciboulette.base import constent
 
 
-class Planning:
+class Planning(object):
+    """
+    Class for planning observation.
+     idgoogledrive = 1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_
+     fileoutput = planning.csv    
+    """
     
-    idgoogledrive = '1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_'
-    fileoutput = 'planning.csv'
-    
-    def __init__(self,idgoogledrive,fileoutput):
-        
+    def __init__(self,idgoogledrive='1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_',fileoutput='planning.csv'):       
         self.data = []
         self.idgoogledrive = idgoogledrive
         self.fileoutput = fileoutput
-
     
+
+    @property
     def get(self):
-        """Return table of planning with google drive 
-            Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_' -O planning.csv
-        
         """
-        
+        Return table of planning with google drive 
+         Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_' -O planning.csv        
+        """
         if os.path.exists(self.fileoutput) :
             os.remove(self.fileoutput)
-    
         url = 'https://docs.google.com/uc?export=download&id='+self.idgoogledrive
-        filedownload = wget.download(url,out=self.fileoutput)
-        
+        filedownload = wget.download(url,out=self.fileoutput,bar=None)      
         # For MAST data_start=3
-        planningtable = Table.read(self.fileoutput, format='ascii.csv')
-    
+        planningtable = Table.read(self.fileoutput, format='ascii.csv')   
         return planningtable
-    
-    
-    def setidgoogledrive(self,idgoogledrive):
-        """Set ID google drive file
-        
-        Attributes:
-            idgoogledrive (str): ID google drive file.csv.
-        
+       
+    @property
+    def idfiledrive(self):
         """
-        
-        self.idgoogledrive = idgoogledrive
-        
-        return True
-        
+        Return ID google drive file
+        """     
+        return self.idgoogledrive    
     
-    def setfileoutput(self,fileoutput):
-        """Set table of exposures with google drive 
-        
-        Attributes:
-            fileoutput (str): file.csv output.
-        
+    @idfiledrive.setter
+    def idfiledrive(self,idgoogledrive):
         """
+        Set ID google drive file
+         idgoogledrive (str): ID google drive file.csv.       
+        """     
+        self.idgoogledrive = idgoogledrive                 
 
+    @property
+    def output(self):
+        """
+        Return fileoutput
+        """     
+        return self.fileoutput
+
+    @output.setter
+    def output(self,fileoutput):
+        """
+        Set table of exposures with google drive 
+         fileoutput (str): file.csv output.
+        """
         self.fileoutput = fileoutput
-        
-        return True
     
-    def getfilter(self,plan):
-        """Return filter name of plan
 
-        Attributes:
-            plan (Table): plan of planning.
-            
+    def filtername(self,plan):
+        """
+        Return filter name of plan
+         plan (Table): plan of planning.
         """
         filter_name = 'L'
-        filter_name = plan[constent.MAST_filters] 
-        
+        filter_name = plan[constent.MAST_filters]       
         return filter_name
-        
-    def getRA(self,plan):
-        """Return RA of plan
-            Format: Hours H.HHHH
+    
 
-        Attributes:
-            plan (Table): plan of planning.
-            
+    def ra(self,plan):
         """
-        
+        Return RA of plan. Format: Hours H.HHHH
+         plan (Table): plan of planning.
+        """     
         ra = 0.0
-        ra = plan[constent.MAST_s_ra] 
-        
+        ra = plan[constent.MAST_s_ra]        
         return ra
 
-    def getDEC(self,plan):
-        """Return RA of plan
-            Format: Degrees D.DDDD
 
-        Attributes:
-            plan (Table): plan of planning.
-            
+    def dec(self,plan):
         """
-        
+        Return RA of plan. Format: Degrees D.DDDD
+         plan (Table): plan of planning.
+        """
         dec = 0.0
-        dec = plan[constent.MAST_s_dec] 
-        
+        dec = plan[constent.MAST_s_dec]     
         return dec
 
-    def getobservationID(self,plan):
-        """Return observation ID of plan
 
-        Attributes:
-            plan (Table): plan of planning.
-            
-            
+    def observationID(self,plan):
+        """
+        Return observation ID of plan
+         plan (Table): plan of planning.
         """
         obs_id = 0
-        obs_id = plan[constent.MAST_obs_id] 
-        
+        obs_id = plan[constent.MAST_obs_id]         
         return obs_id
     
-    def getexptime(self,plan):
-        """Return exposure of plan
 
-        Attributes:
-            plan (Table): plan of planning.
-            
+    def exptime(self,plan):
         """
-        
+        Return exposure of plan
+         plan (Table): plan of planning.
+        """    
         exptime = 0
         exptime = plan[constent.MAST_t_exptime] 
-        
         return exptime
     
-    def getobservaiontitle(self,plan):
-        """Return observaion title of plan
 
-        Attributes:
-            plan (Table): plan of planning.
-            
+    def observaiontitle(self,plan):
         """
-        
+        Return observaion title of plan
+         plan (Table): plan of planning.
+        """       
         obs_title = 'none'
         obs_title = plan[constent.MAST_obs_title] 
-        
         return obs_title
     
-    def getdataproducttype(self,plan):
-        """Return dataproduct type of plan
 
-        Attributes:
-            plan (table): plan of planning.
-            
+    def dataproducttype(self,plan):
         """
-        
+        Return dataproduct type of plan
+         plan (table): plan of planning.          
+        """       
         dataproduct_type = 'Intensity'
         dataproduct_type = plan[constent.MAST_dataproduct_type] 
-        
         return dataproduct_type
