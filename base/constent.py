@@ -1,13 +1,13 @@
-"""Constents 
-
+"""
+Constents 
 """
 
 CBL_binning                                = 'binning'
 
 
-"""MAST constents 
-    Is used for downloaded MAST files 
-    
+"""
+MAST constents 
+ Is used for downloaded MAST files    
 """
 MAST_filters                               = 'filters'
 MAST_target_name                           = 'target_name'
