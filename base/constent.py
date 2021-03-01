@@ -3,7 +3,7 @@ Constents
 """
 
 CBL_binning                                = 'binning'
-
+API_version                                = 2000
 
 """
 MAST constents 
