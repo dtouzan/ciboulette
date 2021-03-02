@@ -26,13 +26,13 @@ class Ciboulette(object):
         self.data = []
         self.api_version = constent.API_version
         self.server = '192.168.1.18'
-        self.port = '11111'
+        self.port = 11111
         self.device = 0
         self.focale = 85.0
         self.diameter = 60
-        self.site_lat = 49.5961
-        self.site_long = -0.3531
-        self.site_elev = 100
+        self.latitude = 49.5961
+        self.longitude = 359.65
+        self.elevation = 100
         self.instrument = 'Atik 383L+'
         self.naxis1 = 3326
         self.naxis2 = 2504
@@ -54,13 +54,13 @@ class Ciboulette(object):
         """
     
         api = [self.api_version]                                # Astropy API
-        server = [self.server+':'+self.port]                    # Server IP:port
+        server = [self.server + ':' + str(self.port)]           # Server IP:port
         device = [self.device]                                  # Device for alpaca
         focale = [self.focale]                                  # Focal millimeter
         diameter = [self.focale]                                # Diameter millimeter
-        site_lat = [self.site_lat]                              # Site latitude degrees
-        site_long = [self.site_long]                            # Site longitude degrees
-        site_elev = [self.site_elev]                            # Site elevation meter
+        latitude = [self.latitude]                              # Site latitude degrees
+        longitude = [self.longitude]                            # Site longitude degrees
+        elevation = [self.elevation]                            # Site elevation meter
         instrument = [self.instrument]                          # Instrument name
         naxis1 = [self.naxis1]                                  # Size naxis1
         naxis2 = [self.naxis2]                                  # Size naxis2
@@ -75,11 +75,31 @@ class Ciboulette(object):
         dec = [self.dec]                                        # Degrees
         object_name = [self.object_name]                        # Object name
         
-        return Table([api,server,device,focale,diameter,site_lat,site_long,site_elev,instrument,naxis1,naxis2,
+        return Table([api,server,device,focale,diameter,latitude,longitude,elevation,instrument,naxis1,naxis2,
                       binXY,pixelXY,filter_name,telescope_name,observer_name,dataset,archive_table,ra,dec,object_name], 
                       names=['API','SERVER','DEVICE','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBJECT'])  
 
+    @property
+    def serverport(self):
+        """
+        Return Server:port configuration
+        """
+        return self.server + ':' + str(self.port)
+
+    @serverport.setter
+    def serverport(self,serverdict):
+        """
+        Set server and port
+         serverdict:
+         {
+            "SRV": string - Server 
+            "PORT": int - Port
+          }
+        """  
+        self.server = str(serverdict['SRV'])
+        self.port = int(serverdict['PORT'])
+        
     @property
     def projections(self):
         """
@@ -363,8 +383,21 @@ class Ciboulette(object):
         
         return frameid
     
+    @property
+    def filtername(self):
+        """
+        Return filter name
+        """
+        return self.filter_name
     
-    def filtername(self,filterwheel):
+    @filtername.setter
+    def filtername(self,string):
+        """
+        Set filter name
+        """
+        self.filter_name = string
+    
+    def filterwheel(self,filterwheel):
         """
         Set filter of filterweel
          filterwheel (Filterwheel): Filterwheel object (Alpaca or Indilib).
@@ -372,8 +405,9 @@ class Ciboulette(object):
         """       
         filter_number = 0  
         filter_names = filterwheel.names()
-        filter_number = filter_names.index(self.filter_name)
-        filterwheel.position(filter_number)
+        if filter_name in filter_names:
+            filter_number = filter_names.index(self.filter_name)
+            filterwheel.position(filter_number)
 
     @property
     def coordinates(self):
@@ -394,13 +428,44 @@ class Ciboulette(object):
         """  
         if 'RA' in coordinatesdict:
             ra = float(coordinatesdict['RA'])
-            if ra >=0 and ra < 24:
+            if ra >= 0 and ra < 24:
                 self.ra = ra
         if 'DEC' in coordinatesdict:
             dec = float(coordinatesdict['DEC'])
-            if dec >=- 90 and dec <= 90:
+            if dec >= -90 and dec <= 90:
                 self.dec = dec    
-        
+
+    @property
+    def site(self):
+        """
+        Return site latitude, site longitude and site elevation 
+        """
+        return self.latitude,self.longitude,self.elevation
+    
+    @site.setter
+    def site(self,sitedict):
+        """
+        Set latitude, longitude and elevation
+         coordinatesdict:
+         {
+            "LAT": float - Latitude
+            "LONG": float - Longitude
+            "ELEV": float - Elevation
+          }
+        """  
+        if 'LAT' in sitedict:
+            latitude = float(sitedict['LAT'])
+            if latitude >= -90 and latitude <= 90:
+                self.latitude = latitude
+        if 'LONG' in sitedict:
+            longitude = float(sitedict['LONG'])
+            if longitude >= 0 and longitude <= 360:
+                self.longitude = longitude    
+        if 'ELEV' in sitedict:
+            elevation = float(sitedict['ELEV'])
+            if elevation >= 0 and elevation <= 8000:
+                self.elevation = elevation    
+
     def slewtocoordinates(self,telescope):
         """
         Slew RA and DEC to telescope 

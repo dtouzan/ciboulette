@@ -95,7 +95,7 @@ class FILTERWheel(indiclient):
             self.filter = filters.index(string)        
 
     @property
-    def filternames(self):
+    def names(self):
         """
         Return list of names of installed filters
         """
@@ -113,7 +113,12 @@ class FILTERWheel(indiclient):
             for name in name_list:
                 self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), name)
                 slot +=1
-            
+ 
+    def position(self,pos):
+        """
+        Set filter position
+        """
+        self.filter = pos
                 
     def connect(self):
         """
