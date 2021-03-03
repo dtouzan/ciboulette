@@ -72,7 +72,7 @@ class FILTERWheel(indiclient):
                 self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", self.filters.index(f)+1)
 
     @property
-    def filtername(self):
+    def name(self):
         """
         Return name of filter selected
         """
@@ -83,8 +83,8 @@ class FILTERWheel(indiclient):
             f = None
         return f
     
-    @filtername.setter
-    def filtername(self, string):      
+    @name.setter
+    def name(self, string):      
         """Initialization filters name
             Ex: 'Blue'
         Attributes:
@@ -97,12 +97,12 @@ class FILTERWheel(indiclient):
     @property
     def names(self):
         """
-        Return list of names of installed filters
+        Return list of names of installed filters (Alpaca compatibility)
         """
         return self.filters
 
-    @filternames.setter
-    def filternames(self, name_list):
+    @names.setter
+    def names(self, name_list):
         """Initialization filters table
             Ex: ['B','Ha','H_alpha', etc]
         Attributes:
@@ -116,7 +116,7 @@ class FILTERWheel(indiclient):
  
     def position(self,pos):
         """
-        Set filter position
+        Set filter position (Alpaca compatibility)
         """
         self.filter = pos
                 
