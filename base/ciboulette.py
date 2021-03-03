@@ -93,13 +93,168 @@ class Ciboulette(object):
         Set server and port
          serverdict:
          {
-            "SRV": string - Server 
+            "SVR": string - Server 
             "PORT": int - Port
           }
         """  
-        self.server = str(serverdict['SRV'])
+        self.server = str(serverdict['SVR'])
         self.port = int(serverdict['PORT'])
-        
+                
+    @property
+    def atik383L(self):
+        """
+        Set Atik383L+ configuration
+        """
+        self.instrument = 'Atik 383L+'
+        self.naxis1 = 3326
+        self.naxis2 = 2504
+        self.pixelXY = 5.4
+    
+    @property
+    def atiktitan(self):
+        """
+        Set Atik Titan configuration
+        """
+        self.instrument = 'Atik Titan'
+        self.naxis1 = 659
+        self.naxis2 = 494
+        self.pixelXY = 7.4       
+    
+    @property
+    def asi120(self):
+        """
+        Set ASI 120 configuration
+        """
+        self.instrument = 'ASI 120'
+        self.naxis1 = 1280
+        self.naxis2 = 960
+        self.pixelXY = 3.75       
+
+    @property
+    def samyang85_1_4(self):
+        """
+        Set Samyang 85mm F1.4 configuration
+        """
+        self.focale = 85
+        self.diameter = 60
+
+    @property
+    def canon200_2_8(self):
+        """
+        Set Canon 200mm F2.8 configuration
+        """
+        self.focale = 200
+        self.diameter = 71
+
+    @property
+    def sigma120_400(self):
+        """
+        Set Sigma 120-400 configuration 120mm
+        """
+        self.focale = 120
+        self.diameter = 71
+
+    @sigma120_400.setter
+    def sigma120_400(self,f):
+        """
+        Set Sigma 120-400 configuration
+        """
+        if f >= 120 and f <= 400:
+            self.focale = f
+            self.diameter = 71
+    
+    @property
+    def filtername(self):
+        """
+        Return filter name
+        """
+        return self.filter_name
+    
+    @filtername.setter
+    def filtername(self,string):
+        """
+        Set filter name
+        """
+        self.filter_name = string
+    
+    def filterwheel(self,filterwheel):
+        """
+        Set filter of filterweel
+         filterwheel (Filterwheel): Filterwheel object (Alpaca or Indilib).
+         filter_name (str): Filter name.           
+        """       
+        filter_number = 0  
+        filter_names = filterwheel.names()
+        if self.filter_name in filter_names:
+            filter_number = filter_names.index(self.filter_name)
+            filterwheel.position(filter_number)
+
+    @property
+    def coordinates(self):
+        """
+        Return RA and DEC to hours and degrees
+        """
+        return self.ra,self.dec
+    
+    @coordinates.setter
+    def coordinates(self,coordinatesdict):
+        """
+        Set RA and DEC
+         coordinatesdict:
+         {
+            "RA": float - Right ascencion
+            "DEC": float - Declination
+          }
+        """  
+        if 'RA' in coordinatesdict:
+            ra = float(coordinatesdict['RA'])
+            if ra >= 0 and ra < 24:
+                self.ra = ra
+        if 'DEC' in coordinatesdict:
+            dec = float(coordinatesdict['DEC'])
+            if dec >= -90 and dec <= 90:
+                self.dec = dec    
+
+    @property
+    def site(self):
+        """
+        Return site latitude, site longitude and site elevation 
+        """
+        return self.latitude,self.longitude,self.elevation
+    
+    @site.setter
+    def site(self,sitedict):
+        """
+        Set latitude, longitude and elevation
+         coordinatesdict:
+         {
+            "LAT": float - Latitude
+            "LONG": float - Longitude
+            "ELEV": float - Elevation
+          }
+        """  
+        if 'LAT' in sitedict:
+            latitude = float(sitedict['LAT'])
+            if latitude >= -90 and latitude <= 90:
+                self.latitude = latitude
+        if 'LONG' in sitedict:
+            longitude = float(sitedict['LONG'])
+            if longitude >= 0 and longitude <= 360:
+                self.longitude = longitude    
+        if 'ELEV' in sitedict:
+            elevation = float(sitedict['ELEV'])
+            if elevation >= 0 and elevation <= 8000:
+                self.elevation = elevation    
+
+    def slewtocoordinates(self,telescope):
+        """
+        Slew RA and DEC to telescope 
+         telescope (Telescope): Telescope object (Alpaca or Indilib).
+         ra (float): Hours.
+         dec (float): Degrees           
+        """
+        telescope.slewtocoordinates(self.ra,self.dec)
+
     @property
     def projections(self):
         """
@@ -196,69 +351,6 @@ class Ciboulette(object):
         plt.ylabel('Dec')
         # Display
         plt.show()
-        
-    @property
-    def atik383L(self):
-        """
-        Set Atik383L+ configuration
-        """
-        self.instrument = 'Atik 383L+'
-        self.naxis1 = 3326
-        self.naxis2 = 2504
-        self.pixelXY = 5.4
-    
-    @property
-    def atiktitan(self):
-        """
-        Set Atik Titan configuration
-        """
-        self.instrument = 'Atik Titan'
-        self.naxis1 = 659
-        self.naxis2 = 494
-        self.pixelXY = 7.4       
-    
-    @property
-    def asi120(self):
-        """
-        Set ASI 120 configuration
-        """
-        self.instrument = 'ASI 120'
-        self.naxis1 = 1280
-        self.naxis2 = 960
-        self.pixelXY = 3.75       
-
-    @property
-    def samyang85_1_4(self):
-        """
-        Set Samyang 85mm F1.4 configuration
-        """
-        self.focale = 85
-        self.diameter = 60
-
-    @property
-    def canon200_2_8(self):
-        """
-        Set Canon 200mm F2.8 configuration
-        """
-        self.focale = 200
-        self.diameter = 71
-
-    @property
-    def sigma120_400(self):
-        """
-        Set Sigma 120-400 configuration 120mm
-        """
-        self.focale = 120
-        self.diameter = 71
-
-    @sigma120_400.setter
-    def sigma120_400(self,f):
-        """
-        Set Sigma 120-400 configuration
-        """
-        if f >= 120 and f <= 400:
-            self.focale = f
-            self.diameter = 71
         
     def exposure(self,exposure,ccd,telescope,filterwheel):
         """
@@ -382,96 +474,3 @@ class Ciboulette(object):
         fits.writeto(file_name, data, hdr, overwrite=True)
         
         return frameid
-    
-    @property
-    def filtername(self):
-        """
-        Return filter name
-        """
-        return self.filter_name
-    
-    @filtername.setter
-    def filtername(self,string):
-        """
-        Set filter name
-        """
-        self.filter_name = string
-    
-    def filterwheel(self,filterwheel):
-        """
-        Set filter of filterweel
-         filterwheel (Filterwheel): Filterwheel object (Alpaca or Indilib).
-         filter_name (str): Filter name.           
-        """       
-        filter_number = 0  
-        filter_names = filterwheel.names()
-        if filter_name in filter_names:
-            filter_number = filter_names.index(self.filter_name)
-            filterwheel.position(filter_number)
-
-    @property
-    def coordinates(self):
-        """
-        Return RA and DEC to hours and degrees
-        """
-        return self.ra,self.dec
-    
-    @coordinates.setter
-    def coordinates(self,coordinatesdict):
-        """
-        Set RA and DEC
-         coordinatesdict:
-         {
-            "RA": float - Right ascencion
-            "DEC": float - Declination
-          }
-        """  
-        if 'RA' in coordinatesdict:
-            ra = float(coordinatesdict['RA'])
-            if ra >= 0 and ra < 24:
-                self.ra = ra
-        if 'DEC' in coordinatesdict:
-            dec = float(coordinatesdict['DEC'])
-            if dec >= -90 and dec <= 90:
-                self.dec = dec    
-
-    @property
-    def site(self):
-        """
-        Return site latitude, site longitude and site elevation 
-        """
-        return self.latitude,self.longitude,self.elevation
-    
-    @site.setter
-    def site(self,sitedict):
-        """
-        Set latitude, longitude and elevation
-         coordinatesdict:
-         {
-            "LAT": float - Latitude
-            "LONG": float - Longitude
-            "ELEV": float - Elevation
-          }
-        """  
-        if 'LAT' in sitedict:
-            latitude = float(sitedict['LAT'])
-            if latitude >= -90 and latitude <= 90:
-                self.latitude = latitude
-        if 'LONG' in sitedict:
-            longitude = float(sitedict['LONG'])
-            if longitude >= 0 and longitude <= 360:
-                self.longitude = longitude    
-        if 'ELEV' in sitedict:
-            elevation = float(sitedict['ELEV'])
-            if elevation >= 0 and elevation <= 8000:
-                self.elevation = elevation    
-
-    def slewtocoordinates(self,telescope):
-        """
-        Slew RA and DEC to telescope 
-         telescope (Telescope): Telescope object (Alpaca or Indilib).
-         ra (float): Hours.
-         dec (float): Degrees           
-        """
-        telescope.slewtocoordinates(self.ra,self.dec)
-        
