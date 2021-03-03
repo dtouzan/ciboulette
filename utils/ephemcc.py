@@ -35,8 +35,7 @@ class Ephemcc(object):
         """    
         if os.path.exists(self.filename) :
             os.remove(self.filename)    
-        url = self.url_base+'-name='+self.name_query+'&-type='+self.type_query+'&-nbd='+self.ndb_query+'&-ep='+
-              self.ep_query+'&-step='+self.step_query+'&-observer='+self.observer+'&-mime=votable'
+        url = self.url_base+'-name='+self.name_query+'&-type='+self.type_query+'&-nbd='+self.ndb_query+'&-ep='+self.ep_query+'&-step='+self.step_query+'&-observer='+self.observer+'&-mime=votable'
         filedownload = wget.download(url,out='imcce_query.xml',bar=None)   
         ephemcctable = parse_single_table(filedownload).to_table()   
         return ephemcctable     
