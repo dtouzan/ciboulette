@@ -1,5 +1,5 @@
-"""Ciboulette class
-
+"""
+Ciboulette class
 """
 
 import time
@@ -46,6 +46,11 @@ class Ciboulette(object):
         self.ra = 0.0 # hours
         self.dec = 90.0 # degrees
         self.object_name = 'INIT'
+        self._date = '2021-01-01T00:00:00'
+        self._temperature = 0
+        self._exp_time = 0
+        self._frameid = 0
+        self._datatype = ''
 
     @property
     def table(self):
@@ -351,84 +356,120 @@ class Ciboulette(object):
         plt.ylabel('Dec')
         # Display
         plt.show()
-        
+   
     def exposure(self,exposure,ccd,telescope,filterwheel):
+        """
+        Get CCD, telescope and filterwheel and write fits file 
+         exposure (Exposure): Exposure object.
+         ccd (Camera): CCD alpaca or indilib object.
+         telescope (Telescope): Telescope alpaca or indilib object.
+         filterwheel (Filterwheel): Filterwheel alpaca or indilib object.         
+        """
+        self._exp_time = exposure.exp_time()
+        self._frameid = exposure.exp_label()
+        self._datatype = exposure.datatype
+
+        if isinstance(telescope, Telescope):
+            self.ra = telescope.rightascension()
+            self.dec = telescope.declination()
+            self.latitude = telescope.sitelatitude()
+            self.longitude = telescope.sitelongitude()
+        else:
+            self.ra = telescope.rightascension
+            self.dec = telescope.declination                
+            self.latitude = telescope.sitelatitude
+            self.longitude = telescope.sitelongitude
+
+        if isinstance(filterwheel, Filterwheel):
+            filter_names = filterwheel.names()
+            self.filter_name = filter_names[filterwheel.position()]
+        else:
+            filter_names = filterwheel.names
+            self.filter_name = filter_names[filterwheel.position()]       
+
+        if isinstance(ccd, Camera):
+            self.binXY = ccd.binx()
+            self.pixelXY = ccd.pixelsizex()
+            self._date = ccd.lastexposurestarttime()
+            self._temperature = ccd.ccdtemperature()
+            _exposurealpaca(exposure,ccd,telescope,filterwheel):
+        else:
+            _exposureindilib(exposure,ccd,telescope,filterwheel):
+        
+        self.extendedfits
+        
+
+    def _exposureindilib(self,exposure,ccd,telescope,filterwheel):
+        """
+        Get CCD, telescope and filterwheel and write fits file 
+         exposure (Exposure): Exposure object.
+         ccd (Camera): CCD indilib object.
+         telescope (Telescope): Telescope indilib object.
+         filterwheel (Filterwheel): Filterwheel indilib object.           
+        """
+        """
+        Shoot
+        """
+        hdul = ccd.startexposure(self._exp_time,True)
+        while not ccd.imageready():
+            time.sleep(1)  
+        file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
+        fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)         
+        
+    def _exposurealpaca(self,exposure,ccd,telescope,filterwheel):
         """
         Get CCD, telescope and filterwheel and write fits file 
          exposure (Exposure): Exposure object.
          ccd (Camera): CCD alpaca object.
          telescope (Telescope): Telescope alpaca object.
-         filterwheel (Filterwheel): Filterwheel alpaca object.
-            
+         filterwheel (Filterwheel): Filterwheel alpaca object.           
         """
-
-        # Shoot
-        exptime = exposure.gettime()
-        frameid = exposure.getnumber()
-        ccd.startexposure(exptime,True)
-
+        #Shoot
+         ccd.startexposure(self._exp_time,True)
         while not ccd.imageready():
-            time.sleep(1)
-         
-        date_obs = ccd.lastexposurestarttime()
-        self.binXY = ccd.binx()
-        self.pixelXY = ccd.pixelsizex()
-        self.naxis1 = ccd.cameraxsize()
-        self.naxis2 = ccd.cameraysize()   
-        ccd_temperature = 0 #ccd.ccdtemperature()
-
+            time.sleep(1)         
         # Translate picture
         data_ccd = ccd.imagearray()
         data_new = np.rot90(data_ccd)
-        data_int16 = data_new.astype(np.int16) 
-        #data_real = np.fliplr(data_int16) # inversion verticale  
-     
-        self.ra = telescope.rightascension()
-        self.dec = telescope.declination()
-        RA_deg = 15 * self.ra
-        DEC_deg = self.dec
-        site_lat = float(telescope.sitelatitude())
-        site_long = float(telescope.sitelongitude())
-   
-        filter_names = filterwheel.names()
-        self.filter_name = filter_names[filterwheel.position()]
-    
-        # Create fits
+        data_int16 = data_new.astype(np.int16)       
+        #Vertical inversion if necessary
+        #data_real = np.fliplr(data_int16)
+        #Create simple fits
         hdu = fits.PrimaryHDU(data=data_int16)
-        file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(frameid)+'.fits'
+        file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         fits.writeto(file_name, hdu.data, hdu.header, overwrite=True) 
+
+    @property
+    def extendedfits(self)
+        """
+        Write fits header extended and fits file
+        """
+        fits_file = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         
-        # Modification fits header
-        #fits_file = get_pkg_data_filename(file_name)
-        fits_file = file_name
-            
         fits.setval(fits_file, 'PIXSIZE1', value=self.pixelXY, comment='[um] Pixel Size X, binned', savecomment=True)
         fits.setval(fits_file, 'PIXSIZE2', value=self.pixelXY, comment='[um] Pixel Size Y, binned', savecomment=True)
         fits.setval(fits_file, 'XBINNING', value=self.binXY, comment='Binning factor X', savecomment=True)
         fits.setval(fits_file, 'YBINNING', value=self.binXY, comment='Binning factor Y', savecomment=True)
-        fits.setval(fits_file, 'EXPTIME', value=exptime, comment='[s] Total Exposure Time', savecomment=True)
+        fits.setval(fits_file, 'EXPTIME', value=self._exp_time, comment='[s] Total Exposure Time', savecomment=True)
         fits.setval(fits_file, 'OBJECT', value=self.object_name, comment='Observed object name', savecomment=True)
         fits.setval(fits_file, 'OBSERVER', value=self.observer_name, comment='Observed name', savecomment=True)
         fits.setval(fits_file, 'TELESCOP', value=self.telescope_name, comment='Telescope name', savecomment=True)
         fits.setval(fits_file, 'INSTRUME', value=self.instrument, comment='Instrument used for acquisition', savecomment=True)                         
         fits.setval(fits_file, 'ROWORDER', value='TOP-DOWN', comment='Order of the rows in image array', savecomment=True)                 
-        fits.setval(fits_file, 'CCD-TEMP', value=ccd_temperature, comment='CCD temperature (Celsius)', savecomment=True) 
-        fits.setval(fits_file, 'FRAME', value='Light', comment='Frame Type', savecomment=True)                                   
-        fits.setval(fits_file, 'IMAGETYP', value='Light', comment='Image Type', savecomment=True)                                  
+        fits.setval(fits_file, 'CCD-TEMP', value=self._temperature, comment='CCD temperature (Celsius)', savecomment=True) 
         fits.setval(fits_file, 'FILTER', value=self.filter_name, comment='Filter info', savecomment=True)     
-        fits.setval(fits_file, 'SITELAT', value=site_lat, comment='Observatory latitude', savecomment=True) 
-        fits.setval(fits_file, 'SITELONG', value=site_long, comment='Observatory longitude', savecomment=True) 
+        fits.setval(fits_file, 'SITELAT', value=self.latitude, comment='Observatory latitude', savecomment=True) 
+        fits.setval(fits_file, 'SITELONG', value=self.longitude, comment='Observatory longitude', savecomment=True)
+        fits.setval(fits_file, 'SITEELEV', value=self.elevation, comment='Driver create', savecomment=True) 
         fits.setval(fits_file, 'SWCREATE', value=self.driver_name, comment='Driver create', savecomment=True) 
         fits.setval(fits_file, 'FOCALLEN', value=self.focale, comment='[mm] Telescope focal length', savecomment=True) 
         fits.setval(fits_file, 'FRAMEX', value=0, comment='Frame start x', savecomment=True)
         fits.setval(fits_file, 'FRAMEY', value=0, comment='Frame start y', savecomment=True)                                                                   
-        fits.setval(fits_file, 'FRAMEHGT', value=self.naxis1, comment='Frame height', savecomment=True)        
-        fits.setval(fits_file, 'FRAMEWDH', value=self.naxis2, comment='Frame width', savecomment=True)
-        fits.setval(fits_file, 'DATE-OBS', value=date_obs, comment='UTC start date of observation', savecomment=True)
+        fits.setval(fits_file, 'DATE-OBS', value=self._date, comment='UTC start date of observation', savecomment=True)
         fits.setval(fits_file, 'RADESYSA', value='ICRS', comment='Equatorial coordinate system', savecomment=True)
-        fits.setval(fits_file, 'FRAMEID', value=frameid, comment='Frame ID', savecomment=True)
+        fits.setval(fits_file, 'FRAMEID', value=self._frameid, comment='Frame ID', savecomment=True)
         fits.setval(fits_file, 'EQUINOX', value=2000.0, comment='Equinox date', savecomment=True)
-        fits.setval(fits_file, 'DATATYPE', value='Intensity', comment='Type of data', savecomment=True)
+        fits.setval(fits_file, 'DATATYPE', value=self._datatype, comment='Type of data', savecomment=True)
         fits.setval(fits_file, 'MJD-OBS', value=0.0, comment='MJD of start of obseration', savecomment=True)
         fits.setval(fits_file, 'JD-OBS', value=0.0, comment='JD of start of obseration', savecomment=True)
 
@@ -443,6 +484,10 @@ class Ciboulette(object):
         time_obs = Time(header['DATE-OBS'])
         header['JD-OBS'] = time_obs.jd
         header['MJD-OBS'] = time_obs.mjd
+
+        # Elements for CRVAL
+        RA_deg = 15 * self.ra
+        DEC_deg = self.dec
 
         # Elements for CRPIX
         crpix1 = int(header['NAXIS1'])/2
@@ -465,12 +510,9 @@ class Ciboulette(object):
 
         # Now, write out the WCS object as a FITS header
         hdu.header = header + w.to_header()
-
         # Header and data
         hdr = hdu.header
         data = hdu.data
-   
         # Sauvegarde
         fits.writeto(file_name, data, hdr, overwrite=True)
-        
-        return frameid
+ 
