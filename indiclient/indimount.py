@@ -75,7 +75,31 @@ class Telescope(indiclient):
         if self.debug:
             vector.tell()
         pass
-    
+
+    @property
+    def rightascension(self):
+        """
+        Return the telescope's right ascension coordinate.
+         The right ascension (hours) of the telescope's current equatorial
+         coordinates, in the coordinate system given by the EquatorialSystem
+         property.
+        """
+        self.process_events()
+        f = self.get_float(self.driver, "EQUATORIAL_EOD_COORD", "RA")
+        return f
+
+    @property
+    def declination(self):
+        """
+        Return the telescope's declination.
+         Reading the property will raise an error if the value is unavailable.
+         The declination (degrees) of the telescope's current equatorial coordinates,
+         in the coordinate system given by the EquatorialSystem property.        
+        """
+        self.process_events()
+        f = self.get_float(self.driver, "EQUATORIAL_EOD_COORD", "DEC")
+        return f
+
     @property
     def sitelatitude(self):
         """
