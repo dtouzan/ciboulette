@@ -7,7 +7,7 @@ from datetime import datetime
 class Exposure(object):
     
     def __init__(self):
-        self.data = []
+        self.datatype = 'Intensity'
         self.exptime = 0
         self.label = 1       
 
@@ -15,7 +15,7 @@ class Exposure(object):
     def exp_time(self):
         """
         Return exposure time                  
-        """            
+        """         
         return self.exptime
     
     @property
