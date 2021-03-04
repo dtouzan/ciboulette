@@ -323,7 +323,16 @@ class CCDCam(indiclient):
         else:
             exptype = "Black"
         self.expose(exptime,exptype)
-        
+
+    def abortexposure(self):
+        """
+        Abort the current exposure, if any, and returns the camera to Idle state.
+        (Alpaca compatibility) 
+        """ 
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_ABORT_EXPOSURE", "On")
+        self.process_events()
+        return vec
+    
     def stopexposure(self):
         """
         Stop the current exposure, if any. (Alpaca compatibility) 
@@ -331,9 +340,8 @@ class CCDCam(indiclient):
             If an exposure is in progress, the readout process is initiated. Ignored if
             readout is already in process.
         """
-        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_ABORT_EXPOSURE", "On")
-        self.process_events()
-        return vec
+        self.abortexposure(self):
+ 
         
     @property
     def activedevices(self):
