@@ -341,7 +341,15 @@ class CCDCam(indiclient):
             readout is already in process.
         """
         self.abortexposure(self):
- 
+
+    def imageready():
+        """
+        Indicate that an image is ready to be downloaded. (Alpaca compatibility)
+        """
+        if self.get_float(self.driver, "CCD_EXPOSURE", "CCD_EXPOSURE_VALUE") <= 0:
+            return True
+        else:
+            return False
         
     @property
     def activedevices(self):
