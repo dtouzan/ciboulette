@@ -309,7 +309,32 @@ class CCDCam(indiclient):
                 break
             time.sleep(0.1)
         return fitsdata
-
+    
+    def startexposure(self, exptime: float, Light: bool):
+        """
+        Start an exposure (Alpaca compatibility)      
+        Notes:
+            Use ImageReady to check when the exposure is complete.
+            Duration (float): Duration of exposure in seconds.
+            Light (bool): True if light frame, false if dark frame.
+        """
+        if Light:
+            exptype = "Light"
+        else:
+            exptype = "Black"
+        self.expose(exptime,exptype)
+        
+    def stopexposure(self):
+        """
+        Stop the current exposure, if any. (Alpaca compatibility) 
+        Notes:
+            If an exposure is in progress, the readout process is initiated. Ignored if
+            readout is already in process.
+        """
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_ABORT_EXPOSURE", "On")
+        self.process_events()
+        return vec
+        
     @property
     def activedevices(self):
         """
