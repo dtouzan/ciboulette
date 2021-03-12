@@ -87,7 +87,7 @@ class Sector:
         # Recherche et création de la table
         mag_format = '<'+str(mag)
         result = v.query_region(SkyCoord(ra=astre_ra, dec=astre_dec, unit=(u.deg, u.deg),frame='icrs'), width=Angle(angle_width, "deg"), 
-                                height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters={'Vmag':mag_format})
+                                height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters={'Gmag':mag_format})
         
         for table_name in result.keys():
             table = result[table_name]
@@ -97,21 +97,21 @@ class Sector:
                 Mv = float(line[2])
                 if Mv != 'masked' :
                     marker_size = 1
-                    if Mv < 12:
-                        marker_size = 1
-                    if Mv < 11:
-                        marker_size = 1    
-                    if Mv < 10:
-                        marker_size = 3  
-                    if Mv < 9:
-                        marker_size = 5
-                    if Mv < 8:
+                    if Mv > 15:
+                        marker_size = 1  
+                    if Mv > 12 and Mv <= 15:
+                        marker_size = 2  
+                    if Mv > 10 and Mv <= 12:
+                        marker_size = 5  
+                    if Mv > 9 and Mv <= 10:
                         marker_size = 8
-                    if Mv < 7:
+                    if Mv > 8 and Mv <= 9:
+                        marker_size = 12
+                    if Mv > 7 and Mv <= 8:
                         marker_size = 20
-                    if Mv < 6:
+                    if Mv > 6 and Mv <= 7:
                         marker_size = 35
-                    if Mv < 5:
+                    if Mv <= 5:
                         marker_size = 50
                         
                     table_ra.append(ra)
