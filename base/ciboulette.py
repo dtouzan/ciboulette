@@ -358,7 +358,10 @@ class Ciboulette(object):
         field_DEC= cdelt2*self.naxis2
         #field_RA = 1.5
         #field_DEC= 1.5
-        mag = 12
+        if field_RA <= 1 and field_DEC <= 1:
+            mag = 15
+        else:
+            mag = 12
         catalog = 'GSC2.3'
         data_field = sct.regionincatalog(RA_deg, DEC_deg,field_RA,field_DEC,mag,catalog,'_RAJ2000', '_DEJ2000', 'Vmag')
     
