@@ -28,7 +28,7 @@ class Ciboulette(object):
         self.server = '192.168.1.18'
         self.port = 11111
         self.device = 0
-        self.focale = 85.0
+        self.focal = 85.0
         self.diameter = 60
         self.latitude = 49.5961
         self.longitude = 359.65
@@ -61,8 +61,8 @@ class Ciboulette(object):
         api = [self.api_version]                                # Astropy API
         server = [self.server + ':' + str(self.port)]           # Server IP:port
         device = [self.device]                                  # Device for alpaca
-        focale = [self.focale]                                  # Focal millimeter
-        diameter = [self.focale]                                # Diameter millimeter
+        focal = [self.focal]                                    # Focal millimeter
+        diameter = [self.diameter]                              # Diameter millimeter
         latitude = [self.latitude]                              # Site latitude degrees
         longitude = [self.longitude]                            # Site longitude degrees
         elevation = [self.elevation]                            # Site elevation meter
@@ -80,7 +80,7 @@ class Ciboulette(object):
         dec = [self.dec]                                        # Degrees
         object_name = [self.object_name]                        # Object name
         
-        return Table([api,server,device,focale,diameter,latitude,longitude,elevation,instrument,naxis1,naxis2,
+        return Table([api,server,device,focal,diameter,latitude,longitude,elevation,instrument,naxis1,naxis2,
                       binXY,pixelXY,filter_name,telescope_name,observer_name,dataset,archive_table,ra,dec,object_name], 
                       names=['API','SERVER','DEVICE','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBJECT'])  
@@ -140,7 +140,7 @@ class Ciboulette(object):
         """
         Set Samyang 85mm F1.4 configuration
         """
-        self.focale = 85
+        self.focal = 85
         self.diameter = 60
 
     @property
@@ -148,7 +148,7 @@ class Ciboulette(object):
         """
         Set Canon 200mm F2.8 configuration
         """
-        self.focale = 200
+        self.focal = 200
         self.diameter = 71
 
     @property
@@ -156,7 +156,7 @@ class Ciboulette(object):
         """
         Set Sigma 120-400 configuration 120mm
         """
-        self.focale = 120
+        self.focal = 120
         self.diameter = 71
 
     @sigma120_400.setter
@@ -165,9 +165,26 @@ class Ciboulette(object):
         Set Sigma 120-400 configuration
         """
         if f >= 120 and f <= 400:
-            self.focale = f
+            self.focal = f
             self.diameter = 71
-    
+            
+    @property
+    def lens70_300(self):
+        """
+        Set 70-300 configuration 70mm
+        """
+        self.focal = 70
+        self.diameter = 53
+
+    @lens70_300.setter
+    def lens70_300(self,f):
+        """
+        Set Sigma 120-400 configuration
+        """
+        if f >= 70 and f <= 300:
+            self.focal = f
+            self.diameter = 53
+
     @property
     def filtername(self):
         """
@@ -322,8 +339,8 @@ class Ciboulette(object):
         crpix2 = int(self.naxis2)/2
 
         # Element for CDELT
-        cdelt1 = (206*int(self.pixelXY)*int(self.binXY)/self.focale)/3600
-        cdelt2 = (206*int(self.pixelXY)*int(self.binXY)/self.focale)/3600
+        cdelt1 = (206*int(self.pixelXY)*int(self.binXY)/self.focal)/3600
+        cdelt2 = (206*int(self.pixelXY)*int(self.binXY)/self.focal)/3600
 
         # Header WCS
         w = wcs.WCS(naxis=2)
@@ -345,7 +362,7 @@ class Ciboulette(object):
         catalog = 'GSC2.3'
         data_field = sct.regionincatalog(RA_deg, DEC_deg,field_RA,field_DEC,mag,catalog,'_RAJ2000', '_DEJ2000', 'Vmag')
     
-        title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focale) + ' | ' +  self.instrument
+        title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument
     
         fig = plt.figure(figsize=(20,16))
         ax = fig.add_subplot(111, projection=w)
@@ -392,12 +409,11 @@ class Ciboulette(object):
             self.pixelXY = ccd.pixelsizex()
             self._date = ccd.lastexposurestarttime()
             self._temperature = ccd.ccdtemperature()
-            _exposurealpaca(exposure,ccd,telescope,filterwheel):
+            _exposurealpaca(exposure,ccd,telescope,filterwheel)
         else:
-            _exposureindilib(exposure,ccd,telescope,filterwheel):
+            _exposureindilib(exposure,ccd,telescope,filterwheel)
         
-        self.extendedfits
-        
+        self.extendedfits()       
 
     def _exposureindilib(self,exposure,ccd,telescope,filterwheel):
         """
@@ -407,15 +423,12 @@ class Ciboulette(object):
          telescope (Telescope): Telescope indilib object.
          filterwheel (Filterwheel): Filterwheel indilib object.           
         """
-        """
-        Shoot
-        """
         hdul = ccd.startexposure(self._exp_time,True)
         while not ccd.imageready():
             time.sleep(1)  
         file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)         
-        
+         
     def _exposurealpaca(self,exposure,ccd,telescope,filterwheel):
         """
         Get CCD, telescope and filterwheel and write fits file 
@@ -424,8 +437,7 @@ class Ciboulette(object):
          telescope (Telescope): Telescope alpaca object.
          filterwheel (Filterwheel): Filterwheel alpaca object.           
         """
-        #Shoot
-         ccd.startexposure(self._exp_time,True)
+        ccd.startexposure(self._exp_time,True)
         while not ccd.imageready():
             time.sleep(1)         
         # Translate picture
@@ -438,9 +450,8 @@ class Ciboulette(object):
         hdu = fits.PrimaryHDU(data=data_int16)
         file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         fits.writeto(file_name, hdu.data, hdu.header, overwrite=True) 
-
-    @property
-    def extendedfits(self)
+    
+    def extendedfits(self):
         """
         Write fits header extended and fits file
         """
@@ -462,7 +473,7 @@ class Ciboulette(object):
         fits.setval(fits_file, 'SITELONG', value=self.longitude, comment='Observatory longitude', savecomment=True)
         fits.setval(fits_file, 'SITEELEV', value=self.elevation, comment='Driver create', savecomment=True) 
         fits.setval(fits_file, 'SWCREATE', value=self.driver_name, comment='Driver create', savecomment=True) 
-        fits.setval(fits_file, 'FOCALLEN', value=self.focale, comment='[mm] Telescope focal length', savecomment=True) 
+        fits.setval(fits_file, 'FOCALLEN', value=self.focal, comment='[mm] Telescope focal length', savecomment=True) 
         fits.setval(fits_file, 'FRAMEX', value=0, comment='Frame start x', savecomment=True)
         fits.setval(fits_file, 'FRAMEY', value=0, comment='Frame start y', savecomment=True)                                                                   
         fits.setval(fits_file, 'DATE-OBS', value=self._date, comment='UTC start date of observation', savecomment=True)
@@ -494,8 +505,8 @@ class Ciboulette(object):
         crpix2 = int(header['NAXIS2'])/2
 
         # Element for CDELT
-        cdelt1 = (206*int(header['PIXSIZE1'])*int(header['XBINNING'])/self.focale)/3600
-        cdelt2 = (206*int(header['PIXSIZE2'])*int(header['YBINNING'])/self.focale)/3600
+        cdelt1 = (206*int(header['PIXSIZE1'])*int(header['XBINNING'])/self.focal)/3600
+        cdelt2 = (206*int(header['PIXSIZE2'])*int(header['YBINNING'])/self.focal)/3600
 
         # Header WCS
         w = wcs.WCS(naxis=2)
