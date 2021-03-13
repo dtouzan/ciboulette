@@ -8,7 +8,7 @@ from astropy.io import fits
 from astroquery.vizier import Vizier
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
-
+from astropy import wcs
 
 class Sector:
     
@@ -95,6 +95,7 @@ class Sector:
                 ra = float(line[0])
                 dec = float(line[1])
                 Mv = float(line[2])
+                #PASSER PAR UN TABLEAU [champ,m18+,m17,m16,m15,...,m-3]
                 if Mv != 'masked' :
                     marker_size = 1
                     if Mv > 15:
@@ -116,11 +117,31 @@ class Sector:
                         
                     table_ra.append(ra)
                     table_dec.append(dec)
-                    table_marker.append(marker_size)
-                
+                    table_marker.append(marker_size)              
                 else :
                     table_ra.append(ra)
                     table_dec.append(dec)
-                    table_Marker.append(0)
-        
+                    table_marker.append(-100)        
             return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
+    
+    def WCSsector(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
+        """
+        Return WSC for sector
+        """    
+        # Element for CRPIX
+        crpix1 = int(naxis1)/2
+        crpix2 = int(naxis2)/2
+        # Element for CDELT
+        cdelt1 = (206*int(pixelXY)*int(binXY)/focal)/3600
+        cdelt2 = (206*int(pixelXY)*int(binXY)/focal)/3600
+        # Header WCS
+        w = wcs.WCS(naxis=2)
+        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+        # CRVAL 
+        w.wcs.crval = [ra * 15, dec] 
+        # CRPIX Vecteur à 2 éléments donnant les coordonnées X et Y du pixel de référence 
+        # (def = NAXIS / 2) dans la convention FITS (le premier pixel est 1,1)
+        w.wcs.crpix = [crpix1, crpix2]
+        # CDELT Vecteur à 2 éléments donnant l'incrément physique au pixel de référence
+        w.wcs.cdelt = [-cdelt1, cdelt2]      
+        return w

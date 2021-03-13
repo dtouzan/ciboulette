@@ -3,9 +3,10 @@ Ephemcc software
 """
 
 from astropy.io.votable import parse_single_table
+from astropy.table import Table
+from astropy.coordinates import SkyCoord, Angle
 import os
 import wget
-
 
 class Ephemcc(object):    
     """
@@ -48,7 +49,7 @@ class Ephemcc(object):
     def name(self,name_query):     
         """
         The designation (1) of the target
-         Ex.: p:Mars, p:5, a:Pallas, a:1999 TC36(*), c:p/halley       
+         Ex.: Mars, 5, Pallas, 1999 TC36(*), p/halley       
          Attributes:
                 name_query (str): name traget.        
         """ 
@@ -145,4 +146,39 @@ class Ephemcc(object):
             longitude = float(sitedict['LONG'])
         if 'ELEV' in sitedict:
             elevation = float(sitedict['ELEV'])
-        self.observer = str(longitude)+self.key_space+str(latitude)+self.key_space+str(elevation)
+        self.observer = str(longitude)+self.key_space+str(latitude)+self.key_space+str(elevation)    
+
+    @property
+    def regionincatalog(self):
+        """
+        Return data of file
+        """
+        table_ra = []
+        table_dec = []
+        table_marker = []
+        table = parse_single_table(self.filename).to_table()
+        if table:
+            for line in table:
+                c = SkyCoord(line['ra'], line['dec'], unit='deg', frame='icrs')
+                table_ra.append(c.ra.degree*15)
+                table_dec.append(c.dec.degree)
+                Mv = float(line['mv'])
+                marker_size = 1
+                if Mv > 15:
+                    marker_size = 1  
+                if Mv > 12 and Mv <= 15:
+                    marker_size = 2  
+                if Mv > 10 and Mv <= 12:
+                    marker_size = 5  
+                if Mv > 9 and Mv <= 10:
+                    marker_size = 8
+                if Mv > 8 and Mv <= 9:
+                    marker_size = 12
+                if Mv > 7 and Mv <= 8:
+                    marker_size = 20
+                if Mv > 6 and Mv <= 7:
+                    marker_size = 35
+                if Mv <= 5:
+                    marker_size = 50
+                table_marker.append(marker_size)        
+        return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])

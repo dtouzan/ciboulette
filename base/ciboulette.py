@@ -11,6 +11,7 @@ from astropy.table import Table
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
 from astropy import wcs
+from astropy.io.votable import parse_single_table
 from astropy.utils.data import get_pkg_data_filename
 from alpaca import Telescope, Camera, FilterWheel
 from ciboulette.base import constent
@@ -184,6 +185,14 @@ class Ciboulette(object):
         if f >= 70 and f <= 300:
             self.focal = f
             self.diameter = 53
+    
+    @property
+    def M603(self):
+        """
+        Set Intes M603 configuration 1500mm
+        """
+        self.focal = 1500
+        self.diameter = 150
 
     @property
     def filtername(self):
@@ -328,55 +337,33 @@ class Ciboulette(object):
     @property    
     def starmap(self):
         """
-        Displays the stars map with maximal magnitude 12
+        Return data, WCS and title for display
         """
-
-        RA_deg = self.ra*15
-        DEC_deg = self.dec
-      
-        # Element for CRPIX
-        crpix1 = int(self.naxis1)/2
-        crpix2 = int(self.naxis2)/2
-
-        # Element for CDELT
-        cdelt1 = (206*int(self.pixelXY)*int(self.binXY)/self.focal)/3600
-        cdelt2 = (206*int(self.pixelXY)*int(self.binXY)/self.focal)/3600
-
-        # Header WCS
-        w = wcs.WCS(naxis=2)
-        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
-        # CRVAL 
-        w.wcs.crval = [RA_deg, DEC_deg] 
-        # CRPIX Vecteur à 2 éléments donnant les coordonnées X et Y du pixel de référence 
-        # (def = NAXIS / 2) dans la convention FITS (le premier pixel est 1,1)
-        w.wcs.crpix = [crpix1, crpix2]
-        # CDELT Vecteur à 2 éléments donnant l'incrément physique au pixel de référence
-        w.wcs.cdelt = [-cdelt1, cdelt2]   
-    
         sct = Sct.Sector()
-        field_RA = cdelt1*self.naxis1
-        field_DEC= cdelt2*self.naxis2
-        #field_RA = 1.5
-        #field_DEC= 1.5
-        if field_RA <= 2 and field_DEC <= 2:
+        WCS = sct.WCSsector(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
+        field_RA = WCS.wcs.cdelt[0]*self.naxis1
+        field_DEC= WCS.wcs.cdelt[1]*self.naxis2
+        mag = 12
+        if field_DEC <= 3:
+            mag = 14
+        if field_DEC <= 1:
             mag = 18
-        else:
-            mag = 12
         catalog = 'GAIA-EDR3'
-        data_field = sct.regionincatalog(RA_deg, DEC_deg,field_RA,field_DEC,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')
-    
+        data = sct.regionincatalog(self.ra*15, self.dec,field_RA,field_DEC,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
         title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument
+        return data,WCS,title
+          
+    def ephemccmap(self,ephemcc):
+        """
+        Return data and title EPHEMCC for display
+        """
+        sct = Sct.Sector()
+        WCS = sct.WCSsector(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
+        title = ephemcc.name        
+        data = ephemcc.regionincatalog
+        return data,WCS,title
+       
     
-        fig = plt.figure(figsize=(20,16))
-        ax = fig.add_subplot(111, projection=w)
-        ax.grid(b = True, linestyle = '--', color = 'black', alpha = 0.40)
-        ax.scatter(data_field['RA'], data_field['DEC'], transform=ax.get_transform('icrs'), s=data_field['MARKER'],edgecolor='black', facecolor='black')
-        fig.suptitle(title, y = 0.92, fontsize = 12)
-        plt.xlabel('RA')
-        plt.ylabel('Dec')
-        # Display
-        plt.show()
-   
     def exposure(self,exposure,ccd,telescope,filterwheel):
         """
         Get CCD, telescope and filterwheel and write fits file 
