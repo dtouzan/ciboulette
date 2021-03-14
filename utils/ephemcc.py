@@ -162,23 +162,5 @@ class Ephemcc(object):
                 c = SkyCoord(line['ra'], line['dec'], unit='deg', frame='icrs')
                 table_ra.append(c.ra.degree*15)
                 table_dec.append(c.dec.degree)
-                Mv = float(line['mv'])
-                marker_size = 1
-                if Mv > 15:
-                    marker_size = 1  
-                if Mv > 12 and Mv <= 15:
-                    marker_size = 2  
-                if Mv > 10 and Mv <= 12:
-                    marker_size = 5  
-                if Mv > 9 and Mv <= 10:
-                    marker_size = 8
-                if Mv > 8 and Mv <= 9:
-                    marker_size = 12
-                if Mv > 7 and Mv <= 8:
-                    marker_size = 20
-                if Mv > 6 and Mv <= 7:
-                    marker_size = 35
-                if Mv <= 5:
-                    marker_size = 50
-                table_marker.append(marker_size)        
+                table_marker.append(int(line['mv']))
         return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])

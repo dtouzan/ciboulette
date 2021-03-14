@@ -341,15 +341,15 @@ class Ciboulette(object):
         """
         sct = Sct.Sector()
         WCS = sct.WCSsector(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
-        field_RA = WCS.wcs.cdelt[0]*self.naxis1
-        field_DEC= WCS.wcs.cdelt[1]*self.naxis2
-        mag = 12
-        if field_DEC <= 3:
-            mag = 14
-        if field_DEC <= 1:
+        #field_RA = WCS.wcs.cdelt[0]*self.naxis1
+        field = WCS.wcs.cdelt[1]*self.naxis2
+        mag = 10.5
+        if field <= 3:
+            mag = 12.5
+        if field <= 1:
             mag = 18
         catalog = 'GAIA-EDR3'
-        data = sct.regionincatalog(self.ra*15, self.dec,field_RA,field_DEC,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
+        data = sct.regionincatalog(self.ra*15, self.dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
         title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument
         return data,WCS,title
           
