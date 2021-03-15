@@ -328,10 +328,17 @@ class Ciboulette(object):
             # RA and DEC in radian
             value_quadran_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             value_quadran_dec.append(c.dec.radian)
+         
+        milkyway = sct.MilkyWay
+        milkyway_ra = []
+        milkyway_dec = []
+        for line in milkyway:
+            ra = float(line['RA'])*u.deg
+            dec = float(line['DEC'])*u.deg
+            c = SkyCoord(ra, dec, frame='icrs')
+            milkyway_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            milkyway_dec.append(c.dec.radian)
             
-        value_ra_graph = []
-        value_dec_graph = []
-        value_color_graph = []
         title =''    
         # RA and DEC in degrees
         ra=float(self.ra)*15*u.deg
@@ -348,6 +355,7 @@ class Ciboulette(object):
         ax = fig.add_subplot(111,projection='aitoff')
         plt.grid(True,axis='both',linestyle='--')
         # Projection drawing
+        plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=2, alpha=0.2)
         if len(sector_arch) > 0:
             plt.plot(value_quadran_ra, value_quadran_dec, 's', color='green', markersize=5, alpha=0.2)   
         plt.plot(value_ra, value_dec, 's', color='red', markersize=5, alpha=0.4)
