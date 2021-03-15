@@ -13,6 +13,7 @@ from astropy import units as u
 from astropy import wcs
 from astropy.io.votable import parse_single_table
 from astropy.utils.data import get_pkg_data_filename
+from astroquery.simbad import Simbad
 from alpaca import Telescope, Camera, FilterWheel
 from ciboulette.base import constent
 from ciboulette.sector import sector as Sct
@@ -288,6 +289,26 @@ class Ciboulette(object):
         """
         telescope.slewtocoordinates(self.ra,self.dec)
 
+    @property    
+    def positionsbyname(self):
+        """
+        Return object name, RA and DEC
+        """
+        return self.object_name,self.ra,self.dec
+    
+    @positionsbyname.setter
+    def positionsbyname(self,string):
+        """
+        Set RA and DEC with astroquery name object
+        """
+        ra = 0
+        dec = 90
+        result_table = Simbad.query_object(string)
+        c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg))
+        self.ra = c.ra.deg[0]    # Hours
+        self.dec = c.dec.deg[0]  # degrees
+        self.object_name = result_table['MAIN_ID'][0]
+
     @property
     def projections(self):
         """
@@ -345,9 +366,9 @@ class Ciboulette(object):
         WCS = sct.WCS(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
         field = WCS.wcs.cdelt[1]*self.naxis2
-        mag = 11.5
+        mag = 11
         if field <= 3:
-            mag = 15.5
+            mag = 14
         if field <= 1:
             mag = 18
         catalog = 'GAIA-EDR3'
