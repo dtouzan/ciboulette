@@ -18,8 +18,6 @@ from ciboulette.base import constent
 from ciboulette.sector import sector as Sct
 from ciboulette.utils import exposure as Exp
 from ciboulette.utils import planning as Pln
-from astropy import wcs
-
 
 class Ciboulette(object):
         
@@ -52,6 +50,10 @@ class Ciboulette(object):
         self._exp_time = 0
         self._frameid = 0
         self._datatype = ''
+        self._pressure = 0
+        self._humidity  = 0
+        self._temperature  = 0
+        self._description = 'Observatory UT1, 10 route de la mare maury, France. @' + str(self.latitude) + ',' + str(self.longitude) + ',' + str(self.elevation) + 'm'
 
     @property
     def table(self):
@@ -340,12 +342,12 @@ class Ciboulette(object):
         Return data, WCS and title for display
         """
         sct = Sct.Sector()
-        WCS = sct.WCSsector(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
+        WCS = sct.WCS(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
         field = WCS.wcs.cdelt[1]*self.naxis2
-        mag = 10.5
+        mag = 11.5
         if field <= 3:
-            mag = 12.5
+            mag = 15.5
         if field <= 1:
             mag = 18
         catalog = 'GAIA-EDR3'
@@ -353,14 +355,15 @@ class Ciboulette(object):
         title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument
         return data,WCS,title
           
-    def ephemccmap(self,ephemcc):
+    def miriademap(self,target,epoch,epoch_step,epoch_nsteps):
         """
-        Return data and title EPHEMCC for display
-        """
+        Return data and title Miriade for display
+        """   
         sct = Sct.Sector()
-        WCS = sct.WCSsector(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
-        title = ephemcc.name        
-        data = ephemcc.regionincatalog
+        WCS = sct.WCS(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
+        location = str(self.longitude) + ' ' + str(self.latitude) + ' ' + str(self.elevation)
+        data = sct.miriadeincatalog(target,epoch,epoch_step,epoch_nsteps,1,location)
+        title = target +' | ' + epoch.value        
         return data,WCS,title
        
     

@@ -9,6 +9,7 @@ from astroquery.vizier import Vizier
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
 from astropy import wcs
+from astroquery.imcce import Miriade, MiriadeClass
 from ciboulette.base import constent
 
 class Sector:
@@ -91,8 +92,29 @@ class Sector:
                     table_dec.append(dec)
                     table_marker.append(marker_size)              
             return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
-    
-    def WCSsector(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
+
+    def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
+        """
+        Returns the table of RA, DEC and markers with Miriade calulator
+        Attributes:
+                target (string)         : target
+                epoch (Time)            : epoch
+                epoch_step (string)     : Miriade definition
+                epoch_nsteps (int)      : Iteration Number
+                coordtype (int)         : Miriade definition
+                location (string)       : Miriade definition
+        """
+        eph = Miriade.get_ephemerides(target, epoch=epoch, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
+        table_ra = []
+        table_dec = []
+        table_marker = []    
+        for line in eph:
+            table_ra.append(line['RA'])
+            table_dec.append(line['DEC'])
+            table_marker.append(int(line['V']))                        
+        return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])        
+        
+    def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
         Return WSC for sector
         """    
