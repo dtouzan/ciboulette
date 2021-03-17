@@ -339,6 +339,26 @@ class Ciboulette(object):
             milkyway_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             milkyway_dec.append(c.dec.radian)
             
+        opc = sct.opencluster16
+        opc_ra = []
+        opc_dec = []
+        for line in opc:
+            if 'NGC' in line['MAIN_ID']:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                ra = c.ra*15
+                opc_ra.append(-ra.wrap_at(180 * u.deg).radian)
+                opc_dec.append(c.dec.radian)
+        
+        location = str(self.longitude) + ' ' + str(self.latitude) + ' ' + str(self.elevation)
+        moon = sct.miriademoon(location)
+        moon_ra = []
+        moon_dec = []
+        for line in moon:
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+            moon_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            moon_dec.append(c.dec.radian)
+            moon_v = line['MARKER']
+                
         title =''    
         # RA and DEC in degrees
         ra=float(self.ra)*15*u.deg
@@ -355,7 +375,11 @@ class Ciboulette(object):
         ax = fig.add_subplot(111,projection='aitoff')
         plt.grid(True,axis='both',linestyle='--')
         # Projection drawing
-        plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=2, alpha=0.2)
+        plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=1, alpha=0.2)
+        plt.fill_between(milkyway_ra,milkyway_dec, color='blue', alpha=0.1)        
+        plt.plot(opc_ra, opc_dec, 'o', color='blue', markersize=2, alpha=0.25)
+        plt.plot(moon_ra, moon_dec, 'o', color='black', markersize=moon_v, alpha=0.4)
+        
         if len(sector_arch) > 0:
             plt.plot(value_quadran_ra, value_quadran_dec, 's', color='green', markersize=5, alpha=0.2)   
         plt.plot(value_ra, value_dec, 's', color='red', markersize=5, alpha=0.4)

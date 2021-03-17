@@ -6,9 +6,11 @@ import os
 from astropy.table import Table
 from astropy.io import fits
 from astroquery.vizier import Vizier
+from astroquery.simbad import Simbad
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
 from astropy import wcs
+from astropy.time import Time
 from astropy.io import ascii
 from astroquery.imcce import Miriade, MiriadeClass
 from ciboulette.base import constent
@@ -106,14 +108,40 @@ class Sector:
                 location (string)       : Miriade definition
         """
         eph = Miriade.get_ephemerides(target, epoch=epoch, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
-        table_ra = []
-        table_dec = []
-        table_marker = []    
+        ra = []
+        dec = []
+        marker = []    
         for line in eph:
-            table_ra.append(line['RA'])
-            table_dec.append(line['DEC'])
-            table_marker.append(int(line['V']))                        
-        return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])        
+            ra.append(line['RA'])
+            dec.append(line['DEC'])
+            marker.append(int(line['V']))                        
+        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
+    
+    def miriademoon(self,location):     
+        """
+        Returns the table of RA, DEC and markers with Miriade calulator
+        Attributes:
+                target (string)         : target
+                epoch (Time)            : epoch
+                epoch_step (string)     : Miriade definition
+                epoch_nsteps (int)      : Iteration Number
+                coordtype (int)         : Miriade definition
+                location (string)       : Miriade definition
+        """
+        now = Time.now()
+        eph = Miriade.get_ephemerides('p:moon', epoch=now, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
+        ra = []
+        dec = []
+        marker = []    
+        for line in eph:
+            ra.append(line['RA'])
+            dec.append(line['DEC'])
+            if line['V'] < -1:
+                marker.append(-int(line['V']))
+            else: 
+                marker.append(1)                   
+        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
+
         
     def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
@@ -163,4 +191,19 @@ class Sector:
               55.22137,50.68865,44.85667,40.01008,40.01010,37.88967,28.60643,21.14243,17.38349,7.40713,2.26840,-0.51347,
               -7.03323,-17.05423,-38.26060,-47.33652,-59.27516,-71.99297,-49.42058]
 
-        return Table([name_id,ra,dec], names=['NAME_ID', 'RA', 'DEC'])     
+        return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])     
+    
+    @property
+    def opencluster16(self):
+        """
+        Return Table of Open Cluster < 16 Mv
+        """
+        result = Simbad.query_criteria("otype='OpC' & Vmag<16")
+        ra = []
+        dec = []
+        main_id = []    
+        for line in result:
+            ra.append(line['RA'])
+            dec.append(line['DEC'])
+            main_id.append(line['MAIN_ID'])                        
+        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
