@@ -95,54 +95,7 @@ class Sector:
                     table_dec.append(dec)
                     table_marker.append(marker_size)              
             return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
-
-    def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
-        """
-        Returns the table of RA, DEC and markers with Miriade calulator
-        Attributes:
-                target (string)         : target
-                epoch (Time)            : epoch
-                epoch_step (string)     : Miriade definition
-                epoch_nsteps (int)      : Iteration Number
-                coordtype (int)         : Miriade definition
-                location (string)       : Miriade definition
-        """
-        eph = Miriade.get_ephemerides(target, epoch=epoch, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
-        ra = []
-        dec = []
-        marker = []    
-        for line in eph:
-            ra.append(line['RA'])
-            dec.append(line['DEC'])
-            marker.append(int(line['V']))                        
-        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
-    
-    def miriademoon(self,location):     
-        """
-        Returns the table of RA, DEC and markers with Miriade calulator
-        Attributes:
-                target (string)         : target
-                epoch (Time)            : epoch
-                epoch_step (string)     : Miriade definition
-                epoch_nsteps (int)      : Iteration Number
-                coordtype (int)         : Miriade definition
-                location (string)       : Miriade definition
-        """
-        now = Time.now()
-        eph = Miriade.get_ephemerides('p:moon', epoch=now, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
-        ra = []
-        dec = []
-        marker = []    
-        for line in eph:
-            ra.append(line['RA'])
-            dec.append(line['DEC'])
-            if line['V'] < -1:
-                marker.append(-int(line['V']))
-            else: 
-                marker.append(1)                   
-        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
-
-        
+     
     def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
         Return WSC for sector
@@ -206,4 +159,26 @@ class Sector:
             ra.append(line['RA'])
             dec.append(line['DEC'])
             main_id.append(line['MAIN_ID'])                        
+        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
+
+    @property
+    def HerbigAeBeStars(self):
+        """
+        Return Table of HerbigAeBeStars
+        Catalog Title: 
+        Herbig Ae/Be accretion rates & mechanisms (Wichittanakom+ 2020)
+        Accretion properties of Herbig Ae/Be stars in Vioque et al. (2018, Cat. J/A+A/620/A128)
+        """
+        v = Vizier(catalog="J/MNRAS/493/234", columns=['_RAJ2000', '_DEJ2000', '*'])
+        v.ROW_LIMIT = 5000
+        result = v.query_constraints()        
+        ra = []
+        dec = []
+        main_id = []    
+        for table_name in result.keys():
+            table = result[table_name]
+            for line in table:
+                ra.append(line[0])
+                dec.append(line[1])
+                main_id.append('Herbig Ae/Be')                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
