@@ -168,9 +168,10 @@ class Sector:
         Catalog Title: 
         Herbig Ae/Be accretion rates & mechanisms (Wichittanakom+ 2020)
         Accretion properties of Herbig Ae/Be stars in Vioque et al. (2018, Cat. J/A+A/620/A128)
+        J/MNRAS/493/234
         """
         v = Vizier(catalog="J/MNRAS/493/234", columns=['_RAJ2000', '_DEJ2000', '*'])
-        v.ROW_LIMIT = 5000
+        v.ROW_LIMIT = 50000
         result = v.query_constraints()        
         ra = []
         dec = []
@@ -182,3 +183,23 @@ class Sector:
                 dec.append(line[1])
                 main_id.append('Herbig Ae/Be')                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
+
+    @property
+    def CepheidStars(self):
+        """
+        Return Table of Cepheid
+        Catalog Title: I/345/cepheid       
+        """
+        v = Vizier(catalog="I/345/cepheid", columns=['_RAJ2000', '_DEJ2000', '*'])
+        v.ROW_LIMIT = 50000
+        result = v.query_constraints()        
+        ra = []
+        dec = []
+        main_id = []    
+        for table_name in result.keys():
+            table = result[table_name]
+            for line in table:
+                ra.append(line[0])
+                dec.append(line[1])
+                main_id.append(line[2])                        
+        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])  

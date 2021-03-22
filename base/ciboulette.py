@@ -357,16 +357,14 @@ class Ciboulette(object):
             herbig_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             herbig_dec.append(c.dec.radian)
         
- #      location = str(self.longitude) + ' ' + str(self.latitude) + ' ' + str(self.elevation)
- #      moon = sct.miriademoon(location)
- #      moon_ra = []
- #      moon_dec = []
- #      for line in moon:
- #          c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
- #          moon_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
- #          moon_dec.append(c.dec.radian)
- #          moon_v = line['MARKER']
-                
+        cepheid = sct.CepheidStars
+        cepheid_ra = []
+        cepheid_dec = []
+        for line in cepheid:
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+            cepheid_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            cepheid_dec.append(c.dec.radian)
+              
         title =''    
         # RA and DEC in degrees
         ra=float(self.ra)*15*u.deg
@@ -385,10 +383,9 @@ class Ciboulette(object):
         # Projection drawing
         plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(milkyway_ra,milkyway_dec, color='blue', alpha=0.1)        
-        plt.plot(opc_ra, opc_dec, 'o', color='blue', markersize=2, alpha=0.25)
         plt.plot(herbig_ra, herbig_dec, 'o', color='orange', markersize=1, alpha=1)
-        #plt.plot(moon_ra, moon_dec, 'o', color='black', markersize=moon_v, alpha=0.4)
-        
+        plt.plot(cepheid_ra, cepheid_dec, 'o', color='red', markersize=1, alpha=0.2)
+        plt.plot(opc_ra, opc_dec, 'o', color='blue', markersize=2, alpha=0.25)
         if len(sector_arch) > 0:
             plt.plot(value_quadran_ra, value_quadran_dec, 's', color='green', markersize=5, alpha=0.2)   
         plt.plot(value_ra, value_dec, 's', color='red', markersize=5, alpha=0.4)
