@@ -95,6 +95,52 @@ class Sector:
                     table_dec.append(dec)
                     table_marker.append(marker_size)              
             return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
+    
+    def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
+        """
+        Returns the table of RA, DEC and markers with Miriade calulator
+        Attributes:
+                target (string)         : target
+                epoch (Time)            : epoch
+                epoch_step (string)     : Miriade definition
+                epoch_nsteps (int)      : Iteration Number
+                coordtype (int)         : Miriade definition
+                location (string)       : Miriade definition
+        """
+        eph = Miriade.get_ephemerides(target, epoch=epoch, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
+        ra = []
+        dec = []
+        marker = []    
+        for line in eph:
+            ra.append(line['RA'])
+            dec.append(line['DEC'])
+            marker.append(int(line['V']))                        
+        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
+    
+    def miriademoon(self,location):     
+        """
+        Returns the table of RA, DEC and markers with Miriade calulator
+        Attributes:
+                target (string)         : target
+                epoch (Time)            : epoch
+                epoch_step (string)     : Miriade definition
+                epoch_nsteps (int)      : Iteration Number
+                coordtype (int)         : Miriade definition
+                location (string)       : Miriade definition
+        """
+        now = Time.now()
+        eph = Miriade.get_ephemerides('p:moon', epoch=now, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
+        ra = []
+        dec = []
+        marker = []    
+        for line in eph:
+            ra.append(line['RA'])
+            dec.append(line['DEC'])
+            if line['V'] < -1:
+                marker.append(-int(line['V']))
+            else: 
+                marker.append(1)                   
+        return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER']) 
      
     def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
