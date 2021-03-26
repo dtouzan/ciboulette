@@ -348,23 +348,7 @@ class Ciboulette(object):
                 ra = c.ra*15
                 opc_ra.append(-ra.wrap_at(180 * u.deg).radian)
                 opc_dec.append(c.dec.radian)
-                
-        herbig = sct.HerbigAeBeStars
-        herbig_ra = []
-        herbig_dec = []
-        for line in herbig:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            herbig_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            herbig_dec.append(c.dec.radian)
-        
-        cepheid = sct.CepheidStars
-        cepheid_ra = []
-        cepheid_dec = []
-        for line in cepheid:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            cepheid_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            cepheid_dec.append(c.dec.radian)
-              
+                            
         title =''    
         # RA and DEC in degrees
         ra=float(self.ra)*15*u.deg
@@ -374,7 +358,7 @@ class Ciboulette(object):
         # RA and DEC in radian
         value_ra = -c.ra.wrap_at(180 * u.deg).radian
         value_dec= c.dec.radian
-        title = self.telescope_name + ' | ' + self.observer_name + ' | ' + self.filter_name + '\n'
+        title = 'NGC Open cluster less than 16 Mv\n'
         # Display configuration
         fig = plt.figure(figsize=(10,10))
         # Configuration de la projecion cartographique du titre et grille 
@@ -383,8 +367,6 @@ class Ciboulette(object):
         # Projection drawing
         plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(milkyway_ra,milkyway_dec, color='blue', alpha=0.1)        
-        plt.plot(herbig_ra, herbig_dec, 'o', color='orange', markersize=1, alpha=1)
-        plt.plot(cepheid_ra, cepheid_dec, 'o', color='red', markersize=1, alpha=0.2)
         plt.plot(opc_ra, opc_dec, 'o', color='blue', markersize=2, alpha=0.25)
         if len(sector_arch) > 0:
             plt.plot(value_quadran_ra, value_quadran_dec, 's', color='green', markersize=5, alpha=0.2)   
@@ -411,7 +393,7 @@ class Ciboulette(object):
             mag = 18
         catalog = 'GAIA-EDR3'
         data = sct.regionincatalog(self.ra*15, self.dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
-        title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument
+        title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument + ' | ' + self.telescope_name + ' | ' + self.observer_name + ' | ' + self.filter_name + '\n'
         return data,WCS,title
           
     def miriademap(self,target,epoch,epoch_step,epoch_nsteps):
