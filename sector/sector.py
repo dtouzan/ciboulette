@@ -193,11 +193,39 @@ class Sector:
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])     
     
     @property
+    def smc(self):
+        """
+        Return Table of SMC
+        """
+        name_id = ['smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc']
+    
+        ra = [15.71412,13.35367,12.35204,11.46044,11.04552,10.56770,10.59704,11.87215,13.35488,
+              14.05924,14.38190,14.35466,14.39971,14.53188,14.85369,15.78852,16.07202,16.09278,15.71412]
+        
+        dec= [-71.80571,-72.10860,-72.42878,-72.64489,-72.83957,-73.22119,-73.38194,-73.59739,-73.66183,-73.57383,
+              -73.36562,-73.03905,-72.74186,-72.57571,-72.41027,-72.25918,-72.17162,-72.06272,-71.80571] 
+       
+        return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
+            
+    @property
+    def lmc(self):
+        """
+        Return Table of LMC
+        """
+        name_id = []
+    
+        ra = []
+        
+        dec= [] 
+       
+        return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC']) 
+
+    @property
     def opencluster16(self):
         """
         Return Table of Open Cluster < 16 Mv
         """
-        result = Simbad.query_criteria("otype='OpC' & Vmag<16")
+        result = Simbad.query_criteria('Vmag<16.5',otype='OpC')
         ra = []
         dec = []
         main_id = []    
