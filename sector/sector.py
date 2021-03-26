@@ -225,7 +225,7 @@ class Sector:
         """
         Return Table of Open Cluster < 16 Mv
         """
-        result = Simbad.query_criteria('Vmag<16.5',otype='OpC')
+        result = Simbad.query_criteria('Vmag<16.1',maintype='OpC')
         ra = []
         dec = []
         main_id = []    

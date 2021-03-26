@@ -354,11 +354,11 @@ class Ciboulette(object):
         opc_ra = []
         opc_dec = []
         for line in opc:
-            if 'NGC' in line['MAIN_ID']:
-                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-                ra = c.ra*15
-                opc_ra.append(-ra.wrap_at(180 * u.deg).radian)
-                opc_dec.append(c.dec.radian)
+            #if 'NGC' in line['MAIN_ID']:
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+            ra = c.ra*15
+            opc_ra.append(-ra.wrap_at(180 * u.deg).radian)
+            opc_dec.append(c.dec.radian)
         
         location = str(self.longitude) + ' ' + str(self.latitude) + ' ' + str(self.elevation)
         moon = sct.miriademoon(location)
