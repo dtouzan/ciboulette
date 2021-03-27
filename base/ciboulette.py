@@ -218,7 +218,10 @@ class Ciboulette(object):
          filter_name (str): Filter name.           
         """       
         filter_number = 0  
-        filter_names = filterwheel.names()
+        if isinstance(filterwheel, FilterWheel):
+            filter_names = filterwheel.names()
+        else:
+            filter_names = filterwheel.names
         if self.filter_name in filter_names:
             filter_number = filter_names.index(self.filter_name)
             filterwheel.position(filter_number)
@@ -320,12 +323,7 @@ class Ciboulette(object):
         value_quadran_ra = []
         value_quadran_dec = []   
         for line in sector_arch:        
-            # RA and DEC in degrees
-            value_RA_quadran = float(line['RA'])*u.deg
-            value_DEC_quadran = float(line['DEC'])*u.deg
-            # ICRS configuration
-            c = SkyCoord(value_RA_quadran, value_DEC_quadran, frame='icrs')
-            # RA and DEC in radian
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             value_quadran_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             value_quadran_dec.append(c.dec.radian)
          
@@ -333,9 +331,7 @@ class Ciboulette(object):
         milkyway_ra = []
         milkyway_dec = []
         for line in milkyway:
-            ra = float(line['RA'])*u.deg
-            dec = float(line['DEC'])*u.deg
-            c = SkyCoord(ra, dec, frame='icrs')
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             milkyway_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             milkyway_dec.append(c.dec.radian)
  
@@ -343,9 +339,7 @@ class Ciboulette(object):
         lmc_ra = []
         lmc_dec = []
         for line in lmc:
-            ra = float(line['RA'])*u.deg
-            dec = float(line['DEC'])*u.deg
-            c = SkyCoord(ra, dec, frame='icrs')
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             lmc_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             lmc_dec.append(c.dec.radian)
  
@@ -353,18 +347,14 @@ class Ciboulette(object):
         smc_ra = []
         smc_dec = []
         for line in smc:
-            ra = float(line['RA'])*u.deg
-            dec = float(line['DEC'])*u.deg
-            c = SkyCoord(ra, dec, frame='icrs')
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             smc_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            smc_dec.append(c.dec.radian)
- 
+            smc_dec.append(c.dec.radian) 
             
         opc = sct.opencluster16
         opc_ra = []
         opc_dec = []
         for line in opc:
-            #if 'NGC' in line['MAIN_ID']:
             c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             ra = c.ra*15
             opc_ra.append(-ra.wrap_at(180 * u.deg).radian)
@@ -379,7 +369,6 @@ class Ciboulette(object):
             moon_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             moon_dec.append(c.dec.radian)
             moon_v = line['MARKER']
-
                             
         title =''    
         # RA and DEC in degrees
@@ -399,8 +388,10 @@ class Ciboulette(object):
         # Projection drawing
         plt.plot(milkyway_ra, milkyway_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(milkyway_ra,milkyway_dec, color='blue', alpha=0.1)  
+        
         plt.plot(smc_ra, smc_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(smc_ra,smc_dec, color='blue', alpha=0.1)        
+
         plt.plot(lmc_ra, lmc_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(lmc_ra,lmc_dec, color='blue', alpha=0.1)        
 
