@@ -338,7 +338,17 @@ class Ciboulette(object):
             c = SkyCoord(ra, dec, frame='icrs')
             milkyway_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             milkyway_dec.append(c.dec.radian)
-        
+ 
+        lmc = sct.lmc
+        lmc_ra = []
+        lmc_dec = []
+        for line in lmc:
+            ra = float(line['RA'])*u.deg
+            dec = float(line['DEC'])*u.deg
+            c = SkyCoord(ra, dec, frame='icrs')
+            lmc_ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            lmc_dec.append(c.dec.radian)
+ 
         smc = sct.smc
         smc_ra = []
         smc_dec = []
@@ -380,7 +390,7 @@ class Ciboulette(object):
         # RA and DEC in radian
         value_ra = -c.ra.wrap_at(180 * u.deg).radian
         value_dec= c.dec.radian
-        title = 'NGC Open cluster less than 16 Mv\n'
+        title = 'Open cluster less than 16 Mv\n'
         # Display configuration
         fig = plt.figure(figsize=(15,15))
         # Configuration de la projecion cartographique du titre et grille 
@@ -391,7 +401,9 @@ class Ciboulette(object):
         plt.fill_between(milkyway_ra,milkyway_dec, color='blue', alpha=0.1)  
         plt.plot(smc_ra, smc_dec, color='blue', lw=1, alpha=0.2)
         plt.fill_between(smc_ra,smc_dec, color='blue', alpha=0.1)        
- 
+        plt.plot(lmc_ra, lmc_dec, color='blue', lw=1, alpha=0.2)
+        plt.fill_between(lmc_ra,lmc_dec, color='blue', alpha=0.1)        
+
         plt.plot(opc_ra, opc_dec, 'o', color='blue', markersize=2, alpha=0.25)
         
         plt.plot(moon_ra, moon_dec, 'o', color='black', markersize=moon_v, alpha=0.15)
