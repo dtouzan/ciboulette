@@ -15,7 +15,7 @@ from astropy.io import ascii
 from astroquery.imcce import Miriade, MiriadeClass
 from ciboulette.base import constent
 
-class Sector:
+class Sector(object):
     
     def __init__(self):
         

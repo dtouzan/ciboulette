@@ -320,7 +320,38 @@ class Ciboulette(object):
         """
         p = projection.Projection()
         p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
-        
+        p.display
+
+    @property
+    def opc16(self):
+        """
+        Displays open cluster on an aitoff projection (mag < 16)     
+        """
+        p = projection.Projection()
+        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.opencluster16
+        p.display
+
+    @property
+    def HerbigAeBe(self):
+        """
+        Displays Herbig Ae/Be on an aitoff projection (mag < 16)     
+        """
+        p = projection.Projection()
+        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.HerbigAeBe
+        p.display
+
+    @property
+    def cepheid(self):
+        """
+        Displays cepheid on an aitoff projection (mag < 16)     
+        """
+        p = projection.Projection(size=20)
+        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.cepheid
+        p.display
+
     @property    
     def starmap(self):
         """
