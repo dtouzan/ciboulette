@@ -117,7 +117,7 @@ class Sector(object):
             marker.append(int(line['V']))                        
         return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
     
-    def miriademoon(self,location):     
+    def miriademoon(self,epoch,location):     
         """
         Returns the table of RA, DEC and markers with Miriade calulator
         Attributes:
@@ -128,8 +128,7 @@ class Sector(object):
                 coordtype (int)         : Miriade definition
                 location (string)       : Miriade definition
         """
-        now = Time.now()
-        eph = Miriade.get_ephemerides('p:moon', epoch=now, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
+        eph = Miriade.get_ephemerides('p:moon', epoch=epoch, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
         ra = []
         dec = []
         marker = []    
@@ -225,7 +224,23 @@ class Sector(object):
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC']) 
 
     @property
-    def opencluster16(self):
+    def constellation(self):
+        """
+        Return Table of cygnus constellation
+        """
+        name_id = ['cyg01','cyg02','cyg03','cyg04','cyg05','cyg06','cyg04','cyg08','cyg09','cyg10','cyg11','cyg12','cyg13','cyg014',
+                   'cyg15','cyg16','cyg17','cyg18','cyg19','cyg20','cyg21','cyg22','cyg23','cyg24','cyg25','cyg26','cyg27','cyg28']
+    
+        ra = [290.27454,296.37044,296.37566,315.01756,315.16620,327.28906,327.35796,329.40071,329.51316,330.69816,330.75935,309.92472,309.58739,308.39034,
+              308.26438,297.17667,297.16272,291.68812,292.00975,287.00677,287.17769,288.31124,288.40571,292.07598,292.18753,291.54741,290.09924,290.27454]
+        
+        dec= [27.75807,27.71632,29.32198,29.43792,28.47269,28.59526,36.61681,36.69658,44.43569,44.73737,55.48212,55.37129,61.32503,61.36405,
+              59.92392,59.63124,58.21273,58.31922,55.67147,55.67877,47.82238,47.67719,43.67811,43.72546,36.82807,30.33083,30.21923,27.75807]
+       
+        return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
+
+    @property
+    def opencluster(self):
         """
         Return Table of Open Cluster, constraints Vmag < 18.1
         """

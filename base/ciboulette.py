@@ -47,7 +47,7 @@ class Ciboulette(object):
         self.ra = 0.0 # hours
         self.dec = 90.0 # degrees
         self.object_name = 'INIT'
-        self._date = '2021-01-01T00:00:00'
+        self._date = '2021-01-01 00:00:00'
         self._temperature = 0
         self._exp_time = 0
         self._frameid = 0
@@ -323,13 +323,13 @@ class Ciboulette(object):
         p.display
 
     @property
-    def opc16(self):
+    def opencluster(self):
         """
         Displays open cluster on an aitoff projection (mag < 18)     
         """
         p = projection.Projection()
         p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
-        p.opencluster16
+        p.opencluster
         p.display
 
     @property

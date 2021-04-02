@@ -13,11 +13,11 @@ from ciboulette.sector import sector as Sct
 class Projection(object):
         
     def __init__(self,size=10,title=''):
-            self.data = []
             self.title = title
             self.size = size
             self.ra = 0
             self.dec = 0
+            self.date = Time.now()
             self.sct = Sct.Sector()
             self.archive = Table()
             self.cursor = Table()
@@ -25,6 +25,7 @@ class Projection(object):
             self.lmc = Table()
             self.smc = Table()
             self.milkyway = Table()
+            self.constellation = Table()
             self.catalog = Table()
     
     def _cursor(self):
@@ -42,7 +43,7 @@ class Projection(object):
         _dec = []
         _marker = []
         location = str(longitude) + ' ' + str(latitude) + ' ' + str(elevation)
-        moon = self.sct.miriademoon(location)
+        moon = self.sct.miriademoon(self.date,location)
         for line in moon:
             c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
@@ -79,6 +80,16 @@ class Projection(object):
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian)
         self.milkyway = Table([_ra,_dec], names=['RA','DEC'])
+
+    def _constellation(self):
+        _ra = []
+        _dec = []
+        constellation = self.sct.constellation
+        for line in constellation:
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            _dec.append(c.dec.radian)
+        self.constellation = Table([_ra,_dec], names=['RA','DEC']) 
     
     def _archive(self,archives):
         """
@@ -105,15 +116,16 @@ class Projection(object):
         self._lmc()
         self._smc()
         self._milkyway()
+        self._constellation()
         self._moon(latitude,longitude,elevation)
     
     @property
-    def opencluster16(self):
+    def opencluster(self):
         """
         Create open cluster for display
         """ 
         self.title = 'Open cluster catalog less than magnitude 18\n'
-        opc = self.sct.opencluster16
+        opc = self.sct.opencluster
         _ra = []
         _dec = []
         for line in opc:
@@ -169,6 +181,7 @@ class Projection(object):
         plt.plot(self.smc['RA'], self.smc['DEC'], color='blue', lw=1, alpha=0.2)
         plt.fill_between(self.smc['RA'],self.smc['DEC'], color='blue', alpha=0.1)        
         plt.plot(self.lmc['RA'], self.lmc['DEC'], color='blue', lw=1, alpha=0.2)
+        plt.plot(self.constellation['RA'], self.constellation['DEC'], '--', color='black', lw=1, alpha=0.4)
         plt.fill_between(self.lmc['RA'],self.lmc['DEC'], color='blue', alpha=0.1)  
         if len(self.catalog) > 0:
             plt.plot(self.catalog['RA'],self.catalog['DEC'], 'o', color='blue', markersize=2, alpha=0.25)    
