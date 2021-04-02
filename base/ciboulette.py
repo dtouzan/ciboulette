@@ -16,8 +16,8 @@ from astropy.utils.data import get_pkg_data_filename
 from astroquery.simbad import Simbad
 from alpaca import Telescope, Camera, FilterWheel
 from ciboulette.base import constent
-from ciboulette.sector import sector as Sct
 from ciboulette.sector import projection
+from ciboulette.sector import maps
 from ciboulette.utils import exposure as Exp
 from ciboulette.utils import planning as Pln
 
@@ -353,34 +353,25 @@ class Ciboulette(object):
         p.display
 
     @property    
-    def starmap(self):
+    def starsmap(self):
         """
-        Return data, WCS and title for display
-        """
-        sct = Sct.Sector()
-        WCS = sct.WCS(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
-        #field_RA = WCS.wcs.cdelt[0]*self.naxis1
-        field = WCS.wcs.cdelt[1]*self.naxis2
-        mag = 11
-        if field <= 3:
-            mag = 14
-        if field <= 1:
-            mag = 18
-        catalog = 'GAIA-EDR3'
-        data = sct.regionincatalog(self.ra*15, self.dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
-        title = 'VizieR-' + catalog + ' | ' + 'F'+str(self.focal) + ' | ' +  self.instrument + ' | ' + self.telescope_name + ' | ' + self.observer_name + ' | ' + self.filter_name + '\n'
-        return data,WCS,title
-          
-    def miriademap(self,target,epoch,epoch_step,epoch_nsteps):
-        """
-        Return data and title Miriade for display
+        Display stars map at RA and DEC
         """   
-        sct = Sct.Sector()
-        WCS = sct.WCS(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal)
-        location = str(self.longitude) + ' ' + str(self.latitude) + ' ' + str(self.elevation)
-        data = sct.miriadeincatalog(target,epoch,epoch_step,epoch_nsteps,1,location)
-        title = target +' | ' + epoch.value        
-        return data,WCS,title
+        m = maps.Map()
+        m.stars(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal,self.instrument,self.telescope_name,self.observer_name,self.filter_name)
+        m.display
+          
+    def trajectory(self,target,epoch,epoch_step,epoch_nsteps):
+        """
+        Display map with target
+        """   
+        m = maps.Map()
+        m.trajectory(target,epoch,epoch_step,epoch_nsteps,self.latitude,self.longitude,self.elevation)
+        ra = m.target['RA'][0]/15
+        dec = m.target['DEC'][0]
+        self.coordinates = { "RA": ra, "DEC": dec }
+        m.stars(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal,self.instrument,self.telescope_name,self.observer_name,self.filter_name)
+        m.display
        
     
     def exposure(self,exposure,ccd,telescope,filterwheel):
