@@ -197,7 +197,8 @@ class Sector(object):
         """
         Return Table of SMC
         """
-        name_id = ['smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc','smc']
+        name_id = ['smc01','smc02','smc03','smc04','smc05','smc06','smc07','smc08','smc09',
+                   'smc10','smc11','smc12','smc13','smc14','smc15','smc16','smc17','smc18','smc19']
     
         ra = [15.71412,13.35367,12.35204,11.46044,11.04552,10.56770,10.59704,11.87215,13.35488,
               14.05924,14.38190,14.35466,14.39971,14.53188,14.85369,15.78852,16.07202,16.09278,15.71412]
@@ -212,7 +213,8 @@ class Sector(object):
         """
         Return Table of LMC
         """
-        name_id = ['lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc','lmc',]
+        name_id = ['lmc01','lmc02','lmc03','lmc04','lmc05','lmc06','lmc07','lmc08','lmc09','lmc10','lmc11',
+                   'lmc12','lmc13','lmc14','lmc15','lmc16','lmc17','lmc18','lmc19','lmc20','lmc21','lmc22',]
     
         ra = [76.93533,75.85622,75.06883,75.18691,77.14843,78.95547,80.53301,83.01741,84.75381,85.35961,85.67452,85.75220,
               85.60654,85.26041,84.61699,83.88328,83.12758,82.58079,81.56873,79.37675,77.83528,76.93533]
@@ -225,9 +227,9 @@ class Sector(object):
     @property
     def opencluster16(self):
         """
-        Return Table of Open Cluster < 16 Mv
+        Return Table of Open Cluster, constraints Vmag < 18.1
         """
-        result = Simbad.query_criteria('Vmag<16.1',maintype='OpC')
+        result = Simbad.query_criteria('Vmag<18.1',maintype='OpC')
         ra = []
         dec = []
         main_id = []    
@@ -241,8 +243,7 @@ class Sector(object):
     def HerbigAeBeStars(self):
         """
         Return Table of HerbigAeBeStars
-        Catalog Title: 
-        Herbig Ae/Be accretion rates & mechanisms (Wichittanakom+ 2020)
+        Catalog Title: Herbig Ae/Be accretion rates & mechanisms (Wichittanakom+ 2020)
         Accretion properties of Herbig Ae/Be stars in Vioque et al. (2018, Cat. J/A+A/620/A128)
         J/MNRAS/493/234
         """

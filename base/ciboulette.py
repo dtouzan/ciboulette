@@ -325,7 +325,7 @@ class Ciboulette(object):
     @property
     def opc16(self):
         """
-        Displays open cluster on an aitoff projection (mag < 16)     
+        Displays open cluster on an aitoff projection (mag < 18)     
         """
         p = projection.Projection()
         p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
@@ -335,7 +335,7 @@ class Ciboulette(object):
     @property
     def HerbigAeBe(self):
         """
-        Displays Herbig Ae/Be on an aitoff projection (mag < 16)     
+        Displays Herbig Ae/Be on an aitoff projection
         """
         p = projection.Projection()
         p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
@@ -345,9 +345,9 @@ class Ciboulette(object):
     @property
     def cepheid(self):
         """
-        Displays cepheid on an aitoff projection (mag < 16)     
+        Displays cepheid on an aitoff projection (mag < 18)     
         """
-        p = projection.Projection(size=20)
+        p = projection.Projection()
         p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
         p.cepheid
         p.display

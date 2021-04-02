@@ -112,7 +112,7 @@ class Projection(object):
         """
         Create open cluster for display
         """ 
-        self.title = 'Open cluster catalog less than magnitude 16\n'
+        self.title = 'Open cluster catalog less than magnitude 18\n'
         opc = self.sct.opencluster16
         _ra = []
         _dec = []
