@@ -187,9 +187,7 @@ class Projection(object):
     def display(self):
         """
         Display projection 
-        """       
-        moon_marker = self.moon['MARKER']
-        
+        """              
         fig = plt.figure(figsize=(self.size,self.size))
         ax = fig.add_subplot(111,projection='aitoff')
         plt.grid(True,axis='both',linestyle='--')
@@ -203,6 +201,7 @@ class Projection(object):
         if len(self.catalog) > 0:
             plt.plot(self.catalog['RA'],self.catalog['DEC'], 'o', color='blue', markersize=2, alpha=0.25)    
         if len(self.moon) >0:
+            moon_marker = self.moon['MARKER']
             plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=moon_marker, alpha=0.25)        
         if len(self.archive) > 0:
             plt.plot(self.sector['RA'], self.sector['DEC'], 's', color='green', markersize=5, alpha=0.2)   

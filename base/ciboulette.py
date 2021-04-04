@@ -314,9 +314,18 @@ class Ciboulette(object):
         self.object_name = result_table['MAIN_ID'][0]
 
     @property
-    def projections(self):
+    def projectionslight(self):
         """
         Displays the archived sectors, RA and DEC on an aitoff projection      
+        """
+        p = projection.Projection()
+        p.projections(self.ra,self.dec,self.archive_table)
+        p.display
+
+    @property
+    def projections(self):
+        """
+        Displays the archived sectors, RA and DEC and Moon on an aitoff projection      
         """
         p = projection.Projection()
         p.Moon(self._date,self.latitude,self.longitude,self.elevation)
