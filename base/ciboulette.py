@@ -47,7 +47,7 @@ class Ciboulette(object):
         self.ra = 0.0 # hours
         self.dec = 90.0 # degrees
         self.object_name = 'INIT'
-        self._date = '2021-01-01 00:00:00'
+        self._date = Time.now()
         self._temperature = 0
         self._exp_time = 0
         self._frameid = 0
@@ -319,7 +319,8 @@ class Ciboulette(object):
         Displays the archived sectors, RA and DEC on an aitoff projection      
         """
         p = projection.Projection()
-        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
         p.display
 
     @property
@@ -328,7 +329,8 @@ class Ciboulette(object):
         Displays open cluster on an aitoff projection (mag < 18)     
         """
         p = projection.Projection()
-        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
         p.opencluster
         p.display
 
@@ -338,7 +340,8 @@ class Ciboulette(object):
         Displays Herbig Ae/Be on an aitoff projection
         """
         p = projection.Projection()
-        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
         p.HerbigAeBe
         p.display
 
@@ -348,7 +351,8 @@ class Ciboulette(object):
         Displays cepheid on an aitoff projection (mag < 18)     
         """
         p = projection.Projection()
-        p.projections(self.ra,self.dec,self.archive_table,self.latitude,self.longitude,self.elevation)
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
         p.cepheid
         p.display
 

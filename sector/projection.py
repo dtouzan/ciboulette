@@ -29,6 +29,9 @@ class Projection(object):
             self.catalog = Table()
     
     def _cursor(self):
+        """
+        Set cursor for display
+        """
         _ra = []
         _dec = []
         ra=float(self.ra)*15*u.deg
@@ -38,20 +41,10 @@ class Projection(object):
         _dec.append(c.dec.radian)
         self.cursor = Table([_ra,_dec], names=['RA','DEC'])
 
-    def _moon(self,latitude,longitude,elevation):
-        _ra = []
-        _dec = []
-        _marker = []
-        location = str(longitude) + ' ' + str(latitude) + ' ' + str(elevation)
-        moon = self.sct.miriademoon(self.date,location)
-        for line in moon:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian)
-            _marker.append(line['MARKER'])
-        self.moon = Table([_ra,_dec,_marker], names=['RA','DEC','MARKER'])
-
     def _lmc(self):
+        """
+        Set LMC for display
+        """
         _ra = []
         _dec = []
         lmc = self.sct.lmc
@@ -62,6 +55,9 @@ class Projection(object):
         self.lmc = Table([_ra,_dec], names=['RA','DEC'])
     
     def _smc(self):
+        """
+        Set SMC for display
+        """
         _ra = []
         _dec = []
         smc = self.sct.smc
@@ -72,6 +68,9 @@ class Projection(object):
         self.smc = Table([_ra,_dec], names=['RA','DEC'])
 
     def _milkyway(self):
+        """
+        Set milkyway for display
+        """
         _ra = []
         _dec = []
         milkyway = self.sct.MilkyWay
@@ -82,6 +81,9 @@ class Projection(object):
         self.milkyway = Table([_ra,_dec], names=['RA','DEC'])
 
     def _constellation(self):
+        """
+        Set constellation for display
+        """
         _ra = []
         _dec = []
         constellation = self.sct.constellation
@@ -104,7 +106,23 @@ class Projection(object):
             _dec.append(c.dec.radian)
         self.archive = Table([_ra,_dec], names=['RA','DEC'])
 
-    def projections(self,RA,DEC,archives,latitude,longitude,elevation):
+    def Moon(self,date,latitude,longitude,elevation):
+        """
+        Set moon for display
+        """
+        _ra = []
+        _dec = []
+        _marker = []
+        location = str(longitude) + ' ' + str(latitude) + ' ' + str(elevation)
+        moon = self.sct.miriademoon(date,location)
+        for line in moon:
+            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            _dec.append(c.dec.radian)
+            _marker.append(line['MARKER'])
+        self.moon = Table([_ra,_dec,_marker], names=['RA','DEC','MARKER'])
+
+    def projections(self,RA,DEC,archives):
         """
         Create the archived sectors, cursor, milkyway, lmc, smc, moon for display
         """
@@ -117,7 +135,6 @@ class Projection(object):
         self._smc()
         self._milkyway()
         self._constellation()
-        self._moon(latitude,longitude,elevation)
     
     @property
     def opencluster(self):
@@ -185,7 +202,8 @@ class Projection(object):
         plt.fill_between(self.lmc['RA'],self.lmc['DEC'], color='blue', alpha=0.1)  
         if len(self.catalog) > 0:
             plt.plot(self.catalog['RA'],self.catalog['DEC'], 'o', color='blue', markersize=2, alpha=0.25)    
-        plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=moon_marker, alpha=0.25)        
+        if len(self.moon) >0:
+            plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=moon_marker, alpha=0.25)        
         if len(self.archive) > 0:
             plt.plot(self.sector['RA'], self.sector['DEC'], 's', color='green', markersize=5, alpha=0.2)   
         plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=5, alpha=0.4)
