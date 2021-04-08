@@ -340,7 +340,7 @@ class CCDCam(indiclient):
             If an exposure is in progress, the readout process is initiated. Ignored if
             readout is already in process.
         """
-        self.abortexposure(self):
+        self.abortexposure()
 
     def imageready():
         """
@@ -350,7 +350,7 @@ class CCDCam(indiclient):
             return True
         else:
             return False
-        
+
     @property
     def activedevices(self):
         """
