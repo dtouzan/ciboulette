@@ -48,7 +48,6 @@ class Ciboulette(object):
         self.dec = 90.0 # degrees
         self.object_name = 'INIT'
         self._date = Time.now()
-        self._temperature = 0
         self._exp_time = 0
         self._frameid = 1
         self._datatype = ''
