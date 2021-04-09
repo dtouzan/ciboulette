@@ -36,22 +36,22 @@ class Exposure(object):
     @exp_label.setter  
     def exp_label(self,label):
         """
-        Initialization serial number
-         label (int): Serial number.
+        Initialization serial label
+         label (int): Serial label.
         """
-        self.number = label
+        self.label = label
 
     @property    
     def inc_label(self):
         """
-        Increment serial number
+        Increment serial label
         """
-        self.number = self.number + 1
+        self.label = self.label + 1
      
     @property
     def today_to_label(self):
         """
-        Initialization serial number whit date end time                         
+        Initialization serial label whit date end time                         
         """
         today = datetime.today()        
         self.label = today.strftime('%Y%m%d%H%M%S')

@@ -47,7 +47,7 @@ class Ciboulette(object):
         self.ra = 0.0 # hours
         self.dec = 90.0 # degrees
         self.object_name = 'INIT'
-        self._date = Time.now()
+        self._date = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms').value
         self._exp_time = 0
         self._frameid = 1
         self._datatype = ''
@@ -391,12 +391,19 @@ class Ciboulette(object):
          camera (object): Camera alpaca or indilib object.
         """
         if isinstance(camera, Camera):
+            t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
+            self._date = t.value
             camera.startexposure(self._exp_time,True)
             while not camera.imageready():
                 time.sleep(1)    
             self.binXY = camera.binx()
             self.pixelXY = camera.pixelsizex()
-            self._date = camera.lastexposurestarttime()
+            
+            """
+            Not implemented in all drivers : lastexposurestarttime()
+            """
+            #self._date = camera.lastexposurestarttime()
+            
             if camera.cansetccdtemperature():
                 self._temperature = camera.ccdtemperature()
             # Translate picture
@@ -450,11 +457,11 @@ class Ciboulette(object):
         fits.setval(fits_file, 'TELESCOP', value=self.telescope_name, comment='Telescope name', savecomment=True)
         fits.setval(fits_file, 'INSTRUME', value=self.instrument, comment='Instrument used for acquisition', savecomment=True)                         
         fits.setval(fits_file, 'ROWORDER', value='TOP-DOWN', comment='Order of the rows in image array', savecomment=True)                 
-        fits.setval(fits_file, 'CCD-TEMP', value=self._temperature, comment='CCD temperature (Celsius)', savecomment=True) 
+        fits.setval(fits_file, 'CCD-TEMP', value=self._temperature, comment='[C] CCD temperature (Celsius)', savecomment=True) 
         fits.setval(fits_file, 'FILTER', value=self.filter_name, comment='Filter info', savecomment=True)     
-        fits.setval(fits_file, 'SITELAT', value=self.latitude, comment='Observatory latitude', savecomment=True) 
-        fits.setval(fits_file, 'SITELONG', value=self.longitude, comment='Observatory longitude', savecomment=True)
-        fits.setval(fits_file, 'SITEELEV', value=self.elevation, comment='Driver create', savecomment=True) 
+        fits.setval(fits_file, 'SITELAT', value=self.latitude, comment='[deg] Observatory latitude', savecomment=True) 
+        fits.setval(fits_file, 'SITELONG', value=self.longitude, comment='[deg] Observatory longitude', savecomment=True)
+        fits.setval(fits_file, 'SITEELEV', value=self.elevation, comment='[deg] Observatory elevation', savecomment=True) 
         fits.setval(fits_file, 'SWCREATE', value=self.api_version, comment='Driver create', savecomment=True) 
         fits.setval(fits_file, 'FOCALLEN', value=self.focal, comment='[mm] Telescope focal length', savecomment=True) 
         fits.setval(fits_file, 'FRAMEX', value=0, comment='Frame start x', savecomment=True)
