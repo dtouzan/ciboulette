@@ -49,7 +49,7 @@ class Exposure(object):
         self.label = self.label + 1
      
     @property
-    def today_to_label(self):
+    def now2label(self):
         """
         Initialization serial label whit date end time                         
         """

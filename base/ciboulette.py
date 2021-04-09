@@ -394,8 +394,11 @@ class Ciboulette(object):
             t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
             self._date = t.value
             camera.startexposure(self._exp_time,True)
-            while not camera.imageready():
-                time.sleep(1)    
+            i = self._exp_time + ((self.naxis1 * self.naxis2)/1048576)
+            while i > 0:
+                time.sleep(1)
+                i = i - 1
+                 
             self.binXY = camera.binx()
             self.pixelXY = camera.pixelsizex()
             
