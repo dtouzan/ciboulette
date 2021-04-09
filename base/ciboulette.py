@@ -183,7 +183,7 @@ class Ciboulette(object):
     @lens70_300.setter
     def lens70_300(self,f):
         """
-        Set Sigma 120-400 configuration
+        Set 70-300 configuration configuration
         """
         if f >= 70 and f <= 300:
             self.focal = f
