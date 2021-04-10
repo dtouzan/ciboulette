@@ -420,7 +420,7 @@ class Ciboulette(object):
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdu.data, hdu.header, overwrite=True)  
         else:
-            hdul = camera.startexposure(self._exp_time,True)
+            hdul = camera.expose(self._exp_time)
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)  
         self.extendedfits()           
