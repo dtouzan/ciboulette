@@ -280,8 +280,14 @@ class CCDCam(indiclient):
         fitsdata = None
         run = True
 
+        """
+        calculation of the time required for 16 bits image
+        ((WIDTH x HEIGHT) / (1024 x 1024)) x 2
+        """
+        xu = self.get_float(self.driver, "CCD_FRAME", "WIDTH")
+        yu = self.get_float(self.driver, "CCD_FRAME", "HEIGHT")
         t = time.time()
-        timeout = exptime + 10.0
+        timeout = exptime + (((xu * yu) / 1048576)*2)
 
         while run:
             self.process_receive_vector_queue()
@@ -308,6 +314,7 @@ class CCDCam(indiclient):
                 log.warning("Exposure timed out.")
                 break
             time.sleep(0.1)
+            
         return fitsdata
     
     def startexposure(self, exptime: float, Light: bool):
@@ -341,8 +348,8 @@ class CCDCam(indiclient):
             readout is already in process.
         """
         self.abortexposure()
-
-    def imageready():
+        
+    def imageready(self):
         """
         Indicate that an image is ready to be downloaded. (Alpaca compatibility)
         """
@@ -445,7 +452,6 @@ class CCDCam(indiclient):
         Set ACTIVE_DEVICES ACTIVE_SKYQUALITY
         """
         self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_SKYQUALITY', string)
-
 
 class ASICam(CCDCam):
     """

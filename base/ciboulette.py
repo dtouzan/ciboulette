@@ -394,7 +394,7 @@ class Ciboulette(object):
             t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
             self._date = t.value
             camera.startexposure(self._exp_time,True)
-            i = self._exp_time + ((self.naxis1 * self.naxis2)/1048576)
+            i = self._exp_time + (((self.naxis1 * self.naxis2)/1048576) *2)
             while i > 0:
                 time.sleep(1)
                 i = i - 1
@@ -420,9 +420,11 @@ class Ciboulette(object):
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdu.data, hdu.header, overwrite=True)  
         else:
-            hdul = ccd.startexposure(self._exp_time,True)
-            while not ccd.imageready():
-                time.sleep(1)  
+            hdul = camera.startexposure(self._exp_time,True)
+            #i = self._exp_time + ((self.naxis1 * self.naxis2)/1048576)
+            #while i > 0:
+                #time.sleep(1)
+                #i = i - 1
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)  
         self.extendedfits()           

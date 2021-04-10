@@ -81,6 +81,7 @@ class ATIKCam383L(CCDCam):
     def filter(self, f):
         pass
 
+    @property
     def local(self):
         """
         Enable local write
@@ -89,7 +90,8 @@ class ATIKCam383L(CCDCam):
         if self.debug:
             vec.tell()
         return vec
-
+    
+    @property
     def client(self):
         """
         Enable client write
@@ -99,6 +101,7 @@ class ATIKCam383L(CCDCam):
             vec.tell()
         return vec
 
+    @property
     def both(self):
         """
         Enable both write
