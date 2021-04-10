@@ -295,3 +295,15 @@ class Sector(object):
                 dec.append(line[1])
                 main_id.append(line[2])                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])  
+    
+    def aavso(self,string):
+        """
+        Return AAVSO variable star 
+        Catalog Title: B/vsx/vsx       
+        """       
+        v = Vizier(catalog='B/vsx/vsx', columns=['_RAJ2000', '_DEJ2000', '*'])
+        v.ROW_LIMIT = 500000
+        result = v.query_constraints(Name = string)        
+        for table_name in result.keys():
+            table = result[table_name]                       
+        return table
