@@ -421,6 +421,10 @@ class Ciboulette(object):
             fits.writeto(file_name, hdu.data, hdu.header, overwrite=True)  
         else:
             hdul = camera.expose(self._exp_time)
+            i = self._exp_time + (((self.naxis1 * self.naxis2)/1048576) *2)
+            while i > 0:
+                time.sleep(1)
+                i = i - 1
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)  
         self.extendedfits()           
