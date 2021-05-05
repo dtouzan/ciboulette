@@ -13,8 +13,9 @@ DEC_J2000                     = 'DEC (J2000)'
 MAST constents 
  Is used for downloaded MAST files    
 """
-MAST_header                   = '#Observation Type, Mission, Instrument, Detector, Project, Filters, Waveband, Target Name, Target Classification, Observation ID, RA, Dec, Proposal ID,                                        Principal Investigator, Product Type, Calibration Level, Start Time, End Time, Exposure Length, Min. Wavelength, Max. Wavelength, Observation Title, Release                                    Date, Proposal Type, Sequence Number, Region,Focale, Format, Seeing, Moon, jpegURL, url'
+MAST_header_name              = '#Observation Type, Mission, Instrument, Detector, Project, Filters, Waveband, Target Name, Target Classification, Observation ID, RA, Dec, Proposal ID, Principal Investigator, Product Type, Calibration Level, Start Time, End Time, Exposure Length, Min. Wavelength, Max. Wavelength, Observation Title, Release Date, Proposal Type, Sequence Number, Region,Focale, Format, Seeing, Moon, jpegURL, url'
 MAST_header_type              = '#@string,string,string,string,string,string,string,string,string,string,ra,dec,string,string,string,int,float,float,float,string,string,string,float,string,int,string,float,string,float,float,string,string'
+MAST_header                   = 'intentType,obs_collection,instrument_name,Detector,project,filters,wavelength_region,target_name,target_classification,obs_id,s_ra,s_dec,proposal_id,proposal_pi,dataproduct_type,calib_level,t_min,t_max,t_exptime,em_min,em_max,obs_title,t_obs_release,proposal_type,sequence_number,s_region,focale,format,Seeing,Moon,jpegURL,url'
 
 MAST_filters                  = 'filters'
 MAST_target_name              = 'target_name'
