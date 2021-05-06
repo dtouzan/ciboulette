@@ -291,6 +291,19 @@ class Ciboulette(object):
          dec (float): Degrees           
         """
         telescope.slewtocoordinates(self.ra,self.dec)
+    
+    def synctocoordinates(self,telescope):
+        """
+        Synchronize the telescope with RA and DEC
+         telescope (Telescope): Telescope object (Alpaca or Indilib).
+         ra (float): Hours.
+         dec (float): Degrees           
+        """
+        telescope.unpark()
+        telescope.tracking()
+        telescope.synctocoordinates(self.ra,self.dec)
+        while telescope.slewing():
+            time.sleep(1)
 
     @property    
     def positionsbyname(self):
