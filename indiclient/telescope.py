@@ -163,3 +163,23 @@ class LX200Generic(Telescope):
         super(LX200Generic, self).__init__(host, port, driver="Standard LX200")
         self.mount_name = "LX200"
         self.process_events()
+
+    @property
+    def tracking(self):
+        """
+        Turn track on
+        """
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "On")
+        if self.debug:
+            vec.tell()
+        return vec
+
+    @property    
+    def untrack(self):
+        """
+        Turn untrack on
+        """
+        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "Off")
+        if self.debug:
+            vec.tell()
+        return vec
