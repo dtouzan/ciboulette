@@ -291,6 +291,10 @@ class Ciboulette(object):
          dec (float): Degrees           
         """
         telescope.slewtocoordinates(self.ra,self.dec)
+        if isinstance(telescope, Telescope):
+            while telescope.slewing():
+                time.sleep(1)
+
     
     def synctocoordinates(self,telescope):
         """
@@ -299,11 +303,13 @@ class Ciboulette(object):
          ra (float): Hours.
          dec (float): Degrees           
         """
-        telescope.unpark()
-        telescope.tracking()
+        if isinstance(telescope, Telescope):
+            telescope.unpark()
+            telescope.tracking()
+        else :
+            telescope.unpark
+            telescope.tracking
         telescope.synctocoordinates(self.ra,self.dec)
-        while telescope.slewing():
-            time.sleep(1)
 
     @property    
     def positionsbyname(self):
