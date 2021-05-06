@@ -160,6 +160,6 @@ class LX200Generic(Telescope):
     Wrap Mount, set driver to LX200 mount, and point to localhost by default.
     """
     def __init__(self, host='localhost', port=7624):
-        super(LX200Mod, self).__init__(host, port, driver="Standard LX200")
+        super(LX200Generic, self).__init__(host, port, driver="Standard LX200")
         self.mount_name = "LX200"
         self.process_events()
