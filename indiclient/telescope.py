@@ -164,12 +164,13 @@ class LX200Generic(Telescope):
         super(LX200Generic, self).__init__(host, port, driver="Standard LX200")
         self.mount_name = "LX200"
         self.process_events()
-        self.configure
+        self.initdate
+        self.initsite
 
     @property    
-    def configure(self):
+    def initdate(self):
         """
-        Configure Date, Time and location
+        Configure Date, Time
         """
         date = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms').value
         self.utc = date
@@ -179,6 +180,12 @@ class LX200Generic(Telescope):
         For old equipment
         """
         time.sleep(5)
+
+    @property    
+    def initsite(self):
+        """
+        Configure site location
+        """
         """
         /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
         It's for my location LX650 mount 
