@@ -13,6 +13,7 @@ import logging.handlers
 
 from astropy.io import fits
 from astropy.table import Table
+from astropy.time import Time
 
 from .indiclient import indiclient
 from ciboulette.indiclient.indimount import Telescope
@@ -163,7 +164,33 @@ class LX200Generic(Telescope):
         super(LX200Generic, self).__init__(host, port, driver="Standard LX200")
         self.mount_name = "LX200"
         self.process_events()
+        self.configure
 
+    @property    
+    def configure(self):
+        """
+        Configure Date, Time and location
+        """
+        date = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms').value
+        self.utc = date
+        self.offset = 0
+        """
+        /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+        For old equipment
+        """
+        time.sleep(5)
+        """
+        /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+        It's for my location LX650 mount 
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, "Sites", "Site 4")
+        """
+        /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+        For old equipment
+        """
+        time.sleep(5)
+
+        
     @property
     def tracking(self):
         """
