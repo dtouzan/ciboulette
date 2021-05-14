@@ -13,7 +13,6 @@ from astropy import wcs
 from astropy.time import Time
 from astropy.io import ascii
 from astroquery.imcce import Miriade, MiriadeClass
-from ciboulette.base import constent
 
 class Sector(object):
     

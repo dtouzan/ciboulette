@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from astropy.table import Table
 from astropy import wcs
 from ciboulette.sector import sector 
-from ciboulette.base import constent
 
 class Map(object):
     
