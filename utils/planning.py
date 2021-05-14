@@ -6,7 +6,7 @@ Planning class
 from astropy.table import Table
 import os
 import wget
-from ciboulette.base import constent
+from ciboulette.base import constant
 
 
 class Planning(object):
@@ -71,7 +71,7 @@ class Planning(object):
         Return filter name of plan
          plan (Table): plan of planning.
         """    
-        return plan[constent.MAST_filters] 
+        return plan[constant.MAST_filters] 
     
 
     def ra(self,plan):
@@ -79,7 +79,7 @@ class Planning(object):
         Return RA of plan. Format: Hours H.HHHH
          plan (Table): plan of planning.
         """           
-        return plan[constent.MAST_s_ra]
+        return plan[constant.MAST_s_ra]
 
 
     def dec(self,plan):
@@ -87,7 +87,7 @@ class Planning(object):
         Return RA of plan. Format: Degrees D.DDDD
          plan (Table): plan of planning.
         """    
-        return plan[constent.MAST_s_dec] 
+        return plan[constant.MAST_s_dec] 
 
 
     def observationID(self,plan):
@@ -95,7 +95,7 @@ class Planning(object):
         Return observation ID of plan
          plan (Table): plan of planning.
         """        
-        return plan[constent.MAST_obs_id]
+        return plan[constant.MAST_obs_id]
     
 
     def exptime(self,plan):
@@ -103,7 +103,7 @@ class Planning(object):
         Return exposure of plan
          plan (Table): plan of planning.
         """    
-        return plan[constent.MAST_t_exptime]
+        return plan[constant.MAST_t_exptime]
     
 
     def observationtitle(self,plan):
@@ -111,7 +111,7 @@ class Planning(object):
         Return observaion title of plan
          plan (Table): plan of planning.
         """       
-        return plan[constent.MAST_obs_title] 
+        return plan[constant.MAST_obs_title] 
     
 
     def dataproducttype(self,plan):
@@ -119,11 +119,39 @@ class Planning(object):
         Return dataproduct type of plan
          plan (table): plan of planning.          
         """       
-        return plan[constent.MAST_dataproduct_type]
+        return plan[constant.MAST_dataproduct_type]
 
     def target(self,plan):
         """
         Return target of plan
          plan (table): plan of planning.          
         """       
-        return plan[constent.MAST_target_name]
+        return plan[constant.MAST_target_name]
+    
+    def observationcollection(self,plan):
+        """
+        Return obs_collection of plan
+         plan (table): plan of planning.          
+        """       
+        return plan[constant.MAST_obs_collection]
+    
+    def instrumentname(self,plan):
+        """
+        Return instrument_name of plan
+         plan (table): plan of planning.          
+        """       
+        return plan[constant.MAST_instrument_name]
+
+    def proposalpi(self,plan):
+        """
+        Return proposal_pi of plan
+         plan (table): plan of planning.          
+        """       
+        return plan[constant.MAST_proposal_pi]
+
+    def moon(self,plan):
+        """
+        Return moon % of plan
+         plan (table): plan of planning.          
+        """       
+        return plan[constant.MAST_moon]
