@@ -15,7 +15,7 @@ from astropy.io.votable import parse_single_table
 from astropy.utils.data import get_pkg_data_filename
 from astroquery.simbad import Simbad
 from alpaca import Telescope, Camera, FilterWheel
-from ciboulette.base import constent
+from ciboulette.base import constant
 from ciboulette.sector import projection
 from ciboulette.sector import maps
 from ciboulette.utils import exposure as Exp
@@ -25,7 +25,7 @@ class Ciboulette(object):
         
     def __init__(self):
         self.data = []
-        self.api_version = constent.API_version
+        self.api_version = constant.API_version
         self.server = '192.168.1.18'
         self.port = 11111
         self.device = 0
