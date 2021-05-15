@@ -163,7 +163,23 @@ class Planning(object):
          plan (table): plan of planning.          
         """       
         return plan[constant.MAST_moon]
-    
+
+    def collection(self,string):
+        """
+        Return find collection 
+        """
+        if self.available:
+            mask = self.observation[constant.MAST_obs_collection] == string
+            return self.observation[mask]
+
+    def instrument(self,string):
+        """
+        Return find instrument
+        """
+        if self.available:
+            mask = self.observation[constant.MAST_instrument_name] == string
+            return self.observation[mask]      
+            
     @property
     def observations(self):
         """
