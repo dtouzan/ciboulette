@@ -16,9 +16,13 @@ class Planning(object):
      fileoutput = planning.csv    
     """
     
-    def __init__(self,idgoogledrive='1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_',fileoutput='planning.csv'):       
+    def __init__(self, title='Planning', idgoogledrive='1Yc-QxFr9veMeGjqvedRMrcEDL2GRyTS_', fileoutput='planning.csv'):       
         self.idgoogledrive = idgoogledrive
         self.fileoutput = fileoutput
+        self.title = title
+        self.observation = Table()
+        self.available = False
+        self.read
     
 
     @property
@@ -32,8 +36,11 @@ class Planning(object):
         url = 'https://docs.google.com/uc?export=download&id='+self.idgoogledrive
         filedownload = wget.download(url,out=self.fileoutput,bar=None)      
         # For MAST data_start=3
-        planningtable = Table.read(self.fileoutput, format='ascii.csv')   
-        return planningtable
+        self.observation = Table.read(self.fileoutput, format='ascii.csv')   
+        if len(self.observation) > 0:
+            self.available = True
+        else:
+            self.available = False
        
     @property
     def idfiledrive(self):
@@ -103,7 +110,7 @@ class Planning(object):
         Return exposure of plan
          plan (Table): plan of planning.
         """    
-        return plan[constant.MAST_t_exptime]
+        return float(plan[constant.MAST_t_exptime])
     
 
     def observationtitle(self,plan):
@@ -155,3 +162,48 @@ class Planning(object):
          plan (table): plan of planning.          
         """       
         return plan[constant.MAST_moon]
+    
+    @property
+    def observations(self):
+        """
+        Return observations table
+        """
+        if len(self.observation) > 0:
+            return self.observation
+        else:
+            return None
+
+    @property
+    def duration(self):
+        """
+        Return planning duration
+        """
+        duration = 0
+        if self.available:
+            for exptime in self.observation[constant.MAST_t_exptime]:
+                duration = duration + float(exptime)
+            duration = duration / 3600
+        return duration
+        
+    @property
+    def number(self):
+        """
+        Return planning duration
+        """
+        number = 0
+        if self.available:
+            number = len(self.observations)
+        return number
+    
+        
+    @property
+    def header(self):
+        """
+        Return title,number and duration in table
+        """
+        if self.available:
+            title = [self.title]
+            number = [self.number]
+            duration = [self.duration]
+            return Table([title,number,duration], names=['Title','Number','Duration'])  
+        return None
