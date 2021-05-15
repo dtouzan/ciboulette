@@ -4,6 +4,7 @@ Planning class
 """
 
 from astropy.table import Table
+from astropy import units as u
 import os
 import wget
 from ciboulette.base import constant
@@ -178,12 +179,13 @@ class Planning(object):
         """
         Return planning duration
         """
-        duration = 0
+        d = 0 * u.second
         if self.available:
+            duration = 0
             for exptime in self.observation[constant.MAST_t_exptime]:
                 duration = duration + float(exptime)
-            duration = duration / 3600
-        return duration
+            d = duration * u.second                     
+        return d.to(u.hour)
         
     @property
     def number(self):
