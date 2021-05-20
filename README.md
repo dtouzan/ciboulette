@@ -10,7 +10,7 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Astropy 4.2
   - Alpyca 1.0.0
   - Astroquery 0.4.1
-  - indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
+  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
   - Phd2client (sources https://github.com/agalasso/phd2client, MIT License), no package 
   - Internet connexion
 
