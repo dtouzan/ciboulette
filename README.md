@@ -51,12 +51,12 @@ jupyter notebook --generate-config
 
 **Astronomy Packages (All)**
 ```sh
-pip install matplotlib
-pip install numpy
+pip install matplotlib or conda install matplotlib
+pip install numpy or conda install numpy
 pip install wget
-pip install astropy
-pip install astroquery
-pip install reproject
+pip install astropy or conda install astropy
+pip install astroquery or conda install -c conda-forge astroquery
+pip install reproject  or conda install -c astropy reproject
 pip install alpyca
 ```      
 
