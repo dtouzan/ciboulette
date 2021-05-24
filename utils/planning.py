@@ -29,6 +29,7 @@ class Planning(object):
         self.timerslew = 5
         self.timerguider = 3
         self.timerfilter = 3
+        self.timerfocus = 0
         self.read
     
 
@@ -205,9 +206,9 @@ class Planning(object):
         if self.available:
             duration = 0
             for exptime in self.observation[constant.MAST_t_exptime]:
-                duration = duration + float(exptime) + self.timerguider + self.timerslew + self.timerfilter
+                duration = duration + float(exptime) + self.timerguider + self.timerslew + self.timerfilter + self.timerfocus
             d = (self.timerinit+duration) * u.second                     
-        return d.to(u.hour)
+        return f'{d.to(u.hour).value:.6f}'
         
     @property
     def number(self):
@@ -234,6 +235,15 @@ class Planning(object):
             title = [self.title]
             number = [self.number]
             duration = [self.duration]
-            return Table([title,number,duration], names=['Title','Number','Duration'])  
+            init = [self.timerinit]
+            slew = [self.timerslew]
+            Filter = [self.timerfilter]
+            guider = [self.timerguider]
+            focus = [self.timerfocus]
+            exp_line = ''
+            for exp in self.observation[constant.MAST_t_exptime]:
+                exp_line = exp_line + ' ' + str(exp)             
+            exposures = [exp_line]    
+            return Table([title,number,init,slew,Filter,guider,focus,exposures,duration], names=['Title','Number','Init','Slew','Filter','Guider','Focus','Exposures','Duration'])  
         return None
 
