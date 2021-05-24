@@ -5,6 +5,8 @@ Planning class
 
 from astropy.table import Table
 from astropy import units as u
+import numpy as np
+import matplotlib.pyplot as plt
 import os
 import wget
 from ciboulette.base import constant
@@ -23,6 +25,10 @@ class Planning(object):
         self.title = title
         self.observation = Table()
         self.available = False
+        self.timerinit = 10
+        self.timerslew = 5
+        self.timerguider = 3
+        self.timerfilter = 3
         self.read
     
 
@@ -199,8 +205,8 @@ class Planning(object):
         if self.available:
             duration = 0
             for exptime in self.observation[constant.MAST_t_exptime]:
-                duration = duration + float(exptime)
-            d = duration * u.second                     
+                duration = duration + float(exptime) + self.timerguider + self.timerslew + self.timerfilter
+            d = (self.timerinit+duration) * u.second                     
         return d.to(u.hour)
         
     @property
@@ -213,7 +219,12 @@ class Planning(object):
             number = len(self.observations)
         return number
     
-        
+    def exposure(self,plan):
+        """
+        Return 
+        """
+        return self.exptime(plan), self.observationID(plan), self.dataproducttype(plan)
+    
     @property
     def header(self):
         """
@@ -225,3 +236,4 @@ class Planning(object):
             duration = [self.duration]
             return Table([title,number,duration], names=['Title','Number','Duration'])  
         return None
+
