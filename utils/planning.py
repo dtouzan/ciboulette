@@ -30,8 +30,7 @@ class Planning(object):
         self.timerguider = 3
         self.timerfilter = 3
         self.timerfocus = 0
-        self.read
-    
+        self.read   
 
     @property
     def read(self):
@@ -80,96 +79,101 @@ class Planning(object):
         """
         self.fileoutput = fileoutput
     
-
     def filtername(self,plan):
         """
         Return filter name of plan
          plan (Table): plan of planning.
         """    
-        return plan[constant.MAST_filters] 
-    
+        if self.available:
+            return plan[constant.MAST_filters]    
 
     def ra(self,plan):
         """
         Return RA of plan. Format: Hours H.HHHH
          plan (Table): plan of planning.
         """           
-        return plan[constant.MAST_s_ra]
-
+        if self.available:
+            return plan[constant.MAST_s_ra]
 
     def dec(self,plan):
         """
         Return RA of plan. Format: Degrees D.DDDD
          plan (Table): plan of planning.
         """    
-        return plan[constant.MAST_s_dec] 
-
+        if self.available:
+            return plan[constant.MAST_s_dec] 
 
     def observationID(self,plan):
         """
         Return observation ID of plan
          plan (Table): plan of planning.
         """        
-        return plan[constant.MAST_obs_id]
+        if self.available:
+            return plan[constant.MAST_obs_id]
     
-
     def exptime(self,plan):
         """
         Return exposure of plan
          plan (Table): plan of planning.
         """    
-        return float(plan[constant.MAST_t_exptime])
+        if self.available:
+            return float(plan[constant.MAST_t_exptime])
     
-
     def observationtitle(self,plan):
         """
         Return observaion title of plan
          plan (Table): plan of planning.
         """       
-        return plan[constant.MAST_obs_title] 
-    
+        if self.available:
+            return plan[constant.MAST_obs_title]     
 
     def dataproducttype(self,plan):
         """
         Return dataproduct type of plan
          plan (table): plan of planning.          
         """       
-        return plan[constant.MAST_dataproduct_type]
+        if self.available:
+            return plan[constant.MAST_dataproduct_type]
 
     def target(self,plan):
         """
         Return target of plan
          plan (table): plan of planning.          
         """       
-        return plan[constant.MAST_target_name]
+        if self.available:
+            return plan[constant.MAST_target_name]
     
     def observationcollection(self,plan):
         """
         Return obs_collection of plan
          plan (table): plan of planning.          
         """       
-        return plan[constant.MAST_obs_collection]
+        if self.available:
+            return plan[constant.MAST_obs_collection]
     
     def instrumentname(self,plan):
         """
         Return instrument_name of plan
          plan (table): plan of planning.          
         """       
-        return plan[constant.MAST_instrument_name]
+        if self.available:
+            return plan[constant.MAST_instrument_name]
 
     def proposalpi(self,plan):
         """
         Return proposal_pi of plan
          plan (table): plan of planning.          
         """       
-        return plan[constant.MAST_proposal_pi]
+        if self.available:
+            return plan[constant.MAST_proposal_pi]
 
     def moon(self,plan):
         """
         Return moon % of plan
          plan (table): plan of planning.          
-        """       
-        return plan[constant.MAST_moon]
+        """   
+        if self.available:
+            return plan[constant.MAST_moon]
 
     def collection(self,string):
         """
@@ -213,7 +217,7 @@ class Planning(object):
     @property
     def number(self):
         """
-        Return planning duration
+        Return number of plan on planning 
         """
         number = 0
         if self.available:
@@ -222,9 +226,17 @@ class Planning(object):
     
     def exposure(self,plan):
         """
+        Return exposition time, observation ID, data product type
+        """
+        if self.available:
+             return self.exptime(plan), self.observationID(plan), self.dataproducttype(plan)
+    
+    def coordinates(self,plan):
+        """
         Return 
         """
-        return self.exptime(plan), self.observationID(plan), self.dataproducttype(plan)
+        if self.available:
+            return self.ra(plan), self.dec(plan)
     
     @property
     def header(self):
