@@ -125,7 +125,15 @@ class Planning(object):
          plan (Table): plan of planning.
         """       
         if self.available:
-            return plan[constant.MAST_obs_title]     
+            return plan[constant.MAST_obs_title]  
+
+    def binning(self,plan):
+        """
+        Return binning of plan
+         plan (Table): plan of planning.
+        """       
+        if self.available:
+            return plan[constant.CBL_binning]     
 
     def dataproducttype(self,plan):
         """
