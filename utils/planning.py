@@ -93,7 +93,7 @@ class Planning(object):
          plan (Table): plan of planning.
         """           
         if self.available:
-            return plan[constant.MAST_s_ra]
+            return float(plan[constant.MAST_s_ra])
 
     def dec(self,plan):
         """
@@ -101,7 +101,7 @@ class Planning(object):
          plan (Table): plan of planning.
         """    
         if self.available:
-            return plan[constant.MAST_s_dec] 
+            return float(plan[constant.MAST_s_dec]) 
 
     def observationID(self,plan):
         """
@@ -109,7 +109,7 @@ class Planning(object):
          plan (Table): plan of planning.
         """        
         if self.available:
-            return plan[constant.MAST_obs_id]
+            return int(plan[constant.MAST_obs_id])
     
     def exptime(self,plan):
         """
@@ -212,7 +212,7 @@ class Planning(object):
             for exptime in self.observation[constant.MAST_t_exptime]:
                 duration = duration + float(exptime) + self.timerguider + self.timerslew + self.timerfilter + self.timerfocus
             d = (self.timerinit+duration) * u.second                     
-        return f'{d.to(u.hour).value:.6f}'
+        return float(f'{d.to(u.hour).value:.6f}')
         
     @property
     def number(self):
