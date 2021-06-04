@@ -25,7 +25,8 @@ class Planning(object):
         self.title = title
         self.observation = Table()
         self.available = False
-        self.timerinit = 10
+        self.timerinit = 900
+        self.timergo = 5
         self.timerslew = 5
         self.timerguider = 3
         self.timerfilter = 3
@@ -218,7 +219,7 @@ class Planning(object):
         if self.available:
             duration = 0
             for exptime in self.observation[constant.MAST_t_exptime]:
-                duration = duration + float(exptime) + self.timerguider + self.timerslew + self.timerfilter + self.timerfocus
+                duration = duration + float(exptime) + self.timergo + self.timerguider + self.timerslew + self.timerfilter + self.timerfocus
             d = (self.timerinit+duration) * u.second                     
         return float(f'{d.to(u.hour).value:.6f}')
         
