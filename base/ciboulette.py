@@ -88,6 +88,10 @@ class Ciboulette(object):
                       binXY,pixelXY,filter_name,telescope_name,observer_name,dataset,archive_table,ra,dec,object_name], 
                       names=['API','SERVER','DEVICE','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBJECT'])  
+ 
+    @property
+    def header(self):
+        return self.table
 
     @property
     def serverport(self):
@@ -276,7 +280,7 @@ class Ciboulette(object):
                 self.latitude = latitude
         if 'LONG' in sitedict:
             longitude = float(sitedict['LONG'])
-            if longitude >= 0 and longitude <= 360:
+            if longitude >= -360 and longitude <= 360:
                 self.longitude = longitude    
         if 'ELEV' in sitedict:
             elevation = float(sitedict['ELEV'])
