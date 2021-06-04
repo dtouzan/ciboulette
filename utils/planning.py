@@ -3,6 +3,7 @@ Planning class
 
 """
 
+import time
 from astropy.table import Table
 from astropy import units as u
 import numpy as np
@@ -10,6 +11,7 @@ import matplotlib.pyplot as plt
 import os
 import wget
 from ciboulette.base import constant
+from ciboulette.utils import exposure
 
 
 class Planning(object):
@@ -26,8 +28,8 @@ class Planning(object):
         self.observation = Table()
         self.available = False
         self.timerinit = 900
-        self.timergo = 5
-        self.timerslew = 5
+        self.timergo = 1
+        self.timerslew = 3
         self.timerguider = 3
         self.timerfilter = 3
         self.timerfocus = 0
@@ -235,10 +237,14 @@ class Planning(object):
     
     def exposure(self,plan):
         """
-        Return exposition time, observation ID, data product type
+        Return exposure class
         """
         if self.available:
-             return self.exptime(plan), self.observationID(plan), self.dataproducttype(plan)
+            exp = exposure.Exposure()
+            exp.exp_time = self.exptime(plan)
+            exp.exp_label = self.observationID(plan)
+            exp.exp_datatype = self.dataproducttype(plan)
+            return exp
     
     def coordinates(self,plan):
         """
@@ -257,6 +263,7 @@ class Planning(object):
             number = [self.number]
             duration = [self.duration]
             init = [self.timerinit]
+            go = [self.timergo]
             slew = [self.timerslew]
             Filter = [self.timerfilter]
             guider = [self.timerguider]
@@ -265,6 +272,29 @@ class Planning(object):
             for exp in self.observation[constant.MAST_t_exptime]:
                 exp_line = exp_line + ' ' + str(exp)             
             exposures = [exp_line]    
-            return Table([title,number,init,slew,Filter,guider,focus,exposures,duration], names=['Title','Number','Init','Slew','Filter','Guider','Focus','Exposures','Duration'])  
+            return Table([title,number,init,go,slew,Filter,guider,focus,exposures,duration], names=['Title','Number','Init','Go','Slew','Filter','Guider','Focus','Exposures','Duration'])  
         return None
 
+    @property
+    def sched_init(self):
+        time.sleep(self.timerinit)
+    
+    @property
+    def sched_go(self):
+        time.sleep(self.timergo)
+    
+    @property
+    def sched_slew(self):
+        time.sleep(self.timerslew)
+    
+    @property
+    def sched_filter(self):
+        time.sleep(self.timerfilter)
+    
+    @property
+    def sched_focus(self):
+        time.sleep(self.timerfocus)
+    
+    @property
+    def sched_guider(self):
+        time.sleep(self.timerguider)
