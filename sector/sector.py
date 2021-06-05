@@ -106,7 +106,9 @@ class Sector(object):
                 coordtype (int)         : Miriade definition
                 location (string)       : Miriade definition
         """
-        eph = Miriade.get_ephemerides(target, epoch=epoch, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
+        epoch_iso = Time(epoch,format='fits')
+        epoch_iso.format = 'iso'
+        eph = Miriade.get_ephemerides(target, epoch=epoch_iso.value, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
         ra = []
         dec = []
         marker = []    
@@ -127,7 +129,9 @@ class Sector(object):
                 coordtype (int)         : Miriade definition
                 location (string)       : Miriade definition
         """
-        eph = Miriade.get_ephemerides('p:moon', epoch=epoch, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
+        epoch_iso = Time(epoch,format='fits')
+        epoch_iso.format = 'iso'
+        eph = Miriade.get_ephemerides('p:moon', epoch=epoch_iso.value, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
         ra = []
         dec = []
         marker = []    
