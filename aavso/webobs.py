@@ -151,14 +151,24 @@ class WebObs(object):
         """
         jd_min,jd_max = self.JDMinMax
         mv_min,mv_max = self.magnitudeMinMax
-        plt.xlim(round(jd_min)-0.5,round(jd_max)+0.5)
+        
+        x = []
+        for value in self.observations:
+            x.append(value['JD']-jd_min)
+        y = self.observations['Magnitude']        
+
+        mymodel = np.poly1d(np.polyfit(x, y, 3))
+        myline = np.linspace(0, jd_max-jd_min, 100)
+
+        plt.xlim(-.5,round(jd_max-jd_min)+.5)
         plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
         plt.gca().invert_yaxis()
-        plt.scatter(self.observations['JD'], self.observations['Magnitude'], c = 'black', s = 5, alpha = 0.5)
+        plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
+        plt.plot(myline, mymodel(myline))
         plt.title(self.title, loc='center')
-        plt.xlabel(r'$JD$', fontsize = 14)
+        plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
         if self.filter == 'vis':
-            plt.ylabel(r'$m_v$', fontsize = 14)
+            plt.ylabel(r'$m_v$', fontsize = 12)
         else:
-            plt.ylabel('Magnitude', fontsize = 14)
+            plt.ylabel('Magnitude', fontsize = 12)
         plt.show()
