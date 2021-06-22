@@ -23,6 +23,7 @@ class WebObs(object):
         self.filter = filtername
         self.fileoutput = fileoutput
         self.titlename = ''
+        self.comment = ''
         self.observation = Table()
         self.html = BeautifulSoup()
         self.available = False
@@ -30,7 +31,6 @@ class WebObs(object):
         if self.filter not in ['vis','ccd']:
             self.filter = 'vis'
         self.read 
-        self.table
 
     @property
     def read(self):
@@ -43,20 +43,38 @@ class WebObs(object):
         
         if ' ' in self.nameID:
             nameID = self.nameID.replace(' ','%20')
+        else:
+            nameID = self.nameID
         url = 'https://app.aavso.org/webobs/results/?star=' + nameID + '&num_results=200' + '&obs_types=' + self.filter
         filedownload = wget.download(url,out=self.fileoutput,bar=None)  
         with open(filedownload) as fp:
             self.html = BeautifulSoup(fp, 'html.parser')
 
-        if len(self.html) > 0:
+        if self.noerror == 0 :
             self.available = True
-            self.titlename = self.html.title.contents[0] + ' -- ' + self.nameID
+            self.title
+            self.comments
+            self.table
         else:
             self.available = False
 
     @property
     def title(self):
+        self.titlename = self.html.title.contents[0] + ' -- ' + self.nameID
         return self.titlename
+       
+    @property
+    def comments(self):
+        if self.available:
+            comment = self.html.find(id='obsinfo').contents[0].string
+            comment = comment + self.html.find(id='obsinfo').contents[1].string
+            comment = comment + self.html.find(id='obsinfo').contents[2].string.replace('\n  \n','').replace('\n','').replace('  ',' ')
+            comment = comment + self.html.find(id='obsinfo').contents[3].string
+            comment = comment + self.html.find(id='obsinfo').contents[4].string.replace('\n  \n  \n  \n ','')
+            comment = comment + self.html.find(id='obsinfo').contents[5].string
+            comment = comment + self.html.find(id='obsinfo').contents[6].string.replace('\n  \n  \n  \n  \n  ','')
+            self.comment = comment
+        return self.comment
             
     @property
     def data(self):
@@ -149,26 +167,44 @@ class WebObs(object):
         """
         Plot observations table
         """
-        jd_min,jd_max = self.JDMinMax
-        mv_min,mv_max = self.magnitudeMinMax
+        if self.available:
+            jd_min,jd_max = self.JDMinMax
+            mv_min,mv_max = self.magnitudeMinMax
         
-        x = []
-        for value in self.observations:
-            x.append(value['JD']-jd_min)
-        y = self.observations['Magnitude']        
+            x = []
+            for value in self.observations:
+                x.append(value['JD']-jd_min)
+            y = self.observations['Magnitude']        
 
-        mymodel = np.poly1d(np.polyfit(x, y, 3))
-        myline = np.linspace(0, jd_max-jd_min, 100)
+            mymodel = np.poly1d(np.polyfit(x, y, 3))
+            myline = np.linspace(0, jd_max-jd_min, 100)
 
-        plt.xlim(-.5,round(jd_max-jd_min)+.5)
-        plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
-        plt.gca().invert_yaxis()
-        plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
-        plt.plot(myline, mymodel(myline))
-        plt.title(self.title, loc='center')
-        plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
-        if self.filter == 'vis':
-            plt.ylabel(r'$m_v$', fontsize = 12)
+            plt.xlim(-.5,round(jd_max-jd_min)+.5)
+            plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
+            plt.gca().invert_yaxis()
+            plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
+            plt.plot(myline, mymodel(myline))
+            plt.title(self.title, loc='center')
+            plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
+            if self.filter == 'vis':
+                plt.ylabel(r'$m_v$', fontsize = 12)
+            else:
+                plt.ylabel('Magnitude', fontsize = 12)
+            plt.show()
         else:
-            plt.ylabel('Magnitude', fontsize = 12)
-        plt.show()
+            print(self.comment)
+        
+    @property
+    def noerror(self):
+        """
+        Error handling
+        """
+        error_code = 0       
+        if 'errors' in self.html.p.get_text():
+                error_code = 404
+                self.comment = 'The star ' + self.nameID + ' cannot be found in our database.' 
+        else:
+            if 'no results' in self.html.p.get_text():
+                error_code = 404
+                self.comment = 'The star ' + self.nameID + ' cannot be found in our database.' 
+        return error_code
