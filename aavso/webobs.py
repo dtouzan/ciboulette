@@ -5,6 +5,7 @@ WebObs class
 from astropy.table import Table
 from astropy import units as u
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import os
@@ -18,7 +19,7 @@ class WebObs(object):
     filtername = vis|ccd
     """
     
-    def __init__(self, nameID, filtername='vis', fileoutput='aavso.html'):  
+    def __init__(self, nameID, filtername='Vis', fileoutput='aavso.html'):  
         self.nameID = nameID
         self.filter = filtername
         self.fileoutput = fileoutput
@@ -28,8 +29,7 @@ class WebObs(object):
         self.html = BeautifulSoup()
         self.available = False
         self._period = 0
-        if self.filter not in ['vis','ccd']:
-            self.filter = 'vis'
+        self.filter = self.isfilter(filtername)
         self.read 
 
     @property
@@ -45,7 +45,12 @@ class WebObs(object):
             nameID = self.nameID.replace(' ','%20')
         else:
             nameID = self.nameID
-        url = 'https://app.aavso.org/webobs/results/?star=' + nameID + '&num_results=200' + '&obs_types=' + self.filter
+        if self.isccd:
+            filtername = 'ccd'
+        else:
+            filtername = 'vis'
+        
+        url = 'https://app.aavso.org/webobs/results/?star=' + nameID + '&num_results=200' + '&obs_types=' + filtername
         filedownload = wget.download(url,out=self.fileoutput,bar=None)  
         with open(filedownload) as fp:
             self.html = BeautifulSoup(fp, 'html.parser')
@@ -75,6 +80,26 @@ class WebObs(object):
             comment = comment + self.html.find(id='obsinfo').contents[6].string.replace('\n  \n  \n  \n  \n  ','')
             self.comment = comment
         return self.comment
+    
+    def isfilter(self,filtername='vis'):
+        """
+        Return filter
+        """
+        if filtername in  ['Vis','I','R','B','V']:
+            f = filtername
+        else:
+            f = 'Vis'            
+        return f
+    
+    @property
+    def isccd(self):
+        """
+        Return true if in ccd filter
+        """
+        if self.filter in ['I','R','B','V']:
+            return True
+        else:
+            return False       
             
     @property
     def data(self):
@@ -108,27 +133,28 @@ class WebObs(object):
         if self.available:
             for ligne in self.data:
                 data = ligne.split('|')
-                Star.append(data[0])
-                JD.append(float(data[1]))
-                Calendar_Date.append(data[2])
-                if isinstance(data[3], int) or isinstance(data[3], float):
-                    Magnitude.append(float(data[3]))
-                else:
-                    Magnitude.append(float(data[3].replace('<','')))
-                Error.append(data[4])
-                Filter.append(data[5])
-                Observer.append(data[6])
-                Comp_Star.append(data[7])
-                Check_Star.append(data[8])
-                Transformed.append(data[9]) 
-                Chart.append(data[10]) 
-                Comment_Codes.append(data[11])
-                Notes.append(data[12])
-
-        self.observation = Table([Star,JD,Calendar_Date,Magnitude,Error,Filter,Observer,Comp_Star,Check_Star,Transformed,Chart,Comment_Codes,Notes],
-                      names=['Star', 'JD', 'Calendar Date', 'Magnitude', 'Error', 'Filter', 'Observer', 'Comp Star', 'Check Star', 'Transformed', 'Chart', 'Comment Codes', 'Notes'])
+                if self.filter in data[5]:
+                    Star.append(data[0])
+                    JD.append(float(data[1]))
+                    Calendar_Date.append(data[2])
+                    if isinstance(data[3], int) or isinstance(data[3], float):
+                        Magnitude.append(float(data[3]))
+                    else:
+                        Magnitude.append(float(data[3].replace('<','')))
+                    Error.append(data[4])
+                    Filter.append(data[5])
+                    Observer.append(data[6])
+                    Comp_Star.append(data[7])
+                    Check_Star.append(data[8])
+                    Transformed.append(data[9]) 
+                    Chart.append(data[10]) 
+                    Comment_Codes.append(data[11])
+                    Notes.append(data[12])
         
-        self._period = self.observation['JD'][0] - self.observation['JD'][len(self.observation)-1]
+        if len(Star) > 0:
+            self.observation = Table([Star,JD,Calendar_Date,Magnitude,Error,Filter,Observer,Comp_Star,Check_Star,Transformed,Chart,Comment_Codes,Notes],
+                      names=['Star', 'JD', 'Calendar Date', 'Magnitude', 'Error', 'Filter', 'Observer', 'Comp Star', 'Check Star', 'Transformed', 'Chart', 'Comment Codes', 'Notes'])
+            self._period = self.observation['JD'][0] - self.observation['JD'][len(self.observation)-1]
         return self.observation
     
     @property
@@ -181,22 +207,26 @@ class WebObs(object):
                 x.append(value['JD']-jd_min)
             y = self.observations['Magnitude']        
 
-            mymodel = np.poly1d(np.polyfit(x, y, 3))
-            myline = np.linspace(0, jd_max-jd_min, 100)
-
+            mymodel = np.poly1d(np.polyfit(x, y, 5))
+            myline = np.linspace(0, jd_max-jd_min, 2000)
+            series = pd.Series(mymodel(myline),myline)
+            ma = series.rolling(20).mean()
+            mstd = series.rolling(20).std()
+            
             plt.xlim(-.5,round(jd_max-jd_min)+.5)
             plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
             plt.gca().invert_yaxis()
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
+            plt.fill_between(mstd.index, ma-20 * mstd, ma+20  * mstd, color="b", alpha=0.2);
             plt.plot(myline, mymodel(myline))
-            plt.gca().xaxis.set_ticks(range( (round(jd_max)-round(jd_min))))
-            plt.gca().set_xticklabels(xlabel)
+#            plt.gca().xaxis.set_ticks(range(int(jd_min),int(jd_max)+1))
+#            plt.gca().set_xticklabels(xlabel)
             plt.title(self.title, loc='center')
             plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
-            if self.filter == 'vis':
+            if self.filter == 'Vis':
                 plt.ylabel(r'$m_v$', fontsize = 12)
             else:
-                plt.ylabel('Magnitude', fontsize = 12)
+                plt.ylabel(self.filter, fontsize = 12)
             plt.show()
         else:
             print(self.comment)
