@@ -170,6 +170,11 @@ class WebObs(object):
         if self.available:
             jd_min,jd_max = self.JDMinMax
             mv_min,mv_max = self.magnitudeMinMax
+
+            xlabel = []
+            for i in range(int(jd_min),int(jd_max)+1):
+                line = str(i)
+                xlabel.append(line[-2:])
         
             x = []
             for value in self.observations:
@@ -184,6 +189,8 @@ class WebObs(object):
             plt.gca().invert_yaxis()
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
             plt.plot(myline, mymodel(myline))
+            plt.gca().xaxis.set_ticks(range( (round(jd_max)-round(jd_min))))
+            plt.gca().set_xticklabels(xlabel)
             plt.title(self.title, loc='center')
             plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
             if self.filter == 'vis':
