@@ -196,11 +196,6 @@ class WebObs(object):
         if self.available:
             jd_min,jd_max = self.JDMinMax
             mv_min,mv_max = self.magnitudeMinMax
-
-            xlabel = []
-            for i in range(int(jd_min),int(jd_max)+1):
-                line = str(i)
-                xlabel.append(line[-2:])
         
             x = []
             for value in self.observations:
@@ -219,8 +214,6 @@ class WebObs(object):
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
             plt.fill_between(mstd.index, ma-20 * mstd, ma+20  * mstd, color="b", alpha=0.2);
             plt.plot(myline, mymodel(myline))
-#            plt.gca().xaxis.set_ticks(range(int(jd_min),int(jd_max)+1))
-#            plt.gca().set_xticklabels(xlabel)
             plt.title(self.title, loc='center')
             plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
             if self.filter == 'Vis':
@@ -245,3 +238,135 @@ class WebObs(object):
                 error_code = 404
                 self.comment = 'The star ' + self.nameID + ' cannot be found in our database.' 
         return error_code
+    
+class datadownload(object):
+    """
+    Class for AAVSO for data download.
+    fileinput = datadownload.csv
+    filtername = Vis|B|V|R|I|TG|CV
+    """
+    
+    def __init__(self, filtername='Vis', fileinput='aavsodata.csv'):  
+        self.nameID = ''
+        self.filter = filtername
+        self.fileinput = fileinput
+        self.titlename = ''
+        self.comment = ''
+        self.observation = Table()
+        self.available = False
+        self._period = 0
+        self.filter = self.isfilter(filtername)
+        self.read 
+
+    def isfilter(self,filtername='vis'):
+        """
+        Return filter
+        """
+        if filtername in  ['Vis','I','R','B','V','CV','TG']:
+            f = filtername
+        else:
+            f = 'Vis'            
+        return f
+
+    @property
+    def read(self):
+        """
+        Return table of observation
+        """       
+        self.observation = Table.read(self.fileinput, format='ascii.csv')   
+        if len(self.observation) > 0:
+            self.available = True
+            self.title
+            self.period
+            self.comments
+        else:
+            self.available = False
+
+    @property
+    def period(self):
+        """
+        Return period JD
+        """
+        if self.available:
+            self._period = self.observation['JD'][len(self.observation)-1] - self.observation['JD'][0]
+            return self._period
+
+    @property
+    def title(self):
+        if self.available:
+            self.titlename = 'AAVSO -- data-download -- ' + self.observation['Star Name'][0]
+        return self.titlename
+
+    @property
+    def comments(self):
+        if self.available:
+            observers = [] 
+            for i in self.observation['Observer Code'] : 
+                if i not in observers: 
+                    observers.append(i)                      
+            comment = 'Showing ' + str(len(self.observation)) + ' observations for ' + self.observation['Star Name'][0] + ' from ' + str(len(observers)) + ' observers'
+            self.comment = comment
+        return self.comment
+
+    @property
+    def observations(self):
+        """
+        Return observations table
+        """
+        if self.observation:
+            return self.observation
+
+    @property
+    def JDMinMax(self):
+        """
+        Return min and max JD in observations table
+        """
+        if self.observation:
+            return self.observation['JD'][0],self.observation['JD'][len(self.observation)-1]
+
+    @property
+    def magnitudeMinMax(self):
+        """
+        Return min and max of magnitude in observations table
+        """
+        if self.observation:
+            mv = []
+            for value in self.observations:
+                if self.filter in value['Band']:
+                    if '<' not in value['Magnitude']:
+                        mv.append(float(value['Magnitude']))           
+            return min(mv),max(mv)
+
+    def plot(self):
+        """
+        Plot observations table
+        """
+        if self.available:
+            jd_min,jd_max = self.JDMinMax
+            mv_min,mv_max = self.magnitudeMinMax
+        
+            x = []
+            y = []
+            
+            """
+            Mettre le filtre choisi
+            """          
+            
+            for value in self.observations:
+                if self.filter in value['Band']:
+                    if '<' not in value['Magnitude']:
+                        x.append(value['JD']-jd_min)
+                        y.append(float(value['Magnitude'])) 
+
+            plt.xlim(-.5,round(jd_max-jd_min)+.5)
+            plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
+            plt.gca().invert_yaxis()
+            plt.scatter(x, y, c = 'black', s = 5, alpha = 0.2)
+            plt.title(self.title, loc='center')
+            plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
+            if self.filter == 'Vis':
+                plt.ylabel(r'$m_v$', fontsize = 12)
+            else:
+                plt.ylabel(self.filter, fontsize = 12)
+            plt.show()
+
