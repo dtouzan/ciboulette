@@ -281,6 +281,48 @@ class datadownload(object):
             self.comments
         else:
             self.available = False
+    
+    def filtername(self, filtername='Vis'):
+        """
+        Update filter
+        """
+        if self.available:
+            self.filter = self.isfilter(filtername)
+
+    @property
+    def Vis(self):
+        if self.available:
+            self.filter = self.isfilter('Vis')    
+
+    @property
+    def I(self):
+        if self.available:
+            self.filter = self.isfilter('I')    
+
+    @property
+    def R(self):
+        if self.available:
+            self.filter = self.isfilter('R')   
+                        
+    @property
+    def V(self):
+        if self.available:
+            self.filter = self.isfilter('V')    
+            
+    @property
+    def B(self):
+        if self.available:
+            self.filter = self.isfilter('B')    
+            
+    @property
+    def CV(self):
+        if self.available:
+            self.filter = self.isfilter('CV')    
+            
+    @property
+    def TG(self):
+        if self.available:
+            self.filter = self.isfilter('TG')    
 
     @property
     def period(self):
