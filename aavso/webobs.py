@@ -388,12 +388,7 @@ class datadownload(object):
             mv_min,mv_max = self.magnitudeMinMax
         
             x = []
-            y = []
-            
-            """
-            Mettre le filtre choisi
-            """          
-            
+            y = []                     
             for value in self.observations:
                 if self.filter in value['Band']:
                     if '<' not in value['Magnitude']:
