@@ -202,6 +202,26 @@ class Ciboulette(object):
         self.diameter = 150
 
     @property
+    def binning(self):
+        """
+        Return binnning value
+        """
+        return self.binXY
+    
+    @binning.setter
+    def binning(self,binXY):
+        """
+        Set binning 
+        """
+        if isinstance(binXY,str):
+            binxy = int(binXY)
+        if isinstance(binXY,float):
+            binxy = int(binXY)            
+        if binXY < 1:
+            binxy = 1
+        self.binXY = binxy        
+        
+    @property
     def filtername(self):
         """
         Return filter name
@@ -354,6 +374,16 @@ class Ciboulette(object):
         p.projections(self.ra,self.dec,self.archive_table)
         p.display
 
+    def proj_planning(self,planning):
+        """
+        Displays the archived sectors, RA and DEC and Moon on an aitoff projection      
+        """
+        p = projection.Projection()
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
+        p.planning(planning)
+        p.display
+
     @property
     def opencluster(self):
         """
@@ -416,6 +446,8 @@ class Ciboulette(object):
         if isinstance(camera, Camera):
             t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
             self._date = t.value
+            camera.binx(self.binXY)
+            camera.biny(self.binXY)
             camera.startexposure(self._exp_time,True)
             i = self._exp_time + (((self.naxis1 * self.naxis2)/1048576) *2)
             while i > 0:
@@ -443,6 +475,7 @@ class Ciboulette(object):
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdu.data, hdu.header, overwrite=True)  
         else:
+            camera.binning({'X':self.binXY, 'Y':self.binXY})
             hdul = camera.expose(self._exp_time)
             i = self._exp_time + (((self.naxis1 * self.naxis2)/1048576) *2)
             while i > 0:

@@ -9,12 +9,14 @@ from astropy import units as u
 from astropy import wcs
 import matplotlib.pyplot as plt
 from ciboulette.sector import sector as Sct
+from ciboulette.utils import planning
 
 class Projection(object):
         
     def __init__(self,size=10,title=''):
             self.title = title
             self.size = size
+            self.cursorsize = 15
             self.ra = 0
             self.dec = 0
             self.date = Time.now()
@@ -41,6 +43,20 @@ class Projection(object):
         _dec.append(c.dec.radian)
         self.cursor = Table([_ra,_dec], names=['RA','DEC'])
 
+    def planning(self,planning):
+        """
+        Set cursors with planning
+        """
+        self.title = 'Planning projection'
+        _ra = []
+        _dec = []            
+        for plan in planning.observations:
+            ra,dec = planning.coordinates(plan)
+            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
+            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            _dec.append(c.dec.radian)
+        self.cursor = Table([_ra,_dec], names=['RA','DEC'])           
+    
     def _lmc(self):
         """
         Set LMC for display
@@ -205,7 +221,7 @@ class Projection(object):
             plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=moon_marker, alpha=0.25)        
         if len(self.archive) > 0:
             plt.plot(self.sector['RA'], self.sector['DEC'], 's', color='green', markersize=5, alpha=0.2)   
-        plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=5, alpha=0.4)
+        plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=self.cursorsize, alpha=0.2)
         ax.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
         ax.set_title(self.title, fontsize = 12)
         plt.show()
