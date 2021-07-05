@@ -46,5 +46,66 @@ class Mast(object):
         else:
             self.available = False
         return self.available
+
+    @property
+    def idfiledrive(self):
+        """
+        Return ID google drive file
+        """     
+        return self.idgoogledrive    
     
-    
+    @idfiledrive.setter
+    def idfiledrive(self,idgoogledrive):
+        """
+        Set ID google drive file
+         idgoogledrive (str): ID google drive file.csv.       
+        """     
+        self.idgoogledrive = idgoogledrive                 
+
+    @property
+    def output(self):
+        """
+        Return fileoutput
+        """     
+        return self.fileoutput
+
+    @output.setter
+    def output(self,fileoutput):
+        """
+        Set table of exposures with google drive 
+         fileoutput (str): file.csv output.
+        """
+        self.fileoutput = fileoutput
+
+    def ra(self,observation):
+        """
+        Return RA of plan. Format: Hours H.HHHH
+         plan (Table): plan of planning.
+        """           
+        if self.available:
+            return float(observation[constant.MAST_s_ra])/15
+
+    def dec(self,observation):
+        """
+        Return RA of plan. Format: Degrees D.DDDD
+         plan (Table): plan of planning.
+        """    
+        if self.available:
+            return float(observation[constant.MAST_s_dec]) 
+
+    def coordinates(self,observation):
+        """
+        Return coordinates RA,DEC
+        """
+        if self.available:
+            return self.ra(observation), self.dec(observation)
+
+    @property
+    def observations(self):
+        """
+        Return observations table
+        """
+        if len(self.observation) > 0:
+            return self.observation
+        else:
+            return None

@@ -248,7 +248,7 @@ class Planning(object):
     
     def coordinates(self,plan):
         """
-        Return 
+        Return coordinates RA,DEC
         """
         if self.available:
             return self.ra(plan), self.dec(plan)
