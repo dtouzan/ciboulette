@@ -40,22 +40,8 @@ class Projection(object):
         dec=float(self.dec)*u.deg
         c = SkyCoord(ra, dec, frame='icrs', unit=(u.deg, u.deg))
         _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-        _dec.append(c.dec.radian)
-        self.cursor = Table([_ra,_dec], names=['RA','DEC'])
-
-    def planning(self,planning):
-        """
-        Set cursors with planning
-        """
-        self.title = 'Planning projection'
-        _ra = []
-        _dec = []            
-        for plan in planning.observations:
-            ra,dec = planning.coordinates(plan)
-            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian)
-        self.cursor = Table([_ra,_dec], names=['RA','DEC'])           
+        _dec.append(c.dec.radian)      
+        self.cursor = Table([_ra,_dec,['o'],['blue'],[5]], names=['RA','DEC','Marker','Color','Size'])
     
     def _lmc(self):
         """
@@ -111,7 +97,7 @@ class Projection(object):
     
     def _archive(self,archives):
         """
-        Attribut : archives(string): répertoire des archives fits
+        Attribut : archives(string): archives fits repository
         """
         _ra = []
         _dec = []
@@ -151,7 +137,19 @@ class Projection(object):
         self._smc()
         self._milkyway()
         self._constellation()
-    
+
+    def planning(self,planning):
+        """
+        Set cursors with planning
+        """
+        self.title = 'Planning projection'           
+        for plan in planning.observations:
+            ra,dec = planning.coordinates(plan)
+            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
+            _ra = -c.ra.wrap_at(180 * u.deg).radian
+            _dec = c.dec.radian
+            self.cursor.add_row([_ra,_dec,'s','red',15])       
+            
     @property
     def opencluster(self):
         """
@@ -220,8 +218,9 @@ class Projection(object):
             moon_marker = self.moon['MARKER']
             plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=moon_marker, alpha=0.25)        
         if len(self.archive) > 0:
-            plt.plot(self.sector['RA'], self.sector['DEC'], 's', color='green', markersize=5, alpha=0.2)   
-        plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=self.cursorsize, alpha=0.2)
+            plt.plot(self.archive['RA'], self.archive['DEC'], 's', color='green', markersize=5, alpha=0.2) 
+        plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=15, alpha=0.2)
+        plt.plot(self.cursor['RA'][0], self.cursor['DEC'][0], 's', color='blue', markersize=5, alpha=0.2)
         ax.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
         ax.set_title(self.title, fontsize = 12)
         plt.show()

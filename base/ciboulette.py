@@ -374,9 +374,9 @@ class Ciboulette(object):
         p.projections(self.ra,self.dec,self.archive_table)
         p.display
 
-    def proj_planning(self,planning):
+    def projections_planning(self,planning):
         """
-        Displays the archived sectors, RA and DEC and Moon on an aitoff projection      
+        Add planning positions
         """
         p = projection.Projection()
         p.Moon(self._date,self.latitude,self.longitude,self.elevation)
