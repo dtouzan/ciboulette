@@ -384,6 +384,16 @@ class Ciboulette(object):
         p.planning(planning)
         p.display
 
+    def projections_mast(self,mast):
+        """
+        Add planning positions
+        """
+        p = projection.Projection()
+        p.Moon(self._date,self.latitude,self.longitude,self.elevation)
+        p.projections(self.ra,self.dec,self.archive_table)
+        p.mast(mast)
+        p.display
+
     @property
     def opencluster(self):
         """

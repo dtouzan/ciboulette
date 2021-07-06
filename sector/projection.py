@@ -10,6 +10,7 @@ from astropy import wcs
 import matplotlib.pyplot as plt
 from ciboulette.sector import sector as Sct
 from ciboulette.utils import planning
+from ciboulette.utils.mast import Mast
 
 class Projection(object):
         
@@ -149,7 +150,19 @@ class Projection(object):
             _ra = -c.ra.wrap_at(180 * u.deg).radian
             _dec = c.dec.radian
             self.cursor.add_row([_ra,_dec,'s','red',15])       
-            
+
+    def mast(self,mast):
+        """
+        Set cursors with mast file
+        """
+        self.title = 'Mast projection'           
+        for obs in mast.observations:
+            ra,dec = mast.coordinates(obs)
+            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
+            _ra = -c.ra.wrap_at(180 * u.deg).radian
+            _dec = c.dec.radian
+            self.cursor.add_row([_ra,_dec,'s','blue',2])       
+
     @property
     def opencluster(self):
         """
