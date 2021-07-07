@@ -204,18 +204,14 @@ class WebObs(object):
 
             mymodel = np.poly1d(np.polyfit(x, y, 5))
             myline = np.linspace(0, jd_max-jd_min, 2000)
-            series = pd.Series(mymodel(myline),myline)
-            #ma = series.rolling(20).mean()
-            #mstd = series.rolling(20).std()
             
             plt.xlim(-.5,round(jd_max-jd_min)+.5)
             plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
             plt.gca().invert_yaxis()
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
-            #plt.fill_between(mstd.index, ma-20 * mstd, ma+20  * mstd, color="b", alpha=0.2);
             plt.plot(myline, mymodel(myline))
             plt.title(self.title, loc='center')
-            plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
+            plt.xlabel(str(int(jd_min))+'\nJD', fontsize = 12)
             if self.filter == 'Vis':
                 plt.ylabel(r'$m_v$', fontsize = 12)
             else:
@@ -223,7 +219,7 @@ class WebObs(object):
             plt.show()
         else:
             print(self.comment)
-        
+            
     @property
     def noerror(self):
         """
@@ -400,7 +396,7 @@ class datadownload(object):
             plt.gca().invert_yaxis()
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.2)
             plt.title(self.title, loc='center')
-            plt.xlabel(str(int(jd_min))+'   JD', fontsize = 12)
+            plt.xlabel(str(int(jd_min))+'\nJD', fontsize = 12)
             if self.filter == 'Vis':
                 plt.ylabel(r'$m_v$', fontsize = 12)
             else:
