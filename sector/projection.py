@@ -12,6 +12,34 @@ from ciboulette.sector import sector as Sct
 from ciboulette.utils import planning
 from ciboulette.utils.mast import Mast
 
+
+class _database(object):
+    
+        def __init__(self,table):
+            self.data = table
+            self.title = 'Cursor'
+            self.size = 2
+            self.color = 'blue'
+            self.marker = 'o'
+            self.alpha = 0.8
+         
+        def properties(self,title='',size=2,color='blue',marker='o',alpha='0.8'):
+            """
+            Properties nitialisation
+            """
+            self.title = title
+            self.size = size
+            self.color = color
+            self.marker = marker
+            self.alpha = alpha      
+        
+        def plot(self):
+            """
+            Plot database
+            """
+            plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color=self.color, markersize=self.size, alpha=self.alpha)
+
+
 class Projection(object):
         
     def __init__(self,size=10,title=''):
@@ -30,6 +58,7 @@ class Projection(object):
             self.milkyway = Table()
             self.constellation = Table()
             self.catalog = Table()
+            self.databaselist = []
     
     def _cursor(self):
         """
@@ -41,8 +70,8 @@ class Projection(object):
         dec=float(self.dec)*u.deg
         c = SkyCoord(ra, dec, frame='icrs', unit=(u.deg, u.deg))
         _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-        _dec.append(c.dec.radian)      
-        self.cursor = Table([_ra,_dec], names=['RA','DEC'])
+        _dec.append(c.dec.radian)
+        self.databaselist.append(_database(Table([_ra,_dec], names=['RA','DEC'])))
     
     def _lmc(self):
         """
@@ -103,11 +132,14 @@ class Projection(object):
         _ra = []
         _dec = []
         archive = self.sct.readarchives(archives)
-        for line in archive:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian)
-        self.archive = Table([_ra,_dec], names=['RA','DEC'])
+        if len(archive) > 0:
+            for line in archive:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+                _dec.append(c.dec.radian)
+            database = _database(Table([_ra,_dec], names=['RA','DEC']))
+            database.properties(title='Archive',size=5,color='blue',marker='s',alpha=0.2)
+            self.databaselist.append(database)   
 
     def Moon(self,date,latitude,longitude,elevation):
         """
@@ -122,7 +154,9 @@ class Projection(object):
             c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian)
-        self.moon = Table([_ra,_dec], names=['RA','DEC'])
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Moon',size=10,color='black',marker='o',alpha=0.25)
+        self.databaselist.append(database)   
 
     def projections(self,RA,DEC,archives):
         """
@@ -140,29 +174,35 @@ class Projection(object):
 
     def planning(self,planning):
         """
-        Set cursors with planning
+        Set cursors with planning for display
         """
         self.title = 'Planning projection\n'           
+        _ra = []
+        _dec = []
         for plan in planning.observations:
             ra,dec = planning.coordinates(plan)
             c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
-            _ra = -c.ra.wrap_at(180 * u.deg).radian
-            _dec = c.dec.radian
-            self.cursor.add_row([_ra,_dec])       
+            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            _dec.append(c.dec.radian) 
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Planning',size=15,color='red',marker='s',alpha=0.2)
+        self.databaselist.append(database)   
 
     def mast(self,mast):
         """
-        Set cursors with mast file
+        Set cursors with mast object for display
         """
         self.title = 'Mast projection\n'
-        if len(self.archive) < 1:
-            self.archive = Table([[],[]], names=['RA','DEC'])
+        _ra = []
+        _dec = []
         for obs in mast.observations:
             ra,dec = mast.coordinates(obs)
             c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
-            _ra = -c.ra.wrap_at(180 * u.deg).radian
-            _dec = c.dec.radian
-            self.archive.add_row([_ra,_dec])       
+            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+            _dec.append(c.dec.radian)
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Mast',size=5,color='green',marker='s',alpha=0.2)
+        self.databaselist.append(database)        
 
     @property
     def opencluster(self):
@@ -178,7 +218,9 @@ class Projection(object):
             ra = c.ra*15
             _ra.append(-ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian) 
-        self.catalog = Table([_ra,_dec], names=['RA','DEC'])
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Open cluster',size=2,color='blue',marker='o',alpha=0.25)
+        self.databaselist.append(database)   
  
     @property
     def HerbigAeBe(self):
@@ -193,7 +235,9 @@ class Projection(object):
             c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian) 
-        self.catalog = Table([_ra,_dec], names=['RA','DEC'])
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Herbig',size=2,color='blue',marker='o',alpha=0.25)
+        self.databaselist.append(database)   
  
     @property
     def cepheid(self):
@@ -209,7 +253,9 @@ class Projection(object):
             ra = c.ra*15
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian) 
-        self.catalog = Table([_ra,_dec], names=['RA','DEC'])
+        database = _database(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(title='Cepheid',size=2,color='blue',marker='o',alpha=0.25)
+        self.databaselist.append(database)   
  
     @property
     def display(self):
@@ -226,14 +272,8 @@ class Projection(object):
         plt.plot(self.lmc['RA'], self.lmc['DEC'], color='blue', lw=1, alpha=0.2)
         plt.plot(self.constellation['RA'], self.constellation['DEC'], '--', color='black', lw=1, alpha=0.4)
         plt.fill_between(self.lmc['RA'],self.lmc['DEC'], color='blue', alpha=0.1)  
-        if len(self.catalog) > 0:
-            plt.plot(self.catalog['RA'],self.catalog['DEC'], 'o', color='blue', markersize=2, alpha=0.25)    
-        if len(self.moon) >0:
-            plt.plot(self.moon['RA'],self.moon['DEC'], 'o', color='black', markersize=10, alpha=0.25)        
-        if len(self.archive) > 0:
-            plt.plot(self.archive['RA'], self.archive['DEC'], 's', color='green', markersize=5, alpha=0.2) 
-        plt.plot(self.cursor['RA'], self.cursor['DEC'], 's', color='red', markersize=15, alpha=0.2)
-        plt.plot(self.cursor['RA'][0], self.cursor['DEC'][0], 's', color='blue', markersize=self.cursorsize, alpha=0.2)
+        for database in self.databaselist:
+            database.plot()       
         ax.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
         ax.set_title(self.title, fontsize = 12)
         plt.show()
