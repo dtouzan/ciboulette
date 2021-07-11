@@ -18,9 +18,7 @@ class Mast(object):
         self.idgoogledrive = idgoogledrive
         self.fileoutput = fileoutput
         self.observation = Table()
-        self.available = False
-
-        
+        self.available = False      
         
     @property
     def create(self):
