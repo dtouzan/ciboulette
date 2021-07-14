@@ -5,7 +5,6 @@ WebObs class
 from astropy.table import Table
 from astropy import units as u
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import os
