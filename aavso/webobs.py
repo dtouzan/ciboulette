@@ -202,7 +202,7 @@ class WebObs(object):
                 x.append(value['JD']-jd_min)
             y = self.observations['Magnitude']        
 
-            mymodel = np.poly1d(np.polyfit(x, y, 5))
+            mymodel = np.poly1d(np.polyfit(x, y, 7))
             myline = np.linspace(0, jd_max-jd_min, 2000)
             
             plt.xlim(-.5,round(jd_max-jd_min)+.5)
