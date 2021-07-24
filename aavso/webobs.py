@@ -236,7 +236,7 @@ class WebObs(object):
     
 class datadownload(object):
     """
-    Class for AAVSO for data download.
+    Class for AAVSO for data download (https://www.aavso.org/data-download).
     fileinput = datadownload.csv
     filtername = Vis|B|V|R|I|TG|CV
     """
