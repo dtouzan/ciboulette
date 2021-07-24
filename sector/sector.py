@@ -13,6 +13,7 @@ from astropy import wcs
 from astropy.time import Time
 from astropy.io import ascii
 from astroquery.imcce import Miriade, MiriadeClass
+from ciboulette.base import constant
 
 class Sector(object):
     
@@ -79,9 +80,9 @@ class Sector(object):
         result = v.query_region(SkyCoord(ra=astre_ra, dec=astre_dec, unit=(u.deg, u.deg),frame='icrs'), width=Angle(angle_width, "deg"), 
                                 height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters={'Gmag':mag_format}) 
         if mag <= 14 :
-            stars = constent.starslow
+            stars = constant.starslow
         else:
-            stars = constent.starshight         
+            stars = constant.starshight         
         for table_name in result.keys():
             table = result[table_name]
             for line in table:

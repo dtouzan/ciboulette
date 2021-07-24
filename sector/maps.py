@@ -5,7 +5,8 @@ Maps class
 import matplotlib.pyplot as plt
 from astropy.table import Table
 from astropy import wcs
-from ciboulette.sector import sector 
+from ciboulette.sector import sector
+from ciboulette.base import constant
 
 class Map(object):
     
@@ -65,6 +66,6 @@ class Map(object):
         if len(self.target) > 0:
             ax.plot(self.target['RA'], self.target['DEC'], transform=ax.get_transform('icrs'), lw=3)
         fig.suptitle(self.title, y = 0.92, fontsize = 12)
-        plt.xlabel(constent.RA_J2000)
-        plt.ylabel(constent.DEC_J2000)
+        plt.xlabel(constant.RA_J2000)
+        plt.ylabel(constant.DEC_J2000)
         plt.show()
