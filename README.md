@@ -14,21 +14,11 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Phd2client (sources https://github.com/agalasso/phd2client, MIT License), no package 
   - Internet connexion
 
-## Configuration
-
-### OS and hardware for development
-  - Windows 10
-  - PC
-
-### OS and hardware for observatory
-  - Ubuntu server 20.10
-  - Raspberry pi 4 or PC
-  
 ### Installation
-**Operating system (Windows)**
+**Operating system (Windows, Ubuntu PC)**
   - miniconda site : https://docs.conda.io/en/latest/miniconda.html
 
-**Operating system (Ubuntu)**
+**Operating system (Ubuntu Raspberry pi4)**
 ```sh
 sudo apt update
 sudo apt upgrade
@@ -42,22 +32,43 @@ sudo reboot
   
   - Indilib.org site: https://indilib.org/download.html
 
-**Jupyter lab (All)**
+**Jupyter lab (Windows, Ubuntu PC)**
+```sh
+conda install jupyter
+conda install jupyterlab
+jupyter notebook --generate-config
+```      
+
+**Jupyter lab (Ubuntu Raspberry pi4)**
 ```sh
 sudo apt install jupyter
 pip install jupyterlab
 jupyter notebook --generate-config
 ```      
 
-**Astronomy Packages (All)**
+**Astronomy Packages (Windows, Ubuntu PC)**
 ```sh
-pip install matplotlib or conda install matplotlib
-pip install numpy or conda install numpy
-pip install wget
-pip install astropy or conda install astropy
-pip install astroquery or conda install -c conda-forge astroquery
-pip install reproject  or conda install -c astropy reproject
+conda install git
+conda install matplotlib
+conda install numpy
+conda install curl
+conda install astropy
+conda install -c conda-forge astroquery
+conda install -c astropy reproject
 pip install alpyca
+pip install wget
+```      
+
+**Astronomy Packages (Ubuntu Raspberry pi4)**
+```sh
+pip install matplotlib
+pip install numpy
+pip install curl
+pip install astropy
+pip install -c conda-forge astroquery
+pip install -c astropy reproject
+pip install alpyca
+pip install wget
 ```      
 
 **Ubuntu service & IP static**
