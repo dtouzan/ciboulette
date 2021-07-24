@@ -67,8 +67,8 @@ pip install curl
 pip install astropy
 pip install -c conda-forge astroquery
 pip install -c astropy reproject
-pip install alpyca
 pip install wget
+pip install alpyca
 ```      
 
 **Ubuntu service & IP static**
