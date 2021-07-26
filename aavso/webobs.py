@@ -407,7 +407,7 @@ class datadownload(object):
 
 class vsx(object):
     """
-    Class AAVSO VSX, return VOTABLE
+    Class AAVSO VSX, return TABLE
     """
 
     def __init__(self, nameID, fileoutput='vsx.html'):  
