@@ -410,7 +410,7 @@ class vsx(object):
     Class AAVSO VSX, return TABLE
     """
 
-    def __init__(self, nameID, fileoutput='vsx.html'):  
+    def __init__(self, nameID):  
         self.nameID = nameID
         self.vsx_table = Table()
         self.available = False
@@ -499,3 +499,9 @@ class vsx(object):
         if self.available:
             c = SkyCoord(ra=float(self.vsx_table['RA2000'])*u.degree, dec=float(self.vsx_table['Declination2000'])*u.degree)                       
             return c.ra.hour, c.dec.degree
+
+    @property
+    def hourdegree(self):
+        """
+        Return vsx RA,DEC (Hour,Degree)
+        """
