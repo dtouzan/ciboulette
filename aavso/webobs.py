@@ -4,11 +4,14 @@ WebObs class
 
 from astropy.table import Table
 from astropy import units as u
+from astropy.coordinates import SkyCoord
 import numpy as np
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import os
+import io
 import wget
+import requests
 
 
 class WebObs(object):
@@ -402,3 +405,97 @@ class datadownload(object):
                 plt.ylabel(self.filter, fontsize = 12)
             plt.show()
 
+class vsx(object):
+    """
+    Class AAVSO VSX, return VOTABLE
+    """
+
+    def __init__(self, nameID, fileoutput='vsx.html'):  
+        self.nameID = nameID
+        self.vsx_table = Table()
+        self.available = False
+
+    @property
+    def read(self):
+        """
+        Return TABLE of Variable
+        """
+        self.table
+
+    @property
+    def data(self):
+        """
+        Return JSON data
+        """
+        if ' ' in self.nameID:
+            nameID = self.nameID.replace(' ','%20')
+        else:
+            nameID = self.nameID
+
+        url = "http://www.aavso.org/vsx/index.php"
+        params = {}
+        params['view']='api.object'
+        params['format']='json'
+        params['ident']=self.nameID
+        response = requests.get(url,params=params)
+        if (response.status_code > 400):
+            self.available = False
+        else:
+            self.available = True
+            return response.json()
+    
+    @property
+    def table(self):
+        """
+        Return data table
+        """
+        j = self.data
+        if self.available:
+            name = [j["VSXObject"]["Name"]]
+            auid = [j["VSXObject"]["AUID"]]
+            ra2000 = [j["VSXObject"]["RA2000"]]
+            dec2000 = [j["VSXObject"]["Declination2000"]]
+            vartype = [j["VSXObject"]["VariabilityType"]]
+            period = [j["VSXObject"]["Period"]]
+            epoch = [j["VSXObject"]["Epoch"]]
+            maxmag = [j["VSXObject"]["MaxMag"]]
+            minmag = [j["VSXObject"]["MinMag"]]
+            discover = [j["VSXObject"]["Discoverer"]]
+            category = [j["VSXObject"]["Category"]]
+            oid = [j["VSXObject"]["OID"]]
+            constellation = [j["VSXObject"]["Constellation"]]
+            self.vsx_table = Table([name,auid,ra2000,dec2000,vartype,period,epoch,maxmag,minmag,discover,category,oid,constellation],
+                                   names=['Name', 'AUID', 'RA2000', 'Declination2000', 'VariabilityType', 'Period', 'Epoch', 'MaxMag', 'MinMagr', 'Discoverer', 'Category', 'OID', 'Constellation'])         
+            
+    @property
+    def observations(self):
+        """
+        Return vsx table
+        """
+        if self.available:
+            return self.vsx_table
+    
+    @property
+    def name(self):
+        """
+        Return vsx name
+        """
+        if self.available:
+            return self.vsx_table['Name'][0]
+    
+    @property
+    def coordinates(self):
+        """
+        Return vsx RA,DEC (degree,degree)
+        """
+        if self.available:
+            return float(self.vsx_table['RA2000']), float(self.vsx_table['Declination2000'])
+
+    @property
+    def hourdegree(self):
+        """
+        Return vsx RA,DEC (Hour,Degree)
+        """
+        if self.available:
+            c = SkyCoord(ra=float(self.vsx_table['RA2000'])*u.degree, dec=float(self.vsx_table['Declination2000'])*u.degree)                       
+            return c.ra.hour, c.dec.degree
