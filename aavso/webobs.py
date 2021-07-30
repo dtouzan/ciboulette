@@ -414,6 +414,7 @@ class vsx(object):
         self.nameID = nameID
         self.vsx_table = Table()
         self.available = False
+        self.read
 
     @property
     def read(self):
@@ -426,6 +427,7 @@ class vsx(object):
     def data(self):
         """
         Return JSON data
+        Source : https://www.aavso.org/direct-web-query-vsxvsp
         """
         if ' ' in self.nameID:
             nameID = self.nameID.replace(' ','%20')
@@ -449,23 +451,17 @@ class vsx(object):
         """
         Return data table
         """
-        j = self.data
-        if self.available:
-            name = [j["VSXObject"]["Name"]]
-            auid = [j["VSXObject"]["AUID"]]
-            ra2000 = [j["VSXObject"]["RA2000"]]
-            dec2000 = [j["VSXObject"]["Declination2000"]]
-            vartype = [j["VSXObject"]["VariabilityType"]]
-            period = [j["VSXObject"]["Period"]]
-            epoch = [j["VSXObject"]["Epoch"]]
-            maxmag = [j["VSXObject"]["MaxMag"]]
-            minmag = [j["VSXObject"]["MinMag"]]
-            discover = [j["VSXObject"]["Discoverer"]]
-            category = [j["VSXObject"]["Category"]]
-            oid = [j["VSXObject"]["OID"]]
-            constellation = [j["VSXObject"]["Constellation"]]
-            self.vsx_table = Table([name,auid,ra2000,dec2000,vartype,period,epoch,maxmag,minmag,discover,category,oid,constellation],
-                                   names=['Name', 'AUID', 'RA2000', 'Declination2000', 'VariabilityType', 'Period', 'Epoch', 'MaxMag', 'MinMagr', 'Discoverer', 'Category', 'OID', 'Constellation'])         
+        result = self.data['VSXObject']
+        header = []
+        value = []
+        types = []
+        for item in result:
+            value.append(result[item])
+            header.append(item)
+            types.append('str')
+    
+        self.vsx_table = Table(names = header, dtype = types) 
+        self.vsx_table.add_row(value)
             
     @property
     def observations(self):
@@ -499,9 +495,4 @@ class vsx(object):
         if self.available:
             c = SkyCoord(ra=float(self.vsx_table['RA2000'])*u.degree, dec=float(self.vsx_table['Declination2000'])*u.degree)                       
             return c.ra.hour, c.dec.degree
-
-    @property
-    def hourdegree(self):
-        """
-        Return vsx RA,DEC (Hour,Degree)
-        """
+    
