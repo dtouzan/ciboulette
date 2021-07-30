@@ -20,21 +20,22 @@ class Map(object):
     def stars(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,instrument,telescope_name,observer_name,filter_name):
         """
         Set data, WCS and title for display
-        Attribut : 
-                ciboulette (object): Ciboulette class
         """
         sct = sector.Sector()
         self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
         field = self.WCS.wcs.cdelt[1]*naxis2
-        mag = 11
+        mag = 8
+        if field <= 5:
+            mag = 11
         if field <= 3:
             mag = 14
         if field <= 1:
             mag = 18
         catalog = 'GAIA-EDR3'
         self.data = sct.regionincatalog(ra*15, dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
-        self.title = self.title+'VizieR-'+catalog+' | F'+str(focal)+' | '+instrument+' | '+telescope_name+' | '+observer_name+' | '+filter_name+'\n'
+        resolv = str("%.2f" %(206*pixelXY/focal))
+        self.title = self.title+'VizieR-'+catalog+' | F'+str(focal)+' | '+instrument+' | '+telescope_name+' | '+observer_name+' | '+filter_name+' | '+resolv +'\n'
         
     def trajectory(self,target,epoch,epoch_step,epoch_nsteps,latitude,longitude,elevation):
         """
@@ -54,9 +55,9 @@ class Map(object):
         self.title = self.title+target+' | '+epoch.value+'\n'        
     
     @property
-    def display(self):
+    def plot(self):
         """
-        Display map
+        Plot map
         """
         fig = plt.figure(figsize=(self.size,self.size))
         ax = fig.add_subplot(111, projection=self.WCS)
@@ -65,7 +66,12 @@ class Map(object):
             ax.scatter(self.data['RA'], self.data['DEC'], transform=ax.get_transform('icrs'), s=self.data['MARKER'],edgecolor='black', facecolor='black')
         if len(self.target) > 0:
             ax.plot(self.target['RA'], self.target['DEC'], transform=ax.get_transform('icrs'), lw=3)
+        ax.scatter(self.WCS.wcs.crval[0], self.WCS.wcs.crval[1], transform=ax.get_transform('icrs'), s=50,edgecolor='red', linewidths=2, facecolor=None, alpha=0.6)
         fig.suptitle(self.title, y = 0.92, fontsize = 12)
         plt.xlabel(constant.RA_J2000)
         plt.ylabel(constant.DEC_J2000)
         plt.show()
+
+    @property
+    def display(self):
+        self.plot
