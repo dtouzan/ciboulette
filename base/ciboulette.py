@@ -4,12 +4,14 @@ Ciboulette class
 
 import time
 import numpy as np
+import math 
 import matplotlib.pyplot as plt
 from astropy.io import fits
 from astropy.time import Time
 from astropy.table import Table
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
+from astropy.coordinates import Angle
 from astropy import wcs
 from astropy.io.votable import parse_single_table
 from astropy.utils.data import get_pkg_data_filename
@@ -20,6 +22,7 @@ from ciboulette.sector import projection
 from ciboulette.sector import maps
 from ciboulette.utils import exposure as Exp
 from ciboulette.utils import planning as Pln
+from ciboulette.aavso.webobs import WebObs, datadownload, vsx
 
 class Ciboulette(object):
         
@@ -142,6 +145,26 @@ class Ciboulette(object):
         self.naxis1 = 1280
         self.naxis2 = 960
         self.pixelXY = 3.75       
+
+    @property
+    def asi178(self):
+        """
+        Set ASI 178 configuration
+        """
+        self.instrument = 'ASI 178'
+        self.naxis1 = 3096
+        self.naxis2 = 2080
+        self.pixelXY = 2.4       
+
+    @property
+    def asi294(self):
+        """
+        Set ASI 294 configuration
+        """
+        self.instrument = 'ASI 294'
+        self.naxis1 = 4144
+        self.naxis2 = 2822
+        self.pixelXY = 4.63       
 
     @property
     def samyang85_1_4(self):
@@ -354,6 +377,26 @@ class Ciboulette(object):
         self.ra = c.ra.deg[0]    # Hours
         self.dec = c.dec.deg[0]  # degrees
         self.object_name = result_table['MAIN_ID'][0]
+
+    @property    
+    def positionsbyaavso(self):
+        """
+        Return object name, RA and DEC
+        """
+        return self.positionsbyname
+
+    @positionsbyaavso.setter
+    def positionsbyaavso(self,string):
+        """
+        Set RA and DEC with VSX AAVSO name object
+        """
+        ra = 0
+        dec = 90
+        v = vsx(string)
+        ra,dec = v.hourdegree
+        self.ra = ra    # Hours
+        self.dec = dec  # degrees
+        self.object_name = v.name
 
     @property
     def projectionslight(self):
@@ -589,3 +632,19 @@ class Ciboulette(object):
         fits_file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         fits.writeto(fits_file_name, data, hdr, overwrite=True)
  
+    @property
+    def functions(self):
+        """
+        Return other functions, resolve, fields, magnitude
+        """
+        resolve = Angle( (((206 * self.pixelXY) / self.focal)) / 3600, unit=u.degree)
+        fieldRA = Angle( resolve * self.naxis1, unit=u.degree)
+        fieldDEC = Angle(resolve * self.naxis2, unit=u.degree)
+        magnitude = math.log10(self.diameter) * 5 + 7.2      
+        t = Table()
+        t['Resolve'] = [resolve]
+        t['Field RA'] = [fieldRA]
+        t['Field DEC'] = [fieldDEC]
+        t['Mv'] = [magnitude]
+        return t
+
