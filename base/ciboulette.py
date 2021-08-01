@@ -645,6 +645,10 @@ class Ciboulette(object):
         t['Resolve'] = [resolve]
         t['Field RA'] = [fieldRA]
         t['Field DEC'] = [fieldDEC]
-        t['Mv'] = [magnitude]
+        t['Mv'] = [magnitude]           
+        t['Resolve'].info.format = '.8f'
+        t['Field RA'].info.format = '.8f'
+        t['Field DEC'].info.format = '.8f'
+        t['Mv'].info.format = '.2f'
         return t
 
