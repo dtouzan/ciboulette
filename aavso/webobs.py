@@ -251,6 +251,7 @@ class datadownload(object):
         self.titlename = ''
         self.comment = ''
         self.observation = Table()
+        self.JDline = _JDline()
         self.available = False
         self._period = 0
         self.filter = self.isfilter(filtername)
@@ -376,6 +377,21 @@ class datadownload(object):
                     if '<' not in value['Magnitude']:
                         mv.append(float(value['Magnitude']))           
             return min(mv),max(mv)
+    
+    @property
+    def JulianDay(self):
+        """
+        Return JD table
+        """
+        return self.JDline.JulianDay
+    
+    @JulianDay.setter
+    def JulianDay(self,JDtable):
+        """
+        Create JD table
+        """
+        if JDtable:
+            self.JDline.JulianDay = JDtable        
 
     def plot(self):
         """
@@ -390,15 +406,16 @@ class datadownload(object):
             for value in self.observations:
                 if self.filter in value['Band']:
                     if '<' not in value['Magnitude']:
-                        x.append(value['JD']-jd_min)
+                        x.append(value['JD'])
                         y.append(float(value['Magnitude'])) 
 
-            plt.xlim(-.5,round(jd_max-jd_min)+.5)
-            plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
+            plt.xlim(round(jd_min)-5,round(jd_max)+5)
+            plt.ylim(round(mv_min)-1,round(mv_max)+1)
             plt.gca().invert_yaxis()
             plt.scatter(x, y, c = 'black', s = 5, alpha = 0.2)
+            self.JDline.plot()
             plt.title(self.title, loc='center')
-            plt.xlabel(str(int(jd_min))+'\nJD', fontsize = 12)
+            plt.xlabel('JD', fontsize = 12)
             if self.filter == 'Vis':
                 plt.ylabel(r'$m_v$', fontsize = 12)
             else:
@@ -496,3 +513,31 @@ class vsx(object):
             c = SkyCoord(ra=float(self.vsx_table['RA2000'])*u.degree, dec=float(self.vsx_table['Declination2000'])*u.degree)                       
             return c.ra.hour, c.dec.degree
     
+class _JDline(object):
+    """
+    Class line Julian Day 
+    """
+
+    def __init__(self):  
+        self.JDtable = []
+
+    @property
+    def JulianDay(self):
+        """
+        Return JD table
+        """
+        return self.JDtable
+    
+    @JulianDay.setter
+    def JulianDay(self,JDtable):
+        """
+        Add JD's
+        """
+        self.JDtable = JDtable
+    
+
+    def plot(self):
+        """
+        Plot line of JD's
+        """
+        plt.vlines(self.JDtable, -30,30 , linestyles = 'dashed', colors = 'red', alpha = 0.4)
