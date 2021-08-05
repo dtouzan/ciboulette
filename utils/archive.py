@@ -51,3 +51,6 @@ class Archive(object):
         self.dataset = Table([object_name,observer,instrument,telescope,frameid,frame,datatype,filter_name,focal,exptime,date_obs,jd,ra,dec], 
                              names=['ID','OBSERVER','INSTRUME','TELESCOP','FRAMEID','FRAME','DATATYPE','FILTER','FOCALLEN','EXPTIME','DATE-OBS','JD-OBS','RA','DEC'])
 
+    @property
+    def observations(self):
+        return self.dataset
