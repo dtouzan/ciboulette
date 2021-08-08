@@ -205,23 +205,34 @@ class Archive(object):
         Plot JD planning
         """
         summer = []
+        new_year = []
         years_data = []
+        if self.go >= self.end:
+            self.go = self.end - 1
         for years in range(self.go,self.end+1):
             date = str(years) + '-01-01T00:00:00'
-            years_data.append(self.JulianDay(date))
-            period_plot = _summer(year = years)
-            summer.append(period_plot)
-            
+            years_data.append(self.JulianDay(date))           
+        for years in range(self.go,self.end):
+            period = _summer(year = years)
+            summer.append(period)
+            period = _year(year = years)
+            new_year.append(period)
+    
         plt.ylim(0,1)
         plt.xlim(min(years_data),max(years_data))
         for database_period in summer:
             database_period.plot()   
-        plt.vlines(years_data, 0,1 , colors = 'red', alpha = 0.2, lw=15)
+        for database_period in new_year:
+            database_period.plot() 
         plt.vlines(self.dataset['JD'], 0,1 , colors = 'black', alpha = 0.3)
+        plt.yticks([])
         plt.xlabel(constant.JD_label)
         plt.show()
 
 class _summer(object):
+    """
+    Plot summer class
+    """
     
     def __init__(self, year = 2021):
         date = str(year) + constant.summer[0]
@@ -232,7 +243,30 @@ class _summer(object):
         self.end = time.jd
         self.y = [0,1]
         self.color = 'blue'
-        self.alpha = 0.1
+        self.alpha = 0.25
     
     def plot(self):
         plt.fill_betweenx(self.y,self.go,self.end, color=self.color, alpha=self.alpha)
+        plt.text(self.go+int((self.end-self.go)/2),0.5,'SUMMER', horizontalalignment='center', verticalalignment='center', fontsize=12, color='w', fontweight='bold')
+
+class _year(object):
+    """
+    Plot year class
+    """
+    
+    def __init__(self, year = 2021):
+        date = str(year) + '-01-01T00:00:00'
+        time = Time(date)
+        self.go = time.jd
+        date = str(year) + '-01-31T00:00:00'
+        time = Time(date)
+        self.end = time.jd     
+        self.label = str(year)
+        self.y = [0,1]
+        self.color = 'red'
+        self.alpha = 0.25
+    
+    def plot(self):
+        plt.fill_betweenx(self.y,self.go,self.end, color=self.color, alpha=self.alpha)
+        plt.text(self.go+int((self.end-self.go)/2),0.5,self.label, rotation='vertical', horizontalalignment='center', verticalalignment='center', fontsize=12, color='w', fontweight='bold')
+        plt.vlines(self.go, 0,1 , colors = 'red', linewidths=3, alpha = 0.5)
