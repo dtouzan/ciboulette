@@ -126,7 +126,6 @@ class Archive(object):
         self.dataset = Table([object_name,observer,instrument,telescope,frameid,frame,datatype,filter_name,focal,exptime,date_obs,jd,ra,dec,filename], 
                              names=['ID','OBSERVER','INSTRUME','TELESCOP','FRAMEID','FRAME','DATATYPE','FILTER','FOCALLEN','EXPTIME','DATE-OBS','JD','RA','DEC','FILE'])
 
-    @property
     def observations(self):
         """
         Return header of list files
@@ -191,7 +190,15 @@ class Archive(object):
         Return period of base
         """
         return sum(self.dataset['EXPTIME'])
-    
+
+    def find(self,string):
+        """
+        Return the object found
+        """
+        mask = self.dataset['ID'] == string
+        r = self.dataset[mask]
+        return r
+        
     def plot(self):
         """
         Plot JD planning
@@ -203,7 +210,7 @@ class Archive(object):
             
         plt.ylim(0,1)
         plt.xlim(min(years_data),max(years_data))
-        plt.vlines(years_data, 0,1 , colors = 'red', alpha = 0.1, lw=15)
+        plt.vlines(years_data, 0,1 , colors = 'red', alpha = 0.2, lw=15)
         plt.vlines(self.dataset['JD'], 0,1 , colors = 'black', alpha = 0.3)
 
         plt.show()
