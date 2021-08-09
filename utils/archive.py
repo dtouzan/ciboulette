@@ -166,8 +166,12 @@ class Archive(object):
         Return exposition time of word of filename
         """  
         exp = string.replace('.fits','').split('-')[3].replace('s','')
-        number = float(exp.split('x')[0])
-        time = float(exp.split('x')[1])
+        number = 1
+        if 'x' in exp:
+            number = float(exp.split('x')[0])
+            time = float(exp.split('x')[1])
+        else:
+            time = float(exp)
         e = number * time
         return e             
         
