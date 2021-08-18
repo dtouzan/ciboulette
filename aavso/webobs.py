@@ -210,7 +210,7 @@ class WebObs(object):
             plt.xlim(-.5,round(jd_max-jd_min)+.5)
             plt.ylim(round(mv_min)-0.5,round(mv_max)+0.5)
             plt.gca().invert_yaxis()
-            plt.scatter(x, y, c = 'black', s = 5, alpha = 0.5)
+            plt.scatter(x, y, c = 'black', s = 2, alpha = 0.5)
             plt.plot(myline, mymodel(myline))
             plt.title(self.title, loc='center')
             plt.xlabel(str(int(jd_min))+'\nJD', fontsize = 12)
@@ -244,7 +244,7 @@ class datadownload(object):
     filtername = Vis|B|V|R|I|TG|CV
     """
     
-    def __init__(self, filtername='Vis', fileinput='aavsodata.csv'):  
+    def __init__(self, filtername='Vis.', fileinput='aavsodata.csv'):  
         self.nameID = ''
         self.filter = filtername
         self.fileinput = fileinput
@@ -257,14 +257,14 @@ class datadownload(object):
         self.filter = self.isfilter(filtername)
         self.read 
 
-    def isfilter(self,filtername='vis'):
+    def isfilter(self,filtername='Vis.'):
         """
         Return filter
         """
-        if filtername in  ['Vis','I','R','B','V','CV','TG']:
+        if filtername in  ['Vis.','I','R','B','V','CV','TG']:
             f = filtername
         else:
-            f = 'Vis'            
+            f = 'Vis.'            
         return f
 
     @property
@@ -281,7 +281,7 @@ class datadownload(object):
         else:
             self.available = False
     
-    def filtername(self, filtername='Vis'):
+    def filtername(self, filtername='Vis.'):
         """
         Update filter
         """
@@ -291,37 +291,37 @@ class datadownload(object):
     @property
     def Vis(self):
         if self.available:
-            self.filter = self.isfilter('Vis')    
+            self.filter = 'Vis.'   
 
     @property
     def I(self):
         if self.available:
-            self.filter = self.isfilter('I')    
+            self.filter = 'I' 
 
     @property
     def R(self):
         if self.available:
-            self.filter = self.isfilter('R')   
+            self.filter = 'R'  
                         
     @property
     def V(self):
         if self.available:
-            self.filter = self.isfilter('V')    
+            self.filter = 'V'    
             
     @property
     def B(self):
         if self.available:
-            self.filter = self.isfilter('B')    
+            self.filter = 'B'    
             
     @property
     def CV(self):
         if self.available:
-            self.filter = self.isfilter('CV')    
+            self.filter = 'CV'    
             
     @property
     def TG(self):
         if self.available:
-            self.filter = self.isfilter('TG')    
+            self.filter = 'TG'    
 
     @property
     def period(self):
@@ -373,7 +373,7 @@ class datadownload(object):
         if self.observation:
             mv = []
             for value in self.observations:
-                if self.filter in value['Band']:
+                if self.filter == value['Band']:
                     if '<' not in value['Magnitude']:
                         mv.append(float(value['Magnitude']))           
             return min(mv),max(mv)
@@ -404,7 +404,7 @@ class datadownload(object):
             x = []
             y = []                     
             for value in self.observations:
-                if self.filter in value['Band']:
+                if self.filter == value['Band']:
                     if '<' not in value['Magnitude']:
                         x.append(value['JD'])
                         y.append(float(value['Magnitude'])) 
@@ -412,7 +412,7 @@ class datadownload(object):
             plt.xlim(round(jd_min)-5,round(jd_max)+5)
             plt.ylim(round(mv_min)-1,round(mv_max)+1)
             plt.gca().invert_yaxis()
-            plt.scatter(x, y, c = 'black', s = 5, alpha = 0.2)
+            plt.scatter(x, y, c = 'black', s = 2, alpha = 0.2)
             self.JDline.plot()
             plt.title(self.title, loc='center')
             plt.xlabel('JD', fontsize = 12)
