@@ -41,9 +41,9 @@ jupyter notebook --generate-config
 
 **Jupyter lab (Ubuntu Raspberry pi4)**
 ```sh
-sudo apt install jupyter
+pip install jupyter
 pip install jupyterlab
-jupyter notebook --generate-config
+~/.local/bin/jupyter notebook --generate-config
 ```      
 
 **Astronomy Packages (Windows, Ubuntu PC)**
@@ -51,7 +51,7 @@ jupyter notebook --generate-config
 conda install git
 conda install matplotlib
 conda install numpy
-conda install curl
+conda install bs4
 conda install astropy
 conda install -c conda-forge astroquery
 conda install -c astropy reproject
@@ -63,10 +63,10 @@ pip install wget
 ```sh
 pip install matplotlib
 pip install numpy
-pip install curl
+pip install bs4
 pip install astropy
-pip install -c conda-forge astroquery
-pip install -c astropy reproject
+pip install astroquery
+pip install reproject==0.7.1 (0.8.0 not available)
 pip install wget
 pip install alpyca
 ```      
