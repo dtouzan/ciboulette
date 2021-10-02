@@ -16,6 +16,7 @@ class Archive(object):
     def __init__(self, archive_table = 'dataset/archives'):
         self.directory = archive_table
         self.dataset = []
+        self.select = '*'
         self.go = 2017
         self.end = 2021
      
@@ -45,84 +46,84 @@ class Archive(object):
             if '.fit' in file:
                 hdu = fits.open(self.directory+'/'+file)[0]
                 header = hdu.header   
-                
-                object_name.append(self.object_name(file))
+                if self.select in self.object_name(file) or self.select == '*':
+                    object_name.append(self.object_name(file))
                  
-                if 'OBSERVER' in header:
-                    observer.append(header['OBSERVER'])    
-                else:
-                    observer.append('Nan')    
+                    if 'OBSERVER' in header:
+                        observer.append(header['OBSERVER'])    
+                    else:
+                        observer.append('Nan')    
                     
-                if 'INSTRUME' in header:
-                    instrument.append(header['INSTRUME']) 
-                else:
-                    instrument.append('Nan') 
-                
-                if 'TELESCOP' in header:
-                    telescope.append(header['TELESCOP'])
-                else:
-                    telescope.append('Nan')
-                
-                if 'FRAMEID' in header:
-                    frameid.append(header['FRAMEID'])
-                else:
-                    frameid.append('Nan')
-                
-                if 'FRAME' in header:
-                    frame.append(header['FRAME'])
-                else:
-                    frame.append('Nan')
-                
-                if 'DATATYPE' in header:
-                    datatype.append(header['DATATYPE'])
-                else:
-                    datatype.append('Nan')
-                
-                if 'FILTERS' in header:
-                    filter_name.append(header['FILTERS'])
-                else:
-                    if 'FILTER' in header:
-                        filter_name.append(header['FILTER'])
+                    if 'INSTRUME' in header:
+                        instrument.append(header['INSTRUME']) 
                     else:
-                        filter_name.append('Nan')
+                        instrument.append('Nan') 
                 
-                if 'FOCALLEN' in header:
-                    focal.append(header['FOCALLEN'])
-                else:
-                    focal.append(self.focal(file))
-                
-                if 'DATE-OBS' in header:
-                    date_obs.append(header['DATE-OBS'])
-                else:
-                    date_obs.append(self.date(file))   
-                                  
-                if 'JD-OBS' in header:
-                    jd.append(header['JD-OBS'])
-                else:          
-                    if 'JD' in header:
-                        jd.append(header['JD'])
+                    if 'TELESCOP' in header:
+                        telescope.append(header['TELESCOP'])
                     else:
-                        if 'DATE-OBS' in header:
-                            jd.append(self.JulianDay(header['DATE-OBS']))
+                        telescope.append('Nan')
+                
+                    if 'FRAMEID' in header:
+                        frameid.append(header['FRAMEID'])
+                    else:
+                        frameid.append('Nan')
+                
+                    if 'FRAME' in header:
+                        frame.append(header['FRAME'])
+                    else:
+                        frame.append('Nan')
+                
+                    if 'DATATYPE' in header:
+                        datatype.append(header['DATATYPE'])
+                    else:
+                        datatype.append('Nan')
+                
+                    if 'FILTERS' in header:
+                        filter_name.append(header['FILTERS'])
+                    else:
+                        if 'FILTER' in header:
+                            filter_name.append(header['FILTER'])
                         else:
-                            jd.append(self.JulianDay(self.date(file)))
+                            filter_name.append('Nan')
                 
-                if 'x' in file:
-                    exptime.append(self.exptime(file))
-                else:
-                    exptime.append(header['EXPTIME'])
+                    if 'FOCALLEN' in header:
+                        focal.append(header['FOCALLEN'])
+                    else:
+                        focal.append(self.focal(file))
                 
-                if 'RA' in header:
-                    ra.append(header['RA'])
-                else:
-                    ra.append('Nan')
+                    if 'DATE-OBS' in header:
+                        date_obs.append(header['DATE-OBS'])
+                    else:
+                        date_obs.append(self.date(file))   
+                                  
+                    if 'JD-OBS' in header:
+                        jd.append(header['JD-OBS'])
+                    else:          
+                        if 'JD' in header:
+                            jd.append(header['JD'])
+                        else:
+                            if 'DATE-OBS' in header:
+                                jd.append(self.JulianDay(header['DATE-OBS']))
+                            else:
+                                jd.append(self.JulianDay(self.date(file)))
+                
+                    if 'x' in file:
+                        exptime.append(self.exptime(file))
+                    else:
+                        exptime.append(header['EXPTIME'])
+                
+                    if 'RA' in header:
+                        ra.append(header['RA'])
+                    else:
+                        ra.append('Nan')
                     
-                if 'DEC' in header:    
-                    dec.append(header['DEC']) 
-                else:
-                    dec.append('Nan') 
+                    if 'DEC' in header:    
+                        dec.append(header['DEC']) 
+                    else:
+                        dec.append('Nan') 
                     
-                filename.append(file.replace('.fits',''))
+                    filename.append(file.replace('.fits',''))
              
         self.dataset = Table([object_name,observer,instrument,telescope,frameid,frame,datatype,filter_name,focal,exptime,date_obs,jd,ra,dec,filename], 
                              names=['ID','OBSERVER','INSTRUME','TELESCOP','FRAMEID','FRAME','DATATYPE','FILTER','FOCALLEN','EXPTIME','DATE-OBS','JD','RA','DEC','FILE'])
@@ -227,7 +228,7 @@ class Archive(object):
         for database_period in summer:
             database_period.plot()   
         for database_period in new_year:
-            database_period.plot() 
+            database_period.plot()
         plt.vlines(self.dataset['JD'], 0,1 , colors = 'black', alpha = 0.3)
         plt.yticks([])
         plt.xlabel(constant.JD_label)
