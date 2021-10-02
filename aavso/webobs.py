@@ -204,7 +204,7 @@ class WebObs(object):
                 x.append(value['JD']-jd_min)
             y = self.observations['Magnitude']        
 
-            mymodel = np.poly1d(np.polyfit(x, y, 7))
+            mymodel = np.poly1d(np.polyfit(x, y, 5))
             myline = np.linspace(0, jd_max-jd_min, 2000)
             
             plt.xlim(-.5,round(jd_max-jd_min)+.5)
@@ -390,8 +390,7 @@ class datadownload(object):
         """
         Create JD table
         """
-        if JDtable:
-            self.JDline.JulianDay = JDtable        
+        self.JDline.JulianDay = JDtable 
 
     def plot(self):
         """
@@ -533,11 +532,15 @@ class _JDline(object):
         """
         Add JD's
         """
-        self.JDtable = JDtable
+        if len(JDtable) > 0:
+            for number in JDtable:
+                self.JDtable.append(number)
+        else:
+            self.JDtable.clear()
     
 
     def plot(self):
         """
         Plot line of JD's
         """
-        plt.vlines(self.JDtable, -30,30 , linestyles = 'dashed', colors = 'red', alpha = 0.4)
+        plt.vlines(self.JDtable, -30,30 , linestyles = 'solid', colors = 'black', alpha = 0.1)
