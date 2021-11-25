@@ -48,6 +48,7 @@ class SA200(object):
     """
     def __init__(self, filename):
         self.s1d = Spectrum1D.read(filename)
+        self.resolution = 200
         f = fits.open(filename)  
         self.data = f[0].data 
         self.header = f[0].header
@@ -120,7 +121,11 @@ class SA200(object):
         """
         Return start calibration reference 
         """
-        return self.header['O_CAL']    
+        if 'O_CAL' in self.header:
+            c = self.header['O_CAL']
+        else:
+            c = str(self.resolution)           
+        return c   
 
     @property
     def longitude(self):
@@ -163,7 +168,12 @@ class SA200(object):
         """
         Return title of spectrum plot
         """
-        title_name = self.name + ' - ' + self.date + ' - R: ' + str(self.R)
+        title_name = self.name + ' - ' + self.date + ' - R: ' + str(self.R) + ' / ' + self.calibration_reference
         return title_name
-    
-    
+     
+    @property
+    def unit(self):
+        """
+        Return resolution of spectrum plot
+        """
+        return self.header['CDELT1']    
