@@ -52,9 +52,10 @@ conda install git
 conda install matplotlib
 conda install numpy
 conda install bs4
-conda install astropy
+conda install -c conda-forge astropy=5.0
 conda install -c conda-forge astroquery
-conda install -c astropy reproject
+conda install -c conda-forge reproject
+conda install -c conda-forge specutils
 pip install alpyca
 pip install wget
 ```      
@@ -67,6 +68,7 @@ pip install bs4
 pip install astropy
 pip install astroquery
 pip install reproject==0.7.1 (0.8.0 not available)
+conda install specutils
 pip install wget
 pip install alpyca
 ```      
