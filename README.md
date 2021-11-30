@@ -7,9 +7,10 @@ Astronomy packages for CCD/CMOS and photographic lens
 [![alpaca](http://img.shields.io/badge/powered%20by-Alpaca-orange.svg?style=flat)](https://ascom-standards.org/Developer/Alpaca.htm) 
 
 ## Prerequisite
-  - Astropy 4.2
+  - Astropy
   - Alpyca 1.0.0
-  - Astroquery 0.4.1
+  - Astroquery
+  - Specutils
   - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
   - Phd2client (sources https://github.com/agalasso/phd2client, MIT License), no package 
   - Internet connexion
@@ -67,7 +68,7 @@ pip install numpy
 pip install bs4
 pip install astropy
 pip install astroquery
-pip install reproject==0.7.1 (0.8.0 not available)
+pip install reproject=0.7.1 (0.8.0 not available)
 conda install specutils
 pip install wget
 pip install alpyca
