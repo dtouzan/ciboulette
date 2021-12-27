@@ -35,14 +35,29 @@ class Sector(object):
         t_DEC = []    
         arch = os.listdir(data_arch)   
         for file in arch:
-            fits_file = get_pkg_data_filename(data_arch+'/'+file)
-            hdu = fits.open(fits_file)[0]
+            hdu = fits.open(data_arch+'/'+file)[0]
             header = hdu.header
-            h_object = header['OBJECT']
-            h_frameid = header['FRAMEID']
-            h_datatype = header['DATATYPE']
-            h_RA =  header['CRVAL1']
-            h_DEC =  header['CRVAL2']        
+            
+            h_object = 'Nan'
+            if 'OBJECT' in header:
+                h_object = header['OBJECT']
+            
+            h_frameid = 'Nan'
+            if 'FRAMEID' in header:
+                h_frameid = header['FRAMEID']
+            
+            h_datatype = 'Nan'
+            if 'DATATYPE' in header:
+                h_datatype = header['DATATYPE']
+            
+            h_RA = 0
+            if 'CRVAL1' in header:
+                h_RA =  header['CRVAL1']
+            
+            h_DEC = 0
+            if 'CRVAL2' in header:
+                h_DEC =  header['CRVAL2']        
+
             protocol = h_object.split('R')[0]        
             if protocol == 'SECTO':
                 t_object.append(h_object)
