@@ -17,8 +17,8 @@ class Archive(object):
         self.directory = archive_table
         self.dataset = []
         self.select = '*'
-        self.go = 2017
-        self.end = 2021
+        self.go = 2010
+        self.end = 2030
      
     @property
     def read(self):
@@ -204,7 +204,47 @@ class Archive(object):
         mask = self.dataset['ID'] == string
         r = self.dataset[mask]
         return r
-        
+
+    @property
+    def start(self):
+        """
+        Return go value
+        """
+        return self.go
+    
+    @start.setter
+    def start(self,start_value):
+        """
+        Set go value
+        """
+        if start_value < 2000:
+            start_value = 2000
+        if start_value > 2999:
+            start_value = 2999
+        if start_value > self.end:
+            start_value = self.end - 1
+        self.go = start_value
+    
+    @property
+    def stop(self):
+        """
+        Return end value
+        """
+        return self.end
+
+    @stop.setter
+    def stop(self,end_value):
+        """
+        Set end value
+        """
+        if end_value < 2000:
+            end_value = 2000
+        if end_value > 2999:
+            end_value = 2999
+        if end_value < self.go:
+            end_value = self.go + 1
+        self.end = end_value  
+
     def plot(self):
         """
         Plot JD planning
