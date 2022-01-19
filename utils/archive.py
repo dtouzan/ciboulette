@@ -184,11 +184,25 @@ class Archive(object):
         return hdu.header 
     
     @property
+    def maxJD(self):
+        """
+        Return max Julian Day
+        """
+        return max(self.dataset['JD'])
+    
+    @property
+    def minJD(self):
+        """
+        Return min Julian Day
+        """ 
+        return min(self.dataset['JD'])
+    
+    @property
     def period(self):
         """
         Return period of base
         """
-        return max(self.dataset['JD'])-min(self.dataset['JD'])
+        return self.maxJD-self.minJD
     
     @property
     def exptimes(self):
