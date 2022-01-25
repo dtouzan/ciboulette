@@ -1,0 +1,73 @@
+#Update swap
+~$sudo fallocate -l 2G /swapfile
+~$sudo chmod 600 /swapfile
+~$sudo mkswap /swapfile
+~$sudo swapon /swapfile
+~$sudo swapon --show
+~$free -h
+~$sudo cp /etc/fstab /etc/fstab.bak
+~$echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+#Optional
+~$sudo nano /etc/sysctl.conf
+#Put options
+vm.swappiness=20
+vm.vfs_cache_pressure=50
+
+#update OS
+~$sudo apt update
+~$sudo apt upgrade
+~$reboot
+
+Welcome to Ubuntu 21.10 (GNU/Linux 5.13.0-1015-raspi armv7l)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Tue Jan 25 21:19:35 UTC 2022
+
+  System load:           2.07
+  Usage of /:            10.4% of 59.10GB
+  Memory usage:          47%
+  Swap usage:            0%
+  Temperature:           49.9 C
+  Processes:             149
+  Users logged in:       0
+  IPv4 address for usb0: 192.168.1.40
+  IPv6 address for usb0: 2a01:cb06:114:6200:205:1bff:feba:611b
+
+ * Super-optimized for small spaces - read how we shrank the memory
+   footprint of MicroK8s to make it the smallest full K8s around.
+
+   https://ubuntu.com/blog/microk8s-memory-optimisation
+
+3 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Installation de indilib
+~$sudo apt-add-repository ppa:mutlaqja/ppa
+~$sudo apt-get update
+~$sudo apt-get install indi-full
+
+Installation de pip
+~$sudo apt install python3-pip
+
+Installation de jupyter
+~$pip install jupyter
+~$pip install jupyterlab
+~$.local/bin/jupyter notebook --generate-config
+
+Installation Astronomy package 
+~$pip install matplotlib
+~$pip install numpy
+~$pip install bs4
+~$pip install astropy
+~$pip install astroquery
+~$pip install reproject=0.7.1 (0.8.0 not available)
+~$pip install specutils
+~$pip install wget
+~$pip install alpyca
+
+
+
