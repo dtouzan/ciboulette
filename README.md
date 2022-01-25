@@ -69,7 +69,7 @@ pip install bs4
 pip install astropy
 pip install astroquery
 pip install reproject=0.7.1 (0.8.0 not available)
-conda install specutils
+pip install specutils
 pip install wget
 pip install alpyca
 ```      
