@@ -45,12 +45,12 @@ Welcome to Ubuntu 21.10 (GNU/Linux 5.13.0-1015-raspi armv7l)
 3 updates can be applied immediately.
 To see these additional updates run: apt list --upgradable
 
-Installation de indilib
+#Installation de indilib
 ~$sudo apt-add-repository ppa:mutlaqja/ppa
 ~$sudo apt-get update
 ~$sudo apt-get install indi-full
 
-Installation de pip
+#Installation de pip
 ~$sudo apt install python3-pip
 
 Installation de jupyter
@@ -58,16 +58,20 @@ Installation de jupyter
 ~$pip install jupyterlab
 ~$.local/bin/jupyter notebook --generate-config
 
-Installation Astronomy package 
-~$pip install matplotlib
+#Installation Astronomy package 
 ~$pip install numpy
 ~$pip install bs4
 ~$pip install astropy
 ~$pip install astroquery
-~$pip install reproject=0.7.1 (0.8.0 not available)
-~$pip install specutils
 ~$pip install wget
 ~$pip install alpyca
 
-
+# Installation PIGPIO
+# Site https://abyz.me.uk/rpi/pigpio/index.html
+# Téléchargé le code source et le compiler
+wget https://github.com/joan2937/pigpio/archive/master.zip
+unzip master.zip
+cd pigpio-master
+make
+sudo make install
 
