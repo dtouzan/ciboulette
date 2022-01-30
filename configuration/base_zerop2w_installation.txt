@@ -69,9 +69,19 @@ Installation de jupyter
 # Installation PIGPIO
 # Site https://abyz.me.uk/rpi/pigpio/index.html
 # Téléchargé le code source et le compiler
-wget https://github.com/joan2937/pigpio/archive/master.zip
-unzip master.zip
-cd pigpio-master
-make
-sudo make install
+~$wget https://github.com/joan2937/pigpio/archive/master.zip
+~$unzip master.zip
+~$cd pigpio-master
+~$make
+~$sudo make install
 
+# Installation de CMAKE
+~$sudo apt install cmake
+
+# Installation de INDILIB
+~$sudo apt install libindi-dev libnova-dev libz-dev libgsl-dev
+# Installation GIT https://github.com/indilib/indi
+~$git clone https://github.com/indilib/indi
+
+# Création du driver INDI
+# Voir documentatnion https://docs.indilib.org/drivers/simple.html
