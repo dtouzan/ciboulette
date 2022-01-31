@@ -66,6 +66,9 @@ Installation de jupyter
 ~$pip install wget
 ~$pip install alpyca
 
+# Installation de RPi.GPIO
+~$sudo apt-get -y install python3-rpi.gpio
+
 # Installation PIGPIO
 # Site https://abyz.me.uk/rpi/pigpio/index.html
 # Téléchargé le code source et le compiler
@@ -82,6 +85,9 @@ Installation de jupyter
 ~$sudo apt install libindi-dev libnova-dev libz-dev libgsl-dev
 # Installation GIT https://github.com/indilib/indi
 ~$git clone https://github.com/indilib/indi
+
+# Installation de RPi.GPIO
+~$sudo apt-get -y install python3-rpi.gpio
 
 # Création du driver INDI
 # Voir documentatnion https://docs.indilib.org/drivers/simple.html
