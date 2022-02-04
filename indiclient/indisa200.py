@@ -6,7 +6,10 @@ Classes and utility functions for communicating with sa200 via the INDI protocol
 """
 
 import time
+import os
 import io
+import socket
+socket.gethostname()
 
 import logging
 import logging.handlers
@@ -36,11 +39,13 @@ class SA200Motor(indiclient):
         self.vector_dict = {v.name: v for v in self.indivectors.list}      
 
     @property
-    def initialisation(self):
+    def initialization(self):
+        self.slot_value = "1"
         self.degree = "0"
         self.R = "200"
         self.length = "20"
-    
+        self.hostname = socket.gethostname()
+        self.PID = os.getppid()
         return True
     
     @property
@@ -153,4 +158,89 @@ class SA200Motor(indiclient):
             reserved : length
         """
         self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3", string)
-        return 
+        return True
+
+    @property
+    def hostname(self):
+        """
+        Return info of slot 4
+        """
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4")
+        return text
+    
+    @hostname.setter
+    def hostname(self, string):      
+        """Initialization slots 4 
+            reserved : Hostname
+        """
+        if self.hostname == "0" : 
+            self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", string) 
+    
+    @property
+    def software(self):
+        """
+        Return info of slot 5
+        """
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_5")
+        return text
+    
+    @software.setter
+    def software(self, string):      
+        """Initialization slots 5 
+            reserved : software
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_5", string)
+        return True  
+
+    @property
+    def PID(self):      
+        """Get os process software 
+        """
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_6")
+        return text
+
+    @PID.setter
+    def PID(self,pid):      
+        """Set os process software 
+            reserved : PID process
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_6", str(pid) )
+        return True
+
+    @property
+    def load(self):      
+        """Load indilid configuration file .xml
+        """
+        self.set_and_send_text(self.driver, "CONFIG_PROCESS", "CONFIG_LOAD", "On")
+        return True
+
+    @property
+    def save(self):      
+        """Save indilid configuration file .xml
+        """
+        self.set_and_send_text(self.driver, "CONFIG_PROCESS", "CONFIG_SAVE", "On")
+        return True 
+
+    @property
+    def ID(self):      
+        """Return ID
+            reserved : hostname:driver_name:software:PID
+        """
+        h = self.hostname
+        d = self.driver_name
+        s = self.software
+        p = self.PID
+        id = d+"@"+h+":"+s+":"+p
+        return id
+
+    @property
+    def datastream(self):      
+        """Return datastream json format
+        """ 
+        objet = '"' + self.driver_name + '":[{'
+        slot = '"slot":' + '"' + str(self.slot_value) + '", '
+        degree = '"degree":' + '"' + self.degree + '", '
+        r = '"R":' + '"' + self.R + '", '
+        length = '"length":' + '"' + self.length + '"}]'
+        data = "{"+objet+slot+degree+r+length+"}"
+        return data
