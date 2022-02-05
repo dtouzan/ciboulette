@@ -9,7 +9,6 @@ import time
 import os
 import io
 import socket
-socket.gethostname()
 
 import logging
 import logging.handlers
@@ -40,12 +39,9 @@ class SA200Motor(indiclient):
 
     @property
     def initialization(self):
-        self.slot_value = "1"
-        self.degree = "0"
-        self.R = "200"
-        self.length = "20"
-        self.hostname = socket.gethostname()
-        self.PID = os.getppid()
+        self.set_slot_value("1")
+        self.set_R("200")
+        self.set_length("20.5")
         return True
     
     @property
@@ -59,32 +55,26 @@ class SA200Motor(indiclient):
         else:
             return False
 
-    @property
-    def slots(self):
+    def get_slots(self):
         """
         Return list of names of installed filters
         """
         slots_list = [e.get_text() for e in self.get_vector(self.driver, "FILTER_NAME").elements]
         return slots_list
 
-    @property
-    def slot_value(self):
+    def get_slot_value(self):
         slot_value = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE"))  # filter slots 1-indexed
         return slot_value
 
-    @slot_value.setter
-    def slot_value(self, f):
-        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", f)
-        return f
+    def motor(self, slot):
+        if slot > 1 and slot < 11:
+            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", slot)
+        else:
+            return 'None'
 
-    @property
-    def driver_name(self):
-        """
-        Return driver_name
-        """
-        name = self.get_text(self.driver, "DRIVER_INFO", "DRIVER_NAME")
-        return name   
-                
+    def direction(self):
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)
+       
     def connect(self):
         """
         Enable sa200 connection
@@ -111,136 +101,86 @@ class SA200Motor(indiclient):
         if self.debug:
             vector.tell()
         pass
+    
+    def get_degree(self,slot):
+        """
+        Return info of slot number
+        """
+        if slot > 3 and slot < 11 :
+            text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot))
+        return text
+    
+    def set_degree(self, slot, string):      
+        """Initialization slot 4 to 10
+        """
+        if slot > 3 and slot < 11 :
+            self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), string)
+        else:
+            return "None"
 
-    @property
-    def degree(self):
+    def get_direction(self):
         """
         Return info of slot 1
         """
         text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1")
         return text
     
-    @degree.setter
-    def degree(self, string):      
-        """Initialization slots 1
-            reserved : length
-        """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1", string)
-        return 
-    
-    @property
-    def R(self):
+
+    def get_R(self):
         """
         Return info of slot 2
         """
         text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2")
         return text
     
-    @R.setter
-    def R(self, string):      
+    def set_R(self, string):      
         """Initialization slots 2
             reserved : R200
         """
         self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
         return 
 
-    @property
-    def length(self):
+    def get_length(self):
         """
-        Return info of slot 2
+        Return info of slot 3
         """
         text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3")
         return text
     
-    @length.setter
-    def length(self, string):      
+    def set_length(self, string):      
         """Initialization slots 3
             reserved : length
         """
         self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3", string)
         return True
 
-    @property
-    def hostname(self):
-        """
-        Return info of slot 4
-        """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4")
-        return text
-    
-    @hostname.setter
-    def hostname(self, string):      
-        """Initialization slots 4 
-            reserved : Hostname
-        """
-        if self.hostname == "0" : 
-            self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", string) 
-    
-    @property
-    def software(self):
-        """
-        Return info of slot 5
-        """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_5")
-        return text
-    
-    @software.setter
-    def software(self, string):      
-        """Initialization slots 5 
-            reserved : software
-        """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_5", string)
-        return True  
-
-    @property
-    def PID(self):      
-        """Get os process software 
-        """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_6")
-        return text
-
-    @PID.setter
-    def PID(self,pid):      
-        """Set os process software 
-            reserved : PID process
-        """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_6", str(pid) )
-        return True
-
-    @property
     def load(self):      
         """Load indilid configuration file .xml
         """
         self.set_and_send_text(self.driver, "CONFIG_PROCESS", "CONFIG_LOAD", "On")
         return True
 
-    @property
     def save(self):      
         """Save indilid configuration file .xml
         """
         self.set_and_send_text(self.driver, "CONFIG_PROCESS", "CONFIG_SAVE", "On")
         return True 
 
-    @property
-    def ID(self):      
-        """Return ID
-            reserved : hostname:driver_name:software:PID
-        """
-        h = self.hostname
-        d = self.driver_name
-        s = self.software
-        p = self.PID
-        id = d+"@"+h+":"+s+":"+p
-        return id
-
-    @property
     def datastream(self):      
         """Return datastream json format
         """ 
-        objet = '"' + self.driver_name + '":[{'
-        slot = '"slot":' + '"' + str(self.slot_value) + '", '
-        degree = '"degree":' + '"' + self.degree + '", '
-        r = '"R":' + '"' + self.R + '", '
-        length = '"length":' + '"' + self.length + '"}]'
-        data = "{"+objet+slot+degree+r+length+"}"
+        slot = ' "slot":' + '"' + str(self.get_slot_value()) + '", '
+        degree = '"direction":' + '"' + self.get_direction() + '", '
+        r = '"R":' + '"' + self.get_R() + '", '
+        length = '"length":' + '"' + self.get_length() + '", '
+        
+        slot4 = '"slot04":' + '"' + self.get_degree(4) + '", '
+        slot5 = '"slot05":' + '"' + self.get_degree(5) + '", '
+        slot6 = '"slot06":' + '"' + self.get_degree(6) + '", '
+        slot7 = '"slot07":' + '"' + self.get_degree(7) + '", '
+        slot8 = '"slot08":' + '"' + self.get_degree(8) + '", '
+        slot9 = '"slot09":' + '"' + self.get_degree(9) + '", '
+        slot10 = '"slot10":' + '"' + self.get_degree(10) + '" '
+        
+        data = "{"+slot+degree+r+length+slot4+slot5+slot6+slot7+slot8+slot9+slot10+"}"
         return data
