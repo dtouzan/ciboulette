@@ -73,7 +73,7 @@ bool SA200::SelectFilter(int f)
                 /* ====================== /!\ /!\ /!\ /!\ /!\=========================
                 system("python3 script.py" + nomEntree );
                 */
-                std::string cmd = "sudo python3 ~/SA200/SA200Motor.py " + std::to_string(degree);
+                std::string cmd = "python3 ~/SA200/SA200Motor.py " + std::to_string(degree);
                 /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
                 system(cmd.c_str());
             }
