@@ -65,7 +65,7 @@ class SA200Motor(indiclient):
     def get_slot_value(self):
         slot_value = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE"))  # filter slots 1-indexed
         return slot_value
-
+    
     def motor(self, slot):
         if slot > 1 and slot < 11:
             self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", slot)           
@@ -73,8 +73,18 @@ class SA200Motor(indiclient):
         else:
             return False
 
-    def direction(self):
-        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)
+    def motor_out(self):
+        self.direction('>')          
+        return True
+ 
+    def direction(self,code = '>'):
+        if code == '>' :
+            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 2)
+            return True
+        if code == '<' :
+            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)
+            return True
+        return False
        
     def connect(self):
         """
@@ -107,52 +117,45 @@ class SA200Motor(indiclient):
         """
         Return info of slot number
         """
-        if slot > 3 and slot < 11 :
+        text = ""
+        if slot > 2 and slot < 11 :
             text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot))
         return text
     
     def set_block(self, slot, string):      
-        """Initialization slot 4 to 10
+        """Initialization slot 3 to 10
         """
-        if slot > 3 and slot < 11 :
+        if slot > 2 and slot < 11 :
             self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), string)
         else:
-            return False
-
-    def get_direction(self):
-        """
-        Return info of slot 1
-        """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1")
-        return text
-    
+            return False   
 
     def get_R(self):
         """
         Return info of slot 2
         """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2")
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1")
         return text
     
     def set_R(self, string):      
         """Initialization slots 2
             reserved : R200
         """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1", string)
         return True
 
     def get_length(self):
         """
         Return info of slot 3
         """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3")
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2")
         return text
     
     def set_length(self, string):      
         """Initialization slots 3
             reserved : length
         """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3", string)
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
         return True
 
     def load(self):      
@@ -170,18 +173,20 @@ class SA200Motor(indiclient):
     def datastream(self):      
         """Return datastream json format
         """ 
-        slot = ' "slot":' + '"' + str(self.get_slot_value()) + '", '
-        degree = '"direction":' + '"' + self.get_direction() + '", '
+        slot = ["<", ">", "1", "5", "10", "15", "30", "45", "90", "180"]
+        degree = slot[self.get_slot_value()-1]       
+
+        degrees = ' "degree":' + '"' + degree + '", '          
         r = '"R":' + '"' + self.get_R() + '", '
         length = '"length":' + '"' + self.get_length() + '", '
+        slot3 = '"block03":' + '"' + self.get_block(3) + '", '     
+        slot4 = '"block04":' + '"' + self.get_block(4) + '", '
+        slot5 = '"block05":' + '"' + self.get_block(5) + '", '
+        slot6 = '"block06":' + '"' + self.get_block(6) + '", '
+        slot7 = '"block07":' + '"' + self.get_block(7) + '", '
+        slot8 = '"block08":' + '"' + self.get_block(8) + '", '
+        slot9 = '"block09":' + '"' + self.get_block(9) + '", '
+        slot10 = '"block10":' + '"' + self.get_block(10) + '" '
         
-        slot4 = '"slot04":' + '"' + self.get_block(4) + '", '
-        slot5 = '"slot05":' + '"' + self.get_block(5) + '", '
-        slot6 = '"slot06":' + '"' + self.get_block(6) + '", '
-        slot7 = '"slot07":' + '"' + self.get_block(7) + '", '
-        slot8 = '"slot08":' + '"' + self.get_block(8) + '", '
-        slot9 = '"slot09":' + '"' + self.get_block(9) + '", '
-        slot10 = '"slot10":' + '"' + self.get_block(10) + '" '
-        
-        data = "{"+slot+degree+r+length+slot4+slot5+slot6+slot7+slot8+slot9+slot10+"}"
+        data = "{"+degrees+r+length+slot3+slot4+slot5+slot6+slot7+slot8+slot9+slot10+"}"
         return data

@@ -61,19 +61,19 @@ bool SA200::SelectFilter(int f)
         {
             switch(f)
             {
-                case 1: direction = direction * -1; break;
-                case 2: degree = 1; break;
-                case 3: degree = 5; break;
-                case 4: degree = 10; break;
-                case 5: degree = 15; break;
-                case 6: degree = 30; break;
-                case 7: degree = 45; break;
-                case 8: degree = 90; break;
-                case 9: degree = 180;  break;
-                case 10: degree = 270;  break;
+                case 1: direction = 1; break;
+                case 2: direction = -1; break;
+                case 3: degree = 1; break;
+                case 4: degree = 5; break;
+                case 5: degree = 10; break;
+                case 6: degree = 15; break;
+                case 7: degree = 30; break;
+                case 8: degree = 45; break;
+                case 9: degree = 90;  break;
+                case 10: degree = 180;  break;
                 default: degree = 1; break;
             }
-        if (f > FilterSlotN[0].min && f <= FilterSlotN[0].max) 
+        if (f > 2 && f <= FilterSlotN[0].max) 
             {
                 degree = int(degree*direction);
                 /* ====================== /!\ /!\ /!\ /!\ /!\=========================

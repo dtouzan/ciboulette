@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 # Use BCM GPIO references
 # Instead of physical pin numbers
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
 # Define GPIO signals to use Pins 
 # Broche - GPIO

@@ -23,7 +23,7 @@ class SA200 : public INDI::FilterWheel
 public:
     SA200() = default;
     virtual ~SA200() = default;
-    int direction = -1;
+    int direction = 1;
     
 protected:
     bool Connect() override;
@@ -31,4 +31,5 @@ protected:
     const char *getDefaultName() override;
     bool SelectFilter(int);
     void TimerHit();
+
 };
