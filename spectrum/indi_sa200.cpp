@@ -32,6 +32,12 @@ bool SA200::Connect()
     CurrentFilter      = 1;
     FilterSlotN[0].min = 1;
     FilterSlotN[0].max = 10;
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================
+    system("python3 script.py" + nomEntree );
+                */
+    std::string cmd = "python3 ~/SA200/SA200GPIO_OUT.py ";
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
+    system(cmd.c_str());
     return true;
 }
 

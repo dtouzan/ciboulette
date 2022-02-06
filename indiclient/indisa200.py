@@ -55,7 +55,7 @@ class SA200Motor(indiclient):
         else:
             return False
 
-    def get_slots(self):
+    def get_blocks(self):
         """
         Return list of names of installed filters
         """
@@ -68,9 +68,10 @@ class SA200Motor(indiclient):
 
     def motor(self, slot):
         if slot > 1 and slot < 11:
-            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", slot)
+            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", slot)           
+            return True
         else:
-            return 'None'
+            return False
 
     def direction(self):
         self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)
@@ -102,7 +103,7 @@ class SA200Motor(indiclient):
             vector.tell()
         pass
     
-    def get_degree(self,slot):
+    def get_block(self,slot):
         """
         Return info of slot number
         """
@@ -110,13 +111,13 @@ class SA200Motor(indiclient):
             text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot))
         return text
     
-    def set_degree(self, slot, string):      
+    def set_block(self, slot, string):      
         """Initialization slot 4 to 10
         """
         if slot > 3 and slot < 11 :
             self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), string)
         else:
-            return "None"
+            return False
 
     def get_direction(self):
         """
@@ -138,7 +139,7 @@ class SA200Motor(indiclient):
             reserved : R200
         """
         self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
-        return 
+        return True
 
     def get_length(self):
         """
@@ -174,13 +175,13 @@ class SA200Motor(indiclient):
         r = '"R":' + '"' + self.get_R() + '", '
         length = '"length":' + '"' + self.get_length() + '", '
         
-        slot4 = '"slot04":' + '"' + self.get_degree(4) + '", '
-        slot5 = '"slot05":' + '"' + self.get_degree(5) + '", '
-        slot6 = '"slot06":' + '"' + self.get_degree(6) + '", '
-        slot7 = '"slot07":' + '"' + self.get_degree(7) + '", '
-        slot8 = '"slot08":' + '"' + self.get_degree(8) + '", '
-        slot9 = '"slot09":' + '"' + self.get_degree(9) + '", '
-        slot10 = '"slot10":' + '"' + self.get_degree(10) + '" '
+        slot4 = '"slot04":' + '"' + self.get_block(4) + '", '
+        slot5 = '"slot05":' + '"' + self.get_block(5) + '", '
+        slot6 = '"slot06":' + '"' + self.get_block(6) + '", '
+        slot7 = '"slot07":' + '"' + self.get_block(7) + '", '
+        slot8 = '"slot08":' + '"' + self.get_block(8) + '", '
+        slot9 = '"slot09":' + '"' + self.get_block(9) + '", '
+        slot10 = '"slot10":' + '"' + self.get_block(10) + '" '
         
         data = "{"+slot+degree+r+length+slot4+slot5+slot6+slot7+slot8+slot9+slot10+"}"
         return data
