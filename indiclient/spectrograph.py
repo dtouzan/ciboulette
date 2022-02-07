@@ -24,4 +24,13 @@ class SPECTROGRAPHsa200(SA200Motor):
     def __init__(self, host='localhost', port=7624):
         super(SPECTROGRAPHsa200, self).__init__(host, port, driver="SA200")
         self.filter_name = "SA200"
-        self.process_events()
+        self.process_events()       
+        
+    def rpio(self):
+        from IPython.display import Image
+        display(Image('ciboulette/indiclient/draw/rpio_sa200.png'))
+    
+    def shemas(self):
+        from IPython.display import Image
+        display(Image('ciboulette/indiclient/draw/shemas.png'))
+        
