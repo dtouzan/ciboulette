@@ -20,6 +20,10 @@
 #include <iostream>   // std::cout
 #include <string>     // std::string, std::to_string
 #include <memory>
+#include <wiringPi.h>
+
+#define FORWARD     1
+#define BACKWARD    0
 
 std::unique_ptr<SA200> simpleSA200(new SA200());
    
@@ -32,12 +36,8 @@ bool SA200::Connect()
     CurrentFilter      = 1;
     FilterSlotN[0].min = 1;
     FilterSlotN[0].max = 10;
-    /* ====================== /!\ /!\ /!\ /!\ /!\=========================
-    system("python3 script.py" + nomEntree );
-                */
-    std::string cmd = "python3 ~/SA200/SA200GPIO_OUT.py ";
-    /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
-    system(cmd.c_str());
+    wiringPiSetup(); 
+    initPins();
     return true;
 }
 
@@ -76,12 +76,7 @@ bool SA200::SelectFilter(int f)
         if (f > 2 && f <= FilterSlotN[0].max) 
             {
                 degree = int(degree*direction);
-                /* ====================== /!\ /!\ /!\ /!\ /!\=========================
-                system("python3 script.py" + nomEntree );
-                */
-                std::string cmd = "python3 ~/SA200/SA200Motor.py " + std::to_string(degree);
-                /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
-                system(cmd.c_str());
+                run(degree);
             }
         }
     SetTimer(500);
@@ -103,4 +98,53 @@ void SA200::TimerHit()
 const char *SA200::getDefaultName()
 {
     return "SA200";
+}
+
+/**************************************************************************************
+** INDI initPins
+***************************************************************************************/
+void SA200::initPins()
+{
+    for(int i = 0; i < 4; i++){
+        pinMode(PINS[i], OUTPUT);                       //set IO to output
+        digitalWrite(PINS[i], STEPS_OUT[1][i]);         //write to IO
+    }
+}
+
+/**************************************************************************************
+** INDI halfstep
+***************************************************************************************/
+void SA200::halfStep(bool dir)
+{
+    index = dir ? ((index+1)%8) : ((index+7)%8);    //add|sub index based on direction
+    
+    for(int i = 0; i < 4; i++)
+        digitalWrite(PINS[i], STEPS[index][i]);     //write to IO	    
+}
+
+/**************************************************************************************
+** INDI halfstep
+***************************************************************************************/
+void SA200::run(int degree)
+{
+    // Define step degree
+    // nbStepsPerRev=2048 full rotate 
+    float step_degree = 2048/360;
+    int step = abs(int(degree*step_degree)*2);
+
+    if (degree >= 0) 
+            {
+                for(int i = 0; i < step; i++){
+                    halfStep(1);
+                    delay(SPEED);
+                }
+            } 
+    
+     if (degree < 0) 
+            {
+                for(int i = 0; i < step; i++){
+                    halfStep(0);
+                    delay(SPEED);
+                }
+            } 
 }
