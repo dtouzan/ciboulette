@@ -15,6 +15,7 @@
 */
 
 #pragma once
+#include "indifilterinterface.h"
 #include <stdio.h>
 #include "indifilterwheel.h"
 
@@ -23,10 +24,12 @@ class SA200 : public INDI::FilterWheel
 public:
     SA200() = default;
     virtual ~SA200() = default;
-    int direction = 1;
     int index = 0;
-    const int SPEED = 2;
-    const int PINS[4] = {5,6,10,11}; // wiringPi pin
+    float R = 200.0;                          // R
+    float length = 20.5;                      // length of sa200 to CCD/CMOS  
+    int speed = 2;                            // miliseconds
+    const float MOTOR_STEP = 0.087890625;     // step of degree
+    const int PINS[4] = {5,6,10,11};          // wiringPi pin
     const bool STEPS[8][4] = {
         {1, 0, 0, 0}, //0 [1,0,0,0]
         {1, 1, 0, 0}, //1 [1,1,0,0]
@@ -38,7 +41,7 @@ public:
         {1, 0, 0, 1}, //7 [1,0,0,1]
     };
     const bool STEPS_OUT[1][4] = {
-        {0, 0, 0, 0}, //0 [1,0,0,0]
+        {0, 0, 0, 0},                         //0 [1,0,0,0] close led
     };
     
 protected:
@@ -47,8 +50,12 @@ protected:
     const char *getDefaultName() override;
     bool SelectFilter(int);
     void TimerHit();
-    void initPins();
-    void halfStep(bool);
-    void run(int);
+    void InitPins();
+    void HalfStep(bool);
+    void Run(int);
+    int GetDegree();
+    float GetR();
+    float GetLength();
+    int GetSpeed();
 
 };

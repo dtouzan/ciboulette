@@ -14,6 +14,7 @@
     A very minimal device! It also allows you to connect/disconnect and performs no other functions.
 */
 
+#include "indifilterinterface.h"
 #include "indi_sa200.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,11 +34,10 @@ std::unique_ptr<SA200> simpleSA200(new SA200());
 bool SA200::Connect()
 {
     IDMessage(getDeviceName(), "SA200 connected successfully!");
-    CurrentFilter      = 1;
+    CurrentFilter      = 4;
     FilterSlotN[0].min = 1;
     FilterSlotN[0].max = 10;
-    wiringPiSetup(); 
-    initPins();
+    InitPins();
     return true;
 }
 
@@ -55,30 +55,14 @@ bool SA200::Disconnect()
 ***************************************************************************************/
 bool SA200::SelectFilter(int f)
 {
-    int degree = 0;
-    CurrentFilter = f;
-    if (f >= FilterSlotN[0].min && f <= FilterSlotN[0].max) 
-        {
-            switch(f)
-            {
-                case 1: direction = 1; break;
-                case 2: direction = -1; break;
-                case 3: degree = 1; break;
-                case 4: degree = 5; break;
-                case 5: degree = 10; break;
-                case 6: degree = 15; break;
-                case 7: degree = 30; break;
-                case 8: degree = 45; break;
-                case 9: degree = 90;  break;
-                case 10: degree = 180;  break;
-                default: degree = 1; break;
-            }
-        if (f > 2 && f <= FilterSlotN[0].max) 
-            {
-                degree = int(degree*direction);
-                run(degree);
-            }
-        }
+    switch(f){
+            case 1: Run(GetDegree()); break;
+            case 2: R = GetR(); break;
+            case 3: length = GetLength(); break;
+            case 4: speed = GetSpeed(); break;
+            default: speed = GetSpeed(); break;
+    }
+
     SetTimer(500);
     return true;
 }
@@ -103,8 +87,9 @@ const char *SA200::getDefaultName()
 /**************************************************************************************
 ** INDI initPins
 ***************************************************************************************/
-void SA200::initPins()
+void SA200::InitPins()
 {
+    wiringPiSetup(); 
     for(int i = 0; i < 4; i++){
         pinMode(PINS[i], OUTPUT);                       //set IO to output
         digitalWrite(PINS[i], STEPS_OUT[1][i]);         //write to IO
@@ -114,7 +99,7 @@ void SA200::initPins()
 /**************************************************************************************
 ** INDI halfstep
 ***************************************************************************************/
-void SA200::halfStep(bool dir)
+void SA200::HalfStep(bool dir)
 {
     index = dir ? ((index+1)%8) : ((index+7)%8);    //add|sub index based on direction
     
@@ -125,26 +110,77 @@ void SA200::halfStep(bool dir)
 /**************************************************************************************
 ** INDI halfstep
 ***************************************************************************************/
-void SA200::run(int degree)
+void SA200::Run(int degree)
 {
     // Define step degree
     // nbStepsPerRev=2048 full rotate 
-    float step_degree = 2048/360;
-    int step = abs(int(degree*step_degree)*2);
+    int step = abs(int(degree/MOTOR_STEP));
 
     if (degree >= 0) 
             {
                 for(int i = 0; i < step; i++){
-                    halfStep(1);
-                    delay(SPEED);
+                    HalfStep(1);
+                    delay(speed);
                 }
             } 
     
-     if (degree < 0) 
+     if (degree < 0)                                 
             {
                 for(int i = 0; i < step; i++){
-                    halfStep(0);
-                    delay(SPEED);
+                    HalfStep(0);
+                    delay(speed);
                 }
             } 
+
+    for(int i = 0; i < 4; i++){
+        digitalWrite(PINS[i], STEPS_OUT[1][i]);         //write to IO close led
+    }
+}
+
+/**************************************************************************************
+** INDI Get Degree [1]
+***************************************************************************************/
+int SA200::GetDegree()
+{
+    int degree = 0;
+    IText FilterNameT = FilterInterface::FilterNameT[0];
+    char *value = FilterNameT.text;
+    degree = atoi(value);
+    return degree;
+}
+
+/**************************************************************************************
+** INDI Get R [2]
+***************************************************************************************/
+float SA200::GetR()
+{
+    float r = 200.0;
+    IText FilterNameT = FilterInterface::FilterNameT[1];
+    char *value = FilterNameT.text;
+    r = atoi(value);
+    return r;
+}
+
+/**************************************************************************************
+** INDI Get Length [3]
+***************************************************************************************/
+float SA200::GetLength()
+{
+    float l = 20.5;
+    IText FilterNameT = FilterInterface::FilterNameT[2];
+    char *value = FilterNameT.text;
+    l = atoi(value);
+    return l;
+}
+
+/**************************************************************************************
+** INDI Get Speed [4]
+***************************************************************************************/
+int SA200::GetSpeed()
+{
+    int s = 2;
+    IText FilterNameT = FilterInterface::FilterNameT[3];
+    char *value = FilterNameT.text;
+    s = atoi(value);
+    return s;
 }

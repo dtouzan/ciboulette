@@ -39,7 +39,7 @@ class SA200Motor(indiclient):
 
     @property
     def initialization(self):
-        self.set_slot_value("1")
+        self.set_slot_value("4")
         self.set_R("200")
         self.set_length("20.5")
         return True
@@ -66,26 +66,14 @@ class SA200Motor(indiclient):
         slot_value = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE"))  # filter slots 1-indexed
         return slot_value
     
-    def motor(self, slot):
-        if slot > 1 and slot < 11:
-            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", slot)           
-            return True
-        else:
-            return False
+    def motor(self):
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)           
+        return self.get_degree()
 
-    def motor_out(self):
-        self.direction('>')          
-        return True
- 
-    def direction(self,code = '>'):
-        if code == '>' :
-            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 2)
-            return True
-        if code == '<' :
-            self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)
-            return True
-        return False
-       
+
+    def motor_out(self):         
+        return self.get_degree()
+      
     def connect(self):
         """
         Enable sa200 connection
@@ -118,46 +106,80 @@ class SA200Motor(indiclient):
         Return info of slot number
         """
         text = ""
-        if slot > 2 and slot < 11 :
+        if slot > 0 and slot < 11 :
             text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot))
         return text
     
     def set_block(self, slot, string):      
-        """Initialization slot 3 to 10
+        """Initialization slot 4 to 10
         """
-        if slot > 2 and slot < 11 :
+        if slot > 4 and slot < 11 :
             self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), string)
         else:
             return False   
 
+    def get_degree(self):
+        """
+        Return info of slot 1
+        """
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1")
+        return text
+    
+    def set_degree(self, string):      
+        """Initialization slots 1
+            reserved : -360° to 360°
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1", string)
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1) 
+        return True
+
+        
     def get_R(self):
         """
         Return info of slot 2
         """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1")
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2")
         return text
     
     def set_R(self, string):      
         """Initialization slots 2
             reserved : R200
         """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_1", string)
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 2) 
         return True
 
     def get_length(self):
         """
         Return info of slot 3
         """
-        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2")
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3")
         return text
     
     def set_length(self, string):      
         """Initialization slots 3
             reserved : length
         """
-        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_2", string)
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_3", string)
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 3)
         return True
 
+    def get_speed(self):
+        """
+        Return info of slot 4
+        """
+        text = self.get_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4")
+        return text
+    
+    def set_speed(self, string):      
+        """Initialization slots 4
+            reserved : length
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", string)
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 4)
+        return True
+   
+    
     def load(self):      
         """Load indilid configuration file .xml
         """
@@ -173,14 +195,12 @@ class SA200Motor(indiclient):
     def datastream(self):      
         """Return datastream json format
         """ 
-        slot = ["<", ">", "1", "5", "10", "15", "30", "45", "90", "180"]
-        degree = slot[self.get_slot_value()-1]       
+     
 
-        degrees = ' "degree":' + '"' + degree + '", '          
+        degrees = ' "degree":' + '"' + self.get_degree() + '", '          
         r = '"R":' + '"' + self.get_R() + '", '
         length = '"length":' + '"' + self.get_length() + '", '
-        slot3 = '"block03":' + '"' + self.get_block(3) + '", '     
-        slot4 = '"block04":' + '"' + self.get_block(4) + '", '
+        speed = '"speed":' + '"' + self.get_speed() + '", '     
         slot5 = '"block05":' + '"' + self.get_block(5) + '", '
         slot6 = '"block06":' + '"' + self.get_block(6) + '", '
         slot7 = '"block07":' + '"' + self.get_block(7) + '", '
@@ -188,5 +208,5 @@ class SA200Motor(indiclient):
         slot9 = '"block09":' + '"' + self.get_block(9) + '", '
         slot10 = '"block10":' + '"' + self.get_block(10) + '" '
         
-        data = "{"+degrees+r+length+slot3+slot4+slot5+slot6+slot7+slot8+slot9+slot10+"}"
+        data = "{"+degrees+r+length+speed+slot5+slot6+slot7+slot8+slot9+slot10+"}"
         return data
