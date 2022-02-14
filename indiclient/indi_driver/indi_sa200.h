@@ -45,17 +45,17 @@ public:
     };
     
 protected:
-    bool Connect() override;
-    bool Disconnect() override;
-    const char *getDefaultName() override;
-    bool SelectFilter(int);
+    bool Connect() override;                  // connect driver
+    bool Disconnect() override;               // disconnect driver
+    const char *getDefaultName() override;    // get name SA200
+    bool SelectFilter(int);                   // select command
     void TimerHit();
-    void InitPins();
-    void HalfStep(bool);
-    void Run(int);
-    int GetDegree();
-    float GetR();
-    float GetLength();
-    int GetSpeed();
-
+    void InitPins();                          // initializing PIN and wiringPi
+    void HalfStep(bool);                      // for motor run
+    void Run(int);                            // motor run
+    int GetDegree();                          // get degree block 1
+    float GetR();                             // get R block 2
+    float GetLength();                        // get length block 3
+    int GetSpeed();                           // get speed block 4
+    char *GetBlock(int);                      // get block 5 to 10
 };
