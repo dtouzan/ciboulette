@@ -71,7 +71,8 @@ class SA200Motor(indiclient):
         return self.get_degree()
 
 
-    def motor_out(self):         
+    def motor_out(self): 
+        self.set_degree('0')
         return self.get_degree()
       
     def connect(self):
