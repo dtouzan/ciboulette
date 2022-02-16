@@ -118,8 +118,11 @@ void SA200::HalfStep(bool dir)
 ***************************************************************************************/
 void SA200::Run(int degree)
 {
+    // Get speed in block 4
+    speed = GetSpeed();
+    
     // Define step degree
-    // nbStepsPerRev=2048 full rotate 
+    // nbStepsPerRev=2048 full rotate
     int step = abs(int(degree/MOTOR_STEP));
 
     if (degree >= 0) 
