@@ -26,6 +26,29 @@ class SPECTROGRAPHsa200(SA200Motor):
         self.filter_name = "SA200"
         self.process_events()       
           
+    def set_name(self,string):
+        """ Set name of system imager (60 caracters)
+            Example :SA200-UT1, SA200-178MM-F200, ...
+        """
+        self.set_block(5,string)
+        return string
+
+    def get_name(self):
+        """ Set name of system imager (60 caracters)
+            Example :SA200-UT1, SA200-178MM-F200, ...
+        """
+        s = self.get_block(5)
+        return s 
+
+    def dispersion(self,pixel_size):
+        """ Get system dispersion
+            pixel_size : um
+        """
+        l = self.get_length()
+        R = self.get_R()
+        d=10000*pixel_size/(float(l)*float(R))
+        return d
+            
     def shemas(self):
         from IPython.display import Image
         display(Image('ciboulette/indiclient/draw/shemas.png'))
