@@ -196,9 +196,9 @@ class SA200Motor(indiclient):
     def datastream(self):      
         """Return datastream json format
         """ 
-     
-
-        degrees = ' "degree":' + '"' + self.get_degree() + '", '          
+        name = ' "SA200":'
+        value = '{ "value":' + '"' + str(self.get_slot_value()) + '", '
+        degrees = '"degree":' + '"' + self.get_degree() + '", '          
         r = '"R":' + '"' + self.get_R() + '", '
         length = '"length":' + '"' + self.get_length() + '", '
         speed = '"speed":' + '"' + self.get_speed() + '", '     
@@ -209,5 +209,5 @@ class SA200Motor(indiclient):
         slot9 = '"block09":' + '"' + self.get_block(9) + '", '
         slot10 = '"block10":' + '"' + self.get_block(10) + '" '
         
-        data = "{"+degrees+r+length+speed+slot5+slot6+slot7+slot8+slot9+slot10+"}"
+        data = "{"+name+value+degrees+r+length+speed+slot5+slot6+slot7+slot8+slot9+slot10+"} }"
         return data

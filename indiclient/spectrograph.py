@@ -40,6 +40,23 @@ class SPECTROGRAPHsa200(SA200Motor):
         s = self.get_block(5)
         return s 
 
+    def set_coverage(self,min=3000,max=7000):
+        """ Set system spectrum coverage 
+            Used block06 (min) and block07 (max)
+        """
+        self.set_block(6,str(min))
+        self.set_block(7,str(max))
+        return min,max
+
+    def get_coverage(self,pixel_size=2.4):
+        """ Get system spectrum coverage 
+            Used block06 min and block07 max
+        """
+        d = self.dispersion(pixel_size)
+        min = int(float(self.get_block(6)) / d)
+        max = int(float(self.get_block(7)) / d) 
+        return min,max
+
     def dispersion(self,pixel_size):
         """ Get system dispersion
             pixel_size : um
