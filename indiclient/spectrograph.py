@@ -58,12 +58,12 @@ class SPECTROGRAPHsa200(SA200Motor):
         return min,max
 
     def dispersion(self,pixel_size):
-        """ Get system dispersion
+        """ Get system dispersion (nanomètre)
             pixel_size : um
         """
         l = self.get_length()
         R = self.get_R()
-        d=10000*pixel_size/(float(l)*float(R))
+        d=(10000*pixel_size/(float(l)*float(R))/10)
         return d
             
     def shemas(self):
