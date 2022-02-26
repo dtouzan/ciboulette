@@ -29,9 +29,6 @@ class Ciboulette(object):
     def __init__(self):
         self.data = []
         self.api_version = constant.API_version
-        self.server = '192.168.1.18'
-        self.port = 11111
-        self.device = 0
         self.focal = 85.0
         self.diameter = 60
         self.latitude = 49.5961
@@ -66,8 +63,6 @@ class Ciboulette(object):
         """
     
         api = [self.api_version]                                # Astropy API
-        server = [self.server + ':' + str(self.port)]           # Server IP:port
-        device = [self.device]                                  # Device for alpaca
         focal = [self.focal]                                    # Focal millimeter
         diameter = [self.diameter]                              # Diameter millimeter
         latitude = [self.latitude]                              # Site latitude degrees
@@ -87,35 +82,15 @@ class Ciboulette(object):
         dec = [self.dec]                                        # Degrees
         object_name = [self.object_name]                        # Object name
         
-        return Table([api,server,device,focal,diameter,latitude,longitude,elevation,instrument,naxis1,naxis2,
+        return Table([api,focal,diameter,latitude,longitude,elevation,instrument,naxis1,naxis2,
                       binXY,pixelXY,filter_name,telescope_name,observer_name,dataset,archive_table,ra,dec,object_name], 
-                      names=['API','SERVER','DEVICE','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
+                      names=['API','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBJECT'])  
  
     @property
     def header(self):
         return self.table
-
-    @property
-    def serverport(self):
-        """
-        Return Server:port configuration
-        """
-        return self.server + ':' + str(self.port)
-
-    @serverport.setter
-    def serverport(self,serverdict):
-        """
-        Set server and port
-         serverdict:
-         {
-            "SVR": string - Server 
-            "PORT": int - Port
-          }
-        """  
-        self.server = str(serverdict['SVR'])
-        self.port = int(serverdict['PORT'])
-                
+               
     @property
     def atik383L(self):
         """
