@@ -211,13 +211,9 @@ class Ciboulette(object):
         """
         Set binning 
         """
-        if isinstance(binXY,str):
-            binxy = int(binXY)
-        if isinstance(binXY,float):
-            binxy = int(binXY)            
         if binXY < 1:
-            binxy = 1
-        self.binXY = binxy        
+            binXY = 1
+        self.binXY = binXY        
         
     @property
     def filtername(self):
@@ -606,7 +602,73 @@ class Ciboulette(object):
         # Sauvegarde
         fits_file_name = self.dataset+'/'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
         fits.writeto(fits_file_name, data, hdr, overwrite=True)
- 
+
+    def extendedhdr(self,header):
+        """
+        Set header extended 
+        """     
+        hdr = header
+        hdr.set('PIXSIZE1', self.pixelXY, '[um] Pixel Size X, binned') 
+        hdr.set('PIXSIZE2', self.pixelXY, '[um] Pixel Size Y, binned')
+        hdr.set('XBINNING', self.binXY, 'Binning factor X')
+        hdr.set('YBINNING', self.binXY, 'Binning factor Y')
+        hdr.set('EXPTIME', self._exp_time, '[s] Total Exposure Time')
+        hdr.set('OBJECT', self.object_name, 'Observed object name')
+        hdr.set('OBSERVER', self.observer_name, 'Observed name')
+        hdr.set('TELESCOP', self.telescope_name, 'Telescope name')
+        hdr.set('INSTRUME', self.instrument, 'Instrument used for acquisition')                         
+        hdr.set('ROWORDER', 'TOP-DOWN', 'Order of the rows in image array')                 
+        hdr.set('CCD-TEMP', self._temperature, '[C] CCD temperature (Celsius)') 
+        hdr.set('FILTER', self.filter_name, 'Filter info')     
+        hdr.set('SITELAT', self.latitude, '[deg] Observatory latitude') 
+        hdr.set('SITELONG', self.longitude, '[deg] Observatory longitude')
+        hdr.set('SITEELEV', self.elevation, '[deg] Observatory elevation') 
+        hdr.set('SWCREATE', self.api_version, 'Driver create') 
+        hdr.set('FOCALLEN', self.focal,'[mm] Telescope focal length') 
+        hdr.set('FRAMEX', 0, 'Frame start x')
+        hdr.set('FRAMEY', 0, 'Frame start y')                                                                   
+        hdr.set('DATE-OBS', self._date, 'UTC start date of observation')
+        hdr.set('RADESYSA', 'ICRS', 'Equatorial coordinate system')
+        hdr.set('FRAMEID', self._frameid, 'Frame ID')
+        hdr.set('EQUINOX', 2000.0, 'Equinox date')
+        hdr.set('DATATYPE', self._datatype, 'Type of data')
+        hdr.set('MJD-OBS', 0.0, 'MJD of start of obseration')
+        hdr.set('JD-OBS', 0.0, 'JD of start of obseration')
+        hdr.set('TELESCOP', self.telescope_name, 'Telescope name')
+
+        # Modification JD and MJD header
+        date_obs = hdr['DATE-OBS']
+        time_obs = Time(hdr['DATE-OBS'])
+        hdr['JD-OBS'] = time_obs.jd
+        hdr['MJD-OBS'] = time_obs.mjd
+
+        # Elements for CRVAL
+        RA_deg = 15 * self.ra
+        DEC_deg = self.dec
+
+        # Elements for CRPIX
+        crpix1 = int(hdr['NAXIS1'])/2
+        crpix2 = int(hdr['NAXIS2'])/2
+
+        # Element for CDELT
+        cdelt1 = (206*int(hdr['PIXSIZE1'])*int(hdr['XBINNING'])/self.focal)/3600
+        cdelt2 = (206*int(hdr['PIXSIZE2'])*int(hdr['YBINNING'])/self.focal)/3600
+
+        # Header WCS
+        w = wcs.WCS(naxis=2)
+        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+        # CRVAL position
+        w.wcs.crval = [RA_deg, DEC_deg] 
+        # CRPIX Vecteur à 2 éléments donnant les coordonnées X et Y du pixel de référence 
+        # (def = NAXIS / 2) dans la convention FITS (le premier pixel est 1,1)
+        w.wcs.crpix = [crpix1, crpix2]
+        # CDELT Vecteur à 2 éléments donnant l'incrément physique au pixel de référence
+        w.wcs.cdelt = [-cdelt1, cdelt2] 
+
+        # Now, write out the WCS object as a FITS header
+        hdu = hdr + w.to_header()
+        return hdu
+
     @property
     def functions(self):
         """

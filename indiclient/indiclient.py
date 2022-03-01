@@ -906,6 +906,9 @@ class indiblob(indielement):
 
     def _get_decoded_value(self):
         """
+        
+        /!\ base64.encodestring replaced by base64.b64decode Python 3.9
+        
         Decodes the value of the BLOB it does the base64 decoding as well as zlib decompression.
         zlib decompression is done only if the current L{format} string ends with C{.z}.
         base64 decoding is always done.
@@ -915,14 +918,17 @@ class indiblob(indielement):
         value = self._value.encode("utf8")
         if len(self.format) >= 2:
             if self.format[len(self.format) - 2] + self.format[len(self.format) - 1] == ".z":
-                return zlib.decompress(base64.decodestring(value))
+                return zlib.decompress(base64.b64decode(value))
             else:
-                return base64.decodestring(value)
+                return base64.b64decode(value)
         else:
-            return base64.decodestring(value)
+            return base64.b64decode(value)
 
     def _encode_and_set_value(self, value, format):
         """
+        
+        /!\ base64.encodestring replaced by base64.b64decode Python 3.9
+        
         Encodes the value to be written into the BLOB it does the base64 encoding as well as
         zlib compression. Zlib compression is done only if the current L{format} string ends with C{.z}.
         base64 encoding is always done.
@@ -936,11 +942,11 @@ class indiblob(indielement):
         self.format = format
         if len(self.format) >= 2:
             if self.format[len(self.format) - 2] + self.format[len(self.format) - 1] == ".z":
-                self._set_value(base64.encodestring(zlib.compress(value)))
+                self._set_value(base64.b64decode(zlib.compress(value)))
             else:
-                self._set_value(base64.encodestring(value))
+                self._set_value(base64.b64decode(value))
         else:
-            self._set_value(base64.encodestring(value))
+            self._set_value(base64.b64decode(value))
 
     def get_plain_format(self):
         """
