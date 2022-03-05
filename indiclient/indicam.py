@@ -314,7 +314,7 @@ class CCDCam(indiclient):
                 log.warning("Exposure timed out.")
                 break
             time.sleep(0.1)
-            
+   
         return fitsdata
     
     def startexposure(self, exptime: float, Light: bool):

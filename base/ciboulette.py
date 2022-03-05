@@ -86,7 +86,36 @@ class Ciboulette(object):
                       binXY,pixelXY,filter_name,telescope_name,observer_name,dataset,archive_table,ra,dec,object_name], 
                       names=['API','FOCAL','DIAM','SITE_LAT','SITE_LONG','SITE_ELEV','INSTRUME','NAXIS1','NAXIS2',
                          'BINXY','PIXELXY','FILTER','NAME','OBSERVER','DATASET','ARCHIVES','RA','DEC','OBJECT'])  
- 
+
+    def datastream(self):
+        """
+        Return JSON of ciboulette values
+        """
+        name = '"' + self.observer_name + '":'
+        api = '{ "api":' + '"' + str(self.api_version) + '", '                              # Astropy API
+        focal = '"focal":' + '"' + str(self.focal) + '", '                                  # Focal millimeter
+        diameter = '"diameter":' + '"' + str(self.diameter) + '", '                         # Diameter millimeter
+        latitude = '"latitude":' + '"' + str(self.latitude) + '", '                         # Site latitude degrees
+        longitude = '"longitude":' + '"' + str(self.longitude) + '", '                      # Site longitude degrees
+        elevation = '"elevation":' + '"' + str(self.elevation) + '", '                      # Site elevation meter
+        instrument = '"instrument":' + '"' + self.instrument + '", '                        # Instrument name
+        naxis1 = '"naxis1":' + '"' + str(self.naxis1) + '", '                               # Size naxis1
+        naxis2 = '"naxis2":' + '"' + str(self.naxis2) + '", '                               # Size naxis2
+        binXY = '"binXY":' + '"' + str(self.binXY) + '", '                                  # Binning
+        pixelXY = '"pixelXY":' + '"' + str(self.pixelXY) + '", '                            # Pixel size X and Y
+        filter_name = '"filter":' + '"' + self.filter_name + '", '                          # Filter name
+        telescope_name = '"telescope":' + '"' + self.telescope_name + '", '                 # Telescope name
+        observer_name = '"observer":' + '"' + self.observer_name + '", '                    # Observer name
+        dataset = '"dataset":' + '"' + self.dataset + '", '                                 # Dataset repository
+        archive_table = '"archive":' + '"' + self.archive_table + '", '                     # Archives repository
+        ra = '"RA":' + '"' + str(self.ra) + '", '                                           # Hours
+        dec = '"DEC":' + '"' + str(self.dec) + '", '                                        # Degrees
+        object_name = '"object":' + '"' + self.object_name + '" }'                          # Object name     
+        
+        data= "{ "+name+api+focal+diameter+latitude+longitude+elevation+instrument+naxis1+naxis2+binXY+pixelXY+filter_name+telescope_name+observer_name+dataset+archive_table+ra+dec+object_name+" }"
+        return data
+
+    
     @property
     def header(self):
         return self.table
@@ -669,6 +698,18 @@ class Ciboulette(object):
         hdu = hdr + w.to_header()
         return hdu
 
+    def reversex(self, data):
+        """
+        Reverse data of fits image
+        """
+        return  np.flipud(data)
+            
+    def reversey(self, data):
+        """
+        Reverse data of fits image
+        """
+        return np.fliplr(data)
+    
     @property
     def functions(self):
         """
@@ -689,3 +730,18 @@ class Ciboulette(object):
         t['Mv'].info.format = '.2f'
         return t
 
+    @property
+    def resolve(self):
+        return Angle((((206 * self.pixelXY) / self.focal)) / 3600, unit=u.degree)
+    
+    @property
+    def fieldRA(self):
+        return Angle(self.resolve * self.naxis1, unit=u.degree)
+    
+    @property
+    def fieldDEC(self):
+        return Angle(self.resolve * self.naxis2, unit=u.degree)
+
+    @property
+    def magnitude(self):
+        return math.log10(self.diameter) * 5 + 7.2
