@@ -1,0 +1,7 @@
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/install.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/list_install_components.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/install/local.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/install/strip.dir
+/home/ubuntu/Documents/lab/indi-master/indi-3rdparty/indi-sa200/build/CMakeFiles/indi_sa200.dir

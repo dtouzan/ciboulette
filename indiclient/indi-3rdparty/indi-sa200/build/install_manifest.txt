@@ -1,0 +1,2 @@
+/usr/bin/indi_sa200
+/usr/share/indi/indi_sa200.xml
