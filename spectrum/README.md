@@ -12,6 +12,7 @@ Astronomy packages for Star Analyser 200
   - Raspberry PI zero 2w
   - Ubuntu 20.04 or more
   - WiringPi
+  - Motor stepper ULN2003
 
 ### Installation
 
