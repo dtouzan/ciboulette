@@ -26,6 +26,7 @@ sudo reboot
 **Indilib for (Ubuntu)**
   
   - Indilib.org site: https://indilib.org/download.html    
+  - Sources indi_sa200: https://github.com/dtouzan/ciboulette/tree/main/indiclient/indi-3rdparty/indi-sa200
 
 **Jupyter lab (Ubuntu Raspberry pi4)**
 ```sh
