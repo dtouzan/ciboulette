@@ -66,6 +66,9 @@ Installation de jupyter
 ~$pip install wget
 ~$pip install alpyca
 
+# Installation wiringpi
+~$sudo apt-get install wiringpi
+
 # Installation de RPi.GPIO
 ~$sudo apt-get -y install python3-rpi.gpio
 
@@ -89,164 +92,11 @@ Installation de jupyter
 # Installation de RPi.GPIO
 ~$sudo apt-get -y install python3-rpi.gpio
 
-# Test motor.py
-# https://www.aranacorp.com/fr/pilotez-un-moteur-pas-a-pas-avec-raspberrypi/
-#######################################################################################################
-#                                        MOTOR.PY@31/01/2022                                          #
-#######################################################################################################
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*-
-# libraries
-import time
-import RPi.GPIO as GPIO
-# Use BCM GPIO references
-# Instead of physical pin numbers
-GPIO.setmode(GPIO.BCM)
-# Define GPIO signals to use Pins 18,22,24,26 GPIO24,GPIO25,GPIO8,GPIO7
-# Define GPIO signals to use Pins 16,18,24,26 GPIO23,GPIO24,GPIO8,GPIO7
-StepPins = [24,25,8,7]
-# Set all pins as output
-for pin in StepPins:
-        print("Setup pins")
-        GPIO.setup(pin,GPIO.OUT)
-        GPIO.output(pin, False)
-# Define time delay between steps
-WaitTime = 0.001 #set speed
-# Define simple sequence
-StepCount1 = 4
-Seq1 = []
-Seq1 = [i for i in range(0, StepCount1)]
-Seq1[0] = [1,0,0,0]
-Seq1[1] = [0,1,0,0]
-Seq1[2] = [0,0,1,0]
-Seq1[3] = [0,0,0,1]
-# Define advanced half-step sequence
-StepCount2 = 8
-Seq2 = []
-Seq2 = [i for i in range(0, StepCount2)]
-Seq2[0] = [1,0,0,0]
-Seq2[1] = [1,1,0,0]
-Seq2[2] = [0,1,0,0]
-Seq2[3] = [0,1,1,0]
-Seq2[4] = [0,0,1,0]
-Seq2[5] = [0,0,1,1]
-Seq2[6] = [0,0,0,1]
-Seq2[7] = [1,0,0,1]
-# Choose a sequence to use
-Seq = Seq2
-StepCount = StepCount2
-def steps(nb):
-        StepCounter = 0
-        if nb<0: sign=-1
-        else: sign=1
-        nb=sign*nb*2 #times 2 because half-step
-        print("nbsteps {} and sign {}".format(nb,sign))
-        for i in range(nb):
-                for pin in range(4):
-                        xpin = StepPins[pin]
-                        if Seq[StepCounter][pin]!=0:
-                                GPIO.output(xpin, True)
-                        else:
-                                GPIO.output(xpin, False)
-                StepCounter += sign
-        # If we reach the end of the sequence
-        # start again
-                if (StepCounter==StepCount):
-                        StepCounter = 0
-                if (StepCounter<0):
-                        StepCounter = StepCount-1
-                # Wait before moving on
-                time.sleep(WaitTime)
-# Start main loop
-nbStepsPerRev=2048
-_45d = int(2048*45/360)
-print("45°:",_45d)
-nbStepsPerRev=_45d
-if __name__ == '__main__' :
-    hasRun=False
-    while not hasRun:
-            steps(nbStepsPerRev)# parcourt un tour dans le sens horaire
-            time.sleep(1)
-            steps(-nbStepsPerRev)# parcourt un tour dans le sens anti-horaire
-            time.sleep(1)
-            hasRun=True
-    print("Stop motor")
-    for pin in StepPins:
-            GPIO.output(pin, False)
-#######################################################################################################
-#######################################################################################################
-
-# Création du driver INDI
-# Voir documentatnion https://docs.indilib.org/drivers/simple.html
-
-
-#######################################################################################################
-# CMakeLists.txt for build create
-#######################################################################################################
-# define the project name
-project(indi-sa200 C CXX)
-cmake_minimum_required(VERSION 2.8)
-
-include(GNUInstallDirs)
-
-# add our cmake_modules folder
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/")
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake_modules/")
-
-# find our required packages
-find_package(INDI REQUIRED)
-find_package(Nova REQUIRED)
-find_package(ZLIB REQUIRED)
-find_package(GSL REQUIRED)
-
-# these will be used to set the version number in config.h and our driver's xml file
-set(CDRIVER_VERSION_MAJOR 0)
-set(CDRIVER_VERSION_MINOR 1)
-
-# do the replacement in the config.h
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/config.h
-)
-
-# do the replacement in the driver's xml file
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/indi_sa200.xml.cmake ${CMAKE_CURRENT_BINARY_DIR}/indi_sa200.xml)
-
-
-# set our include directories to look for header files
-include_directories( ${CMAKE_CURRENT_BINARY_DIR})
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR})
-include_directories( ${INDI_INCLUDE_DIR})
-include_directories( ${NOVA_INCLUDE_DIR})
-include_directories( ${EV_INCLUDE_DIR})
-include_directories(/usr/local/include)
-include_directories(/usr/local/lib)
-
-include(CMakeCommon)
-
-# tell cmake to build our executable
-add_executable(
-    indi_sa200
-    indi_sa200.cpp
-)
-
-# and link it to these libraries
-target_link_libraries(
-    indi_sa200
-    wiringPi
-    ${INDI_LIBRARIES}
-    ${NOVA_LIBRARIES}
-    ${GSL_LIBRARIES}
-)
-
-# tell cmake where to install our executable
-install(TARGETS indi_sa200 RUNTIME DESTINATION bin)
-
-# and where to put the driver's xml file.
-install(
-    FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/indi_sa200.xml
-    DESTINATION ${INDI_DATA_DIR}
-#######################################################################################################
-#######################################################################################################
+# /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+# Version raspberry Pi zero 2w
+# Utilisation de NetworkManager
+# mettre le fichier /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+sudo reboot
+# Configurer le réseau avec NetworkManager
+sudo nmtui

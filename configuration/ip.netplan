@@ -26,3 +26,11 @@ network:
 
     version: 2
 
+# /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+# Version raspberry Pi zero 2w
+# Utilisation de NetworkManager
+# mettre le fichier /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+sudo reboot
+# Configurer le réseau avec NetworkManager
+sudo nmtui
