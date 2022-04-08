@@ -202,11 +202,11 @@ class QHY5MCam(CCDCam):
     @property
     def gain(self):
         self.process_events()
-        gain = self.get_float(self.driver, "CCD_CONTROLS", "Gain")
+        gain = self.get_float(self.driver, "CCD_GAIN", "GAIN")
         return gain
 
     @gain.setter
     def gain(self,f):
         if f >=0 and f <=100:
-            self.set_and_send_float(self.driver, 'CCD_CONTROLS', 'Gain', f) 
+            self.set_and_send_float(self.driver, 'CCD_GAIN', 'GAIN', f) 
             self.process_events()
