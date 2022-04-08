@@ -177,3 +177,36 @@ class ASICam178MM(CCDCam):
         if self.debug:
             vec.tell()
         return vec
+
+class QHY5MCam(CCDCam):
+    """
+    Wrap CCDCam, set driver to QHY CCD, and point to localhost by default.
+    """
+    def __init__(self, host='localhost', port=7624):
+        super(QHY5MCam, self).__init__(host, port, driver="QHY CCD QHY5-M-")
+        self.camera_name = "QHYCCD Camera"
+        self.process_events()
+
+    @property
+    def filters(self):
+        return ["N/A"]
+
+    @property
+    def filter(self):
+        return "N/A"
+
+    @filter.setter
+    def filter(self, f):
+        pass
+
+    @property
+    def gain(self):
+        self.process_events()
+        gain = self.get_float(self.driver, "CCD_CONTROLS", "Gain")
+        return gain
+
+    @gain.setter
+    def gain(self,f):
+        if f >=0 and f <=100:
+            self.set_and_send_float(self.driver, 'CCD_CONTROLS', 'Gain', f) 
+            self.process_events()
