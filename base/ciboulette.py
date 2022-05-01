@@ -168,7 +168,17 @@ class Ciboulette(object):
         self.instrument = 'ASI 294'
         self.naxis1 = 4144
         self.naxis2 = 2822
-        self.pixelXY = 4.63       
+        self.pixelXY = 4.63      
+    
+    @property
+    def qhy5M(self):
+        """
+        Set QHY5M configuration
+        """
+        self.instrument = 'QHY-5M'
+        self.naxis1 = 1240
+        self.naxis2 = 1024
+        self.pixelXY = 5.40    
 
     @property
     def samyang85_1_4(self):
