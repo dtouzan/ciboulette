@@ -258,7 +258,7 @@ class CCDCam(indiclient):
         self.process_events()
         return c_vec
 
-    def expose(self, exptime=1.0, exptype="Light"):
+    def expose(self, exptime=1.0, exptype="Light", latency=1):
         """
         Take exposure and return FITS data
         """
@@ -280,18 +280,11 @@ class CCDCam(indiclient):
         fitsdata = None
         run = True
 
-        """
-        calculation of the time required for 16 bits image
-        ((WIDTH x HEIGHT) / (1024 x 1024)) x 2
-        """
-        xu = self.get_float(self.driver, "CCD_FRAME", "WIDTH")
-        yu = self.get_float(self.driver, "CCD_FRAME", "HEIGHT")
         t = time.time()
-        timeout = exptime + (((xu * yu) / 1048576)*2)
-
+        timeout = exptime * latency
         while run:
             self.process_receive_vector_queue()
-            while self.receive_event_queue.empty() is False:
+            while self.receive_event_queue.empty() is False:               
                 vector = self.receive_event_queue.get()
                 if vector.tag.get_type() == "BLOBVector":
                     log.info("Reading FITS image out...")
@@ -313,7 +306,7 @@ class CCDCam(indiclient):
             if ((time.time() - t) > timeout):
                 log.warning("Exposure timed out.")
                 break
-            time.sleep(0.1)
+            time.sleep(0.8)
    
         return fitsdata
     
