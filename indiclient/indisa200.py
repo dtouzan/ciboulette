@@ -41,7 +41,7 @@ class SA200Motor(indiclient):
     def initialization(self):
         self.set_slot_value("4")
         self.set_R("200")
-        self.set_length("20.5")
+        self.set_length("18")
         return True
     
     @property
@@ -69,7 +69,6 @@ class SA200Motor(indiclient):
     def motor(self):
         self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 1)           
         return self.get_degree()
-
 
     def motor_out(self): 
         self.set_degree('0')
@@ -174,12 +173,35 @@ class SA200Motor(indiclient):
     
     def set_speed(self, string):      
         """Initialization slots 4
-            reserved : length
+            reserved : speed
         """
         self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", string)
         self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 4)
         return True
-   
+
+    def set_speed2(self):      
+        """Initialization slots 4
+            reserved : speed
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", '2')
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 4)
+        return True
+
+    def set_speed4(self):      
+        """Initialization slots 4
+            reserved : speed
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", '4')
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 4)
+        return True
+
+    def set_speed10(self):      
+        """Initialization slots 4
+            reserved : speed
+        """
+        self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_4", '10')
+        self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", 4)
+        return True
     
     def load(self):      
         """Load indilid configuration file .xml
