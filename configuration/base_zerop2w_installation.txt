@@ -1,4 +1,4 @@
-#Update swap
+# Update swap
 ~$sudo fallocate -l 2G /swapfile
 ~$sudo chmod 600 /swapfile
 ~$sudo mkswap /swapfile
@@ -8,57 +8,81 @@
 ~$sudo cp /etc/fstab /etc/fstab.bak
 ~$echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
-#Optional
+# Optional
 ~$sudo nano /etc/sysctl.conf
 #Put options
 vm.swappiness=20
 vm.vfs_cache_pressure=50
 
-#update OS
+# Configuration IP de base
+~$ip addr show
+~$sudo ip addr add 192.168.3.131/24 dev enx00051bba611b 
+~$sudo ip -a route add default via 192.168.3.1  dev enx00051bba611b 
+
+# update OS
+~$sudo apt update
+~$sudo apt upgrade
+
+# /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+# Version raspberry Pi zero 2w
+# Installation de NetworkManager
+~$sudo apt install network-manager
+# mettre le fichier /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+~$sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+# Configurer le réseau avec NetworkManager
+~$sudo nmtui
+
+# Installation net-tools
+~$sudo apt install net-tools
+
+# Installation raspi-config
+# Configurer SSH server au démarrage
+#   1 System Options       Configure system settings 
+#     P2 SSH               Enable/disable remote command line access using SSH 
+
+~$sudo apt install raspi-config
+~$sudo raspi-config
+
+# Update OS
 ~$sudo apt update
 ~$sudo apt upgrade
 ~$reboot
 
-Welcome to Ubuntu 21.10 (GNU/Linux 5.13.0-1015-raspi armv7l)
+Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-1006-raspi aarch64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
  * Support:        https://ubuntu.com/advantage
 
-  System information as of Tue Jan 25 21:19:35 UTC 2022
+  System information as of dim. 15 mai 2022 17:18:57 CEST
 
-  System load:           2.07
-  Usage of /:            10.4% of 59.10GB
-  Memory usage:          47%
-  Swap usage:            0%
-  Temperature:           49.9 C
-  Processes:             149
-  Users logged in:       0
-  IPv4 address for usb0: 192.168.1.40
-  IPv6 address for usb0: 2a01:cb06:114:6200:205:1bff:feba:611b
+  System load:                      0.080078125
+  Usage of /:                       46.4% of 14.46GB
+  Memory usage:                     48%
+  Swap usage:                       0%
+  Temperature:                      39.2 C
+  Processes:                        138
+  Users logged in:                  0
+  IPv4 address for enx00051bba611b: 192.168.3.131
 
  * Super-optimized for small spaces - read how we shrank the memory
    footprint of MicroK8s to make it the smallest full K8s around.
 
    https://ubuntu.com/blog/microk8s-memory-optimisation
 
-3 updates can be applied immediately.
+1 update can be applied immediately.
 To see these additional updates run: apt list --upgradable
 
-#Installation de indilib
-~$sudo apt-add-repository ppa:mutlaqja/ppa
-~$sudo apt-get update
-~$sudo apt-get install indi-full
-
-#Installation de pip
+# Installation de pip
 ~$sudo apt install python3-pip
 
-Installation de jupyter
+# Installation de jupyter
 ~$pip install jupyter
 ~$pip install jupyterlab
 ~$.local/bin/jupyter notebook --generate-config
 
-#Installation Astronomy package 
+# Installation Astronomy package 
+~$pip install matplotlib
 ~$pip install numpy
 ~$pip install bs4
 ~$pip install astropy
@@ -66,37 +90,25 @@ Installation de jupyter
 ~$pip install wget
 ~$pip install alpyca
 
-# Installation wiringpi
-~$sudo apt-get install wiringpi
-
 # Installation de RPi.GPIO
 ~$sudo apt-get -y install python3-rpi.gpio
 
-# Installation PIGPIO
-# Site https://abyz.me.uk/rpi/pigpio/index.html
-# Téléchargé le code source et le compiler
-~$wget https://github.com/joan2937/pigpio/archive/master.zip
-~$unzip master.zip
-~$cd pigpio-master
-~$make
-~$sudo make install
-
-# Installation de CMAKE
-~$sudo apt install cmake
-
-# Installation de INDILIB
-~$sudo apt install libindi-dev libnova-dev libz-dev libgsl-dev
+# Installation de indilib
+~$sudo apt-add-repository ppa:mutlaqja/ppa
+~$sudo apt update
+~$sudo apt install libindi1 indi-bin
+~$sudo apt install libindi-dev
+~$sudo apt -y install libnova-dev libcfitsio-dev libusb-1.0-0-dev zlib1g-dev libgsl-dev build-essential cmake git libjpeg-dev libcurl4-gnutls-dev libtiff-dev libfftw3-dev libftdi-dev libgps-dev libraw-dev libgphoto2-dev libboost-dev libboost-regex-dev librtlsdr-dev liblimesuite-dev libftdi1-dev libavcodec-dev libavdevice-dev
 # Installation GIT https://github.com/indilib/indi
 ~$git clone https://github.com/indilib/indi
 
-# Installation de RPi.GPIO
-~$sudo apt-get -y install python3-rpi.gpio
+# Installation de indilib ASI
+~$sudo apt install libasi
+~$sudo apt install indi-asi
+~$sudo apt install libindidriver1
 
-# /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
-# Version raspberry Pi zero 2w
-# Utilisation de NetworkManager
-# mettre le fichier /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
-sudo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
-sudo reboot
-# Configurer le réseau avec NetworkManager
-sudo nmtui
+# Installation de indilib QHYCCD
+~$sudo apt install indi-qhy
+
+
+
