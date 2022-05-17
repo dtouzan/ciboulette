@@ -14,17 +14,13 @@
     A very minimal device! It also allows you to connect/disconnect and performs no other functions.
 */
 
-#include "indifilterinterface.h"
 #include "indi_sa200.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>                   // std::cout
-#include <string>                     // std::string, std::to_string
+#include <iostream>   // std::cout
+#include <string>     // std::string, std::to_string
 #include <memory>
-#include <wiringPi.h>                // wiringpi librairy
 
-#define FORWARD     1
-#define BACKWARD    0
 
 std::unique_ptr<SA200> simpleSA200(new SA200());
    
@@ -55,21 +51,21 @@ bool SA200::Disconnect()
 ***************************************************************************************/
 bool SA200::SelectFilter(int f)
 {
-    switch(f){
-            case 1: Run(GetDegree()); break;
-            case 2: R = GetR(); break;
-            case 3: length = GetLength(); break;
-            case 4: speed = GetSpeed(); break;
-            case 5: speed = GetSpeed(); break;
-            case 6: speed = GetSpeed(); break;
-            case 7: speed = GetSpeed(); break;
-            case 8: speed = GetSpeed(); break;
-            case 9: speed = GetSpeed(); break;
-            case 10: speed = GetSpeed(); break;
-            default: speed = GetSpeed(); break;
+    switch(f)
+    {
+        case 1: Run(GetDegree()); break;
+        case 2: R = GetR(); break;
+        case 3: length = GetLength(); break;
+        case 4: speed = GetSpeed(); break;
+        case 5: speed = GetSpeed(); break;
+        case 6: speed = GetSpeed(); break;
+        case 7: speed = GetSpeed(); break;
+        case 8: speed = GetSpeed(); break;
+        case 9: speed = GetSpeed(); break;
+        case 10: speed = GetSpeed(); break;
+        default: speed = GetSpeed(); break;
     }
-
-    SetTimer(100);
+    SetTimer(500);
     return true;
 }
 
@@ -83,7 +79,7 @@ void SA200::TimerHit()
 
 
 /**************************************************************************************
-** SA200 is asking us for our default device name
+** INDI is asking us for our default device name
 ***************************************************************************************/
 const char *SA200::getDefaultName()
 {
@@ -95,22 +91,12 @@ const char *SA200::getDefaultName()
 ***************************************************************************************/
 void SA200::InitPins()
 {
-    wiringPiSetup(); 
-    for(int i = 0; i < 4; i++){
-        pinMode(PINS[i], OUTPUT);                       //set IO to output
-        digitalWrite(PINS[i], STEPS_OUT[1][i]);         //write to IO
-    }
-}
-
-/**************************************************************************************
-** SA200 halfstep
-***************************************************************************************/
-void SA200::HalfStep(bool dir)
-{
-    index = dir ? ((index+1)%8) : ((index+7)%8);    //add|sub index based on direction
-    
-    for(int i = 0; i < 4; i++)
-        digitalWrite(PINS[i], STEPS[index][i]);     //write to IO	    
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================
+    system("python3 script.py" + nomEntree );
+    */
+    std::string cmd = "python3 ~/SA200/SA200GPIO_OUT.py ";
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
+    system(cmd.c_str());
 }
 
 /**************************************************************************************
@@ -118,29 +104,13 @@ void SA200::HalfStep(bool dir)
 ***************************************************************************************/
 void SA200::Run(int degree)
 { 
-    // Define step degree
-    // nbStepsPerRev=2048 full rotate
     int step = abs(int(degree/MOTOR_STEP));
-
-    if (degree >= 0) 
-            {
-                for(int i = 0; i < step; i++){
-                    HalfStep(1);
-                    delay(speed);
-                }
-            } 
-    
-     if (degree < 0)                                 
-            {
-                for(int i = 0; i < step; i++){
-                    HalfStep(0);
-                    delay(speed);
-                }
-            } 
-
-    for(int i = 0; i < 4; i++){
-        digitalWrite(PINS[i], STEPS_OUT[1][i]);         //write to IO close led
-    }
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================
+    system("python3 script.py" + nomEntree );
+    */
+    std::string cmd = "python3 ~/SA200/SA200Motor.py " + std::to_string(step) + " " + std::to_string(speed);
+    /* ====================== /!\ /!\ /!\ /!\ /!\=========================*/
+    system(cmd.c_str());
 }
 
 /**************************************************************************************

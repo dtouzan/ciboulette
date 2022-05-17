@@ -82,31 +82,31 @@ def steps(nb):
                 # Wait before moving on
                 time.sleep(WaitTime)
 
+# Speed
+def wait_time(waittime = 2):
+    speed = waittime / 1000
+    if waittime < 1:
+        speed = 0.001  
+    return speed
+
 # degree rotate
 def degree_rotate(degree = 0):
-    d = degree
-    if degree > 360 :
-        d = 360
-    if degree < -360 :
-        d = -360
-    # nbStepsPerRev=2048 full rotate    
-    rotate = int(d*step_degree)
+    rotate = int(degree)
+    if degree < 0 :
+        rotate = 0
     return rotate
     
 # Main program
-# ./SA200Motor.py +/-Degree
+# ./SA200Motor.py +Degree speed
 if __name__ == '__main__' :
     # Start main loop
-    if len(sys.argv)>1 :
-        nbStepsPerRev = degree_rotate(int(sys.argv[1])) 
-    else :
-        nbStepsPerRev = degree_rotate(0)
-    hasRun=False
+    nbStepsPerRev = degree_rotate(int(sys.argv[1])) 
+    WaitTime = wait_time(int(sys.argv[2]))
+    hasRun=False         
     while not hasRun:
-            # n degree clockwise/anti-clockwise (+/- sys.argv[1])
             steps(nbStepsPerRev)
             time.sleep(1)
             hasRun=True
-    print("Stop motor")
+
     for pin in StepPins:
             GPIO.output(pin, False)

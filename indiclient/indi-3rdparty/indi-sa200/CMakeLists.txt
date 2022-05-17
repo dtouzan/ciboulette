@@ -49,7 +49,6 @@ add_executable(
 # and link it to these libraries
 target_link_libraries(
     indi_sa200
-    wiringPi
     ${INDI_LIBRARIES}
     ${NOVA_LIBRARIES}
     ${GSL_LIBRARIES}

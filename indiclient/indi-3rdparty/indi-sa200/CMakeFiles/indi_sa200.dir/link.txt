@@ -1,0 +1,1 @@
+/usr/bin/c++  -D_FORTIFY_SOURCE=2 -Wa,--noexecstack  -Wall -Wextra -Wno-unused-but-set-variable -Wno-format-truncation -g -g   -Wl,-z,nodump -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now  -rdynamic CMakeFiles/indi_sa200.dir/indi_sa200.cpp.o -o indi_sa200  -lindidriver -lindiAlignmentDriver -lnova -lgsl -lgslcblas 

@@ -23,5 +23,3 @@ StepPins = [GPIO24,GPIO25,GPIO08,GPIO07]
 for pin in StepPins:
     GPIO.setup(pin,GPIO.OUT)
     GPIO.output(pin, False)
-    
-print("GPIO.OUT:",str(GPIO07),":",str(GPIO08),":",str(GPIO24),":",str(GPIO25))
