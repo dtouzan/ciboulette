@@ -197,6 +197,14 @@ class Ciboulette(object):
         self.diameter = 71
 
     @property
+    def tokinaSZX400(self):
+        """
+        Set Tokina 400mm F8 configuration
+        """
+        self.focal = 400
+        self.diameter = 50
+
+    @property
     def sigma120_400(self):
         """
         Set Sigma 120-400 configuration 120mm
