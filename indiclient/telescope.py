@@ -41,6 +41,16 @@ class telescopesimul(Telescope):
     @property
     def telescope_park_position(self):
         return ["N/A"]
+
+class CelestronGPS(Telescope):
+    """
+    Wrap Mount, set driver to EQMod mount, and point to localhost by default.
+    """
+    def __init__(self, host='localhost', port=7624):
+        super(CelestronGPS, self).__init__(host, port, driver="Celestron GPS")
+        self.mount_name = "CelestronGPS"
+        self.process_events()  
+    
     
 class EQMod(Telescope):
     """

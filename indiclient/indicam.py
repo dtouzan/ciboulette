@@ -306,7 +306,7 @@ class CCDCam(indiclient):
             if ((time.time() - t) > timeout):
                 log.warning("Exposure timed out.")
                 break
-            time.sleep(0.8)
+            time.sleep(1)
    
         return fitsdata
     
