@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VOTABLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.ivoa.net/xml/VOTable/v1.1" xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1">
+<RESOURCE ID="CIBOULETTE" utype="dal:footprint.geom">
+    <PARAM datatype="char" arraysize="*" name="TelescopeName" ID="TelescopeName" value="CIBOULETTE" />
+    <PARAM datatype="char" arraysize="*" name="InstrumentName" ID="InstrumentName" value="CIBOULETTE" />
+    <PARAM datatype="char" arraysize="*" name="InstrumentDescription" ID="InstrumentDescription" value="SZX400-SPECTRO" />
+    <PARAM datatype="char" arraysize="*" name="Origin" ID="Origin" value="dtouzan@gùail.com" />
+    <PARAM datatype="char" arraysize="*" utype="stc:AstroCoordSystem.CoordFrame.CARTESIAN" name="reference-frame" value="*"/>
+    <PARAM name="projection" utype="stc:AstroCoordSystem.CoordFrame.Cart2DRefFrame.projection" datatype="char" arraysize="*" value="TAN"/>
+
+    <RESOURCE ID="shape_7" name="SZX400">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-7589.0</TD><TD>3476.0</TD></TR>
+        <TR><TD>1589.0</TD><TD>3476.0</TD></TR>
+        <TR><TD>1589.0</TD><TD>-3476.0</TD></TR>
+        <TR><TD>-7589.0</TD><TD>-3476.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_6" name="SPECTRO">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-8725.0</TD><TD>5815.0</TD></TR>
+        <TR><TD>8725.0</TD><TD>5815.0</TD></TR>
+        <TR><TD>8725.0</TD><TD>-5815.0</TD></TR>
+        <TR><TD>-8725.0</TD><TD>-5815.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+</RESOURCE>
+</VOTABLE>
