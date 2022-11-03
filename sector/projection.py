@@ -275,16 +275,12 @@ class Projection(object):
         self._milkyway()
         self._constellation()
 
-    @property
-    def display(self):
+    def plot(self,axe):
         """
         Display projection 
         """              
-        fig = plt.figure(figsize=(self.width,self.height))
-        ax = fig.add_subplot(projection='aitoff')
         plt.grid(True,axis='both',linestyle='--')
         for database in self.databaselist:
             database.plot()       
-        ax.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
-        ax.set_title(self.title, fontsize = 12)
-        plt.show()
+        axe.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
+        axe.set_title(self.title, fontsize = 8)

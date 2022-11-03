@@ -50,7 +50,7 @@ class Ciboulette(object):
         self._date = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms').value
         self._exp_time = 0
         self._frameid = 1
-        self._datatype = ''
+        self._datatype = 'Light'
         self._pressure = 0
         self._humidity  = 0
         self._temperature  = 0
@@ -433,7 +433,7 @@ class Ciboulette(object):
         p = projection.Projection()
         p.Moon(self._date,self.latitude,self.longitude,self.elevation)
         p.projections(self.ra,self.dec,self.archive_table)
-        p.display
+        return p
 
     def projections_planning(self,planning):
         """
@@ -495,7 +495,7 @@ class Ciboulette(object):
         """   
         m = maps.Map()
         m.stars(self.ra,self.dec,self.naxis1,self.naxis2,self.binXY,self.pixelXY,self.focal,self.instrument,self.telescope_name,self.observer_name,self.filter_name)
-        m.display
+        return m
           
     def trajectory(self,target,epoch,epoch_step,epoch_nsteps):
         """
@@ -555,11 +555,29 @@ class Ciboulette(object):
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)  
         self.extendedfits()           
+
+    def frameid(self):
+        """
+        Return frame ID value
+        """
+        return self._frameid
+
+    def datatype(self):
+        """
+        Return datatype value
+        """
+        return self._datatype
+    
+    def expose(self):
+        """
+        Return exposure value
+        """
+        return self._exp_time
     
     @property
     def exposure(self):
         """
-        Return exposure values
+        Return exposure value
         """
         return self._exp_time,self._frameid,self._datatype
     
