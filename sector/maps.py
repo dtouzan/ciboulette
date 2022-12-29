@@ -25,17 +25,22 @@ class Map(object):
         self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
         field = self.WCS.wcs.cdelt[1]*naxis2
-        mag = 8
-        if field <= 5:
-            mag = 11
-        if field <= 3:
-            mag = 14
-        if field <= 1:
-            mag = 18
+        mag = 9
+    
+        if field >= 1.5:
+            field = 1.5
+            mag = 12.5
+        if field < 1.5:   
+            mag = 14.5
+        if field < 0.75:   
+            mag = 16    
+        if field < 0.30:  
+            mag = 18    
+
         catalog = 'GAIA-EDR3'
         self.data = sct.regionincatalog(ra*15, dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
         resolv = str("%.2f" %(206*pixelXY/focal))
-        self.title = self.title+'VizieR-'+catalog+' | F'+str(focal)+' | '+instrument+' | '+telescope_name+' | '+observer_name+' | '+filter_name+' | '+resolv +'\n'
+        self.title = self.title+'VizieR-'+catalog+' | F'+str(focal)+' | '+instrument+' | '+telescope_name+' | '+observer_name+' | '+filter_name+' | '+resolv+ '"/p'+ ':Mv '+str(mag) +'\n'
         
     def trajectory(self,target,epoch,epoch_step,epoch_nsteps,latitude,longitude,elevation):
         """

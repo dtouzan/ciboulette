@@ -94,10 +94,18 @@ class Sector(object):
         mag_format = '<'+str(mag)
         result = v.query_region(SkyCoord(ra=astre_ra, dec=astre_dec, unit=(u.deg, u.deg),frame='icrs'), width=Angle(angle_width, "deg"), 
                                 height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters={'Gmag':mag_format}) 
-        if mag <= 14 :
+        if mag < 15 :
             stars = constant.starslow
-        else:
-            stars = constant.starshight         
+            stars[0] = -2
+        if mag <= 12.5 :
+            stars = constant.starslow
+            stars[0] = 0          
+        if mag >= 15 :
+            stars = constant.starslow
+            stars[0] = -2
+        if mag > 16 :
+            stars = constant.starslow
+            stars[0] = -4        
         for table_name in result.keys():
             table = result[table_name]
             for line in table:
@@ -105,10 +113,13 @@ class Sector(object):
                 dec = float(line[1])
                 mv = float(line[2])
                 if mv != 'masked' :
-                    marker_size = stars[int(mv)+stars[0]]
+                    if int(mv)+stars[0] < 1 :
+                        marker_size = 150
+                    else :
+                        marker_size = stars[int(mv)+stars[0]]
                     table_ra.append(ra)
                     table_dec.append(dec)
-                    table_marker.append(marker_size)              
+                    table_marker.append(marker_size) 
             return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
     
     def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
