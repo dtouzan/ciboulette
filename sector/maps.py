@@ -59,20 +59,19 @@ class Map(object):
         self.target = sct.miriadeincatalog(target,epoch,epoch_step,epoch_nsteps,1,location)
         self.title = self.title+target+' | '+epoch.value+'\n'        
     
+    def cursor(self,axe):
+        """
+        Plot cursor map
+        """
+        axe.scatter(self.WCS.wcs.crval[0], self.WCS.wcs.crval[1], transform=axe.get_transform('icrs'), s=250, edgecolor='red', linewidths=5, facecolor='none', alpha=0.2)
+        
     def plot(self,axe):
         """
         Plot map
         """
-        #fig = plt.figure(figsize=(self.size,self.size))
-        #axe = fig.add_subplot(111, projection=self.WCS)
         axe.grid(b = True, linestyle = '--', color = 'black', alpha = 0.40)
         if len(self.data) > 0:
             axe.scatter(self.data['RA'], self.data['DEC'], transform=axe.get_transform('icrs'), s=self.data['MARKER'],edgecolor='black', facecolor='black')
-        if len(self.target) > 0:
-            axe.plot(self.target['RA'], self.target['DEC'], transform=ax.get_transform('icrs'), lw=3)
-        axe.scatter(self.WCS.wcs.crval[0], self.WCS.wcs.crval[1], transform=axe.get_transform('icrs'), s=50,edgecolor='red', linewidths=2, facecolor=None, alpha=0.6)
-        #fig.suptitle(self.title, y = 0.92, fontsize = 12)
         axe.set_title(self.title, fontsize = 8)
         plt.xlabel(constant.RA_J2000)
         plt.ylabel(constant.DEC_J2000)
-        #plt.show()
