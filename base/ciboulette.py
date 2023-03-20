@@ -16,7 +16,6 @@ from astropy import wcs
 from astropy.io.votable import parse_single_table
 from astropy.utils.data import get_pkg_data_filename
 from astroquery.simbad import Simbad
-from alpaca import Telescope, Camera, FilterWheel
 from ciboulette.base import constant
 from ciboulette.sector import projection
 from ciboulette.sector import maps
@@ -279,14 +278,11 @@ class Ciboulette(object):
     def filterwheel(self,filterwheel):
         """
         Set filter of filterweel
-         filterwheel (Filterwheel): Filterwheel object (Alpaca or Indilib).
+         filterwheel (Filterwheel): Filterwheel object Indilib.
          filter_name (str): Filter name.           
         """       
         filter_number = 0  
-        if isinstance(filterwheel, FilterWheel):
-            filter_names = filterwheel.names()
-        else:
-            filter_names = filterwheel.names
+        filter_names = filterwheel.names
         if self.filter_name in filter_names:
             filter_number = filter_names.index(self.filter_name)
             filterwheel.position(filter_number)
@@ -351,29 +347,22 @@ class Ciboulette(object):
     def slewtocoordinates(self,telescope):
         """
         Slew RA and DEC to telescope 
-         telescope (Telescope): Telescope object (Alpaca or Indilib).
+         telescope (Telescope): Telescope object Indilib.
          ra (float): Hours.
          dec (float): Degrees           
         """
         telescope.slewtocoordinates(self.ra,self.dec)
-        if isinstance(telescope, Telescope):
-            while telescope.slewing():
-                time.sleep(1)
 
     
     def synctocoordinates(self,telescope):
         """
         Synchronize the telescope with RA and DEC
-         telescope (Telescope): Telescope object (Alpaca or Indilib).
+         telescope (Telescope): Telescope object  Indilib.
          ra (float): Hours.
          dec (float): Degrees           
         """
-        if isinstance(telescope, Telescope):
-            telescope.unpark()
-            telescope.tracking()
-        else :
-            telescope.unpark
-            telescope.tracking
+        telescope.unpark
+        telescope.tracking
         telescope.synctocoordinates(self.ra,self.dec)
 
     @property    
@@ -512,8 +501,10 @@ class Ciboulette(object):
     def camera(self,camera):
         """
         Get CCD and write fits file 
-         camera (object): Camera alpaca or indilib object.
+         camera (object): Camera indilib object.
         """
+        t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
+        self._date = t.value
         if isinstance(camera, Camera):
             t = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms')
             self._date = t.value
@@ -552,6 +543,14 @@ class Ciboulette(object):
             while i > 0:
                 time.sleep(1)
                 i = i - 1
+            
+            data_ccd = camera.imagearray()
+            data_new = np.rot90(data_ccd)
+            data_int16 = data_new.astype(np.int16)       
+            #Vertical inversion if necessary
+            #data_real = np.fliplr(data_int16)
+            #Create simple fits
+
             file_name = self.dataset+'/_'+self.observer_name+'_'+self.object_name+'_'+str(self._frameid)+'.fits'
             fits.writeto(file_name, hdul[0].data, hdul[0].header, overwrite=True)  
         self.extendedfits()           
