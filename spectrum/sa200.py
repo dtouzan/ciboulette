@@ -1,6 +1,8 @@
 """
 sa200 class
 
+use specutils
+
 Header ISIS V6.1.1
 SIMPLE  =                    T / File does conform to FITS standard   
 CRVAL1  =                  -32 / Coordinate at reference pixel                  
@@ -50,77 +52,47 @@ class SA200(object):
         self.s1d = Spectrum1D.read(filename)
         self.resolution = 200
         f = fits.open(filename)  
-        self.data = f[0].data 
         self.header = f[0].header
         f.close() 
-        #Serie de balmer
-        self.Ha = 6562.10
-        self.Hb = 4861.32
-        self.Hg = 4340.46
-        self.Hd = 4101.73
-        #
-        self.Mg = 5714
-        # Doublet du sodium
-        self.NaI = 5889.950
-        self.NaII = 5895.924 
-        #
-        self.SiIIa = 6347.1
-        self.SiIIb = 6371.4
   
     @property
     def name(self):
-        """
-        Return resolution
-        """
+        # Return resolution
         return self.header['OBJNAME']
 
     @property
     def R(self):
-        """
-        Return resolution
-        """
+        # Return resolution
         return self.header['SPE_RPOW']
     
     @property
     def observer(self):
-        """
-        Return observer
-        """
+        # Return observer
         return self.header['OBSERVER']
     
     @property
     def date(self):
-        """
-        Return date observation
-        """
+        # Return date observation
         return self.header['DATE-OBS']    
 
     @property
     def instrument(self):
-        """
-        Return instrum                      
-        """
+        # Return instrum                      
         return self.header['BSS_INST']    
 
     @property
     def site(self):
-        """
-        Return site                      
-        """
+        # Return site                      
         return self.header['BSS_SITE']    
 
     @property
     def exposure(self):
-        """
-        Return exposure
-        """
+        # Return exposure
         return self.header['EXPTIME']    
 
     @property
     def calibration_reference(self):
-        """
-        Return start calibration reference 
-        """
+        # Return start calibration reference 
         if 'O_CAL' in self.header:
             c = self.header['O_CAL']
         else:
@@ -129,51 +101,64 @@ class SA200(object):
 
     @property
     def longitude(self):
-        """
-        Return site longitude
-        """
+        # Return site longitude
         return self.header['GEO_LONG']    
 
     @property
     def latitude(self):
-        """
-        Return site latitude 
-        """
+        # Return site latitude 
         return self.header['GEO_LAT']    
 
     @property
     def elevation(self):
-        """
-        Return site latitude 
-        """
+        # Return site latitude 
         return self.header['GEO_ELEV']    
     
     @property
     def version(self):
-        """
-        Return software version
-        """
+        # Return software version
         return self.header['VERSION']    
 
     @property
     def JD(self):
-        """
-        Return Julian Day
-        """
+        # Return Julian Day
         time = Time(self.header['DATE-OBS'])
         return time.jd
     
     @property
     def title(self):
-        """
-        Return title of spectrum plot
-        """
+        # Return title of spectrum plot
         title_name = self.name + ' - ' + self.date + ' - R: ' + str(self.R) + ' / ' + self.calibration_reference
         return title_name
      
     @property
     def unit(self):
-        """
-        Return resolution of spectrum plot
-        """
+        # Return resolution of spectrum plot
         return self.header['CDELT1']    
+
+    def flux_value(self, atomic_line = 6562.8):
+        # Returns the value of atomic line
+        return self.s1d.flux.value[int( (atomic_line - self.header['CRVAL1']) / self.unit)]
+
+    @property
+    def xlabel(self):
+        # Return X label 
+        label = r'$\lambda$[Ångström]'.format(self.s1d.spectral_axis.unit)
+        return label
+    
+    @property
+    def ylabel(self):
+        # Return Y label
+        label = 'Relative intensity'.format(self.s1d.flux.unit)
+        return label
+    
+    @property
+    def spectral_axis(self):
+        # Return spectral axis table
+        return self.s1d.spectral_axis
+    
+    @property
+    def flux(self):
+        # Return flux table
+        return self.s1d.flux
+    
