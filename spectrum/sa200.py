@@ -162,3 +162,11 @@ class SA200(object):
         # Return flux table
         return self.s1d.flux
     
+    def plotBD(self, axes):
+        # Plot spectrum
+        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=3, color = 'black',alpha=0.7)
+        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=1, color = 'cornflowerblue')
+
+    def plot(self, axes):
+        # Plot spectrum
+        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=2, color = 'black')

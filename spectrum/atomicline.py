@@ -56,14 +56,19 @@ class AtomicLine(object):
 class Ha(AtomicLine):
     # Class H alpha Balmer     
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H alpha'
         self.label = r'H$\alpha$'
-        self.atomic_line_request(650, 660, 'H I')
+        self.atomic_line_request(650, 660, 'H I')       
     
 class Hb(AtomicLine):
     # Class H beta Balmer 
-    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H beta'
         self.label = r'H$\beta$'
         self.atomic_line_request(480, 490, 'H I')
@@ -71,6 +76,9 @@ class Hb(AtomicLine):
 class Hg(AtomicLine):
     # Class H gamma Balmer    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H gamma'
         self.label = r'H$\gamma$'
         self.atomic_line_request(430, 440, 'H I')
@@ -78,6 +86,9 @@ class Hg(AtomicLine):
 class Hd(AtomicLine):
     # Class H delta Balmer    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H delta'
         self.label = r'H$\delta$'
         self.atomic_line_request(410, 411, 'H I')
@@ -85,6 +96,9 @@ class Hd(AtomicLine):
 class He(AtomicLine):
     # Class H epsilon Balmer    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H epsilon'
         self.label = r'H$\epsilon$'
         self.atomic_line_request(390, 399, 'H I')
@@ -92,14 +106,19 @@ class He(AtomicLine):
 class Hz(AtomicLine):
     # Class H zeta Balmer     
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'H zeta'
         self.label = r'H$\zeta$'
         self.atomic_line_request(388, 389, 'H I')
         
 class D2(AtomicLine):
     # Class Sodium D2
-    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'sodium D2'
         self.label = 'D2'
         self.atomic_line_request(589.1, 589.9, 'Na I')
@@ -107,6 +126,9 @@ class D2(AtomicLine):
 class D1(AtomicLine):
     # Class sodium D1   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'sodium D1'
         self.label = 'D1'
         self.atomic_line_request(588.8 , 589, 'Na I')
@@ -114,6 +136,9 @@ class D1(AtomicLine):
 class H(AtomicLine):
     # Class calcium H    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'calcium H'
         self.label = 'H'
         self.atomic_line_request(396.7 , 397, 'Ca II')
@@ -121,14 +146,19 @@ class H(AtomicLine):
 class K(AtomicLine):
     # Class calcium K   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'calcium K'
         self.label = 'K'
         self.atomic_line_request(393.1 , 393.7, 'Ca II')
         
 class G(AtomicLine):
     # Class bande G
-    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'bande G (Ca+Fe)'
         self.label = 'G'
         self.atomic_line_request(430.79, 430.8, 'Fe I')  
@@ -136,14 +166,19 @@ class G(AtomicLine):
 class Mb1(AtomicLine):
     # Class magnesium b1   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'magnesium b1'
         self.label = 'b1'
         self.atomic_line_request(516.6, 516.8, 'Mg I') 
          
 class Mb2(AtomicLine):
     # Class magnesium b2
-    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'magnesium b2'
         self.label = 'b2'
         self.atomic_line_request(517.1, 517.3, 'Mg I')  
@@ -151,6 +186,9 @@ class Mb2(AtomicLine):
 class Mb3(AtomicLine):
     # Class magnesium b3   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'magnesium b3'
         self.label = 'b3'
         self.atomic_line_request(518.1, 518.4, 'Mg I')  
@@ -158,6 +196,9 @@ class Mb3(AtomicLine):
 class g(AtomicLine):
     # Class calcium g    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'calcium g'
         self.label = 'g'
         self.atomic_line_request(422.4, 422.8, 'Ca I')
@@ -165,6 +206,9 @@ class g(AtomicLine):
 class e(AtomicLine):
     # Class bande e   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'fer e'
         self.label = 'e'
         self.atomic_line_request(438.35, 438.36, 'Fe I') 
@@ -172,6 +216,9 @@ class e(AtomicLine):
 class d(AtomicLine):
     # Class fer d    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'fer d'
         self.label = 'd'
         self.atomic_line_request(466.8138, 466.82, 'Fe I') 
@@ -179,6 +226,9 @@ class d(AtomicLine):
 class c(AtomicLine):
     # Class fer c   
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'fer c'
         self.label = 'c'
         self.atomic_line_request(495.759, 495.76, 'Fe I') 
@@ -186,6 +236,9 @@ class c(AtomicLine):
 class E(AtomicLine):
     # Class fer E    
     def __init__(self):
+        self.set_atomic_line()
+        
+    def set_atomic_line(self):
         self.name = 'fer E'
         self.label = 'E'
         self.atomic_line_request(526.95, 526.98, 'Fe I') 
