@@ -63,7 +63,11 @@ class SA200(object):
     @property
     def R(self):
         # Return resolution
-        return self.header['SPE_RPOW']
+        if 'SPE_RPOW' in self.header:
+            c = self.header['SPE_RPOW']
+        else:
+            c = ''           
+        return c   
     
     @property
     def observer(self):
