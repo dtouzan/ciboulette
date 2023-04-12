@@ -58,8 +58,8 @@ class SDSS_Sloan_g(Filters):
         self.set_filter()
     
     def set_filter(self):
-        self.spectral_axis = [3950, 4010, 4100, 4200, 4310, 4400, 4500, 4600, 4800, 5000, 5100, 5200, 5300, 5400, 5500, 5595, 5600]
-        self.flux = [0, 0.9, 0.92, 0.96, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.98, 0]
+        self.spectral_axis = [3950, 4010, 4100, 4200, 4310, 4400, 4500, 4600, 4800, 5000, 5100, 5200, 5300, 5400, 5500, 5595, 5600, 5700]        
+        self.flux = [0, 0.9, 0.94, 0.96, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.98, 0.20, 0.04, 0]       
         self.name = "Baader SLOAN/SDSS g' photometric"
         self.label = "g'"
         self.color = 'cornflowerblue' 
