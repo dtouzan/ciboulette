@@ -15,6 +15,9 @@ Baader Bessel R photometric https://www.baader-planetarium.com/en/filters/photom
 Baader Bessel I photometric https://www.baader-planetarium.com/en/filters/photometric-filters/ubvri-bessel-i-filter-%E2%80%93-photometrisch.html
 Baader Bessel I photometric https://www.baader-planetarium.com/en/baader-h-alpha-35nm-ccd-filter.html
 
+spectral_axis: Angstrom
+flux: percent
+
 """
 
 from astropy import units as u
@@ -265,54 +268,15 @@ class cls_ccd(Filters):
         self.color = 'grey'
         self.make_XY('make_interp_spline')
 
-[ 0.00,
-0.01,
-0.01,
-0.02,
-0.10,
-0.20,
-0.30,
-0.40,
-0.50,
-0.60,
-0.70,
-0.74,
-0.75,
-0.79,
-0.82,
-0.84,
-0.84,
-0.84,
-0.84,
-0.83,
-0.82,
-0.80,
-0.78,
-0.77,
-0.74,
-0.72,
-0.68,
-0.65,
-0.62,
-0.59,
-0.56,
-0.53,
-0.49,
-0.46,
-0.42,
-0.39,
-0.35,
-0.31,
-0.27,
-0.23,
-0.20,
-0.17,
-0.13,
-0.10,
-0.08,
-0.05,
-0.02,
-0.01,
-0.01,
-0 ]
-
+class OIII12nm(Filters):
+    # Class Astronomik OIII CCD 12 nm filter 
+    def __init__(self):
+        self.set_filter()
+    
+    def set_filter(self):
+        self.spectral_axis = [4850, 4900, 4950, 5000, 5050, 5100, 5150]
+        self.flux = [0, 0.10, 0.85, 0.96, 0.60, 0.05, 0]
+        self.name = "Astronomik OIII CCD 12nm"
+        self.label = 'OIII'
+        self.color = 'teal'
+        self.make_XY('make_interp_spline')
