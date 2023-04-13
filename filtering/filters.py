@@ -14,6 +14,7 @@ Baader Bessel V photometric https://www.baader-planetarium.com/en/filters/photom
 Baader Bessel R photometric https://www.baader-planetarium.com/en/filters/photometric-filters/ubvri-bessel-r-filter-%E2%80%93-photometrisch.html
 Baader Bessel I photometric https://www.baader-planetarium.com/en/filters/photometric-filters/ubvri-bessel-i-filter-%E2%80%93-photometrisch.html
 Baader Bessel I photometric https://www.baader-planetarium.com/en/baader-h-alpha-35nm-ccd-filter.html
+Baader RGB B  filter https://www.baader-planetarium.com/en/baader-rgb-b-filter-%E2%80%93-cmos-optimized.html
 
 spectral_axis: Angstrom
 flux: percent
@@ -255,6 +256,45 @@ class Ha35nm(Filters):
         self.color = 'red'
         self.make_XY('make_interp_spline')
 
+class RGB_B(Filters):
+    # Class Baader RGB B filter optimised CMOS
+    def __init__(self):
+        self.set_filter()
+    
+    def set_filter(self):
+        self.spectral_axis = [3895, 4000, 4100, 4200, 4300, 4400, 4600, 4800, 5000, 5100]
+        self.flux = [0, 0.90, 0.93, 0.96, 0.99, 0.99, 0.99, 0.99, 0.99, 0]
+        self.name = "Baader RGB-B filter optimised CMOS"
+        self.label = 'B'
+        self.color = 'blue'
+        self.make_XY('interp1d')
+
+class RGB_G(Filters):
+    # Class Baader RGB G filter optimised CMOS
+    def __init__(self):
+        self.set_filter()
+    
+    def set_filter(self):
+        self.spectral_axis = [4850, 4900, 5000, 5200, 5400, 5600, 5790, 5800, 5805]
+        self.flux = [0, 0.98, 0.99, 0.99, 0.99, 0.99, 0.99, 0.20, 0]
+        self.name = "Baader RGB-G filter optimised CMOS"
+        self.label = 'G'
+        self.color = 'green'
+        self.make_XY('interp1d')
+
+class RGB_R(Filters):
+    # Class Baader RGB R filter optimised CMOS
+    def __init__(self):
+        self.set_filter()
+    
+    def set_filter(self):
+        self.spectral_axis = [5850, 5950, 6000, 6200, 6400, 6600, 6800, 6850, 7000]
+        self.flux = [0, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.98,0]
+        self.name = "Baader RGB-R filter optimised CMOS"
+        self.label = 'R'
+        self.color = 'red'
+        self.make_XY('interp1d')
+    
 class cls_ccd(Filters):
     # Class Astronomik CLS CCD filter 
     def __init__(self):
