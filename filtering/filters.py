@@ -15,6 +15,8 @@ Baader Bessel R photometric https://www.baader-planetarium.com/en/filters/photom
 Baader Bessel I photometric https://www.baader-planetarium.com/en/filters/photometric-filters/ubvri-bessel-i-filter-%E2%80%93-photometrisch.html
 Baader Bessel I photometric https://www.baader-planetarium.com/en/baader-h-alpha-35nm-ccd-filter.html
 Baader RGB B  filter https://www.baader-planetarium.com/en/baader-rgb-b-filter-%E2%80%93-cmos-optimized.html
+Baader RGB G  filter https://www.baader-planetarium.com/en/baader-rgb-g-filter-%E2%80%93-cmos-optimized.html
+Baader RGB R  filter https://www.baader-planetarium.com/en/baader-rgb-r-filter-%E2%80%93-cmos-optimized.html
 
 spectral_axis: Angstrom
 flux: percent
