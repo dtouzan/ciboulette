@@ -199,7 +199,16 @@ class Mast(object):
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_name')
             return words['target_name']
-        
+
+    @property
+    def filters(self):
+        """
+        Return filters table
+        """
+        if len(self.observation) > 0:
+            words = unique(self.observation, keys='filters')
+            return words['filters']
+
     def query_project(self, projet_name = 'HII'):
         """
         Return observations projects in table
@@ -212,6 +221,12 @@ class Mast(object):
         """
         return self._query_all('target_name', target_name)
         
+    def query_filters(self, filter_name = 'L'):
+        """
+        Return observations filtes in table
+        """
+        return self._query_all('filters', filter_name)
+ 
     def _query_all(self, name = 'target_name', target = 'M31'):
         """
         Return observations find in table
