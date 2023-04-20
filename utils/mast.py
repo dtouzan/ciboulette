@@ -183,6 +183,13 @@ class Mast(object):
             return self.observation
 
     @property
+    def header_names(self):
+        """
+        Return names headers table
+        """
+        return self.header.colnames
+
+    @property
     def projects(self):
         """
         Return projects table
@@ -209,6 +216,15 @@ class Mast(object):
             words = unique(self.observation, keys='filters')
             return words['filters']
 
+    @property
+    def target_classification(self):
+        """
+        Return filters table
+        """
+        if len(self.observation) > 0:
+            words = unique(self.observation, keys='target_classification')
+            return words['target_classification']
+        
     def query_project(self, projet_name = 'HII'):
         """
         Return observations projects in table
@@ -226,6 +242,19 @@ class Mast(object):
         Return observations filtes in table
         """
         return self._query_all('filters', filter_name)
+    
+    def query_target_classification(self, target_classification = 'Galaxy'):
+        """
+        Return observations target_classification in table
+        """
+        return self._query_all('target_classification', target_classification)
+
+    def query_header(self, header_name='intentType', name='archive'):
+        """
+        Return observations target_classification in table
+        """
+        return self._query_all(header_name, name)
+
  
     def _query_all(self, name = 'target_name', target = 'M31'):
         """
