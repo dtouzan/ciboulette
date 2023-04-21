@@ -2,70 +2,40 @@
 Mast class
 File id google 12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn
 
-Observation Type:
-                        string: intentType
-Mission:
-                        string: obs_collection
-Instrument: 
-                        string: instrument_name
-Detector: 
-                        string: detector
-Project: 
-                        string: project
-Filters: 
-                        string: filters
-Waveband: 
-                        string: wavelength_region
-Target Name: 
-                        string: target_name
-Target Classification: 
-                        string: target_classification
-Observation ID: 
-                        string: obs_id
-RA: 
-                        float: s_ra
-Dec: 
-                        float: s_dec
-Proposal ID: 
-                        string: proposal_id
-Principal Investigator: 
-                        string: proposal_pi
-Product Type: 
-                        string: dataproduct_type
-Calibration Level: 
-                        int: calib_level
-Start Time:
-                        float: t_min              
-End Time: 
-                        float: t_max
-Exposure Length: 
-                        float: t_exptime
-Min. Wavelength: 
-                        float: em_min
-Max. Wavelength: 
-                        float: em_max
-Observation Title: 
-                        string: obs_title
-Release Date: 
-                        float: t_obs_release
-Proposal Type: 
-                        string:proposal_type
-Sequence Number: 
-                        int: sequence_number
-Region: 
-                        string: s_region
-Focale: 
-                        float: focal
-Format: 
-                        float: format
-Seeing: 
-                        float: seeing
-Moon: 
-                        float: moon
-jpegURL: 
-                        string: jpeg_url
-url:
-                        string: url
+       Name             Type                 Variable name
+-----------------     --------         -----------------------
+Observation Type       string           intentType
+Mission                string           obs_collection
+Instrument             string           instrument_name
+Detector               string           detector
+Project                string           project
+Filters                string           filters
+Waveband               string           wavelength_region
+Target Name            string           target_name
+Target Classification  string           target_classification
+Observation ID         string           obs_id
+RA                     float            s_ra
+Dec                    float            s_dec
+Proposal ID            string           proposal_id
+Principal Investigator string           proposal_pi
+Product Type           string           dataproduct_type
+Calibration Level      int              calib_level
+Start Time             float            t_min              
+End Time               float            t_max
+Exposure Length        float            t_exptime
+Min. Wavelength        float            em_min
+Max. Wavelength        float            em_max
+Observation Title      string           obs_title
+Release Date           float            t_obs_release
+Proposal Type          string           proposal_type
+Sequence Number        int              sequence_number
+Region                 string           s_region
+Focale                 float            focal
+Format                 float            format
+Seeing                 float            seeing
+Moon                   float            moon
+jpegURL                string           jpeg_url
+url                    string           url
 
 """
 
@@ -90,24 +60,29 @@ class Mast(object):
     @property
     def create(self):
         """
-        Create MAST type file with fits archives file
+        @return: True if exist, False if nul
         """
-        return True
+        if len(self.observation) > 0:
+            return True
+        else:
+            return False
     
     @property
     def read(self):
         """
         Read MAST type file
-        Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn' -O mast.csv        
+        Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn' -O mast.csv  
         """
         if os.path.exists(self.fileoutput) :
             os.remove(self.fileoutput)
         url = 'https://docs.google.com/uc?export=download&id='+self.idgoogledrive
         filedownload = wget.download(url,out=self.fileoutput,bar=None)      
         # For MAST data_start=3
+        self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)
         self.observation = Table.read(self.fileoutput, format='ascii.csv',header_start=2,data_start=3)   
+        self.observations['obs_title'].mask =[False]
+        self.observations['obs_id'].mask =[False]
         if len(self.observation) > 0:
-            self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)   
             self.available = True
         else:
             self.available = False
@@ -116,22 +91,22 @@ class Mast(object):
     @property
     def idfiledrive(self):
         """
-        Return ID google drive file
+        @return:  A sting representing ID google drive file
         """     
         return self.idgoogledrive    
     
     @idfiledrive.setter
     def idfiledrive(self,idgoogledrive):
         """
-        Set ID google drive file
-         idgoogledrive (str): ID google drive file.csv.       
+        @return: Set ID google drive file
+        @idgoogledrive: ID google drive file.csv.       
         """     
         self.idgoogledrive = idgoogledrive                 
 
     @property
     def output(self):
         """
-        Return fileoutput
+        @return: Fileoutput.csv name
         """     
         return self.fileoutput
 
@@ -139,37 +114,37 @@ class Mast(object):
     def output(self,fileoutput):
         """
         Set table of exposures with google drive 
-         fileoutput (str): file.csv output.
+        @fileoutput: file.csv output.
         """
         self.fileoutput = fileoutput
 
     def ha(self,observation):
         """
-        Return RA of plan. Format: Hours H.HHHH
-         plan (Table): plan of planning.
+        @return:  RA of plan. Format: Hours H.HHHH
+        @plan:    Plan of planning class.
         """           
         if self.available:
             return float(observation['s_ra'])/15
 
     def ra(self,observation):
         """
-        Return RA of plan. Format: Hours D.DDDD
-         plan (Table): plan of planning.
+        @return:   RA of plan. Format: Hours D.DDDD
+        @plan:    Plan of planning class.
         """           
         if self.available:
             return float(observation['s_ra'])
 
     def dec(self,observation):
         """
-        Return DEC of plan. Format: Degrees D.DDDD
-         plan (Table): plan of planning.
+        @return:  DEC of plan. Format: Degrees D.DDDD
+        @plan:    Plan of planning class.
         """    
         if self.available:
             return float(observation['s_dec']) 
 
     def coordinates(self,observation):
         """
-        Return coordinates RA,DEC
+        @return:  Coordinates RA,DEC
         """
         if self.available:
             return self.ra(observation), self.dec(observation)
@@ -177,7 +152,7 @@ class Mast(object):
     @property
     def observations(self):
         """
-        Return observations table
+        @return:  Observations table
         """
         if len(self.observation) > 0:
             return self.observation
@@ -185,14 +160,14 @@ class Mast(object):
     @property
     def header_names(self):
         """
-        Return names headers table
+        @return:  Names headers table
         """
         return self.header.colnames
 
     @property
     def projects(self):
         """
-        Return projects table
+        @return:  Pojects table
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='project')
@@ -201,7 +176,7 @@ class Mast(object):
     @property
     def targets(self):
         """
-        Return targets table
+        @return:  Targets table
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_name')
@@ -219,7 +194,7 @@ class Mast(object):
     @property
     def target_classification(self):
         """
-        Return filters table
+        @return:  Filters table
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_classification')
@@ -227,38 +202,38 @@ class Mast(object):
         
     def query_project(self, projet_name = 'HII'):
         """
-        Return observations projects in table
+        @return:  Observations projects in table
         """
         return self._query_all('project', projet_name)
 
     def query_target(self, target_name = 'M31'):
         """
-        Return observations targets in table
+        @return:  Observations targets in table
         """
         return self._query_all('target_name', target_name)
         
     def query_filters(self, filter_name = 'L'):
         """
-        Return observations filtes in table
+        @return:  Observations filtes in table
         """
         return self._query_all('filters', filter_name)
     
     def query_target_classification(self, target_classification = 'Galaxy'):
         """
-        Return observations target_classification in table
+        @return:  Observations target_classification in table
         """
         return self._query_all('target_classification', target_classification)
 
     def query_header(self, header_name='intentType', name='archive'):
         """
-        Return observations target_classification in table
+        @return:  A target_classification tabe observations
         """
         return self._query_all(header_name, name)
 
  
     def _query_all(self, name = 'target_name', target = 'M31'):
         """
-        Return observations find in table
+        @return:  Observations find in table
         """
         if len(self.observation) > 0:
             observations = self.header
