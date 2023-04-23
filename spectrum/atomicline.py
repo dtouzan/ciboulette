@@ -5,6 +5,12 @@ Use astroquery / Atomic Line List (astroquery.atomic)
 
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2023-04-10"
+__version__= "1.0.0"
+
 from astropy import units as u
 from astroquery.atomic import AtomicLineList
 

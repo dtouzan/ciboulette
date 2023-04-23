@@ -23,6 +23,12 @@ flux: percent
 
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2023-04-10"
+__version__= "1.0.0"
+
 from astropy import units as u
 import numpy as np
 from scipy.interpolate import make_interp_spline, interp1d
@@ -39,8 +45,9 @@ class Filters(object):
         self.y = []
     
     def plotBD(self, axes):
-         """
+        """
         @set:  Plot filter
+        @axes: Axes matplotlib
         """       
         axes.fill_between(self.x,self.y, color = self.color, alpha=0.1)
         axes.plot(self.x,self.y, linewidth=3, color = self.color,alpha=0.9)
@@ -51,6 +58,7 @@ class Filters(object):
     def make_XY(self,name = ''):
         """
         @set:  Set x,y for plot
+        @name:  A sting representing interpolation type
         """ 
         if name == 'make_interp_spline':
             X_Y_Spline = make_interp_spline(self.spectral_axis, self.flux)
@@ -70,6 +78,9 @@ class SDSS_Sloan_g(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan g' filter 
+        """       
         self.spectral_axis = [3950, 4010, 4100, 4200, 4310, 4400, 4500, 4600, 4800, 5000, 5100, 5200, 5300, 5400, 5500, 5595, 5600, 5700]        
         self.flux = [0, 0.9, 0.94, 0.96, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.98, 0.20, 0.04, 0]       
         self.name = "Baader SLOAN/SDSS g' photometric"
@@ -83,6 +94,9 @@ class SDSS_Sloan_r(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan r' filter 
+        """       
         self.spectral_axis = [5595, 5610, 6995, 7020]
         self.flux = [0, 1, 1, 0]
         self.name = "Baader SLOAN/SDSS r' photometric"
@@ -96,6 +110,9 @@ class SDSS_Sloan_u(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan u' filter
+        """       
         self.spectral_axis = [  3013.5134,
                                 3112.6125,
                                 3175.6758,
@@ -153,6 +170,9 @@ class SDSS_Sloan_i(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan i' filter 
+        """       
         self.spectral_axis = [6995, 7010, 8400, 8500]
         self.flux = [0, 1, 1, 0]
         self.name = "Baader SLOAN/SDSS i' photometric"
@@ -166,6 +186,9 @@ class SDSS_Sloan_z_s(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan z-s' filter 
+        """       
         self.spectral_axis = [8100, 8300, 9100, 9300]
         self.flux = [0, 1, 1, 0]
         self.name = "Baader SLOAN/SDSS z- s' photometric"
@@ -179,6 +202,9 @@ class SDSS_Sloan_y(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  SDSS/Sloan y' filter  
+        """       
         self.spectral_axis = [9300, 9450, 10450, 10600]
         self.flux = [0, 1, 1, 0]
         self.name = "Baader SLOAN/SDSS y' photometric"
@@ -192,6 +218,9 @@ class Bessel_V(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  UBVRI Bessel V filter 
+        """       
         self.spectral_axis = [4800, 4900, 5000, 5100, 5200, 5400, 5600, 5800, 6000, 6200, 6400, 6600, 6800]
         self.flux = [0, 0.35, 0.70, 0.85, 0.93, 0.905, 0.815, 0.66, 0.45, 0.30, 0.15, 0.04, 0]
         self.name = "Baader UBVRI Bessel V photometric"
@@ -205,6 +234,9 @@ class Bessel_B(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  UBVRI Bessel B filter
+        """       
         self.spectral_axis = [3800, 4000, 4200, 4400, 4600, 4800, 5000, 5100, 5200]
         self.flux = [0, 0.75, 0.80, 0.77, 0.70, 0.45, 0.20, 0.05, 0]
         self.name = "Baader UBVRI Bessel B photometric"
@@ -218,6 +250,9 @@ class Bessel_R(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  UBVRI Bessel R filter 
+        """       
         self.spectral_axis = [5550, 5600, 5800, 6000, 6200, 6400, 6600, 6800, 7000, 7200, 7400, 7600, 7800, 8000, 8200, 8400, 8600]
         self.flux = [0, 0.20, 0.72, 0.80, 0.75, 0.66, 0.58, 0.45, 0.35, 0.25, 0.18, 0.12, 0.06, 0.04, 0.02, 0.01, 0]
         self.name = "Baader UBVRI Bessel R photometric"
@@ -231,6 +266,9 @@ class Bessel_U(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  UBVRI Bessel U filter 
+        """       
         self.spectral_axis = [3200, 3400, 3600, 3800, 4000, 4100]
         self.flux = [0, 0.30, 0.60, 0.60, 0.20, 0]
         self.name = "Baader UBVRI Bessel U photometric"
@@ -244,6 +282,9 @@ class Bessel_I(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  UBVRI Bessel I filter 
+        """       
         self.spectral_axis = [7000, 7200, 7400, 7600, 7800, 8000, 8200, 8400, 8600, 8800, 9000, 9200, 9400, 9600, 9800, 10000, 10200, 10400, 10600, 10800, 11000, 11200, 11400, 11500]
         self.flux = [0, 0.30, 0.80, 0.93, 0.95, 0.94, 0.93, 0.92, 0.91, 0.90, 0.89, 0.86, 0.84, 0.80, 0.75, 0.67, 0.60, 0.50, 0.40, 0.28, 0.20, 0.10, 0.04, 0]
         self.name = "Baader UBVRI Bessel I photometric"
@@ -257,6 +298,9 @@ class Ha35nm(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  Baader H-alpha 35nm filter 
+        """       
         self.spectral_axis = [6200, 6300, 6500, 6600, 6700]
         self.flux = [0, 0.70, 0.95, 0.85, 0]
         self.name = "Baader H-alpha 35nm"
@@ -283,6 +327,9 @@ class RGB_G(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  Baader RGB G filter optimised CMOS
+        """       
         self.spectral_axis = [4850, 4900, 5000, 5200, 5400, 5600, 5790, 5800, 5805]
         self.flux = [0, 0.98, 0.99, 0.99, 0.99, 0.99, 0.99, 0.20, 0]
         self.name = "Baader RGB-G filter optimised CMOS"
@@ -296,6 +343,9 @@ class RGB_R(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  Baader RGB R filter optimised CMOS
+        """       
         self.spectral_axis = [5850, 5950, 6000, 6200, 6400, 6600, 6800, 6850, 7000]
         self.flux = [0, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.98,0]
         self.name = "Baader RGB-R filter optimised CMOS"
@@ -309,6 +359,9 @@ class cls_ccd(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  Astronomik CLS CCD filter 
+        """       
         self.spectral_axis = [4400, 4600, 4800, 5000, 5200, 5400, 5600, 5800, 6000, 6200, 6400, 6600, 6800, 7000]
         self.flux = [0, 0.90, 0.95, 0.95, 0.90, 0.15, 0.01, 0.01, 0.01, 0.15, 0.85, 0.93, 0.95, 0 ]
         self.name = "Astronomik CLS CCD"
@@ -322,6 +375,9 @@ class OIII12nm(Filters):
         self.set_filter()
     
     def set_filter(self):
+        """
+        @set:  Astronomik OIII CCD 12 nm filter 
+        """       
         self.spectral_axis = [4850, 4900, 4950, 5000, 5050, 5100, 5150]
         self.flux = [0, 0.10, 0.85, 0.96, 0.60, 0.05, 0]
         self.name = "Astronomik OIII CCD 12nm"

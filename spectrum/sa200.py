@@ -33,6 +33,12 @@ GEO_LAT =                      / Obs. geographic latitude
 GEO_ELEV=                      / Obs. geographic elevation        
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2023-04-10"
+__version__= "1.0.0"
+
 from astropy.io import fits
 from astropy.table import Table
 from astropy import units as u
