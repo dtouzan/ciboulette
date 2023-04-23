@@ -45,9 +45,7 @@ from astropy.time import Time
 
 
 class SA200(object):
-    """
-    Class for sa200 spectrum.
-    """
+    # Class for sa200 spectrum.
     def __init__(self, filename):
         self.s1d = Spectrum1D.read(filename)
         self.resolution = 200
@@ -57,12 +55,16 @@ class SA200(object):
   
     @property
     def name(self):
-        # Return resolution
+        """
+        @return:  A sting representing name
+        """     
         return self.header['OBJNAME']
 
     @property
     def R(self):
-        # Return resolution
+        """
+        @return:  A string representing resolution
+        """     
         if 'SPE_RPOW' in self.header:
             c = self.header['SPE_RPOW']
         else:
@@ -71,32 +73,44 @@ class SA200(object):
     
     @property
     def observer(self):
-        # Return observer
+        """
+        @return:  A sting representing observer
+        """     
         return self.header['OBSERVER']
     
     @property
     def date(self):
-        # Return date observation
+        """
+        @return:  A sting representing date
+        """     
         return self.header['DATE-OBS']    
 
     @property
     def instrument(self):
-        # Return instrum                      
+        """
+        @return:  A sting representing instrument
+        """     
         return self.header['BSS_INST']    
 
     @property
     def site(self):
-        # Return site                      
+        """
+        @return:  A sting representing site
+        """     
         return self.header['BSS_SITE']    
 
     @property
     def exposure(self):
-        # Return exposure
+        """
+        @return:  A sting representing exposure time
+        """     
         return self.header['EXPTIME']    
 
     @property
     def calibration_reference(self):
-        # Return start calibration reference 
+        """
+        @return:  A sting representing calibration reference
+        """     
         if 'O_CAL' in self.header:
             c = self.header['O_CAL']
         else:
@@ -105,72 +119,100 @@ class SA200(object):
 
     @property
     def longitude(self):
-        # Return site longitude
+        """
+        @return:  A sting representing longitude
+        """     
         return self.header['GEO_LONG']    
 
     @property
     def latitude(self):
-        # Return site latitude 
+        """
+        @return:  A sting representing latitude
+        """     
         return self.header['GEO_LAT']    
 
     @property
     def elevation(self):
-        # Return site latitude 
+        """
+        @return:  A sting representing elevation
+        """     
         return self.header['GEO_ELEV']    
     
     @property
     def version(self):
-        # Return software version
+        """
+        @return:  A sting representing version
+        """     
         return self.header['VERSION']    
 
     @property
     def JD(self):
-        # Return Julian Day
+        """
+        @return:  A sting representing Julian Day
+        """     
         time = Time(self.header['DATE-OBS'])
         return time.jd
     
     @property
     def title(self):
-        # Return title of spectrum plot
+        """
+        @return:  A sting representing title
+        """     
         title_name = self.name + ' - ' + self.date + ' - R: ' + str(self.R) + ' / ' + self.calibration_reference
         return title_name
      
     @property
     def unit(self):
-        # Return resolution of spectrum plot
+        """
+        @return:  A sting representing unit
+        """     
         return self.header['CDELT1']    
 
     def flux_value(self, atomic_line = 6562.8):
-        # Returns the value of atomic line
+        """
+        @return:  A string representing flux values
+        """     
         return self.s1d.flux.value[int( (atomic_line - self.header['CRVAL1']) / self.unit)]
 
     @property
     def xlabel(self):
-        # Return X label 
+        """
+        @return:  A sting representing x plot label
+        """     
         label = r'$\lambda$[Ångström]'.format(self.s1d.spectral_axis.unit)
         return label
     
     @property
     def ylabel(self):
-        # Return Y label
+        """
+        @return:  A sting representing y plot label
+        """     
         label = 'Relative intensity'.format(self.s1d.flux.unit)
         return label
     
     @property
     def spectral_axis(self):
-        # Return spectral axis table
+        """
+        @return:  A table representing spectral axis
+        """     
         return self.s1d.spectral_axis
     
     @property
     def flux(self):
-        # Return flux table
+        """
+        @return:  A table representing flux values
+        """     
         return self.s1d.flux
     
     def plotBD(self, axes):
-        # Plot spectrum
+        """
+        @set:  Plot spectrum comic format
+        """     
         axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=3, color = 'black',alpha=0.7)
         axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=1, color = 'cornflowerblue')
 
     def plot(self, axes):
-        # Plot spectrum
+        """
+        @set:  Plot spectrum line width 2
+        """     
         axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=2, color = 'black')
