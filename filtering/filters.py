@@ -39,6 +39,9 @@ class Filters(object):
         self.y = []
     
     def plotBD(self, axes):
+         """
+        @set:  Plot filter
+        """       
         axes.fill_between(self.x,self.y, color = self.color, alpha=0.1)
         axes.plot(self.x,self.y, linewidth=3, color = self.color,alpha=0.9)
         axes.plot(self.x,self.y, linewidth=5, color = 'white',alpha=0.5)
@@ -46,6 +49,9 @@ class Filters(object):
         axes.annotate(f'{self.label}', xy=(x_annotate, 0), xytext=(0,5), textcoords='offset points', rotation=0, va='bottom', ha='left', annotation_clip=False, fontsize=8, color=self.color, weight='bold', alpha=0.9)
 
     def make_XY(self,name = ''):
+        """
+        @set:  Set x,y for plot
+        """ 
         if name == 'make_interp_spline':
             X_Y_Spline = make_interp_spline(self.spectral_axis, self.flux)
             self.x = np.linspace(min(self.spectral_axis), max(self.spectral_axis), 500)
