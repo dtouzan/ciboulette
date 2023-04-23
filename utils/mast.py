@@ -70,8 +70,10 @@ class Mast(object):
     @property
     def read(self):
         """
-        Read MAST type file
-        Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn' -O mast.csv  
+        @return:  A boolean representing available (True is table create, False Otherwise)       
+                  Read your MAST type file
+                  Read your MAST header type file
+                  Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn' -O mast.csv  
         """
         if os.path.exists(self.fileoutput) :
             os.remove(self.fileoutput)
@@ -80,8 +82,9 @@ class Mast(object):
         # For MAST data_start=3
         self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)
         self.observation = Table.read(self.fileoutput, format='ascii.csv',header_start=2,data_start=3)   
-        self.observations['obs_title'].mask =[False]
-        self.observations['obs_id'].mask =[False]
+        self.observations['obs_title'].mask = [False]
+        self.observations['obs_id'].mask = [False]
+        
         if len(self.observation) > 0:
             self.available = True
         else:
@@ -98,8 +101,8 @@ class Mast(object):
     @idfiledrive.setter
     def idfiledrive(self,idgoogledrive):
         """
-        @return: Set ID google drive file
-        @idgoogledrive: ID google drive file.csv.       
+        @set: Set ID google drive file
+        @idgoogledrive: A string representing ID google drive file.csv  
         """     
         self.idgoogledrive = idgoogledrive                 
 
@@ -114,37 +117,38 @@ class Mast(object):
     def output(self,fileoutput):
         """
         Set table of exposures with google drive 
-        @fileoutput: file.csv output.
+        @fileoutput: A string representing file.csv output
         """
         self.fileoutput = fileoutput
 
     def ha(self,observation):
         """
-        @return:  RA of plan. Format: Hours H.HHHH
-        @plan:    Plan of planning class.
+        @return:  A float  representing RA of observation. Format: Hours H.HHHH
+        @observation:  A class representing observation 
         """           
         if self.available:
             return float(observation['s_ra'])/15
 
     def ra(self,observation):
         """
-        @return:   RA of plan. Format: Hours D.DDDD
-        @plan:    Plan of planning class.
+        @return:  A float representing RA of observation. Format: Hours D.DDDD
+        @observation:   A class representing observation
         """           
         if self.available:
             return float(observation['s_ra'])
 
     def dec(self,observation):
         """
-        @return:  DEC of plan. Format: Degrees D.DDDD
-        @plan:    Plan of planning class.
+        @return:  A float representing DEC of observation. Format: Degrees D.DDDD
+        @observation:  A class representing observation
         """    
         if self.available:
             return float(observation['s_dec']) 
 
     def coordinates(self,observation):
         """
-        @return:  Coordinates RA,DEC
+        @return:  A float,float representing Coordinates RA,DEC
+        @observation:  A class representing observation
         """
         if self.available:
             return self.ra(observation), self.dec(observation)
@@ -152,7 +156,7 @@ class Mast(object):
     @property
     def observations(self):
         """
-        @return:  Observations table
+        @return:  A table representing Observations
         """
         if len(self.observation) > 0:
             return self.observation
@@ -160,14 +164,14 @@ class Mast(object):
     @property
     def header_names(self):
         """
-        @return:  Names headers table
+        @return:  A table representing Names headers
         """
         return self.header.colnames
 
     @property
     def projects(self):
         """
-        @return:  Pojects table
+        @return:  A table representing Pojects
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='project')
@@ -176,7 +180,7 @@ class Mast(object):
     @property
     def targets(self):
         """
-        @return:  Targets table
+        @return:  A table representing Targets
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_name')
@@ -185,7 +189,7 @@ class Mast(object):
     @property
     def filters(self):
         """
-        Return filters table
+        @return:  A table representing filters
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='filters')
@@ -194,7 +198,7 @@ class Mast(object):
     @property
     def target_classification(self):
         """
-        @return:  Filters table
+        @return:  A table representing targets classifications
         """
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_classification')
@@ -202,38 +206,46 @@ class Mast(object):
         
     def query_project(self, projet_name = 'HII'):
         """
-        @return:  Observations projects in table
+        @return:  A table representing observations projects
+        @projet_name: A string representing a project name
         """
         return self._query_all('project', projet_name)
 
     def query_target(self, target_name = 'M31'):
         """
-        @return:  Observations targets in table
+        @return:  A table representing observations targets
+        @target_name: A string representing a target name
         """
         return self._query_all('target_name', target_name)
         
     def query_filters(self, filter_name = 'L'):
         """
-        @return:  Observations filtes in table
+        @return:  A table representing observations filtes
+        @filter_name: A string representing a filter name
         """
         return self._query_all('filters', filter_name)
     
     def query_target_classification(self, target_classification = 'Galaxy'):
         """
-        @return:  Observations target_classification in table
+        @return:  A table representing observations target classification
+        @target_classification:  A string representing a target classification
         """
         return self._query_all('target_classification', target_classification)
 
     def query_header(self, header_name='intentType', name='archive'):
         """
-        @return:  A target_classification tabe observations
+        @return:  A table representing header name
+        @header_name:  A string representing header name 
+        @name:  A string representing name in header
         """
         return self._query_all(header_name, name)
 
  
     def _query_all(self, name = 'target_name', target = 'M31'):
         """
-        @return:  Observations find in table
+        @return:  A table representing observations find in table
+        @name:  A string representing name
+        @target:  A string representing target find
         """
         if len(self.observation) > 0:
             observations = self.header
