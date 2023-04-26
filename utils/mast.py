@@ -48,6 +48,8 @@ __version__= "1.0.0"
 import time
 from astropy.table import Table, unique, vstack
 from astropy import units as u
+from astropy.time import Time
+from datetime import datetime
 import os
 import wget
 from ciboulette.base import constant
@@ -210,7 +212,7 @@ class Mast(object):
             words = unique(self.observation, keys='target_classification')
             return words['target_classification']
         
-    def query_project(self, projet_name = 'HII'):
+    def query_project(self, projet_name='HII'):
         """
         @return:  A table representing observations projects
         @projet_name: A string representing a project name
@@ -247,7 +249,7 @@ class Mast(object):
         return self._query_all(header_name, name)
 
  
-    def _query_all(self, name = 'target_name', target = 'M31'):
+    def _query_all(self, name='target_name', target='M31'):
         """
         @return:  A table representing observations find in table
         @name:  A string representing name
@@ -271,3 +273,135 @@ class Mast(object):
                 return 'No name'
         else:
             return 'No observations'
+
+    def split(self, line='name-AAAAMMJJ-HHMM-nxexptimes-ffocale.fits'):
+        """
+        @return:  A table representing observation fits file
+        @line:  A string representing name fits file
+        
+        '-': Representing split caracter
+        
+        """
+        name = line.split('.')[0]
+        return name.split('-')
+    
+    def files_name(self, directory='dataset'):
+        """
+        @return:  A table representing observation files name
+        @directory:  A string representing the dataset
+        """
+        return os.listdir(directory) 
+    
+    def target_name(self, table):
+        """
+        @return:  A string representing target name
+        @table: A table representing a split file name
+        """
+        return str(table[0])
+ 
+    def exptime(self, table):
+        """
+        @return:  A string representing Exposure Length
+        @table: A table representing a split file name
+        """
+        line = table[3]
+        line = line.split('s')[0]
+        line = line.split('x')
+        exposition_time = int(line[0]) * int(line[1])
+        return str(exposition_time)
+    
+    def focal(self, table):
+        """
+        @return:  A string representing focal
+        @table: A table representing a split file name
+        """
+        line = table[4]
+        focal = float(line.split('f')[1]) / 1000
+        return str(focal)
+
+    def date_format(self, table):
+        """
+        @return:  A string representing UT date
+        @table: A table representing a split file name
+        """
+        date_line = table[1]
+        time_line = table[2]
+        date = str(date_line[0:4]) + '-' + str(date_line[4:6]) + '-' + str(date_line[6:8]) + 'T' + str(time_line[0:2]) + ':' + str(time_line[2:4]) + ':' + '00' 
+        return date
+ 
+    def target_name_format(self, table):
+        """
+        @return:  A string representing MAST target_name
+        @table: A table representing a split file name
+        """
+        return self.target_name
+
+    def t_min_format(self, table):
+        """
+        @return:  A string representing MAST Start time (t_min)
+        @table: A table representing a split file name
+        """
+        t = Time(self.date_format(table), format='isot', scale='utc')
+        return str(t.mjd)
+ 
+    def t_max_format(self, table):
+        """
+        @return:  A string representing MAST End time (t_max)
+        @table: A table representing a split file name
+        """
+        t = Time(self.date_format(table), format='isot', scale='utc')
+        exp_date = int(self.exptime(table)) / 86400
+        t_max = t.mjd + exp_date
+        return str(t_max)
+ 
+    def t_exptime_format(self, table):
+        """
+        @return:  A string representing MAST exposure Length 'second'
+        @table: A table representing a split file name
+        """
+        return self.exptime(table)
+
+    def intent_type_format(self, string='a'):
+        """
+        @return:  A string representing MAST observation Type (intentType)
+        @string:  A string representing a name type
+                  'S': science
+                  'A': analysis
+                  's': spectrum
+                  'a': archive (default)
+        """
+        match string:
+            case 'S':
+                itype = 'science'
+            case 'A':
+                itype = 'analysis'
+            case 's':
+                itype = 'spectrum'
+            case _:
+                itype = 'archive'
+        return itype
+        
+    def obs_id_format(self):
+        """
+        @return:  A string representing a the new index of 
+                  the observations table                 
+        """
+        if len(self.observation) > 0:
+            words = self.observation['obs_id'].value           
+            numbers = []
+            for i in words:
+                if i != '--':
+                    numbers.append(int(i))
+            n = max(numbers) + 1
+        return str(n)
+
+    def t_obs_release_format(self, date=''):
+        """
+        @return: A string representing MAST release date (t_obs_release)
+        @table: A table representing a split file name
+        """
+        if date == '':
+            today = datetime.today()        
+            date = today.strftime('%Y-%m-%dT%H:%M:%S')
+        t = Time(date, format='isot', scale='utc')
+        return str(t.mjd)
