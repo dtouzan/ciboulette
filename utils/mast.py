@@ -46,14 +46,15 @@ __date__ = "2023-04-10"
 __version__= "1.0.0"
 
 import time
+import os
+from collections import Counter, OrderedDict
+import wget
 from astropy.table import Table, unique, vstack
 from astropy import units as u
 from astropy.time import Time
 from datetime import datetime
-import os
-import wget
 from ciboulette.base import constant
-from collections import Counter, OrderedDict
+
 
 
 class Mast(object):
@@ -66,7 +67,7 @@ class Mast(object):
         self.available = False      
         
     @property
-    def create(self):
+    def exist(self):
         """
         @return: True if exist, False if nul
         """
@@ -405,3 +406,21 @@ class Mast(object):
             date = today.strftime('%Y-%m-%dT%H:%M:%S')
         t = Time(date, format='isot', scale='utc')
         return str(t.mjd)
+
+    def create(self, file='mast.csv'):
+        """
+        @return:  False or create the Mast file
+        @file: A string representing the file Mast
+        """       
+        if self.exist:
+            if file == '':
+                print(f'Create: {len(self.observation)} observations')
+                # create line
+                # print line
+            else:
+                print(f'Create: {len(self.observation)} observations in file {file}')
+                # create and write header in file
+                # create line
+                # print line in file
+        else:
+            return False
