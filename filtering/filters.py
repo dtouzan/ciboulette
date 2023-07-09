@@ -33,6 +33,7 @@ from astropy import units as u
 import numpy as np
 from scipy.interpolate import make_interp_spline, interp1d
 
+
 class Filters(object):
     # Class for Element filters.
     def __init__(self):
@@ -71,6 +72,19 @@ class Filters(object):
         if name == '':
             self.x = self.spectral_axis
             self.y = self.flux
+            
+    def min_flux(self):
+        return min(self.flux)
+    
+    def max_flux(self):
+        return max(self.flux)
+    
+    def min_spectral_axis(self):
+        return min(self.spectral_axis)
+    
+    def max_spectral_axis(self):
+        return max(self.spectral_axis)
+    
         
 class SDSS_Sloan_g(Filters):
     # Class SDSS/Sloan g' filter 
@@ -88,6 +102,7 @@ class SDSS_Sloan_g(Filters):
         self.color = 'cornflowerblue' 
         self.make_XY('interp1d')
 
+        
 class SDSS_Sloan_r(Filters):
     # Class SDSS/Sloan r' filter 
     def __init__(self):
@@ -104,6 +119,7 @@ class SDSS_Sloan_r(Filters):
         self.color = 'darkorange'
         self.make_XY('interp1d')
 
+        
 class SDSS_Sloan_u(Filters):
     # Class SDSS/Sloan u' filter 
     def __init__(self):
@@ -113,57 +129,16 @@ class SDSS_Sloan_u(Filters):
         """
         @set:  SDSS/Sloan u' filter
         """       
-        self.spectral_axis = [  3013.5134,
-                                3112.6125,
-                                3175.6758,
-                                3198.1982,
-                                3202.7026,
-                                3211.7117,
-                                3220.7207,
-                                3274.7747,
-                                3351.3513,
-                                3450.4504,
-                                3549.5496,
-                                3644.144,
-                                3690.2073,
-                                3750.2703,
-                                3792.7927,
-                                3824.3242,
-                                3851.3513,
-                                3882.8828,
-                                3896.3965,
-                                3909.91,
-                                3909.91,
-                                3972.973 ]
+        self.spectral_axis = [3013.5134, 3112.6125, 3175.6758, 3198.1982, 3202.7026, 3211.7117, 3220.7207, 3274.7747, 3351.3513, 3450.4504, 3549.5496, 3644.144, 3690.2073, 3750.2703, 3792.7927, 3824.3242, 3851.3513, 3882.8828, 3896.3965, 3909.91, 3909.91, 3972.973]
 
-        self.flux = [   0,
-                        0.01,
-                        0.01,
-                        0.02,
-                        0.50,
-                        0.80,
-                        0.83,
-                        0.84,
-                        0.84,
-                        0.83,
-                        0.81,
-                        0.75,
-                        0.70,
-                        0.60,
-                        0.50,
-                        0.40,
-                        0.30,
-                        0.20,
-                        0.10,
-                        0.02,
-                        0.01,
-                        0 ]
+        self.flux = [0, 0.01, 0.01, 0.02, 0.50, 0.80, 0.83, 0.84, 0.84, 0.83, 0.81, 0.75, 0.70, 0.60, 0.50, 0.40, 0.30, 0.20, 0.10, 0.02, 0.01, 0]
         
         self.name = "Baader SLOAN/SDSS u' photometric"
         self.label = "u'"
         self.color = 'darkmagenta'
         self.make_XY('interp1d')
 
+        
 class SDSS_Sloan_i(Filters):
     # Class SDSS/Sloan i' filter 
     def __init__(self):
@@ -180,6 +155,7 @@ class SDSS_Sloan_i(Filters):
         self.color = 'indianred'
         self.make_XY('interp1d')
 
+        
 class SDSS_Sloan_z_s(Filters):
     # Class SDSS/Sloan z-s' filter 
     def __init__(self):
@@ -196,6 +172,7 @@ class SDSS_Sloan_z_s(Filters):
         self.color = 'red'
         self.make_XY('interp1d')
 
+        
 class SDSS_Sloan_y(Filters):
     # Class SDSS/Sloan y' filter 
     def __init__(self):
@@ -227,6 +204,7 @@ class Bessel_V(Filters):
         self.label = "V"
         self.color = 'green'
         self.make_XY('make_interp_spline')
+
         
 class Bessel_B(Filters):
     # Class UBVRI Bessel B filter 
@@ -259,6 +237,7 @@ class Bessel_R(Filters):
         self.label = "R"
         self.color = 'orange'
         self.make_XY('make_interp_spline')
+
         
 class Bessel_U(Filters):
     # Class UBVRI Bessel U filter 
@@ -292,6 +271,7 @@ class Bessel_I(Filters):
         self.color = 'darkred'
         self.make_XY('make_interp_spline')
 
+        
 class Ha35nm(Filters):
     # Class Baader H-alpha 35nm filter 
     def __init__(self):
@@ -308,6 +288,7 @@ class Ha35nm(Filters):
         self.color = 'red'
         self.make_XY('make_interp_spline')
 
+        
 class RGB_B(Filters):
     # Class Baader RGB B filter optimised CMOS
     def __init__(self):
@@ -321,6 +302,7 @@ class RGB_B(Filters):
         self.color = 'blue'
         self.make_XY('interp1d')
 
+        
 class RGB_G(Filters):
     # Class Baader RGB G filter optimised CMOS
     def __init__(self):
@@ -352,7 +334,8 @@ class RGB_R(Filters):
         self.label = 'R'
         self.color = 'red'
         self.make_XY('interp1d')
-    
+ 
+
 class cls_ccd(Filters):
     # Class Astronomik CLS CCD filter 
     def __init__(self):
@@ -369,6 +352,7 @@ class cls_ccd(Filters):
         self.color = 'grey'
         self.make_XY('make_interp_spline')
 
+        
 class OIII12nm(Filters):
     # Class Astronomik OIII CCD 12 nm filter 
     def __init__(self):
