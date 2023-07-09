@@ -190,7 +190,7 @@ class H(AtomicLine):
         """
         @set:  Set atomic line calcium H
         """     
-       self.name = 'calcium H'
+        self.name = 'calcium H'
         self.label = 'H'
         self.atomic_line_request(396.7 , 397, 'Ca II')
 
@@ -307,7 +307,7 @@ class c(AtomicLine):
         """
         @set:  Set atomic line fer c
         """     
-       self.name = 'fer c'
+        self.name = 'fer c'
         self.label = 'c'
         self.atomic_line_request(495.759, 495.76, 'Fe I') 
     
@@ -320,7 +320,7 @@ class E(AtomicLine):
         """
         @set:  Set atomic line fer E
         """     
-       self.name = 'fer E'
+        self.name = 'fer E'
         self.label = 'E'
         self.atomic_line_request(526.95, 526.98, 'Fe I') 
 
