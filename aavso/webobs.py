@@ -543,4 +543,4 @@ class _JDline(object):
         """
         Plot line of JD's
         """
-        plt.vlines(self.JDtable, -30,30 , linestyles = 'solid', colors = 'grey', alpha = 0.3)
+        plt.vlines(self.JDtable, -30,30 , linestyles = 'solid', colors = 'grey', alpha = 0.1)

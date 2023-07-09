@@ -100,7 +100,7 @@ class Planning(object):
 
     def dec(self,plan):
         """
-        Return RA of plan. Format: Degrees D.DDDD
+        Return DEC of plan. Format: Degrees D.DDDD
          plan (Table): plan of planning.
         """    
         if self.available:

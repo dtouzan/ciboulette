@@ -335,7 +335,7 @@ class Mast(object):
         @return:  A string representing MAST target_name
         @table: A table representing a split file name
         """
-        return self.target_name
+        return self.target_name(table)
 
     def t_min_format(self, table):
         """
@@ -382,19 +382,22 @@ class Mast(object):
                 itype = 'archive'
         return itype
         
-    def obs_id_format(self):
+    def obs_id_format(self, index=False):
         """
-        @return:  A string representing a the new index of 
+        @return:  A string representing the new index of 
                   the observations table                 
         """
-        if len(self.observation) > 0:
-            words = self.observation['obs_id'].value           
-            numbers = []
-            for i in words:
-                if i != '--':
-                    numbers.append(int(i))
-            n = max(numbers) + 1
-        return str(n)
+        if index:
+            return 0
+        else:
+            if len(self.observation) > 0:
+                words = self.observation['obs_id'].value           
+                numbers = []
+                for i in words:
+                    if i != '--':
+                        numbers.append(int(i))
+                n = max(numbers) + 1
+            return str(n)
 
     def t_obs_release_format(self, date=''):
         """
@@ -407,14 +410,34 @@ class Mast(object):
         t = Time(date, format='isot', scale='utc')
         return str(t.mjd)
 
-    def create(self, file='mast.csv'):
+    def get_coordinate():
+        return None
+        
+    def create(self, directory='dataset', file='mast.csv'):
         """
         @return:  False or create the Mast file
         @file: A string representing the file Mast
         """       
-        if self.exist:
+        if self.exist:          
             if file == '':
-                print(f'Create: {len(self.observation)} observations')
+                
+                print(f'Create: observations')
+                listing = self.files_name(directory)
+                obs_id = int(self.obs_id_format(True))
+                for name in listing:
+                    if '.fits' in name:
+                        name_list = self.split(name)
+                        obs_id += 1
+                        print(name,':',
+                              self.intent_type_format('S'), 
+                              self.target_name_format(name_list), 
+                              str(obs_id),
+                              self.t_min_format(name_list), 
+                              self.t_max_format(name_list), 
+                              self.t_exptime_format(name_list), 
+                              self.focal(name_list) 
+                             )
+                    
                 # create line
                 # print line
             else:

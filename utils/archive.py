@@ -283,7 +283,7 @@ class Archive(object):
             database_period.plot()   
         for database_period in new_year:
             database_period.plot()
-        plt.vlines(self.dataset['JD'], 0,1 , colors = 'black', alpha = 0.3)
+        plt.vlines(self.dataset['JD'], 0,1 , colors = 'black', alpha = 0.1)
         plt.yticks([])
         plt.xlabel(constant.JD_label)
         plt.show()
