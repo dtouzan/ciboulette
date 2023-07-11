@@ -45,14 +45,19 @@ __copyright__ = "MIT"
 __date__ = "2023-04-10"
 __version__= "1.0.0"
 
+# Globals mods
 import time
 import os
 from collections import Counter, OrderedDict
 import wget
+from datetime import datetime
+# Astropy mods
 from astropy.table import Table, unique, vstack
 from astropy import units as u
 from astropy.time import Time
-from datetime import datetime
+from astropy.coordinates import SkyCoord, Angle, ICRS
+from astroquery.simbad import Simbad
+# User mods
 from ciboulette.base import constant
 
 
@@ -410,8 +415,23 @@ class Mast(object):
         t = Time(date, format='isot', scale='utc')
         return str(t.mjd)
 
-    def get_coordinate():
-        return None
+    def get_coordinates(self,string):
+        """
+        @return: A string representing RA and DEC with astroquery name object
+        """
+        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC')
+        ra = 0
+        dec = 0
+        for c in catalog:
+            if '_' not in string:
+                if string[0] != 's':
+                    if c in string.upper():
+                        result_table = Simbad.query_object(string)
+                        if result_table:
+                            c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                            ra = c.ra.deg[0]*15    
+                            dec = c.dec.deg[0]     
+        return ra, dec
         
     def create(self, directory='dataset', file='mast.csv'):
         """
@@ -428,10 +448,14 @@ class Mast(object):
                     if '.fits' in name:
                         name_list = self.split(name)
                         obs_id += 1
-                        print(name,':',
+                        name_object = self.target_name_format(name_list)
+                        ra, dec = self.get_coordinates(name_object)
+                        print(name, ':',
                               self.intent_type_format('S'), 
-                              self.target_name_format(name_list), 
+                              name_object, 
                               str(obs_id),
+                              ra,
+                              dec,
                               self.t_min_format(name_list), 
                               self.t_max_format(name_list), 
                               self.t_exptime_format(name_list), 
