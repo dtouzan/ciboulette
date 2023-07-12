@@ -419,18 +419,21 @@ class Mast(object):
         """
         @return: A string representing RA and DEC with astroquery name object
         """
-        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC')
+        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN')
         ra = 0
         dec = 0
         for c in catalog:
             if '_' not in string:
-                if string[0] != 's':
-                    if c in string.upper():
-                        result_table = Simbad.query_object(string)
-                        if result_table:
-                            c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
-                            ra = c.ra.deg[0]*15    
-                            dec = c.dec.deg[0]     
+                if string[0] == 's':
+                    name_object = string.split('s')[1]
+                else:
+                    name_object = string
+                if c in name_object.upper():
+                    result_table = Simbad.query_object(name_object)
+                    if result_table:
+                        c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                        ra = c.ra.deg[0]*15    
+                        dec = c.dec.deg[0]     
         return ra, dec
         
     def create(self, directory='dataset', file='mast.csv'):
