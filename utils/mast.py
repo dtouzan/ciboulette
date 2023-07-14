@@ -30,7 +30,7 @@ Release Date           float            t_obs_release
 Proposal Type          string           proposal_type
 Sequence Number        int              sequence_number
 Region                 string           s_region
-Focale                 float            focal
+Focal                  float            focal
 Format                 float            format
 Seeing                 float            seeing
 Moon                   float            moon
@@ -217,7 +217,18 @@ class Mast(object):
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_classification')
             return words['target_classification']
-        
+ 
+    @property
+    def calib_level(self):
+        """
+        @return:  A value representing calibration level (1, 2 or 3)
+        """
+        return 1
+
+    @property
+    def proposal_pi(self):
+        return 'dtouzan@gmail.com'
+    
     def query_project(self, projet_name='HII'):
         """
         @return:  A table representing observations projects
@@ -420,21 +431,49 @@ class Mast(object):
         @return: A string representing RA and DEC with astroquery name object
         """
         catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN')
+        supernovae = ('SN', 'ASAS', 'ATLAS')
+        comet = ('P_', 'C2')
         ra = 0
         dec = 0
-        for c in catalog:
-            if '_' not in string:
-                if string[0] == 's':
-                    name_object = string.split('s')[1]
-                else:
-                    name_object = string
-                if c in name_object.upper():
-                    result_table = Simbad.query_object(name_object)
-                    if result_table:
-                        c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
-                        ra = c.ra.deg[0]*15    
-                        dec = c.dec.deg[0]     
-        return ra, dec
+        otype = 'NaN'
+        
+        # For asteroid
+        try:
+            number = int(string)
+            otype = 'Asteroid'
+        except ValueError:
+            otype = otype
+
+        #For super novae
+        for c in supernovae:
+            if c in string.upper():
+                otype = 'SN*'
+        
+        #For spectrum name
+        if string[0] == 's':
+            name_object = string.split('s')[1]
+        else:
+            name_object = string
+                                       
+        #For comet
+        for c in comet:
+            if c in string.upper():
+                otype = 'Comet'
+        
+        if '_' not in string:
+            for c in catalog:        
+                    #For object catalog 
+                    if c in name_object.upper():
+                        customSimbad = Simbad()
+                        customSimbad.add_votable_fields('otype')
+                        result_table = customSimbad.query_object(name_object)
+                        #result_table.pprint(max_width=255)
+                        if result_table:
+                            c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                            ra = c.ra.deg[0]*15    
+                            dec = c.dec.deg[0]  
+                            otype = result_table['OTYPE'][0]
+        return ra, dec, otype
         
     def create(self, directory='dataset', file='mast.csv'):
         """
@@ -452,13 +491,16 @@ class Mast(object):
                         name_list = self.split(name)
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
-                        ra, dec = self.get_coordinates(name_object)
+                        ra, dec, otype = self.get_coordinates(name_object)
                         print(name, ':',
                               self.intent_type_format('S'), 
                               name_object, 
                               str(obs_id),
                               ra,
                               dec,
+                              otype,
+                              self.calib_level,
+                              self.proposal_pi,
                               self.t_min_format(name_list), 
                               self.t_max_format(name_list), 
                               self.t_exptime_format(name_list), 
