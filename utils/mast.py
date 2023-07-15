@@ -37,6 +37,30 @@ Moon                   float            moon
 jpegURL                string           jpeg_url
 url                    string           url
 
+OT Mast class
+
+Name             Type                 Variable name
+-----------------     --------         -----------------------
+Observation Type       string           intentType
+Mission                string           obs_collection
+Instrument             string           instrument_name
+Filters                string           filters
+Target Name            string           target_name
+Target Classification  string           target_classification
+Observation ID         string           obs_id
+RA                     float            s_ra
+Dec                    float            s_dec
+Principal Investigator string           proposal_pi
+Product Type           string           dataproduct_type
+Calibration Level      int              calib_level
+Start Time             float            t_min              
+End Time               float            t_max
+Exposure Length        float            t_exptime
+Observation Title      string           obs_title
+Focal                  float            focal
+Format                 float            format
+url                    string           url
+
 """
 
 __authors__ = ("Dominique Touzan","ciboulette module")
@@ -225,6 +249,49 @@ class Mast(object):
         """
         return 1
 
+    @property
+    def obs_collection(self):
+        """
+        @return:  A value representing observaton collection (UT1, UT2, OT Library)
+        """
+        return 'OT_Library_UT1'
+    
+    @property
+    def instrument_name(self):
+        """
+        @return:  A value representing instrument name (UT1, CIBOULETTE_S, CIBOULETTE_V, CIBOULETTE_G, CIBOULETTE_N, ...)
+        """
+        return 'UT1'
+
+    @property
+    def filters(self):
+        """
+        @return:  A value representing filter name
+        """
+        return 'IR-CUT'
+
+    @property
+    def formats(self):
+        """
+        @return:  A fits extention
+        """
+        return 'fits'
+
+    @property
+    def dataproduct_type(self):
+        """
+        @return:  A value representing data product type (light, dark, flat, offset)
+        """
+        return 'light'   
+
+    @property
+    def obs_title(self):
+        """
+        @return:  A value representing observation title
+        """
+        return 'None'
+        
+    
     @property
     def proposal_pi(self):
         return 'dtouzan@gmail.com'
@@ -492,20 +559,25 @@ class Mast(object):
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
                         ra, dec, otype = self.get_coordinates(name_object)
-                        print(name, ':',
-                              self.intent_type_format('S'), 
-                              name_object, 
-                              str(obs_id),
-                              ra,
-                              dec,
-                              otype,
-                              self.calib_level,
-                              self.proposal_pi,
-                              self.t_min_format(name_list), 
-                              self.t_max_format(name_list), 
-                              self.t_exptime_format(name_list), 
-                              self.focal(name_list) 
-                             )
+                        print(f'{self.intent_type_format("S")};'
+                                f'{self.obs_collection};'
+                                f'{self.instrument_name};'
+                                f'{self.filters};'
+                                f'{name_object};'
+                                f'{otype};'
+                                f'{str(obs_id)};'
+                                f'{ra};'
+                                f'{dec};'
+                                f'{self.proposal_pi};'
+                                f'{self.dataproduct_type};'
+                                f'{self.calib_level};'
+                                f'{self.t_min_format(name_list)};'
+                                f'{self.t_max_format(name_list)};'
+                                f'{self.t_exptime_format(name_list)};'
+                                f'{self.obs_title};'
+                                f'{self.focal(name_list)};'
+                                f'{self.formats};'
+                                f'{name}')
                     
                 # create line
                 # print line
