@@ -528,16 +528,17 @@ class Mast(object):
                 otype = 'SN*'
         
         #For spectrum name
-        if string[0] == 's' and string[1] != 'n':
-            name_object = string.split('s')[1]
+        String = string.upper()
+        if String[0] == 'S' and String[1] != 'N':
+            name_object = String.split('S')[1]
             disperser = 'SA200'
         else:
             name_object = string
-        
+
         if 'sngc' in string:
             name_object = string.split('s')[1]
             disperser = 'SA200'
-                                       
+
         #For comet
         for c in comet:
             if c in string.upper():
