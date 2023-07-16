@@ -45,6 +45,7 @@ Observation Type       string           intentType
 Mission                string           obs_collection
 Instrument             string           instrument_name
 Filters                string           filters
+Disperser              string           disperser
 Target Name            string           target_name
 Target Classification  string           target_classification
 Observation ID         string           obs_id
@@ -53,6 +54,7 @@ Dec                    float            s_dec
 Principal Investigator string           proposal_pi
 Product Type           string           dataproduct_type
 Calibration Level      int              calib_level
+Scheduling             string           scheduling       
 Start Time             float            t_min              
 End Time               float            t_max
 Exposure Length        float            t_exptime
@@ -241,60 +243,6 @@ class Mast(object):
         if len(self.observation) > 0:
             words = unique(self.observation, keys='target_classification')
             return words['target_classification']
- 
-    @property
-    def calib_level(self):
-        """
-        @return:  A value representing calibration level (1, 2 or 3)
-        """
-        return 1
-
-    @property
-    def obs_collection(self):
-        """
-        @return:  A value representing observaton collection (UT1, UT2, OT Library)
-        """
-        return 'OT_Library_UT1'
-    
-    @property
-    def instrument_name(self):
-        """
-        @return:  A value representing instrument name (UT1, CIBOULETTE_S, CIBOULETTE_V, CIBOULETTE_G, CIBOULETTE_N, ...)
-        """
-        return 'UT1'
-
-    @property
-    def filters(self):
-        """
-        @return:  A value representing filter name
-        """
-        return 'IR-CUT'
-
-    @property
-    def formats(self):
-        """
-        @return:  A fits extention
-        """
-        return 'fits'
-
-    @property
-    def dataproduct_type(self):
-        """
-        @return:  A value representing data product type (light, dark, flat, offset)
-        """
-        return 'light'   
-
-    @property
-    def obs_title(self):
-        """
-        @return:  A value representing observation title
-        """
-        return 'None'
-        
-    
-    @property
-    def proposal_pi(self):
-        return 'dtouzan@gmail.com'
     
     def query_project(self, projet_name='HII'):
         """
@@ -493,6 +441,68 @@ class Mast(object):
         t = Time(date, format='isot', scale='utc')
         return str(t.mjd)
 
+    @property
+    def calib_level(self):
+        """
+        @return:  A value representing calibration level (1, 2 or 3)
+        """
+        return 1
+
+    @property
+    def obs_collection(self):
+        """
+        @return:  A value representing observaton collection (UT1, UT2, OT Library)
+        """
+        return 'OT_Library_UT1'
+    
+    @property
+    def instrument_name(self):
+        """
+        @return:  A value representing instrument name (UT1, CIBOULETTE_S, CIBOULETTE_V, CIBOULETTE_G, CIBOULETTE_N, ...)
+        """
+        return 'UT1'
+
+    @property
+    def filter_default(self):
+        """
+        @return:  A value representing filter name
+        """
+        return 'IR-CUT'
+
+    @property
+    def formats(self):
+        """
+        @return:  A fits extention
+        """
+        return 'fits'
+
+    @property
+    def dataproduct_type(self):
+        """
+        @return:  A value representing data product type (light, dark, flat, offset)
+        """
+        return 'light'   
+
+    @property
+    def obs_title(self):
+        """
+        @return:  A value representing observation title
+        """
+        return 'None'    
+    
+    @property
+    def proposal_pi(self):
+        """
+        @return:  A value representing proposal principal investigator
+        """
+        return 'dtouzan@gmail.com'        
+    
+    def scheduling(self,table):
+        """
+        @return:  A value representing schediling observation (AAAA-MM-DDTHH:MM:SS)
+        """
+        return self.date_format(table)
+    
     def get_coordinates(self,string):
         """
         @return: A string representing RA and DEC with astroquery name object
@@ -503,6 +513,7 @@ class Mast(object):
         ra = 0
         dec = 0
         otype = 'NaN'
+        disperser = 'NaN'
         
         # For asteroid
         try:
@@ -517,10 +528,15 @@ class Mast(object):
                 otype = 'SN*'
         
         #For spectrum name
-        if string[0] == 's':
+        if string[0] == 's' and string[1] != 'n':
             name_object = string.split('s')[1]
+            disperser = 'SA200'
         else:
             name_object = string
+        
+        if 'sngc' in string:
+            name_object = string.split('s')[1]
+            disperser = 'SA200'
                                        
         #For comet
         for c in comet:
@@ -540,7 +556,7 @@ class Mast(object):
                             ra = c.ra.deg[0]*15    
                             dec = c.dec.deg[0]  
                             otype = result_table['OTYPE'][0]
-        return ra, dec, otype
+        return ra, dec, otype, disperser
         
     def create(self, directory='dataset', file='mast.csv'):
         """
@@ -548,21 +564,22 @@ class Mast(object):
         @file: A string representing the file Mast
         """       
         if self.exist:          
-            if file == '':
-                
-                print(f'Create: observations')
-                listing = self.files_name(directory)
-                obs_id = int(self.obs_id_format(True))
+            # create line
+            print(f'Create: observations file')
+            listing = self.files_name(directory)
+            obs_id = int(self.obs_id_format(True))
+            with open(file, 'w') as file_mast:
                 for name in listing:
                     if '.fits' in name:
                         name_list = self.split(name)
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
-                        ra, dec, otype = self.get_coordinates(name_object)
+                        ra, dec, otype, disperser = self.get_coordinates(name_object)
                         print(f'{self.intent_type_format("S")};'
                                 f'{self.obs_collection};'
                                 f'{self.instrument_name};'
-                                f'{self.filters};'
+                                f'{self.filter_default};'
+                                f'{disperser};'
                                 f'{name_object};'
                                 f'{otype};'
                                 f'{str(obs_id)};'
@@ -571,20 +588,13 @@ class Mast(object):
                                 f'{self.proposal_pi};'
                                 f'{self.dataproduct_type};'
                                 f'{self.calib_level};'
+                                f'{self.scheduling(name_list)};'
                                 f'{self.t_min_format(name_list)};'
                                 f'{self.t_max_format(name_list)};'
                                 f'{self.t_exptime_format(name_list)};'
                                 f'{self.obs_title};'
                                 f'{self.focal(name_list)};'
                                 f'{self.formats};'
-                                f'{name}')
-                    
-                # create line
-                # print line
-            else:
-                print(f'Create: {len(self.observation)} observations in file {file}')
-                # create and write header in file
-                # create line
-                # print line in file
+                                f'{name}', file=file_mast)
         else:
             return False
