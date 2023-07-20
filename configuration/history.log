@@ -1,0 +1,306 @@
+    1  sudo raspi-config
+    2  sudo apt update
+    3  sudo apt upgrade -y
+    4  sudo raspi-config
+    5  sudo reboot
+    6  cd /etc/
+    7  cat dphys-swapfile 
+    8  ps -ef
+    9  cd
+   10  wget -O - https://www.astroberry.io/repo/key | sudo apt-key add -
+   11  sudo su -c "echo 'deb https://www.astroberry.io/repo/ buster main' > /etc/apt/sources.list.d/astroberry.list"
+   12  sudo apt update
+   13  sudo apt install indi-full
+   14  cd /etc/systemctl
+   15  cd /etc/systemd
+   16  cd system
+   17  ls -lr
+   18  cd
+   19  pip install jupyter
+   20  sudo install jupyter
+   21  sudo apt install jupyter
+   22  sudo apt install jupyterlab
+   23  sudo apt install jupyter-lab
+   24  jupyter lab
+   25  jupyter-lab
+   26  pip3 install jupyter-lab
+   27  pip install jupyterlab
+   28  jupyter lab
+   29  pip install jupyterlab
+   30  pip install jsonshema
+   31  sudo apt-get install python3-pip
+   32  sudo pip3 install setuptools
+   33  sudo apt install libffi-dev
+   34  sudo pip3 install cffi
+   35  pip3 install jupyterlab
+   36  pip install jupyterlab
+   37  pip install jsonschema
+   38  sudo pip install jsonschema
+   39  sudo apt install libffi-dev
+   40  pip3 install jupyterlab
+   41  pip3 install y-py
+   42  pip3 install jupyterlab==3.0.0
+   43  jupyter lab
+   44  ls -la
+   45  pip3 install jupyterlab==3.9.0
+   46  pip3 install jupyterlab==3.7.0
+   47  pip3 install jupyterlab==3.8.0
+   48  pip3 install jupyterlab==3.6.0
+   49  pip3 install jupyterlab==3.5.0
+   50  jupyterlab
+   51  jupyter-lab
+   52  jupyter lab
+   53  jupyter_lab
+   54  jupyterlab
+   55  jupyter-lab
+   56  ls -la
+   57  cd .local
+   58  ls
+   59  ls -la
+   60  cd bin
+   61  ls -lrt
+   62  exit
+   63  type jupyter-lab
+   64  jupyter-lab --ip 192.168.1.54
+   65  jupyter-lab
+   66  pip3 install jupyterlab==4.0.0
+   67  pip3 install jupyterlab==4
+   68  pip3 install jupyterlab
+   69  jupyter-lab
+   70  pip3 install markupsafe
+   71  sudo install python3=3.10
+   72  sudo apt install python3=3.10
+   73  sudo apt install python=3.10
+   74  sudo apt install python==3.10
+   75  sudo apt install python3
+   76  pip3 install jupyterlab==3.2.0
+   77  jupyter-lab
+   78  pip install markupsafe==2.0.1
+   79  libcamera-still
+   80  raspistill
+   81  raspistill camselect
+   82  sudo apt install libcamera-still
+   83  sudo apt install libcamera
+   84  sudo apt install libcamera*
+   85  libcamera-apps
+   86  ps -ef
+   87  git clone https://git.libcamera.org/libcamera/libcamera.git
+   88  cd libcamera
+   89  meson setup build
+   90  pip3 install --user meson
+   91  pip3 install --user --upgrade meson
+   92  meson setup build
+   93  sudo apt install cmake
+   94  meson setup build
+   95  sudo apt remove libcamera*
+   96  sudo apt install libcamera*
+   97  sudo apt install libcamera-apps
+   98  sudo rpi-eeprom-update -d -a
+   99  sudo reboot
+  100  libcamera-still -o image.jpg
+  101  sudo rspi-config
+  102  sudo raspi-config
+  103  raspistill -o photo.jpg
+  104  ls -lt
+  105  pwd
+  106  raspistill -o photo.jpg
+  107  jupyter-lab
+  108  sudo atp remove jupyter-lab
+  109  sudo apt remove jupyter-lab
+  110  sudo apt remove jupyterlab
+  111  sudo pip3 uninstall jupyterlab
+  112  sudo pip3 uninstall jupyter-lab
+  113  sudo pip uninstall jupyter-lab
+  114  pip uninstall
+  115  pip uninstall jupyter
+  116  pip uninstall jupyter-lab
+  117  jupyter-lab
+  118  cd .local
+  119  ls -ltr
+  120  cd lib
+  121  ls -lrt
+  122  cd ..
+  123  cd etc
+  124  ls 
+  125  cd ju*
+  126  ls -ltr
+  127  cd ../..
+  128  ls -la
+  129  cd share
+  130  ls -la
+  131  cd ..
+  132  ls -lrt
+  133  cd bin
+  134  ls -ltr
+  135  jupyter
+  136  jupyter noteboock
+  137  jupyter notebook
+  138  pip install jupyter
+  139  sudo apt install jupyter
+  140  ls -lrt
+  141  cd ..
+  142  ls -lrt
+  143  mv bin bin.old
+  144  cd
+  145  jupyter
+  146  jupyter notebook
+  147  sudo apt remove jupyter
+  148  jupyter
+  149  type jupyter
+  150  jupyter noteboock
+  151  jupyter notebook
+  152  sudo apt remove jupyter
+  153  sudo apt autoremove jupyter
+  154  python3
+  155  jupyter notebook
+  156  sudo apt autoremove jupyter
+  157  cd .local
+  158  dir
+  159  mv bin.old bin
+  160  ls -ltr
+  161  cd bin
+  162  ls -lrt
+  163  cd ..
+  164  cd
+  165  jupyter lab
+  166  jupyter-lab
+  167  pip install jupyter
+  168  pip3 install jupyter
+  169  jupyter lab
+  170  jupyter
+  171  echo $path
+  172  echo $PATH
+  173  /home/ut1/.local/bin/jupyter
+  174  type jupyter
+  175  ls -lrt
+  176  cd
+  177  ls -ltr
+  178  ls -la
+  179  nano .bashrc
+  180  . .bashrc
+  181  path
+  182  $PATH
+  183  cd /home/ut1/.local/
+  184  cd bin
+  185  cd ..
+  186  cd..
+  187  cd ..
+  188  jupyter lab
+  189  type jupyter
+  190  cd /etc/systemd/system
+  191  ls -ltr
+  192  sudo nano indiserver.service
+  193  sudo systemctl enable indiserver.service
+  194  sudo systemctl start indiserver.service
+  195  ps -ef
+  196  indi_getprop
+  197  sudo reboot
+  198  ps -ef
+  199  pwd
+  200  ls -lrt
+  201  raspistill -o photo.jpg
+  202  ls -lr
+  203  jupyter
+  204  jupyter notebook
+  205  ps -ef
+  206  sudo raspi-config
+  207  ps -ef
+  208  free
+  209  jupyter lab
+  210  sudo apt install xdmp
+  211  sudo apt install xdmcp
+  212  pip3 install jupyter install markupsafe==2.0.1
+  213  jupyter lab
+  214  jupyter lab --ip 192.168.1.54
+  215  ps -ef
+  216  history
+  217  cd Do*
+  218  cd Do*s*
+  219  ls
+  220  cd Documents
+  221  cd lab
+  222  history > history.log
+  223  ls
+  224  cd /etc/systemd/system
+  225  typr jupyter lab
+  226  typr jupyter-lab
+  227  type jupyter-lab
+  228  cd
+  229  jupyter-lab
+  230  ls -la
+  231  cd .jupyter
+  232  ls -lrt
+  233  cd lab
+  234  ls
+  235  ls -la
+  236  cd ..
+  237  ls -la
+  238  cd ..
+  239  ls -lrt
+  240  cd /etc/systemd/system
+  241  ls -lr
+  242  sudo nano jupyterlab.service
+  243  sudo systemctl enable jupyterlab.service
+  244  ls -lrt
+  245  sudo systemctl enable jupyterlab.service
+  246  sudo nano jupyterlab.service
+  247  cat jupyterlab.service
+  248  /home/ut1/.local/bin/jupyter-lab --ip 192.168.1.54
+  249  cat jupyterlab.service
+  250  dir
+  251  lqs -lrt
+  252  ls -ltr
+  253  cat indiserver.service
+  254  id
+  255  cat jupyterlab.service
+  256  sudo nano jupyterlab.service
+  257  sudo systemctl enable jupyterlab.service
+  258  sudo nano jupyterlab.service
+  259  sudo systemctl enable jupyterlab.service
+  260  sudo systemctl start jupyterlab.service
+  261  ps -ef
+  262  sudo systemctl stop jupyterlab.service
+  263  ps -ef
+  264  cd
+  265  pip3 install jupyterlab
+  266  sudo systemctl start jupyterlab.service
+  267  ps -ef
+  268  sudo systemctl stop jupyterlab.service
+  269  pip3 install jupyterlab==4.0.2
+  270  pip3 install jupyterlab==4
+  271  pip3 install jupyterlab=4
+  272  pip3 install jupyterlab==4.0.0
+  273  pip3 install jupyterlab==3.4.0
+  274  sudo systemctl start jupyterlab.service
+  275  ps -ef
+  276  sudo systemctl stop jupyterlab.service
+  277  pip3 install jupyterlab==3.6.0
+  278  pip3 install jupyterlab==3.5.0
+  279  sudo systemctl start jupyterlab.service
+  280  ps -ef
+  281  history|grep !
+  282  pip3 install jupyterlab==3.5.0 install y-py
+  283  pip3 install jupyterlab==3.5.0 install y-py install y-py
+  284  pip install y-py
+  285  pip3 install y-py
+  286  pip list
+  287  python -m pip install -U pip 
+  288  python3 -m pip install -U pip 
+  289  pip install –upgrade setuptools
+  290  pip3 install –upgrade setuptools
+  291  python3 -m pip install -U setuptools
+  292  python -m pip install -U setuptools
+  293  python3 -m pip3 install -U jupyterlab
+  294  python3 -m pip install -U jupyterlab
+  295  ps -ef
+  296  sudo systemctl stop jupyterlab.service
+  297  ps -ef
+  298  sudo systemctl start jupyterlab.service
+  299  ps -ef
+  300  pyp3 install astropy
+  301  pip3 install astropy
+  302  pip3 install matplotlib
+  303  pip3 install astropy[all]
+  304  pip3 install astroquery[all]
+  305  cd Documents/lab
+  306  history>history.log
