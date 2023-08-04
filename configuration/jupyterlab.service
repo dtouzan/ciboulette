@@ -3,7 +3,7 @@
 # sudo systemctl enable jupyterlab.service
 # sudo systemctl start jupyterlab.service
 
-Unit]
+[Unit]
 Description=Jupyter server
 
 [Service]
