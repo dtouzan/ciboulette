@@ -16,6 +16,29 @@ GPIO.setwarnings(False)
 # 22     - GPIO25
 # 24     - GPIO8
 # 26     - GPIO7
+########################################
+
+#R: Red   +
+#B: Black -
+#Y: Yellow
+#G: Green
+#g: Grey
+#W: White
+
+
+#  R B           Y   G g W
+#+ + + + + + + + + + + + + + + + + + + +
+#+ + + + + + + + + + + + + + + + + + + + 
+#                                      #
+#              CPU                     #
+#          |||||||||||                 #
+#          |||||||||||                 #
+#          |||||||||||                 # 
+#          |||||||||||                 #
+# Video                     USB        #
+#  ___                    __   __      # 
+
+########################################
 GPIO07 = 7
 GPIO08 = 8
 GPIO24 = 24
@@ -90,14 +113,12 @@ def wait_time(waittime = 2):
     return speed
 
 # degree rotate
-def degree_rotate(degree = 0):
-    rotate = int(degree)
-    if degree < 0 :
-        rotate = 0
+def degree_rotate(nb_step = 0):
+    rotate = int(nb_step)
     return rotate
     
 # Main program
-# ./SA200Motor.py +Degree speed
+# ./SA200Motor.py +-Degree speed
 if __name__ == '__main__' :
     # Start main loop
     nbStepsPerRev = degree_rotate(int(sys.argv[1])) 
