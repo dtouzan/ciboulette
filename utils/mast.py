@@ -83,6 +83,7 @@ from astropy import units as u
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, Angle, ICRS
 from astroquery.simbad import Simbad
+from astroquery.mpc import MPC
 # User mods
 from ciboulette.base import constant
 
@@ -503,7 +504,7 @@ class Mast(object):
         """
         return self.date_format(table)
     
-    def get_coordinates(self,string):
+    def get_coordinates(self, string, scheduling):
         """
         @return: A string representing RA and DEC with astroquery name object
         """
@@ -519,6 +520,9 @@ class Mast(object):
         try:
             number = int(string)
             otype = 'Asteroid'
+            ephemerid = MPC.get_ephemeris(target=number, start=scheduling, step=1*u.d, number=1)
+            ra = ephemerid['RA'].value[0]
+            dec = ephemerid['Dec'].value[0]
         except ValueError:
             otype = otype
 
@@ -575,7 +579,9 @@ class Mast(object):
                         name_list = self.split(name)
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
-                        ra, dec, otype, disperser = self.get_coordinates(name_object)
+                        scheduling = self.scheduling(name_list)
+                        print(name)
+                        ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
                         print(f'{self.intent_type_format("S")};'
                                 f'{self.obs_collection};'
                                 f'{self.instrument_name};'
@@ -589,7 +595,7 @@ class Mast(object):
                                 f'{self.proposal_pi};'
                                 f'{self.dataproduct_type};'
                                 f'{self.calib_level};'
-                                f'{self.scheduling(name_list)};'
+                                f'{scheduling};'
                                 f'{self.t_min_format(name_list)};'
                                 f'{self.t_max_format(name_list)};'
                                 f'{self.t_exptime_format(name_list)};'
