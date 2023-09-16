@@ -506,11 +506,11 @@ class Mast(object):
     
     def get_coordinates(self, string, scheduling):
         """
-        @return: A string representing RA and DEC with astroquery name object
+        @return: A string representing RA, DEC, TYPE with astroquery name object and DISPERSER
         """
         catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN')
         supernovae = ('SN', 'ASAS', 'ATLAS')
-        comet = ('P_', 'C2')
+        comet = ('P_', 'C_', 'C_')
         ra = 0
         dec = 0
         otype = 'NaN'
@@ -547,7 +547,13 @@ class Mast(object):
         for c in comet:
             if c in string.upper():
                 otype = 'Comet'
+                names = string.split('_')
+                name = names[0]+'/'+names[1]+' '+names[2]
+                ephemerid = MPC.get_ephemeris(name, start=scheduling, step=1*u.d, number=1)
+                ra = ephemerid['RA'].value[0]
+                dec = ephemerid['Dec'].value[0]
         
+        #For other
         if '_' not in string:
             for c in catalog:        
                     #For object catalog 
@@ -561,6 +567,7 @@ class Mast(object):
                             ra = c.ra.deg[0]*15    
                             dec = c.dec.deg[0]  
                             otype = result_table['OTYPE'][0]
+                            
         return ra, dec, otype, disperser
         
     def create(self, directory='dataset', file='mast.csv'):
