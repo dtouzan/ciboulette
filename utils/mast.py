@@ -91,12 +91,11 @@ from ciboulette.base import constant
 
 class Mast(object):
     
-    def __init__(self, idgoogledrive='12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn', fileoutput='mast.csv'):
-        self.idgoogledrive = idgoogledrive
+    def __init__(self, fileoutput='mast.csv'):
         self.fileoutput = fileoutput
         self.observation = Table()
         self.header = Table()     
-        self.available = False      
+        self.available = True      
         
     @property
     def exist(self):
@@ -114,39 +113,19 @@ class Mast(object):
         @return:  A boolean representing available (True is table create, False Otherwise)       
                   Read your MAST type file
                   Read your MAST header type file
-                  Ex:  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12QY7fQLqnoySHFnEoLMWQbqYjHmaDpGn' -O mast.csv  
         """
+        """ A REPRENDRE POUR LECTURE LOCAL
         if os.path.exists(self.fileoutput) :
-            os.remove(self.fileoutput)
-        url = 'https://docs.google.com/uc?export=download&id='+self.idgoogledrive
-        filedownload = wget.download(url,out=self.fileoutput,bar=None)      
-        # For MAST data_start=3
-        self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)
-        self.observation = Table.read(self.fileoutput, format='ascii.csv',header_start=2,data_start=3)   
-        self.observations['obs_title'].mask = [False]
-        self.observations['obs_id'].mask = [False]
+
+            self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)
+            self.observation = Table.read(self.fileoutput, format='ascii.csv',header_start=2,data_start=3)   
+            self.observations['obs_title'].mask = [False]
+            self.observations['obs_id'].mask = [False]
+        """
+        self.available = exist()
         
-        if len(self.observation) > 0:
-            self.available = True
-        else:
-            self.available = False
         return self.available
-
-    @property
-    def idfiledrive(self):
-        """
-        @return:  A sting representing ID google drive file
-        """     
-        return self.idgoogledrive    
-    
-    @idfiledrive.setter
-    def idfiledrive(self,idgoogledrive):
-        """
-        @set: Set ID google drive file
-        @idgoogledrive: A string representing ID google drive file.csv  
-        """     
-        self.idgoogledrive = idgoogledrive                 
-
+   
     @property
     def output(self):
         """
@@ -508,9 +487,9 @@ class Mast(object):
         """
         @return: A string representing RA, DEC, TYPE with astroquery name object and DISPERSER
         """
-        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN')
+        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN', 'V')
         supernovae = ('SN', 'ASAS', 'ATLAS')
-        comet = ('P_', 'C_', 'C_')
+        comet = ('P_', '_P', 'C_')
         ra = 0
         dec = 0
         otype = 'NaN'
@@ -548,7 +527,10 @@ class Mast(object):
             if c in string.upper():
                 otype = 'Comet'
                 names = string.split('_')
-                name = names[0]+'/'+names[1]+' '+names[2]
+                if c in comet[1]:
+                    name = names[0]+names[1]
+                else:
+                    name = names[0]+'/'+names[1]+' '+names[2]
                 ephemerid = MPC.get_ephemeris(name, start=scheduling, step=1*u.d, number=1)
                 ra = ephemerid['RA'].value[0]
                 dec = ephemerid['Dec'].value[0]
@@ -561,7 +543,6 @@ class Mast(object):
                         customSimbad = Simbad()
                         customSimbad.add_votable_fields('otype')
                         result_table = customSimbad.query_object(name_object)
-                        #result_table.pprint(max_width=255)
                         if result_table:
                             c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
                             ra = c.ra.deg[0]*15    
@@ -575,7 +556,7 @@ class Mast(object):
         @return:  False or create the Mast file
         @file: A string representing the file Mast
         """       
-        if self.exist:          
+        if self.available:          
             # create line
             print(f'Create: observations file')
             listing = self.files_name(directory)
