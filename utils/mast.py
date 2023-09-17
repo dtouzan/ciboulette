@@ -487,7 +487,7 @@ class Mast(object):
         """
         @return: A string representing RA, DEC, TYPE with astroquery name object and DISPERSER
         """
-        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN', 'V')
+        catalog = ('M', 'MESSIER', 'IC', 'UGC', 'NGC', 'HD', 'COL', 'LBN', 'V', 'SN', 'ABELL', 'DO', 'KING', 'DWB', 'STOCK', 'CR', 'ATLAS', 'TR')
         supernovae = ('SN', 'ASAS', 'ATLAS')
         comet = ('P_', '_P', 'C_')
         ra = 0
@@ -522,6 +522,16 @@ class Mast(object):
             name_object = string.split('s')[1]
             disperser = 'SA200'
 
+        String = string.upper()
+        if 'S' in String[0] and 'V' in String[1]:
+            name_object = 'v'+String.split('SV')[1]
+            disperser = 'SA200'
+
+        String = string.upper()
+        if 'SSN' in String:
+            disperser = 'SA200'
+            name_object = 'sn'+String.split('SN')[1]
+
         #For comet
         for c in comet:
             if c in string.upper():
@@ -535,10 +545,9 @@ class Mast(object):
                 ra = ephemerid['RA'].value[0]
                 dec = ephemerid['Dec'].value[0]
         
-        #For other
+        #For object catalog 
         if '_' not in string:
             for c in catalog:        
-                    #For object catalog 
                     if c in name_object.upper():
                         customSimbad = Simbad()
                         customSimbad.add_votable_fields('otype')
