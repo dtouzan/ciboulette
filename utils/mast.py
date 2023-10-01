@@ -95,7 +95,8 @@ class Mast(object):
         self.fileoutput = fileoutput
         self.observation = Table()
         self.header = Table()     
-        self.available = True      
+        self.available = True  
+        self.disperser = 'SA200'
         
     @property
     def exist(self):
@@ -387,8 +388,6 @@ class Mast(object):
                 itype = 'science'
             case 'A':
                 itype = 'analysis'
-            case 's':
-                itype = 'spectrum'
             case _:
                 itype = 'archive'
         return itype
@@ -494,10 +493,18 @@ class Mast(object):
         dec = 0
         otype = 'NaN'
         disperser = 'NaN'
-        
+
+        #For spectrum name
+        String = string.upper()
+        if String[0] == 's' and String[1] == '_':
+            name_object = String.split('s_')[1]
+            disperser = self.disperser
+        else:
+            name_object = string
+
         # For asteroid
         try:
-            number = int(string)
+            number = int(name_object)
             otype = 'Asteroid'
             ephemerid = MPC.get_ephemeris(target=number, start=scheduling, step=1*u.d, number=1)
             ra = ephemerid['RA'].value[0]
@@ -507,36 +514,14 @@ class Mast(object):
 
         #For super novae
         for c in supernovae:
-            if c in string.upper():
+            if c in name_object.upper():
                 otype = 'SN*'
         
-        #For spectrum name
-        String = string.upper()
-        if String[0] == 'S' and String[1] != 'N':
-            name_object = String.split('S')[1]
-            disperser = 'SA200'
-        else:
-            name_object = string
-
-        if 'sngc' in string:
-            name_object = string.split('s')[1]
-            disperser = 'SA200'
-
-        String = string.upper()
-        if 'S' in String[0] and 'V' in String[1]:
-            name_object = 'v'+String.split('SV')[1]
-            disperser = 'SA200'
-
-        String = string.upper()
-        if 'SSN' in String:
-            disperser = 'SA200'
-            name_object = 'sn'+String.split('SN')[1]
-
         #For comet
         for c in comet:
-            if c in string.upper():
+            if c in name_object.upper():
                 otype = 'Comet'
-                names = string.split('_')
+                names = name_object.split('_')
                 if c in comet[1]:
                     name = names[0]+names[1]
                 else:
@@ -544,7 +529,7 @@ class Mast(object):
                 ephemerid = MPC.get_ephemeris(name, start=scheduling, step=1*u.d, number=1)
                 ra = ephemerid['RA'].value[0]
                 dec = ephemerid['Dec'].value[0]
-        
+
         #For object catalog 
         if '_' not in string:
             for c in catalog:        
@@ -578,27 +563,28 @@ class Mast(object):
                         name_object = self.target_name_format(name_list)
                         scheduling = self.scheduling(name_list)
                         print(name)
+                        intent_type = 'S'
                         ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
-                        print(f'{self.intent_type_format("S")};'
-                                f'{self.obs_collection};'
-                                f'{self.instrument_name};'
-                                f'{self.filter_default};'
-                                f'{disperser};'
-                                f'{name_object};'
-                                f'{otype};'
-                                f'{str(obs_id)};'
-                                f'{ra};'
-                                f'{dec};'
-                                f'{self.proposal_pi};'
-                                f'{self.dataproduct_type};'
-                                f'{self.calib_level};'
-                                f'{scheduling};'
-                                f'{self.t_min_format(name_list)};'
-                                f'{self.t_max_format(name_list)};'
-                                f'{self.t_exptime_format(name_list)};'
-                                f'{self.obs_title};'
-                                f'{self.focal(name_list)};'
-                                f'{self.formats};'
+                        print(f'{self.intent_type_format(intent_type)},'
+                                f'{self.obs_collection},'
+                                f'{self.instrument_name},'
+                                f'{self.filter_default},'
+                                f'{disperser},'
+                                f'{name_object},'
+                                f'{otype},'
+                                f'{str(obs_id)},'
+                                f'{ra},'
+                                f'{dec},'
+                                f'{self.proposal_pi},'
+                                f'{self.dataproduct_type},'
+                                f'{self.calib_level},'
+                                f'{scheduling},'
+                                f'{self.t_min_format(name_list)},'
+                                f'{self.t_max_format(name_list)},'
+                                f'{self.t_exptime_format(name_list)},'
+                                f'{self.obs_title},'
+                                f'{self.focal(name_list)},'
+                                f'{self.formats},'
                                 f'{name}', file=file_mast)
         else:
             return False
