@@ -97,6 +97,7 @@ class Mast(object):
         self.header = Table()     
         self.available = True  
         self.disperser = 'SA200'
+        self.observation_number = -4 # Header
         
     @property
     def exist(self):
@@ -107,25 +108,28 @@ class Mast(object):
             return True
         else:
             return False
-    
-    @property
-    def read(self):
-        """
-        @return:  A boolean representing available (True is table create, False Otherwise)       
-                  Read your MAST type file
-                  Read your MAST header type file
-        """
-        """ A REPRENDRE POUR LECTURE LOCAL
-        if os.path.exists(self.fileoutput) :
 
-            self.header = Table.read('mast_header.csv', format='ascii.csv',header_start=2,data_start=3)
-            self.observation = Table.read(self.fileoutput, format='ascii.csv',header_start=2,data_start=3)   
-            self.observations['obs_title'].mask = [False]
-            self.observations['obs_id'].mask = [False]
+    def read(self, fileinput):
         """
-        self.available = exist()
-        
-        return self.available
+        @return:  Create observation list if exist
+        @fileinput: A string representing the file Mast
+        """
+        return self.exist
+    
+    def get_number(self, fileinput):
+        """
+        @return:  A number representing observation ID   
+        @fileinput: A string representing the file Mast
+        """
+        if fileinput == '':
+            self.observation_number = 0
+        else:
+            with open(fileinput, 'r') as file_mast:
+                self.observation_number = -4 # Header
+                for line in file_mast:
+                    self.observation_number += 1  
+            
+        return self.observation_number
    
     @property
     def output(self):
@@ -392,23 +396,6 @@ class Mast(object):
                 itype = 'archive'
         return itype
         
-    def obs_id_format(self, index=False):
-        """
-        @return:  A string representing the new index of 
-                  the observations table                 
-        """
-        if index:
-            return 0
-        else:
-            if len(self.observation) > 0:
-                words = self.observation['obs_id'].value           
-                numbers = []
-                for i in words:
-                    if i != '--':
-                        numbers.append(int(i))
-                n = max(numbers) + 1
-            return str(n)
-
     def t_obs_release_format(self, date=''):
         """
         @return: A string representing MAST release date (t_obs_release)
@@ -496,8 +483,8 @@ class Mast(object):
 
         #For spectrum name
         String = string.upper()
-        if String[0] == 's' and String[1] == '_':
-            name_object = String.split('s_')[1]
+        if String[0] == 'S' and String[1] == '_':
+            name_object = String.split('S_')[1]
             disperser = self.disperser
         else:
             name_object = string
@@ -531,17 +518,16 @@ class Mast(object):
                 dec = ephemerid['Dec'].value[0]
 
         #For object catalog 
-        if '_' not in string:
-            for c in catalog:        
-                    if c in name_object.upper():
-                        customSimbad = Simbad()
-                        customSimbad.add_votable_fields('otype')
-                        result_table = customSimbad.query_object(name_object)
-                        if result_table:
-                            c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
-                            ra = c.ra.deg[0]*15    
-                            dec = c.dec.deg[0]  
-                            otype = result_table['OTYPE'][0]
+        for c in catalog:        
+                if c in name_object.upper():
+                    customSimbad = Simbad()
+                    customSimbad.add_votable_fields('otype')
+                    result_table = customSimbad.query_object(name_object)
+                    if result_table:
+                        c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                        ra = c.ra.deg[0]*15    
+                        dec = c.dec.deg[0]  
+                        otype = result_table['OTYPE'][0]
                             
         return ra, dec, otype, disperser
         
@@ -552,9 +538,9 @@ class Mast(object):
         """       
         if self.available:          
             # create line
-            print(f'Create: observations file')
+            obs_id = self.observation_number
+            print(f'Create: observations file index {obs_id}')
             listing = self.files_name(directory)
-            obs_id = int(self.obs_id_format(True))
             with open(file, 'w') as file_mast:
                 for name in listing:
                     if '.fits' in name:
@@ -562,7 +548,7 @@ class Mast(object):
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
                         scheduling = self.scheduling(name_list)
-                        print(name)
+                        print(obs_id, name)
                         intent_type = 'S'
                         ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
                         print(f'{self.intent_type_format(intent_type)},'
