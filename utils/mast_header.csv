@@ -1,3 +1,0 @@
-#Observation Type, Mission, Instrument, Filters, Disperser, Target Name,Target Classification, Observation ID, RA, Dec, Principal Investigator, Product Type, Calibration Level, Scheduling, Start Time, End Time, Exposure Length, Observation Title, Focal, Format, url
-#@string, string, string, string, string, string, string, string, ra, dec, string, string, int, string, float, float, float, string, float, string, string
-intentType,obs_collection,instrument_name,filters,disperser,target_name,target_classification,obs_id,s_ra,s_dec,proposal_pi,dataproduct_type,calib_level,scheduling,t_min,t_max,t_exptime,obs_title,focal,format,url

@@ -94,7 +94,6 @@ class Mast(object):
     def __init__(self, fileoutput='mast.csv'):
         self.fileoutput = fileoutput
         self.observation = Table()
-        self.header = Table()     
         self.available = True  
         self.disperser = 'SA200'
         self.observation_number = -4 # Header
@@ -114,6 +113,10 @@ class Mast(object):
         @return:  Create observation list if exist
         @fileinput: A string representing the file Mast
         """
+        if os.path.exists(fileinput) :
+
+            self.observation = Table.read(fileinput, format='ascii.csv',header_start=2,data_start=3)   
+            self.observations['obs_title'].mask = [False]
         return self.exist
     
     def get_number(self, fileinput):
@@ -189,9 +192,9 @@ class Mast(object):
     @property
     def header_names(self):
         """
-        @return:  A table representing Names headers
+        @return:  A list representing Names headers
         """
-        return self.header.colnames
+        return self.observations.colnames
 
     @property
     def projects(self):
@@ -273,7 +276,7 @@ class Mast(object):
         @target:  A string representing target find
         """
         if len(self.observation) > 0:
-            observations = self.header
+            observations = self.header_names
             unique_by_name = unique(self.observation, keys= name)
             if len(unique_by_name) > 0:
                 matches = [match for match in unique_by_name[name] if target in match]
