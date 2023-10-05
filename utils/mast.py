@@ -94,9 +94,8 @@ class Mast(object):
     def __init__(self, fileoutput='mast.csv'):
         self.fileoutput = fileoutput
         self.observation = Table()
-        self.available = True  
         self.disperser = 'SA200'
-        self.observation_number = -4 # Header
+        self.observation_number = -4 # Header file create
         
     @property
     def exist(self):
@@ -115,8 +114,9 @@ class Mast(object):
         """
         if os.path.exists(fileinput) :
 
-            self.observation = Table.read(fileinput, format='ascii.csv',header_start=2,data_start=3)   
+            self.observation = Table.read(fileinput, format='ascii.csv', header_start=2, data_start=3)   
             self.observations['obs_title'].mask = [False]
+            self.observations['disperser'].mask = [False]
         return self.exist
     
     def get_number(self, fileinput):
@@ -137,48 +137,48 @@ class Mast(object):
     @property
     def output(self):
         """
-        @return: Fileoutput.csv name
+        @return: A string representing fileoutput csv format
         """     
         return self.fileoutput
 
     @output.setter
     def output(self,fileoutput):
         """
-        Set table of exposures with google drive 
+        @return:  A string representing file.csv output
         @fileoutput: A string representing file.csv output
         """
         self.fileoutput = fileoutput
 
+"""
+Part for informations
+"""
+    
     def ha(self,observation):
         """
-        @return:  A float  representing RA of observation. Format: Hours H.HHHH
-        @observation:  A class representing observation 
+        @return:  A float representing RA of observation. Format: Hours H.HHHH
         """           
-        if self.available:
+        if self.exist:
             return float(observation['s_ra'])/15
 
     def ra(self,observation):
         """
         @return:  A float representing RA of observation. Format: Hours D.DDDD
-        @observation:   A class representing observation
         """           
-        if self.available:
+        if self.exist:
             return float(observation['s_ra'])
 
     def dec(self,observation):
         """
         @return:  A float representing DEC of observation. Format: Degrees D.DDDD
-        @observation:  A class representing observation
         """    
-        if self.available:
+        if self.exist:
             return float(observation['s_dec']) 
 
     def coordinates(self,observation):
         """
         @return:  A float,float representing Coordinates RA,DEC
-        @observation:  A class representing observation
         """
-        if self.available:
+        if self.exist:
             return self.ra(observation), self.dec(observation)
 
     @property
@@ -186,7 +186,7 @@ class Mast(object):
         """
         @return:  A table representing Observations
         """
-        if len(self.observation) > 0:
+        if self.exist:
             return self.observation
 
     @property
@@ -197,41 +197,61 @@ class Mast(object):
         return self.observations.colnames
 
     @property
-    def projects(self):
+    def obs_collection(self):
         """
         @return:  A table representing Pojects
         """
-        if len(self.observation) > 0:
-            words = unique(self.observation, keys='project')
-            return words['project']
+        return self._header_info('obs_collection')
+
+    @property
+    def instrument_name(self):
+        """
+        @return:  A table representing Pojects
+        """
+        return self._header_info('instrument_name')
 
     @property
     def targets(self):
         """
         @return:  A table representing Targets
         """
-        if len(self.observation) > 0:
-            words = unique(self.observation, keys='target_name')
-            return words['target_name']
+        return self._header_info('target_name')
 
     @property
     def filters(self):
         """
         @return:  A table representing filters
         """
-        if len(self.observation) > 0:
-            words = unique(self.observation, keys='filters')
-            return words['filters']
+        return self._header_info('filters')
 
     @property
     def target_classification(self):
         """
         @return:  A table representing targets classifications
         """
-        if len(self.observation) > 0:
-            words = unique(self.observation, keys='target_classification')
-            return words['target_classification']
-    
+        return self._header_info('target_classification')
+
+    @property
+    def dispersers(self):
+        """
+        @return:  A table representing dispersers 
+        """
+        return self._header_info('disperser')
+
+    def _header_info(self, header_name='targets'):
+        """
+        @return:  A table representing targets header
+        """
+        if self.exist:
+            if header_name in self.header_names:
+                words = unique(self.observation, keys=header_name)
+                return words[header_name]
+        return False       
+
+"""
+Part for query's
+"""
+
     def query_project(self, projet_name='HII'):
         """
         @return:  A table representing observations projects
@@ -268,31 +288,32 @@ class Mast(object):
         """
         return self._query_all(header_name, name)
 
- 
+    
     def _query_all(self, name='target_name', target='M31'):
         """
         @return:  A table representing observations find in table
-        @name:  A string representing name
+        @name:  A string representing header name 
         @target:  A string representing target find
         """
-        if len(self.observation) > 0:
-            observations = self.header_names
-            unique_by_name = unique(self.observation, keys= name)
-            if len(unique_by_name) > 0:
-                matches = [match for match in unique_by_name[name] if target in match]
-                if len(matches) > 0:
-                    for targets in matches:
-                        mask = self.observation[name] == targets
-                        observations = vstack([self.observation[mask], observations])  
-                
-                    observations = observations[0:len(observations)-1]
+        if self.exist:
+            if name in self.header_names:
+                mask = self.observation[name] == target
+                observations = self.observation[mask]
+                if len(observations) > 0:
                     return observations
                 else:
-                    return 'No target'
+                    print('No target')
+                    return False
             else:
-                return 'No name'
+                print('No header')
+                return False
         else:
-            return 'No observations'
+            print('No observations')
+            return False
+
+"""
+Part for create mast file
+"""
 
     def split(self, line='name-AAAAMMJJ-HHMM-nxexptimes-ffocale.fits'):
         """
@@ -539,7 +560,7 @@ class Mast(object):
         @return:  False or create the Mast file
         @file: A string representing the file Mast
         """       
-        if self.available:          
+        if self.exist:          
             # create line
             obs_id = self.observation_number
             print(f'Create: observations file index {obs_id}')
@@ -552,7 +573,7 @@ class Mast(object):
                         name_object = self.target_name_format(name_list)
                         scheduling = self.scheduling(name_list)
                         print(obs_id, name)
-                        intent_type = 'S'
+                        intent_type = 'S' # For Science
                         ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
                         print(f'{self.intent_type_format(intent_type)},'
                                 f'{self.obs_collection},'
