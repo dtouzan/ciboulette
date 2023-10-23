@@ -149,9 +149,9 @@ class Mast(object):
         """
         self.fileoutput = fileoutput
 
-"""
-Part for informations
-"""
+    """
+    Part for informations
+    """
     
     def ha(self,observation):
         """
@@ -248,9 +248,9 @@ Part for informations
                 return words[header_name]
         return False       
 
-"""
-Part for query's
-"""
+    """
+    Part for query's
+    """
 
     def query_project(self, projet_name='HII'):
         """
@@ -311,9 +311,9 @@ Part for query's
             print('No observations')
             return False
 
-"""
-Part for create mast file
-"""
+    """
+    Part for create mast file
+    """
 
     def split(self, line='name-AAAAMMJJ-HHMM-nxexptimes-ffocale.fits'):
         """
