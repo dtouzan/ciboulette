@@ -105,7 +105,7 @@ class vsx(compoment):
             c = SkyCoord(ra=float(self.dataset['RA2000'])*u.degree, dec=float(self.dataset['Declination2000'])*u.degree)
             return c.ra.hour, c.dec.degree
         else:
-            return False
+            return False, False
 
     @property
     def epoch(self):
@@ -127,7 +127,7 @@ class vsx(compoment):
             max = float(self.dataset['MaxMag'][0].split(' ')[0])
             return max, min
         else:
-            return False
+            return False, False
 
     @property
     def AUID(self):
