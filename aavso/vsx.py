@@ -28,17 +28,17 @@ class vsx(compoment):
 
     def __init__(self, nameID):
         self.nameID = nameID
-        self.read
+        self._read
 
     @property
-    def read(self):
+    def _read(self):
         """
         @return: TABLE of Variable
         """
-        self.table
+        self._table
 
     @property
-    def data(self):
+    def _data(self):
         """
         @return: JSON data
         Source : https://www.aavso.org/direct-web-query-vsxvsp
@@ -60,11 +60,11 @@ class vsx(compoment):
             return response.json()
 
     @property
-    def table(self):
+    def _table(self):
         """
         @return: data table
         """
-        result = self.data['VSXObject']
+        result = self._data['VSXObject']
         header = []
         value = []
         types = []
