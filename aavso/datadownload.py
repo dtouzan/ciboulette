@@ -12,9 +12,6 @@ __version__= "1.0.0"
 # Globals mods
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import wget
-import requests
 
 # Astropy mods
 from astropy.table import Table
