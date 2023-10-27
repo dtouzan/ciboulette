@@ -12,9 +12,7 @@ __version__= "1.0.0"
 # Globals mods
 import numpy as np
 import matplotlib.pyplot as plt
-from bs4 import BeautifulSoup
 import os
-import io
 import wget
 import requests
 
@@ -23,7 +21,10 @@ from astropy.table import Table
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
-class load(object):
+# Users mods
+from ciboulette.aavso.compoments import compoment
+
+class load(compoment):
     """
     Class for AAVSO for data download (https://www.aavso.org/data-download).
     @fileinput: datadownload.csv
@@ -32,18 +33,14 @@ class load(object):
 
     def __init__(self, filtername='Vis.', fileinput='aavsodata.csv'):
         self.nameID = ''
-        self.filter = filtername
         self.fileinput = fileinput
         self.titlename = ''
         self.comment = ''
-        self.observation = Table()
         self.JDline = _JDline()
-        self.available = False
-        self._period = 0
         self.filter = self.isfilter(filtername)
         self.read
 
-    def isfilter(self,filtername='Vis.'):
+    def isfilter(self, filtername='Vis.'):
         """
         @return: filter
         """
@@ -58,56 +55,69 @@ class load(object):
         """
         @return: table of observation
         """
-        self.observation = Table.read(self.fileinput, format='ascii.csv')
-        if len(self.observation) > 0:
-            self.available = True
-            self.title
+        self.dataset = Table.read(self.fileinput, format='ascii.csv')
+        if len(self.dataset) > 0:
+            self._title
             self.period
-            self.comments
+            self._comments
         else:
-            self.available = False
+            return False
 
     def filtername(self, filtername='Vis.'):
         """
-        @return: filter
+        Init filter
+        @input: filtername
         """
-        if self.available:
-            self.filter = self.isfilter(filtername)
+        self.filter = self.isfilter(filtername)
 
     @property
     def Vis(self):
-        if self.available:
-            self.filter = 'Vis.'
+        """
+        Init filter Vis.
+        """
+        self.filter = self.isfilter('Vis.')
 
     @property
     def I(self):
-        if self.available:
-            self.filter = 'I'
+        """
+        Init filter I
+        """
+        self.filter = self.isfilter('I')
 
     @property
     def R(self):
-        if self.available:
-            self.filter = 'R'
+        """
+        Init filter R
+        """
+        self.filter = self.isfilter('R')
 
     @property
     def V(self):
-        if self.available:
-            self.filter = 'V'
+        """
+        Init filter V
+        """
+        self.filter = self.isfilter('V')
 
     @property
     def B(self):
-        if self.available:
-            self.filter = 'B'
+        """
+        Init filter B
+        """
+        self.filter = self.isfilter('B')
 
     @property
     def CV(self):
-        if self.available:
-            self.filter = 'CV'
+        """
+        Init filter CV
+        """
+        self.filter = self.isfilter('CV')
 
     @property
     def TG(self):
-        if self.available:
-            self.filter = 'TG'
+        """
+        Init filter TG
+        """
+        self.filter = self.isfilter('TG')
 
     @property
     def period(self):
@@ -115,54 +125,61 @@ class load(object):
         @return: period JD
         """
         if self.available:
-            self._period = self.observation['JD'][len(self.observation)-1] - self.observation['JD'][0]
-            return self._period
+            return self.dataset['JD'][-1] - self.dataset['JD'][0]
+        else:
+            return 0
 
     @property
-    def title(self):
+    def _title(self):
+        """
+        @return: title name
+        """
         if self.available:
-            self.titlename = 'AAVSO -- data-download -- ' + self.observation['Star Name'][0]
-        return self.titlename
+            self.titlename = 'AAVSO -- data-download -- ' + self.dataset['Star Name'][0]
+            return self.titlename
+        else:
+            return False   
 
     @property
-    def comments(self):
+    def _comments(self):
+        """
+        @return: comments
+        """
         if self.available:
             observers = []
-            for i in self.observation['Observer Code'] :
+            for i in self.dataset['Observer Code'] :
                 if i not in observers:
                     observers.append(i)
-            comment = 'Showing ' + str(len(self.observation)) + ' observations for ' + self.observation['Star Name'][0] + ' from ' + str(len(observers)) + ' observers'
+            comment = 'Showing ' + str(len(self.dataset)) + ' observations for ' + self.dataset['Star Name'][0] + ' from ' + str(len(observers)) + ' observers'
             self.comment = comment
-        return self.comment
-
-    @property
-    def observations(self):
-        """
-        @return: observations table
-        """
-        if self.observation:
-            return self.observation
+            return self.comment
+        else:
+            return False
 
     @property
     def JDMinMax(self):
         """
         @return: min and max JD in observations table
         """
-        if self.observation:
-            return self.observation['JD'][0],self.observation['JD'][len(self.observation)-1]
+        if self.available:
+            return self.dataset['JD'][0],self.dataset['JD'][-1]
+        else:
+            return 0, 0
 
     @property
     def magnitudeMinMax(self):
         """
         @return: min and max of magnitude in observations table
         """
-        if self.observation:
+        if self.available:
             mv = []
-            for value in self.observations:
+            for value in self.dataset:
                 if self.filter == value['Band']:
                     if '<' not in value['Magnitude']:
                         mv.append(float(value['Magnitude']))
             return min(mv),max(mv)
+        else:
+            return False, False
 
     @property
     def JulianDay(self):
@@ -188,7 +205,7 @@ class load(object):
 
             x = []
             y = []
-            for value in self.observations:
+            for value in self.dataset:
                 if self.filter == value['Band']:
                     if '<' not in value['Magnitude']:
                         x.append(value['JD'])
@@ -197,9 +214,10 @@ class load(object):
             plt.xlim(round(jd_min)-5,round(jd_max)+5)
             plt.ylim(round(mv_min)-1,round(mv_max)+1)
             plt.gca().invert_yaxis()
-            plt.scatter(x, y, c = 'black', s = 2, alpha = 0.2)
+            #plt.scatter(x, y, c = 'blue', s = 2, alpha = 0.4)
+            plt.plot(x, y , linewidth=2, color='blue', alpha=0.7)
             self.JDline.plot()
-            plt.title(self.title, loc='center')
+            plt.title(self.titlename, loc='center')
             plt.xlabel('JD', fontsize = 12)
             if self.filter == 'Vis':
                 plt.ylabel(r'$m_v$', fontsize = 12)
@@ -238,4 +256,4 @@ class _JDline(object):
         """
         Plot line of JD's
         """
-        plt.vlines(self.JDtable, -30,30 , linestyles = 'solid', colors = 'grey', alpha = 0.1)
+        plt.vlines(self.JDtable, -30,30 , linestyles = '--', colors = 'red', alpha = 0.3)

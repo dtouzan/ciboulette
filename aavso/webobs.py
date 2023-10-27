@@ -14,7 +14,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import os
-import io
 import wget
 import requests
 
@@ -48,6 +47,7 @@ class web_obs(compoment):
         """
         @return: HTML of observation
         Ex:  wget --no-check-certificate 'https://app.aavso.org/webobs/results/?star=' -O aavso.html
+                                          https://app.aavso.org/webobs/results/?star=v1405+cas&num_results=25&obs_types=vis
         """
         if os.path.exists(self. fileoutput) :
             os.remove(self.fileoutput)
