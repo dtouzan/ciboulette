@@ -82,7 +82,7 @@ class vsx(compoment):
         @return: vsx name
         """
         if self.available:
-            return self.dataset['Name'][0]
+            return self._header_query('Name')
         else:
             return False
  
@@ -108,23 +108,13 @@ class vsx(compoment):
             return False, False
 
     @property
-    def epoch(self):
-        """
-        @return: vsx epoch
-        """
-        if self.available:
-            return float(self.dataset['Epoch'][0])
-        else:
-            return False
-
-    @property
     def magnitude(self):
         """
         @return: vsx magnitude maximum minimum
         """
         if self.available:
-            min = float(self.dataset['MinMag'][0].split(' ')[0])
-            max = float(self.dataset['MaxMag'][0].split(' ')[0])
+            min = float(self._header_query('MinMag').split(' ')[0])
+            max = float(self._header_query('MaxMag').split(' ')[0])
             return max, min
         else:
             return False, False
@@ -135,7 +125,66 @@ class vsx(compoment):
         @return: vsx AUID
         """
         if self.available:
-            return self.dataset['AUID'][0]
+            return self._header_query('AUID')
+        else:
+            return False
+
+    @property
+    def variability_type(self):
+        """
+        @return: vsx VariabilityType
+        """
+        if self.available:
+            return self._header_query('VariabilityType')
+        else:
+            return False
+
+    @property
+    def category(self):
+        """
+        @return: vsx Category
+        """
+        if self.available:
+            return self._header_query('Category')
+        else:
+            return False
+
+    @property
+    def OID(self):
+        """
+        @return: vsx OID
+        """
+        if self.available:
+            return self._header_query('OID')
+        else:
+            return False
+
+    @property
+    def constellation(self):
+        """
+        @return: vsx Constellation
+        """
+        if self.available:
+            return self._header_query('Constellation')
+        else:
+            return False
+
+    def header_value(self, header_name=''):
+        """
+        @return: vsx string representing dataset query header
+        """
+        return self._header_query(header_name)
+    
+    
+    def _header_query(self, header_name=''):
+        """
+        @return:  A string representing dataset headers query
+        """
+        if header_name != '':
+            if self.available:
+                return self.dataset[header_name][0]
+            else:
+                return False
         else:
             return False
 
