@@ -1,4 +1,4 @@
-![AAVSO](https://www.aavso.org/sites/default/files/aavso%20logo_0.png) 
+![AAVSO](https://www.aavso.org/sites/default/files/inline-images/aavso%20square%20logo_1.png) 
 ## AAVSO package
 Astronomy packages for AAVSO
 
