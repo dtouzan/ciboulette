@@ -31,7 +31,7 @@ __version__= "1.0.0"
 
 # Global mods
 import numpy as np
-from scipy.interpolate import make_interp_spline, interp1d
+from scipy.interpolate import make_interp_spline, interp1d, BSpline, CubicSpline
 
 # Astropy mods
 from astropy import units as u
@@ -66,6 +66,7 @@ SDSS_sloan_y = {'name': "Baader SLOAN/SDSS y' photometric", 'label': "y'", 'colo
                 'spectral_axis': [9300, 9450, 10450, 10600],\
                 'flux': [0, 1, 1, 0],\
                 'make_interp_spline': 'interp1d'}
+
 BESSEL_v = {'name': "Baader UBVRI Bessel V photometric", 'label': "V", 'color': 'green',\
                 'spectral_axis': [4800, 4900, 5000, 5100, 5200, 5400, 5600, 5800, 6000, 6200, 6400, 6600, 6800],\
                 'flux': [0, 0.35, 0.70, 0.85, 0.93, 0.905, 0.815, 0.66, 0.45, 0.30, 0.15, 0.04, 0],\
@@ -118,7 +119,7 @@ CLS_ccd = {'name':"Astronomik CLS CCD", 'label': 'CLS', 'color': 'grey',\
 
 OIII12nm = {'name':"Astronomik OIII CCD 12nm", 'label': 'OIII', 'color': 'teal',\
                 'spectral_axis': [4850, 4900, 4950, 5000, 5050, 5100, 5150],\
-                'flux':  [0, 0.10, 0.85, 0.96, 0.60, 0.05, 0],\
+                'flux':  [0, 0.35, 0.85, 0.96, 0.60, 0.20, 0],\
                 'make_interp_spline': 'make_interp_spline'}
 
 class Filters():
@@ -133,16 +134,16 @@ class Filters():
         self.flux = filter_configure['flux']
         self.make_XY(filter_configure['make_interp_spline'])
 
-    def plotBD(self, axes):
+    def plot(self):
         """
         @set:  Plot filter
-        @axes: Axes matplotlib
+        @axis: Axis matplotlib
         """       
-        axes.fill_between(self.x,self.y, color = self.color, alpha=0.1)
-        axes.plot(self.x,self.y, linewidth=3, color = self.color,alpha=0.9)
-        axes.plot(self.x,self.y, linewidth=5, color = 'white',alpha=0.5)
+        self.axis.fill_between(self.x,self.y, color = self.color, alpha=0.1)
+        self.axis.plot(self.x,self.y, linewidth=3, color = self.color,alpha=0.9)
+        self.axis.plot(self.x,self.y, linewidth=5, color = 'white',alpha=0.5)
         x_annotate = self.x[0] + ((self.x[len(self.x)-1] - self.x[0]) / 2)
-        axes.annotate(f'{self.label}', xy=(x_annotate, 0), xytext=(0,5), textcoords='offset points', rotation=0, va='bottom', ha='left', annotation_clip=False, fontsize=8, color=self.color, weight='bold', alpha=0.9)
+        self.axis.annotate(f'{self.label}', xy=(x_annotate, 0), xytext=(0,5), textcoords='offset points', rotation=0, va='bottom', ha='left', annotation_clip=False, fontsize=8, color=self.color, weight='bold', alpha=0.9)
 
     def make_XY(self,name = ''):
         """
@@ -160,25 +161,29 @@ class Filters():
         if name == '':
             self.x = self.spectral_axis
             self.y = self.flux
-            
+
+    @property
     def min_flux(self):
         """
         @return: minimum flux
         """
         return min(self.flux)
-    
+
+    @property
     def max_flux(self):
         """
         @return: maximun flux
         """
         return max(self.flux)
-    
+
+    @property
     def min_spectral_axis(self):
         """
         @return: minimum spectral axis
         """
         return min(self.spectral_axis)
-    
+
+    @property
     def max_spectral_axis(self):
         """
         @return: maximun spectral axis
