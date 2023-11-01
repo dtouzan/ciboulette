@@ -39,16 +39,18 @@ __copyright__ = "MIT"
 __date__ = "2023-04-10"
 __version__= "1.0.0"
 
+# Global mods
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Astropy mods
 from astropy.io import fits
 from astropy.table import Table
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-import numpy as np
-import matplotlib.pyplot as plt
 from astropy.visualization import quantity_support
-from specutils import Spectrum1D
 from astropy.time import Time
-
+from specutils import Spectrum1D
 
 class SA200(object):
     # Class for sa200 spectrum.
@@ -72,11 +74,10 @@ class SA200(object):
         @return:  A string representing resolution
         """     
         if 'SPE_RPOW' in self.header:
-            c = self.header['SPE_RPOW']
+            return self.header['SPE_RPOW']
         else:
-            c = ''           
-        return c   
-    
+            return ''           
+            
     @property
     def observer(self):
         """
@@ -118,11 +119,10 @@ class SA200(object):
         @return:  A sting representing calibration reference
         """     
         if 'O_CAL' in self.header:
-            c = self.header['O_CAL']
+            return self.header['O_CAL']
         else:
-            c = str(self.resolution)           
-        return c   
-
+            return str(self.resolution)           
+            
     @property
     def longitude(self):
         """
@@ -178,7 +178,7 @@ class SA200(object):
         """
         @return:  A string representing flux values
         """     
-        return self.s1d.flux.value[int( (atomic_line - self.header['CRVAL1']) / self.unit)]
+        return self.s1d.flux.value[int((atomic_line - self.header['CRVAL1']) / self.unit)]
 
     @property
     def xlabel(self):
@@ -210,15 +210,9 @@ class SA200(object):
         """     
         return self.s1d.flux
     
-    def plotBD(self, axes):
+    def plot(self):
         """
         @set:  Plot spectrum comic format
         """     
-        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=3, color = 'black',alpha=0.7)
-        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=1, color = 'cornflowerblue')
-
-    def plot(self, axes):
-        """
-        @set:  Plot spectrum line width 2
-        """     
-        axes.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=2, color = 'black')
+        self.axis.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=3, color = 'black',alpha=0.7)
+        self.axis.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=1, color = 'cornflowerblue')
