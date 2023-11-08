@@ -89,7 +89,7 @@ from ciboulette.base import constant
 
 
 
-class Mast(object):
+class Mast():
     
     def __init__(self, fileoutput='mast.csv'):
         self.fileoutput = fileoutput
