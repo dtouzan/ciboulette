@@ -7,7 +7,11 @@ __authors__ = ("Dominique Touzan","ciboulette module")
 __contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
 __copyright__ = "MIT"
 __date__ = "2023-10-24"
-__version__= "1.0.0"
+__version__ = "1.0.0"
+__citation__ = "The International Variable Star Index. Available: https://www.aavso.org/vsx/index.php?view=about.top\n"\
+                "VSX - usage and policies. Available : https://www.aavso.org/vsx/index.php?view=about.top\n"\
+                "AAVSO Data Usage Guidelines. Available: https://www.aavso.org/data-usage-guidelines.\n"\
+                "We acknowledge with thanks the variable star observations from the AAVSO International Database contributed by observers worldwide and used in this research.\n"
 
 # Globals mods
 import requests

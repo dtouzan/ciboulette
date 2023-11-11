@@ -29,11 +29,11 @@ class atomic_lines():
     Create atomic line table
     """
 
-    def __init__(self, spectrum='H I'):
-        self.atomic_line = []
+    def __init__(self):
+        self.atomic_line = Table()
         self.lambda_min = 300
         self.lambda_max = 800
-        self.spectrum = spectrum
+        self.spectrum = ''
         self.unit = u.nm
 
     @property
@@ -45,7 +45,9 @@ class atomic_lines():
     
     def read(self,package='ciboulette/spectrum/', file='atomicline_HI.csv'):
         """
-        Set atomic_line
+        Set atomic_line whith file
+        @set: package file directory
+        @set: file 
         """
         package_file = package+file
         self.atomic_line = Table.read(package_file, format='ascii.csv', header_start=5, data_start=6, delimiter='|') 
@@ -75,8 +77,89 @@ class atomic_lines():
         self.read('ciboulette/spectrum/','atomicline_FeII.csv')
 
     @property
+    def Fe_III(self):
+        """
+        Set atomic_line Fe III
+        """
+        self.spectrum = 'Fe III'
+        self.read('ciboulette/spectrum/','atomicline_FeIII.csv')
+
+    @property
+    def Na_I(self):
+        """
+        Set atomic_line Na I
+        """
+        self.spectrum = 'Na I'
+        self.read('ciboulette/spectrum/','atomicline_NaI.csv')
+
+    @property
+    def Na_II(self):
+        """
+        Set atomic_line Na II
+        """
+        self.spectrum = 'Na II'
+        self.read('ciboulette/spectrum/','atomicline_NaII.csv')
+
+    @property
+    def Ca_I(self):
+        """
+        Set atomic_line Ca I
+        """
+        self.spectrum = 'Ca I'
+        self.read('ciboulette/spectrum/','atomicline_CaI.csv')
+
+    @property
+    def Ca_II(self):
+        """
+        Set atomic_line Ca II
+        """
+        self.spectrum = 'Ca II'
+        self.read('ciboulette/spectrum/','atomicline_CaII.csv')
+
+    @property
+    def Mg_I(self):
+        """
+        Set atomic_line Mg I
+        """
+        self.spectrum = 'Mg I'
+        self.read('ciboulette/spectrum/','atomicline_MgI.csv')
+
+    @property
+    def Mg_II(self):
+        """
+        Set atomic_line Mg II
+        """
+        self.spectrum = 'Mg II'
+        self.read('ciboulette/spectrum/','atomicline_MgII.csv')
+
+    @property
+    def O_I(self):
+        """
+        Set atomic_line O I
+        """
+        self.spectrum = 'O I'
+        self.read('ciboulette/spectrum/','atomicline_OI.csv')
+
+    @property
+    def O_II(self):
+        """
+        Set atomic_line O II
+        """
+        self.spectrum = 'O II'
+        self.read('ciboulette/spectrum/','atomicline_OII.csv')
+
+    @property
+    def O_III(self):
+        """
+        Set atomic_line O III
+        """
+        self.spectrum = 'O III'
+        self.read('ciboulette/spectrum/','atomicline_OIII.csv')
+
+    @property
     def minmax(self):
         """
+        @init Lambda min and lambda max
         @return: wavelength range
         """
         if self.available:
@@ -108,15 +191,6 @@ class atomic_lines():
             self.thick_headed
             mask = (self.lambda_min < self.atomic_line['Wavelength']) & (self.atomic_line['Wavelength'] < self.lambda_max)
             values = self.atomic_line[mask]
-            """
-            for value in values:
-                if value['Wavelength'] < self.lambda_min or value['Wavelength'] > self.lambda_max:
-                    index_table.append(index)
-                index += 1
-            index_table.reverse()
-            for index in index_table:
-                values.remove_row(index)
-            """
             return values
         else:
             return False   
