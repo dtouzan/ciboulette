@@ -20,8 +20,21 @@ __citation__ = "Kramida, A., Ralchenko, Yu., Reader, J. and NIST ASD Team (2022)
 
 # Astropy mods
 from astropy import units as u
-from astropy.table import Table
-from astropy.utils.data import get_pkg_data_filename
+from astropy.table import Table, vstack as astropy_vstack
+
+SPECTRUM_FILE = (('atomicline_HI.csv', 'H I'),
+                 ('atomicline_FeI.csv', 'Fe I'),
+                 ('atomicline_FeII.csv', 'Fe II'),
+                 ('atomicline_FeIII.csv', 'Fe III'),
+                 ('atomicline_NaI.csv', 'Na I'),
+                 ('atomicline_NaII.csv', 'Na II'),
+                 ('atomicline_CaI.csv', 'Ca I'),
+                 ('atomicline_CaII.csv', 'Ca II'),
+                 ('atomicline_MgI.csv', 'Mg I'),
+                 ('atomicline_MgII.csv', 'Mg II'),
+                 ('atomicline_OI.csv', 'O I'),
+                 ('atomicline_OII.csv', 'O II'),
+                 ('atomicline_OIII.csv', 'O III'))
 
 class atomic_lines():
     # Class for Element spectrum.
@@ -50,111 +63,44 @@ class atomic_lines():
         @set: file 
         """
         package_file = package+file
-        self.atomic_line = Table.read(package_file, format='ascii.csv', header_start=5, data_start=6, delimiter='|') 
+        atomic_line = Table.read(package_file, format='ascii.csv', header_start=5, data_start=6, delimiter='|') 
+
+        # Re-Type colunm
+
+        atomic_line['Rel'] = atomic_line['Rel'].astype(str)  
+        atomic_line['Aki'] = atomic_line['Aki'].astype(str)     
+        atomic_line['Acc'] = atomic_line['Acc'].astype(str)       
+        atomic_line['Ei - Ek'] = atomic_line['Ei - Ek'].astype(str)              
+        atomic_line['L Conf'] = atomic_line['L Conf'].astype(str)     
+        atomic_line['L J'] = atomic_line['L J'].astype(str)
+        atomic_line['L Term'] = atomic_line['L Term'].astype(str) 
+        atomic_line['U Conf'] = atomic_line['U Conf'].astype(str)
+        atomic_line['U J'] = atomic_line['U J'].astype(str)
+        atomic_line['U Term'] = atomic_line['U Term'].astype(str)
+        atomic_line['gi - gk'] = atomic_line['gi - gk'].astype(str)
+        atomic_line['Type'] = atomic_line['Type'].astype(str)
+        atomic_line['TP'] = atomic_line['TP'].astype(str)    
+
+        # Rename colunm(15)
+        atomic_line.rename_column('col15', 'Spectrum')
+        atomic_line['Spectrum'] = atomic_line['Spectrum'].astype(str)
+        atomic_line[:]['Spectrum']=self.spectrum
+        
+        if self.available:
+            self.atomic_line = astropy_vstack([self.atomic_line, atomic_line])
+        else:
+            self.atomic_line = atomic_line
+        self.spectrum=''
 
     @property
-    def H_I(self):
+    def catalog(self):
         """
-        Set atomic_line H I
+        Set ciboulette catalog atomic linesn in module path spectrum
         """
-        self.spectrum = 'H I'
-        self.read('ciboulette/spectrum/','atomicline_HI.csv')
+        for file, spectrum in SPECTRUM_FILE:
+            self.spectrum = spectrum
+            self.read('ciboulette/spectrum/', file)
 
-    @property
-    def Fe_I(self):
-        """
-        Set atomic_line Fe I
-        """
-        self.spectrum = 'Fe I'
-        self.read('ciboulette/spectrum/','atomicline_FeI.csv')
-
-    @property
-    def Fe_II(self):
-        """
-        Set atomic_line Fe II
-        """
-        self.spectrum = 'Fe II'
-        self.read('ciboulette/spectrum/','atomicline_FeII.csv')
-
-    @property
-    def Fe_III(self):
-        """
-        Set atomic_line Fe III
-        """
-        self.spectrum = 'Fe III'
-        self.read('ciboulette/spectrum/','atomicline_FeIII.csv')
-
-    @property
-    def Na_I(self):
-        """
-        Set atomic_line Na I
-        """
-        self.spectrum = 'Na I'
-        self.read('ciboulette/spectrum/','atomicline_NaI.csv')
-
-    @property
-    def Na_II(self):
-        """
-        Set atomic_line Na II
-        """
-        self.spectrum = 'Na II'
-        self.read('ciboulette/spectrum/','atomicline_NaII.csv')
-
-    @property
-    def Ca_I(self):
-        """
-        Set atomic_line Ca I
-        """
-        self.spectrum = 'Ca I'
-        self.read('ciboulette/spectrum/','atomicline_CaI.csv')
-
-    @property
-    def Ca_II(self):
-        """
-        Set atomic_line Ca II
-        """
-        self.spectrum = 'Ca II'
-        self.read('ciboulette/spectrum/','atomicline_CaII.csv')
-
-    @property
-    def Mg_I(self):
-        """
-        Set atomic_line Mg I
-        """
-        self.spectrum = 'Mg I'
-        self.read('ciboulette/spectrum/','atomicline_MgI.csv')
-
-    @property
-    def Mg_II(self):
-        """
-        Set atomic_line Mg II
-        """
-        self.spectrum = 'Mg II'
-        self.read('ciboulette/spectrum/','atomicline_MgII.csv')
-
-    @property
-    def O_I(self):
-        """
-        Set atomic_line O I
-        """
-        self.spectrum = 'O I'
-        self.read('ciboulette/spectrum/','atomicline_OI.csv')
-
-    @property
-    def O_II(self):
-        """
-        Set atomic_line O II
-        """
-        self.spectrum = 'O II'
-        self.read('ciboulette/spectrum/','atomicline_OII.csv')
-
-    @property
-    def O_III(self):
-        """
-        Set atomic_line O III
-        """
-        self.spectrum = 'O III'
-        self.read('ciboulette/spectrum/','atomicline_OIII.csv')
 
     @property
     def minmax(self):
@@ -163,12 +109,12 @@ class atomic_lines():
         @return: wavelength range
         """
         if self.available:
-            self.lambda_min = min(self.atomic_line['Wavelength'])
-            self.lambda_max = max(self.atomic_line['Wavelength'])                
+            lambda_min = min(self.atomic_line['Wavelength'])
+            lambda_max = max(self.atomic_line['Wavelength'])                
         else:
-            self.lambda_min = 300
-            self.lambda_max = 800    
-        return self.lambda_max - self.lambda_min
+            lambda_min = 300
+            lambda_max = 800    
+        return lambda_min, lambda_max, lambda_max - lambda_min
 
     @property
     def wavelength_values(self):
@@ -189,7 +135,10 @@ class atomic_lines():
             index = 0
             index_table = []
             self.thick_headed
-            mask = (self.lambda_min < self.atomic_line['Wavelength']) & (self.atomic_line['Wavelength'] < self.lambda_max)
+            if self.spectrum != '':
+                mask = (self.lambda_min < self.atomic_line['Wavelength']) & (self.atomic_line['Wavelength'] < self.lambda_max) & (self.atomic_line['Spectrum']==self.spectrum)
+            else:
+                mask = (self.lambda_min < self.atomic_line['Wavelength']) & (self.atomic_line['Wavelength'] < self.lambda_max)
             values = self.atomic_line[mask]
             return values
         else:
@@ -205,6 +154,12 @@ class atomic_lines():
             self.lambda_min = self.lambda_max
             self.lambda_max = max
             
+    @property
+    def header_names(self):
+        """
+        @return:  A list representing dataset headers
+        """
+        return self.atomic_line.colnames
 
 
 
