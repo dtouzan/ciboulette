@@ -18,9 +18,6 @@ __citation__ = "Kramida, A., Ralchenko, Yu., Reader, J. and NIST ASD Team (2022)
                 "NIST Atomic Spectra Database (version 5.10), [Online]. Available: https://physics.nist.gov/asd [Thu Nov 09 2023].\n" \
                 "National Institute of Standards and Technology, Gaithersburg, MD. DOI: https://doi.org/10.18434/T4W30F" 
 
-# Global mods
-import json
-
 # Astropy mods
 from astropy import units as u
 from astropy.table import Table, vstack as astropy_vstack
@@ -162,15 +159,17 @@ class atomic_lines():
         """
         return self.atomic_line.colnames
 
-    def to_line(self, name='', label=''):
+    def get(self, name='', label=''):
         """
         @return:  A dict representing data line
         """
+        spectrum = 'H I'
+        wavelength = 658.28
         request = self.request
         spectrum = request['Spectrum'][0]
         wavelength = str(request['Wavelength'][0])
-        value = "{" + '"name": "' + name + '"' + "," + '"label": "' + label + '"' + "," + '"wavelength": "' + wavelength + '"' + "," + '"spectrum": "' + spectrum + '"' + "}"
-        return json.loads(value)
+        value = {'name': name, 'label': label, 'wavelength': wavelength, 'spectrum': spectrum}
+        return value
                
 
 
