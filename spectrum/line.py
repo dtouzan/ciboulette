@@ -17,25 +17,41 @@ from astropy.table import Table
 # Local mods
 from ciboulette.spectrum import atomiclines
 
-AtomicLine_Ha = {'name': 'H alpha', 'label': 'Ha', 'wavelength': 658.28, 'spectrum': 'H I'}
-AtomicLine_Hb = {'name': 'H beta', 'label': 'Hb', 'wavelength': 490, 'spectrum': 'H I'}
-AtomicLine_Hg = {'name': 'H gamma', 'label': 'Hg', 'wavelength': 440, 'spectrum': 'H I'}
-AtomicLine_Hd = {'name': 'H delta', 'label': 'Hd', 'wavelength': 411, 'spectrum': 'H I'}
-AtomicLine_He = {'name': 'H epsilon', 'label': 'He', 'wavelength': 399, 'spectrum': 'H I'}
-AtomicLine_Hz = {'name': 'H zeta', 'label': 'Hz', 'wavelength': 389, 'spectrum': 'H I'}
-AtomicLine_D2 = {'name': 'sodium D2', 'label': 'D2', 'wavelength': 589.9, 'spectrum': 'Na I'}
-AtomicLine_D1 = {'name': 'sodium D1', 'label': 'D1', 'wavelength': 589, 'spectrum': 'Na I'}
-AtomicLine_H = {'name': 'calcium H1', 'label': 'H', 'wavelength': 397, 'spectrum': 'Ca II'}
-AtomicLine_K = {'name': 'calcium K', 'label': 'K', 'wavelength': 393.7, 'spectrum': 'Ca II'}
-AtomicLine_G = {'name': 'bande G (Ca+Fe)', 'label': 'G', 'wavelength': 430.8, 'spectrum': 'Fe I'}
-AtomicLine_Mb1 = {'name': 'magnesium b1', 'label': 'b1', 'wavelength': 516.8, 'spectrum': 'Mg I'}
-AtomicLine_Mb2 = {'name': 'magnesium b2', 'label': 'b2', 'wavelength': 517.3, 'spectrum': 'Mg I'}
-AtomicLine_Mb3 = {'name': 'magnesium b2', 'label': 'b2', 'wavelength': 518.4, 'spectrum': 'Mg I'}
-AtomicLine_g = {'name': 'calcium g', 'label': 'g', 'wavelength': 422.8, 'spectrum': 'Ca I'}
-AtomicLine_e = {'name': 'fer e', 'label': 'e', 'wavelength': 438.36, 'spectrum': 'Fe I'}
-AtomicLine_d = {'name': 'fer d', 'label': 'e', 'wavelength': 466.82, 'spectrum': 'Fe I'}
-AtomicLine_c = {'name': 'fer c', 'label': 'e', 'wavelength': 495.76, 'spectrum': 'Fe I'}
-AtomicLine_E = {'name': 'fer E', 'label': 'E', 'wavelength': 526.98, 'spectrum': 'Fe I'}
+AtomicLine_y = {'name': 'y', 'label': 'y', 'wavelength': 898.765, 'spectrum': 'O II'}
+AtomicLine_Z = {'name': 'Z', 'label': 'Z', 'wavelength': 822.696, 'spectrum': 'O II'}
+AtomicLine_A = {'name': 'A', 'label': 'A', 'wavelength': 759.37, 'spectrum': 'O II'}
+AtomicLine_B = {'name': 'B', 'label': 'B', 'wavelength': 686.719, 'spectrum': 'O II'}
+AtomicLine_C = {'name': 'C', 'label': 'H Alpha', 'wavelength': 656.285175, 'spectrum': 'H I'}
+AtomicLine_a = {'name': 'a', 'label': 'a', 'wavelength': 627.661, 'spectrum': 'O II'}
+AtomicLine_D1 = {'name': 'D1', 'label': 'D1', 'wavelength': 589.592, 'spectrum': 'Na I'}
+AtomicLine_D2 = {'name': 'D2', 'label': 'D2', 'wavelength': 588.995, 'spectrum': 'Na I'}
+AtomicLine_D3 = {'name': 'D3 ou d', 'label': 'D3 ou d', 'wavelength': 587.562, 'spectrum': 'He I'}
+AtomicLine_e = {'name': 'e', 'label': 'e', 'wavelength': 546.073, 'spectrum': 'Hg I'}
+AtomicLine_E2 = {'name': 'E2', 'label': 'E2', 'wavelength': 527.039, 'spectrum': 'Fe I'}
+AtomicLine_b1 = {'name': 'b1', 'label': 'b1', 'wavelength': 518.362, 'spectrum': 'Mg I'}
+AtomicLine_b2 = {'name': 'b2', 'label': 'b2', 'wavelength': 517.27, 'spectrum': 'Mg I'}
+AtomicLine_b3 = {'name': 'b3', 'label': 'b3', 'wavelength': 516.891, 'spectrum': 'Fe I'}
+AtomicLine_b4 = {'name': 'b4', 'label': 'b4', 'wavelength': 516.722, 'spectrum': 'Mg I'}
+AtomicLine_c = {'name': 'c', 'label': 'c', 'wavelength': 495.761, 'spectrum': 'Fe I'}
+AtomicLine_F = {'name': 'F', 'label': 'H Beta', 'wavelength': 486.134, 'spectrum': 'H I'}
+AtomicLine_d = {'name': 'd', 'label': 'd', 'wavelength': 466.814, 'spectrum': 'Fe I'}
+AtomicLine_e = {'name': 'e', 'label': 'e', 'wavelength': 438.355, 'spectrum': 'Fe I'}
+AtomicLine_Hg = {'name': 'G ou f', 'label': 'H gamma', 'wavelength': 434.047, 'spectrum': 'H I'}
+AtomicLine_G_fe = {'name': 'G', 'label': 'G', 'wavelength': 430.79, 'spectrum': 'Fe I'}
+AtomicLine_G = {'name': 'G', 'label': 'G', 'wavelength': 430.774, 'spectrum': 'Ca I'}
+AtomicLine_h = {'name': 'h', 'label': 'H Delta', 'wavelength': 410.175, 'spectrum': 'H I'}
+AtomicLine_He = {'name': 'H epsilon', 'label': 'He', 'wavelength': 397.0075, 'spectrum': 'H I'}
+AtomicLine_Hz = {'name': 'H zeta', 'label': 'Hz', 'wavelength': 388.9064, 'spectrum': 'H I'}
+AtomicLine_H = {'name': 'H', 'label': 'H', 'wavelength': 396.847, 'spectrum': 'Ca II'}
+AtomicLine_K = {'name': 'K', 'label': 'K', 'wavelength': 393.366, 'spectrum': 'Ca II'}
+AtomicLine_L = {'name': 'L', 'label': 'L', 'wavelength': 382.044, 'spectrum': 'Fe I'}
+AtomicLine_N = {'name': 'N', 'label': 'N', 'wavelength': 358.121, 'spectrum': 'Fe I'}
+AtomicLine_P = {'name': 'P', 'label': 'P', 'wavelength': 336.112, 'spectrum': 'Ti II'}
+AtomicLine_T = {'name': 'T', 'label': 'T', 'wavelength': 302.108, 'spectrum': 'Fe I'}
+AtomicLine_t = {'name': 't', 'label': 't', 'wavelength': 299.444, 'spectrum': 'Ni I'}
+
+
+
 
 class lines():
     """
