@@ -216,3 +216,13 @@ class SA200(object):
         """     
         self.axis.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=3, color = 'black',alpha=0.7)
         self.axis.plot(self.s1d.spectral_axis, self.s1d.flux , linewidth=1, color = 'cornflowerblue')
+
+    @property
+    def xytitle(self):
+        """
+        @set:  Plot title, xlabel and ylabel 
+        """  
+        self.axis.set_title(self.title, loc='center', fontsize=8)
+        self.axis.set_xlabel(self.xlabel, fontsize=10)
+        self.axis.set_ylabel(self.ylabel, fontsize=10)
+
