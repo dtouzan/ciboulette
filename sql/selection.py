@@ -13,10 +13,15 @@ from ciboulette.sql import compoments
 
 
 class select(compoments.compoment):
+    """
+    SQL select class
+    """
 
     @property
     def mast(self):
         """
+        SQL view mast_select, return mast records
+        
         MAST                  DB UT1
         -------------------   -------------------------
         intentType            scienceprogram.type

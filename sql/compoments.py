@@ -12,6 +12,9 @@ __version__= "1.0.0"
 import sqlite3
 
 class compoment:
+    """
+    Base compoment for SQL
+    """
     
     def __init__(self):
         self.db = 'ciboulette/db/UT1.db'
@@ -20,10 +23,16 @@ class compoment:
 
     @property
     def connect(self):
+        """
+        Connect to database
+        """
         self.connection = sqlite3.connect(self.db)
 
     @property
     def database(self):
+        """
+        SQL view database, return name, release of databasse
+        """
         self.cursor = self.connection.cursor()
         resources = self.cursor.execute("SELECT name,release FROM database").fetchone()
         self.cursor.close()
@@ -31,6 +40,9 @@ class compoment:
     
     @property
     def close(self):
+        """
+        Close database
+        """
         self.connection.close()
 
         
