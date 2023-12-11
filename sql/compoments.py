@@ -31,7 +31,8 @@ class compoment:
     @property
     def database(self):
         """
-        SQL view database, return name, release of databasse
+        SQL view database
+        @return: name, release of databasse
         """
         self.cursor = self.connection.cursor()
         resources = self.cursor.execute("SELECT name,release FROM database").fetchone()
