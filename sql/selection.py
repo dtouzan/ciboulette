@@ -17,6 +17,19 @@ class select(compoments.compoment):
     SQL select class
     """
 
+    def _selectall(self, sql_request: str):
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute(sql_request).fetchall()
+        self.cursor.close()
+        return resources
+
+    def _selectone(self, sql_request: str):
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute(sql_request).fetchall()
+        self.cursor.close()
+        return resources
+
+
     @property
     def mast(self):
         """
@@ -47,9 +60,7 @@ class select(compoments.compoment):
         format                observation.note_file        19 
         url                   observation.fits_file        20  
         """
-        self.cursor = self.connection.cursor()
-        resources = self.cursor.execute("SELECT * FROM mast_select").fetchall()
-        self.cursor.close()
+        resources = self._selectall("SELECT * FROM mast_select")
         return resources
 
     @property
@@ -58,9 +69,7 @@ class select(compoments.compoment):
         SQL view mast_header
         @return: data of mast header
         """
-        self.cursor = self.connection.cursor()
-        resources = self.cursor.execute("SELECT * FROM mast_header").fetchone()
-        self.cursor.close()        
+        resources = self._selectone("SELECT * FROM mast_header")    
         return resources
 
     @property
@@ -69,7 +78,23 @@ class select(compoments.compoment):
         SQL view filter_header
         @return: data of filter header
         """
-        self.cursor = self.connection.cursor()
-        resources = self.cursor.execute("SELECT * FROM filter_header").fetchone()
-        self.cursor.close()        
+        resources = self._selectone("SELECT * FROM filter_header")
+        return resources
+
+    @property
+    def scienceprogram(self):
+        """
+        SQL view scienceprogram_select
+        @return: data of scienceprogram
+        """
+        resources = self._selectall("SELECT * FROM scienceprogram_select")
+        return resources
+
+    @property
+    def collection(self):
+        """
+        SQL view collection_select
+        @return: data of collection
+        """
+        resources = self._selectall("SELECT * FROM collection_select")
         return resources
