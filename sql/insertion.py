@@ -24,11 +24,11 @@ class insert(compoments.compoment):
         @set: mast data line        
         """
         self.cursor = self.connection.cursor()
-        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram,)).fetchone()
+        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
         if science_program_id:
             # Scienceprogram resources
             SP_id = science_program_id[0]
-            resources = dataset.split(',')
+            resources = mast_dataset.split(',')
             # Observation resources
             observation_id = int(resources[7])
             collection = resources[1]
