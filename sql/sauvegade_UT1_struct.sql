@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur mar. déc. 12 11:48:59 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur mar. déc. 12 16:29:55 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -49,6 +49,10 @@ CREATE TABLE IF NOT EXISTS Instrument (
 	GAIN                 INTEGER     ,
 	FOREIGN KEY ( OBSERVATION_ID ) REFERENCES Observation( OBSERVATION_ID )  
  );
+
+-- Tableau : Mount
+DROP TABLE IF EXISTS Mount;
+CREATE TABLE IF NOT EXISTS Mount (NAME TEXT (1024) DEFAULT "AZ-EQ5-GT", LABEL TEXT (1024) DEFAULT "AZ-EQ5-GT SynScan GoTo");
 
 -- Tableau : Observation
 DROP TABLE IF EXISTS Observation;
