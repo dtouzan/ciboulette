@@ -122,7 +122,23 @@ class insert(compoments.compoment):
             self.connection.commit()           
         self.cursor.close()
         
-
+    def close_scienceprogram(self, scienceprogram_title: str):
+        """
+        SQL close science program, status = 0
+        """
+        self.cursor = self.connection.cursor()
+        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
+        if science_program_id:
+            # SQLupdate scienceprogram status
+            sql = """UPDATE scienceprogram SET status=0  WHERE science_program_id=?;"""
+            dataresources = science_program_id
+            self.cursor.execute(sql, dataresources) 
+            
+            # SQL commit to database
+            self.connection.commit()
+        else:
+            return False        
+        
 
 
 

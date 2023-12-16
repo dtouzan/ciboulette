@@ -25,7 +25,7 @@ class select(compoments.compoment):
 
     def _selectone(self, sql_request: str):
         self.cursor = self.connection.cursor()
-        resources = self.cursor.execute(sql_request).fetchall()
+        resources = self.cursor.execute(sql_request).fetchone()
         self.cursor.close()
         return resources
 
@@ -98,3 +98,25 @@ class select(compoments.compoment):
         """
         resources = self._selectall("SELECT * FROM collection_select")
         return resources
+
+    @property
+    def scheduling_last(self):
+        """
+        SQL view date_last
+        @return: last date of observation
+        """
+        resources = self._selectall("SELECT * FROM scheduling_last")
+        return resources
+
+    @property
+    def scienceprogram_type_header(self):
+        """
+        SQL view scienceprogram_type_header
+        @return: last date of observation
+        """
+        resources = self._selectone("SELECT * FROM scienceprogram_type_header")
+        return resources
+
+
+
+

@@ -30,4 +30,31 @@ class interfaces(compoments.compoment):
                 print(row[0])
                 data_in.mast(scienceprogram_title, row[0])
         data_in.close
+
+    @property
+    def scienceprogram_type_header(self):
+        """
+        @return: types list of sciencprogram
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = data_out.scienceprogram_type_header       
+        data_out.close
+        return resources[0].split(';')
+        
+    @property
+    def collection(self):
+        """
+        @return: collections list of observation
+        """
+        data_out = selection.select() 
+        data_out.connect
+        dataset = data_out.collection
+        data_out.close
+        resources = []
+        for value in dataset:
+            resources.append(value[0])
+        return resources
+       
+        
                 

@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur jeu. déc. 14 21:03:09 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur sam. déc. 16 23:24:17 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -17,7 +17,7 @@ INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD) VALUES (4, 'nefe
 
 -- Tableau : Collection
 DROP TABLE IF EXISTS Collection;
-CREATE TABLE IF NOT EXISTS Collection (NAME TEXT (1024) DEFAULT OT_Library_UT1);
+CREATE TABLE IF NOT EXISTS Collection (NAME TEXT (1024) DEFAULT OT_Library_UT1 UNIQUE);
 INSERT INTO Collection (NAME) VALUES ('OT_Library_UT1');
 INSERT INTO Collection (NAME) VALUES ('OT_Library_HII');
 INSERT INTO Collection (NAME) VALUES ('OT_Library_OIII');
@@ -54,6 +54,7 @@ DROP TABLE IF EXISTS Header;
 CREATE TABLE IF NOT EXISTS Header (NAME TEXT (1024), DATA TEXT (1024), RELEASE TEXT (1024) DEFAULT (1.0));
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'name;label;spectral_axis;flux', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collection;instrument_name;filters;disperser;target_name;target_classification;obs_id;s_ra;s_dec;proposal_pi;dataproduct_type;calib_level;scheduling;t_min;t_max;t_exptime;obs_title;focal;format;url', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -1890,7 +1891,7 @@ CREATE TABLE IF NOT EXISTS ObservingLog (
 -- Tableau : ScienceProgram
 DROP TABLE IF EXISTS ScienceProgram;
 CREATE TABLE IF NOT EXISTS ScienceProgram (SCIENCE_PROGRAM_ID INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT, TITLE TEXT (1024), STATUS INTEGER DEFAULT (1), CONTACT TEXT (1024) DEFAULT "dtouzan@gmail.com", OBSERVING_TIME REAL, TYPE TEXT (1024) DEFAULT science, DATASET TEXT (1024) DEFAULT dataset);
-INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1000, 'UT1 science program 2016-2023', 0, 'dtouzan@gmail.com', 0.0, 'science', 'dataset/archives');
+INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1000, 'UT1 science program 2016-2023', 1, 'dtouzan@gmail.com', 0.0, 'science', 'dataset/archives');
 INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1001, 'UT1 science program 2024', 1, 'dtouzan@gmail.com', 0.0, 'science', 'dataset/archives');
 
 -- Tableau : Sequence
@@ -3687,7 +3688,7 @@ INSERT INTO Target (OBSERVATION_ID, NAME, CLASS, RA, DEC, NOTES) VALUES (892, 's
 
 -- Vue : collection_select
 DROP VIEW IF EXISTS collection_select;
-CREATE VIEW IF NOT EXISTS collection_select AS SELECT * FROM collection;
+CREATE VIEW IF NOT EXISTS collection_select AS SELECT * FROM Collection;
 
 -- Vue : filter_header
 DROP VIEW IF EXISTS filter_header;
@@ -3724,6 +3725,10 @@ CREATE VIEW IF NOT EXISTS scienceprogram_mast_values AS SELECT type FROM Science
 -- Vue : scienceprogram_select
 DROP VIEW IF EXISTS scienceprogram_select;
 CREATE VIEW IF NOT EXISTS scienceprogram_select AS SELECT science_program_id, title, contact, observing_time, type, dataset FROM ScienceProgram;
+
+-- Vue : scienceprogram_type_header
+DROP VIEW IF EXISTS scienceprogram_type_header;
+CREATE VIEW IF NOT EXISTS scienceprogram_type_header AS SELECT data FROM header WHERE name='scienceprogram_type';
 
 -- Vue : sequence_mast_values
 DROP VIEW IF EXISTS sequence_mast_values;
