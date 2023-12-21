@@ -32,6 +32,18 @@ class interfaces(compoments.compoment):
         data_in.close
 
     @property
+    def mast_out(self):
+        """
+        Export vue mast_select for table
+        @set: scienceprogram_title
+        """
+        data_out = selection.select() 
+        data_out.connect   
+        resources = data_out.mast
+        data_out.close
+        return resources
+
+    @property
     def scienceprogram_type_header(self):
         """
         @return: types list of sciencprogram

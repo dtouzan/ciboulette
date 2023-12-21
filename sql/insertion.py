@@ -43,7 +43,7 @@ class insert(compoments.compoment):
             filters = resources[3]  
             disperser = resources[4]
             exposure_time = float(resources[16])
-            camera = resources[18] 
+            focal = resources[18] 
             # Target resources
             target_name = resources[5]
             target_class = resources[6]
@@ -61,7 +61,7 @@ class insert(compoments.compoment):
 
             # SQL INSERT instrument
             sql = """INSERT INTO instrument(observation_id,name,filter,disperser,camera,exposure_time) VALUES(?,?,?,?,?,?);"""
-            dataresources = (observation_id, instrument_name, filters, disperser, camera, exposure_time)
+            dataresources = (observation_id, instrument_name, filters, disperser, focal, exposure_time)
             self.cursor.execute(sql, dataresources) 
 
             # SQL INSERT target
