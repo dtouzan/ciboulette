@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur jeu. déc. 21 23:31:15 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur ven. déc. 22 16:11:59 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -954,8 +954,8 @@ INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSUR
 
 -- Tableau : Mount
 DROP TABLE IF EXISTS Mount;
-CREATE TABLE IF NOT EXISTS Mount (NAME TEXT (1024) DEFAULT "AZ-EQ5-GT", LABEL TEXT (1024) DEFAULT "AZ-EQ5-GT SynScan GoTo");
-INSERT INTO Mount (NAME, LABEL) VALUES ('UT1', 'AZ-EQ5-GT SynScan GoTo');
+CREATE TABLE IF NOT EXISTS Mount (NAME TEXT (1024) DEFAULT "AZ-EQ5-GT", LABEL TEXT (1024) DEFAULT "AZ-EQ5-GT SynScan GoTo", LONGITUDE REAL DEFAULT (- 0.35), LATITUDE REAL DEFAULT (49.35));
+INSERT INTO Mount (NAME, LABEL, LONGITUDE, LATITUDE) VALUES ('UT1', 'AZ-EQ5-GT SynScan GoTo', -0.35, 49.35);
 
 -- Tableau : Observation
 DROP TABLE IF EXISTS Observation;
@@ -3684,7 +3684,7 @@ CREATE VIEW IF NOT EXISTS filter_header AS SELECT data FROM header WHERE name='f
 
 -- Vue : instrument_mast_values
 DROP VIEW IF EXISTS instrument_mast_values;
-CREATE VIEW IF NOT EXISTS instrument_mast_values AS SELECT name, filter, disperser, exposure_time, camera FROM Instrument;
+CREATE VIEW IF NOT EXISTS instrument_mast_values AS SELECT name, filter, disperser, exposure_time, focal FROM Instrument;
 
 -- Vue : mast_header
 DROP VIEW IF EXISTS mast_header;
@@ -3692,7 +3692,7 @@ CREATE VIEW IF NOT EXISTS mast_header AS SELECT data FROM header WHERE name='mas
 
 -- Vue : mast_select
 DROP VIEW IF EXISTS mast_select;
-CREATE VIEW IF NOT EXISTS mast_select AS SELECT ScienceProgram.type, collection, Instrument.name, filter, disperser, target.name, class, Observation.observation_id, ra, dec, proposal_pi, Sequence.type, calibration, scheduling, timeline_min, timeline_max, exposure_time, Observation.title, Instrument.camera, note_file, fits_file FROM ScienceProgram , Observation , Instrument , target , Sequence WHERE Observation.science_program_id = ScienceProgram.science_program_id AND Observation.observation_id = Instrument.observation_id AND Observation.observation_id = Sequence.observation_id AND Observation.observation_id = target.observation_id;
+CREATE VIEW IF NOT EXISTS mast_select AS SELECT ScienceProgram.type, collection, Instrument.name, filter, disperser, target.name, class, Observation.observation_id, ra, dec, proposal_pi, Sequence.type, calibration, scheduling, timeline_min, timeline_max, exposure_time, Observation.title, Instrument.focal, note_file, fits_file FROM ScienceProgram , Observation , Instrument , target , Sequence WHERE Observation.science_program_id = ScienceProgram.science_program_id AND Observation.observation_id = Instrument.observation_id AND Observation.observation_id = Sequence.observation_id AND Observation.observation_id = target.observation_id;
 
 -- Vue : observation_last_id
 DROP VIEW IF EXISTS observation_last_id;
