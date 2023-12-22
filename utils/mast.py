@@ -39,7 +39,7 @@ url                    string           url
 
 OT Mast class
 
-Name             Type                 Variable name
+Name                    Type                 Variable name
 -----------------     --------         -----------------------
 Observation Type       string           intentType
 Mission                string           obs_collection
@@ -75,7 +75,6 @@ __version__= "1.0.0"
 import time
 import os
 from collections import Counter, OrderedDict
-import wget
 from datetime import datetime
 # Astropy mods
 from astropy.table import Table, unique, vstack
@@ -115,8 +114,8 @@ class Mast():
         if os.path.exists(fileinput) :
 
             self.observation = Table.read(fileinput, format='ascii.csv', header_start=2, data_start=3)   
-            self.observations['obs_title'].mask = [False]
-            self.observations['disperser'].mask = [False]
+            self.observation['obs_title'].mask = [False]
+            self.observation['disperser'].mask = [False]
         return self.exist
     
     def get_number(self, fileinput):
