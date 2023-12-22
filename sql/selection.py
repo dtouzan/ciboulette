@@ -64,6 +64,14 @@ class select(compoments.compoment):
         return resources
 
     @property
+    def mast_last_id(self):
+        """
+        Export vue mast_last_id 
+        """
+        resources = self._selectone("SELECT * FROM observation_last_id") 
+        return resources
+    
+    @property
     def mast_header(self):
         """
         SQL view mast_header

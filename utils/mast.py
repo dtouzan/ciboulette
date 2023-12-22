@@ -76,6 +76,7 @@ import time
 import os
 from collections import Counter, OrderedDict
 from datetime import datetime
+import csv
 # Astropy mods
 from astropy.table import Table, unique, vstack
 from astropy import units as u
@@ -94,7 +95,7 @@ class Mast():
         self.fileoutput = fileoutput
         self.observation = Table()
         self.disperser = 'SA200'
-        self.observation_number = -4 # Header file create
+        self.observation_number = -3 # Header file create
         
     @property
     def exist(self):
@@ -126,11 +127,7 @@ class Mast():
         if fileinput == '':
             self.observation_number = 0
         else:
-            with open(fileinput, 'r') as file_mast:
-                self.observation_number = -4 # Header
-                for line in file_mast:
-                    self.observation_number += 1  
-            
+            self.observation_number = max(self.observation['obs_id'])            
         return self.observation_number
    
     @property

@@ -35,7 +35,6 @@ class interfaces(compoments.compoment):
     def mast_out(self):
         """
         Export vue mast_select for table
-        @set: scienceprogram_title
         """
         data_out = selection.select() 
         data_out.connect   
@@ -43,6 +42,18 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    @property
+    def mast_last_id(self):
+        """
+        Export vue mast_last_id 
+        """
+        data_out = selection.select() 
+        data_out.connect   
+        resources = data_out.mast_last_id
+        data_out.close
+        return resources[1]
+
+    
     @property
     def scienceprogram_type_header(self):
         """
