@@ -116,6 +116,15 @@ class select(compoments.compoment):
         resources = self._selectall("SELECT * FROM scheduling_last")
         return resources
 
+    @property
+    def scienceprogram_type_header(self):
+        """
+        SQL view scienceprogram_type_header
+        @return: last date of observation
+        """
+        resources = self._selectone("SELECT * FROM scienceprogram_type_header")
+        return resources
+    
     def scienceprogram_observing_time(self, scienceprogram_title:str):
         """
         @return: all sequences of scienceprogram title
