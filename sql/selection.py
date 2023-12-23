@@ -116,15 +116,38 @@ class select(compoments.compoment):
         resources = self._selectall("SELECT * FROM scheduling_last")
         return resources
 
-    @property
-    def scienceprogram_type_header(self):
+    def scienceprogram_observing_time(self, scienceprogram_title:str):
         """
-        SQL view scienceprogram_type_header
-        @return: last date of observation
+        @return: all sequences of scienceprogram title
+        @set: science program title
         """
-        resources = self._selectone("SELECT * FROM scienceprogram_type_header")
+        self.cursor = self.connection.cursor()
+        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
+        if science_program_id:
+            sql_request = "SELECT timeline_min,\
+                                  timeline_max \
+                                  FROM sequence,observation \
+                                  WHERE observation.observation_id=sequence.observation_id \
+                                  AND observation.science_program_id=? \
+                                  ORDER BY sequence.timeline_min"
+            resources = self.cursor.execute(sql_request, science_program_id).fetchall()
+        self.cursor.close()
         return resources
 
+    def instrument_exposure_time(self, scienceprogram_title:str):
+        """
+        @return: scienceprogram sum exposure time
+        @set: science program title
+        """
+        self.cursor = self.connection.cursor()
+        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
+        if science_program_id:
+            sql_request = "SELECT exposure_time FROM instrument,observation \
+                                  WHERE observation.observation_id=instrument.observation_id \
+                                  AND observation.science_program_id=?"
+            resources = self.cursor.execute(sql_request, science_program_id).fetchall()
+        self.cursor.close()
+        return resources
 
 
 

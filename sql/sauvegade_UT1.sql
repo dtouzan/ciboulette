@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur ven. déc. 22 18:33:19 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur sam. déc. 23 23:37:34 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -3713,6 +3713,10 @@ CREATE VIEW IF NOT EXISTS observation_mast_values AS SELECT collection, observat
 -- Vue : scheduling_last
 DROP VIEW IF EXISTS scheduling_last;
 CREATE VIEW IF NOT EXISTS scheduling_last AS SELECT * FROM sequence INNER JOIN observation ON observation.observation_id = sequence.observation_id ORDER BY sequence.timeline_min;
+
+-- Vue : scheduling_table
+DROP VIEW IF EXISTS scheduling_table;
+CREATE VIEW IF NOT EXISTS scheduling_table AS SELECT timeline_min,timeline_max FROM sequence INNER JOIN observation ON observation.observation_id = sequence.observation_id ORDER BY sequence.timeline_min;
 
 -- Vue : scienceprogram_mast_values
 DROP VIEW IF EXISTS scienceprogram_mast_values;

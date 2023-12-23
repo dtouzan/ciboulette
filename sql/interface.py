@@ -64,7 +64,20 @@ class interfaces(compoments.compoment):
         resources = data_out.scienceprogram_type_header       
         data_out.close
         return resources[0].split(';')
-        
+
+    def scienceprogram_observing_time(self, scienceprogram_title: str):
+        """
+        @return: observing time of sciencprogram
+        """
+        result = 0.0
+        data_out = selection.select() 
+        data_out.connect
+        resources = data_out.scienceprogram_observing_time(scienceprogram_title)
+        for resource in resources:
+            result = result+(resource[1]-resource[0])
+        data_out.close
+        return result
+    
     @property
     def collection(self):
         """
@@ -79,5 +92,17 @@ class interfaces(compoments.compoment):
             resources.append(value[0])
         return resources
        
+    def instrument_exposure_time(self, scienceprogram_title: str):
+        """
+        @return: exposure time of instrument
+        """
+        result = 0.0
+        data_out = selection.select() 
+        data_out.connect
+        resources = data_out.instrument_exposure_time(scienceprogram_title)
+        for resource in resources:
+            result = result+(resource[0])
+        data_out.close
+        return result
         
                 
