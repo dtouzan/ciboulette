@@ -77,7 +77,36 @@ class interfaces(compoments.compoment):
             result = result+(resource[1]-resource[0])
         data_out.close
         return result
-    
+
+    @property
+    def scienceprogram_title(self):
+        """
+        @return: sciencprogram title list
+        """
+        data_out = selection.select() 
+        data_out.connect
+        dataset = data_out.scienceprogram_title   
+        data_out.close
+        resources = []
+        for value in dataset:
+            resources.append(value[0])
+        return resources
+
+    def scienceprogram_by_title(self, scienceprogram_title:str):
+        """
+        @return: scienceprogram data for the title (dict)
+        @set: scienceprogram title
+        """
+        data_out = selection.select() 
+        data_out.connect
+        dataset = data_out.scienceprogram_by_title(scienceprogram_title)
+        headers = data_out.scienceprogram_header
+        data_out.close
+        resources = dict()
+        for header, value in zip(headers[0].split(';'), dataset):
+            resources.setdefault(header, value)          
+        return resources
+
     @property
     def collection(self):
         """

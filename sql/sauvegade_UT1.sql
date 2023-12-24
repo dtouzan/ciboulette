@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur sam. déc. 23 23:37:34 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur dim. déc. 24 22:30:45 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS Header (NAME TEXT (1024), DATA TEXT (1024), RELEASE T
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'name;label;spectral_axis;flux', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collection;instrument_name;filters;disperser;target_name;target_classification;obs_id;s_ra;s_dec;proposal_pi;dataproduct_type;calib_level;scheduling;t_min;t_max;t_exptime;obs_title;focal;format;url', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram', 'id;title;status;contact;observing_time;type;dataset', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -3718,6 +3719,10 @@ CREATE VIEW IF NOT EXISTS scheduling_last AS SELECT * FROM sequence INNER JOIN o
 DROP VIEW IF EXISTS scheduling_table;
 CREATE VIEW IF NOT EXISTS scheduling_table AS SELECT timeline_min,timeline_max FROM sequence INNER JOIN observation ON observation.observation_id = sequence.observation_id ORDER BY sequence.timeline_min;
 
+-- Vue : scienceprogram_header
+DROP VIEW IF EXISTS scienceprogram_header;
+CREATE VIEW IF NOT EXISTS scienceprogram_header AS SELECT data FROM header WHERE name='scienceprogram';
+
 -- Vue : scienceprogram_mast_values
 DROP VIEW IF EXISTS scienceprogram_mast_values;
 CREATE VIEW IF NOT EXISTS scienceprogram_mast_values AS SELECT type FROM ScienceProgram;
@@ -3725,6 +3730,10 @@ CREATE VIEW IF NOT EXISTS scienceprogram_mast_values AS SELECT type FROM Science
 -- Vue : scienceprogram_select
 DROP VIEW IF EXISTS scienceprogram_select;
 CREATE VIEW IF NOT EXISTS scienceprogram_select AS SELECT science_program_id, title, contact, observing_time, type, dataset FROM ScienceProgram;
+
+-- Vue : scienceprogram_title
+DROP VIEW IF EXISTS scienceprogram_title;
+CREATE VIEW IF NOT EXISTS scienceprogram_title AS SELECT title FROM scienceprogram;
 
 -- Vue : scienceprogram_type_header
 DROP VIEW IF EXISTS scienceprogram_type_header;

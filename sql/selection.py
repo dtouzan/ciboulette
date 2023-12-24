@@ -120,9 +120,18 @@ class select(compoments.compoment):
     def scienceprogram_type_header(self):
         """
         SQL view scienceprogram_type_header
-        @return: last date of observation
+        @return: scienceprogram type header
         """
         resources = self._selectone("SELECT * FROM scienceprogram_type_header")
+        return resources
+
+    @property
+    def scienceprogram_header(self):
+        """
+        SQL view scienceprogram_header
+        @return: scienceprogram header
+        """
+        resources = self._selectone("SELECT * FROM scienceprogram_header")
         return resources
     
     def scienceprogram_observing_time(self, scienceprogram_title:str):
@@ -143,10 +152,29 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    @property
+    def scienceprogram_title(self):
+        """
+        SQL view scienceprogram_title
+        @return: sciencprogram title list
+        """
+        resources = self._selectall("SELECT * FROM scienceprogram_title")
+        return resources
+
+    def scienceprogram_by_title(self, scienceprogram_title:str):
+        """
+        @return: scienceprogram data for the title
+        @set: scienceprogram title
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
+        self.cursor.close()
+        return resources
+
     def instrument_exposure_time(self, scienceprogram_title:str):
         """
         @return: scienceprogram sum exposure time
-        @set: science program title
+        @set: scienceprogram title
         """
         self.cursor = self.connection.cursor()
         science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
