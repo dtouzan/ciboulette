@@ -133,5 +133,22 @@ class interfaces(compoments.compoment):
             result = result+(resource[0])
         data_out.close
         return result
-        
+
+    def observation_by_id(self, id:int):
+        """
+        @return: observation data by id (dict)
+        @set: observation id
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.observation_by_id(id)
+        if dataset:
+            headers = data_out.observation_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+
                 

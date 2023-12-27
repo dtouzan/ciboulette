@@ -186,5 +186,21 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def observation_by_id(self, id:int):
+        """
+        @return: observation data by id (dict)
+        @set: observation id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observation WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
 
-
+    @property
+    def observation_header(self):
+        """
+        SQL view observation_header
+        @return: observation header
+        """
+        resources = self._selectone("SELECT * FROM observation_header")
+        return resources

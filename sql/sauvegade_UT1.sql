@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur dim. déc. 24 22:30:45 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur mer. déc. 27 18:21:06 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -56,6 +56,7 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'name;label;spectral_
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collection;instrument_name;filters;disperser;target_name;target_classification;obs_id;s_ra;s_dec;proposal_pi;dataproduct_type;calib_level;scheduling;t_min;t_max;t_exptime;obs_title;focal;format;url', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram', 'id;title;status;contact;observing_time;type;dataset', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation', 'science_program_id;observation_id;title;collection;proposal_pi;priority;status;scheduling;fits_file;note_file;calibration', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -3702,6 +3703,10 @@ CREATE VIEW IF NOT EXISTS mast_header AS SELECT data FROM header WHERE name='mas
 -- Vue : mast_select
 DROP VIEW IF EXISTS mast_select;
 CREATE VIEW IF NOT EXISTS mast_select AS SELECT ScienceProgram.type, collection, Instrument.name, filter, disperser, target.name, class, Observation.observation_id, ra, dec, proposal_pi, Sequence.type, calibration, scheduling, timeline_min, timeline_max, exposure_time, Observation.title, Instrument.focal, note_file, fits_file FROM ScienceProgram , Observation , Instrument , target , Sequence WHERE Observation.science_program_id = ScienceProgram.science_program_id AND Observation.observation_id = Instrument.observation_id AND Observation.observation_id = Sequence.observation_id AND Observation.observation_id = target.observation_id;
+
+-- Vue : observation_header
+DROP VIEW IF EXISTS observation_header;
+CREATE VIEW IF NOT EXISTS observation_header AS SELECT data FROM header WHERE name='observation';
 
 -- Vue : observation_last_id
 DROP VIEW IF EXISTS observation_last_id;
