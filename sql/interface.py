@@ -150,5 +150,84 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def sequence_by_id(self, id:int):
+        """
+        @return: observation data by id (dict)
+        @set: observation id
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.sequence_by_id(id)
+        if dataset:
+            headers = data_out.sequence_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
 
-                
+    def instrument_by_id(self, id:int):
+        """
+        @return: instrument data by id (dict)
+        @set: observation id
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.instrument_by_id(id)
+        if dataset:
+            headers = data_out.instrument_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+    def target_by_id(self, id:int):
+        """
+        @return: target data by id (dict)
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.target_by_id(id)
+        if dataset:
+            headers = data_out.target_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+    def observinglog_by_id(self, id:int):
+        """
+        @return: observinglog data by id (dict)
+        @set: observinglog id
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.observinglog_by_id(id)
+        if dataset:
+            headers = data_out.observinglog_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+    def observingconditions_by_id(self, id:int):
+        """
+        @return: observingconditions data by id (dict)
+        @set: observingconditions id
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.observingconditions_by_id(id)
+        if dataset:
+            headers = data_out.observingconditions_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources

@@ -204,3 +204,98 @@ class select(compoments.compoment):
         """
         resources = self._selectone("SELECT * FROM observation_header")
         return resources
+
+    def sequence_by_id(self, id:int):
+        """
+        @return: sequence data by id (dict)
+        @set: sequence id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM sequence WHERE observation_id=?", (id,)).fetchall()
+        self.cursor.close()
+        return resources
+
+    @property
+    def sequence_header(self):
+        """
+        SQL view sequence_header
+        @return: sequence header
+        """
+        resources = self._selectone("SELECT * FROM sequence_header")
+        return resources
+
+    def instrument_by_id(self, id:int):
+        """
+        @return: instrument data by id (dict)
+        @set: instrument id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def instrument_header(self):
+        """
+        SQL view instrument_header
+        @return: instrument header
+        """
+        resources = self._selectone("SELECT * FROM instrument_header")
+        return resources
+
+    def target_by_id(self, id:int):
+        """
+        @return: target data by id (dict)
+        @set: target id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM target WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def target_header(self):
+        """
+        SQL view target_header
+        @return: target header
+        """
+        resources = self._selectone("SELECT * FROM target_header")
+        return resources
+
+    def observinglog_by_id(self, id:int):
+        """
+        @return: observinglog data by id (dict)
+        @set: observinglog id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observinglog WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def observinglog_header(self):
+        """
+        SQL view observinglog_header
+        @return: observinglog header
+        """
+        resources = self._selectone("SELECT * FROM observinglog_header")
+        return resources
+
+    def observingconditions_by_id(self, id:int):
+        """
+        @return: observingconditions data by id (dict)
+        @set: observingconditions id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observingconditions WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def observingconditions_header(self):
+        """
+        SQL view observingconditions_header
+        @return: observingconditions header
+        """
+        resources = self._selectone("SELECT * FROM observingconditions_header")
+        return resources

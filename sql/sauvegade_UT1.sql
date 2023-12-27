@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur mer. déc. 27 18:21:06 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur mer. déc. 27 22:23:51 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -57,6 +57,11 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collect
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram', 'id;title;status;contact;observing_time;type;dataset', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation', 'science_program_id;observation_id;title;collection;proposal_pi;priority;status;scheduling;fits_file;note_file;calibration', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('sequence', 'observation_id;title;label;type;timeline_min;timeline_max;compoment', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('instrument', 'observation_id;name;filter;disperser;camera;exposure_time;position_angle;binning_x;binning_y;focal;aperture', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('target', 'observation_id;name;class;RA;DEC;notes', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observinglog', 'observation_id;label;filename;comment', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observationconditions', 'observation_id;sky_background;cloud_cover;image_quality;water_vapor;elevation_constraint;timming_windows', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -1871,6 +1876,7 @@ CREATE TABLE IF NOT EXISTS ObservingConditions (
 	TIMMING_WINDOW       TEXT(1024)     ,
 	FOREIGN KEY ( OBSERVATION_ID ) REFERENCES Observation( OBSERVATION_ID )  
  );
+INSERT INTO ObservingConditions (OBSERVATION_ID, SKY_BACKGROUND, CLOUD_COVER, IMAGE_QUALITY, WATER_VAPOR, ELEVATION_CONSTRAINT, TIMMING_WINDOW) VALUES (1, 100, 20, 100, 60, 80, 'ANY');
 
 -- Tableau : ObservingLog
 DROP TABLE IF EXISTS ObservingLog;
@@ -1881,6 +1887,7 @@ CREATE TABLE IF NOT EXISTS ObservingLog (
 	COMMENT              TEXT(1024)     ,
 	FOREIGN KEY ( OBSERVATION_ID ) REFERENCES Observation( OBSERVATION_ID )  
  );
+INSERT INTO ObservingLog (OBSERVATION_ID, LABEL, FILENAME, COMMENT) VALUES (1, 'default', 'default_observinglog.txt', 'default observing log file');
 
 -- Tableau : ScienceProgram
 DROP TABLE IF EXISTS ScienceProgram;
@@ -3692,6 +3699,10 @@ CREATE VIEW IF NOT EXISTS collection_select AS SELECT * FROM Collection;
 DROP VIEW IF EXISTS filter_header;
 CREATE VIEW IF NOT EXISTS filter_header AS SELECT data FROM header WHERE name='filter';
 
+-- Vue : instrument_header
+DROP VIEW IF EXISTS instrument_header;
+CREATE VIEW IF NOT EXISTS instrument_header AS SELECT data FROM header WHERE name='instrument';
+
 -- Vue : instrument_mast_values
 DROP VIEW IF EXISTS instrument_mast_values;
 CREATE VIEW IF NOT EXISTS instrument_mast_values AS SELECT name, filter, disperser, exposure_time, focal FROM Instrument;
@@ -3715,6 +3726,14 @@ CREATE VIEW IF NOT EXISTS observation_last_id AS SELECT * FROM Observation ORDER
 -- Vue : observation_mast_values
 DROP VIEW IF EXISTS observation_mast_values;
 CREATE VIEW IF NOT EXISTS observation_mast_values AS SELECT collection, observation_id, proposal_pi, calibration, scheduling, title, note_file, fits_file FROM Observation;
+
+-- Vue : observingconditions_header
+DROP VIEW IF EXISTS observingconditions_header;
+CREATE VIEW IF NOT EXISTS observingconditions_header AS SELECT data FROM header WHERE name='observationconditions';
+
+-- Vue : observinglog_header
+DROP VIEW IF EXISTS observinglog_header;
+CREATE VIEW IF NOT EXISTS observinglog_header AS SELECT data FROM header WHERE name='observinglog';
 
 -- Vue : scheduling_last
 DROP VIEW IF EXISTS scheduling_last;
@@ -3744,9 +3763,17 @@ CREATE VIEW IF NOT EXISTS scienceprogram_title AS SELECT title FROM scienceprogr
 DROP VIEW IF EXISTS scienceprogram_type_header;
 CREATE VIEW IF NOT EXISTS scienceprogram_type_header AS SELECT data FROM header WHERE name='scienceprogram_type';
 
+-- Vue : sequence_header
+DROP VIEW IF EXISTS sequence_header;
+CREATE VIEW IF NOT EXISTS sequence_header AS SELECT data FROM header WHERE name='sequence';
+
 -- Vue : sequence_mast_values
 DROP VIEW IF EXISTS sequence_mast_values;
 CREATE VIEW IF NOT EXISTS sequence_mast_values AS SELECT type, timeline_min, timeline_max FROM Sequence;
+
+-- Vue : target_header
+DROP VIEW IF EXISTS target_header;
+CREATE VIEW IF NOT EXISTS target_header AS SELECT data FROM header WHERE name='target';
 
 -- Vue : target_mast_values
 DROP VIEW IF EXISTS target_mast_values;
