@@ -231,3 +231,31 @@ class interfaces(compoments.compoment):
                 resources.setdefault(header, value)  
         data_out.close
         return resources
+
+    def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type_SP='science', dataset='dataset/archives'):
+        """
+        View SQL insert scienceprogram
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.scienceprogram(title, status, contact, observing_time, type_SP, dataset)
+        data_in.close
+
+        
+    def sequence(self, observation_id: int, title='sequence', label='001', type='light', timeline_min=0, timeline_max=0, compoment='None'):
+        """
+        View SQL insert sequence
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.sequence(observation_id, title, label, type, timeline_min, timeline_max, compoment)
+        data_in.close
+
+    def target(self, observation_id:int, name='default', class_type='default', RA=0.0, DEC=0.0, notes='default'):
+        """
+        View SQL insert target
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.target(observation_id, name, class_type, RA, DEC, notes)
+        data_in.close

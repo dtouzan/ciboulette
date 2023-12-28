@@ -78,7 +78,7 @@ class insert(compoments.compoment):
             self.connection.commit()           
         self.cursor.close()
 
-    def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type='science', dataset='dataset/archives'):
+    def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type_SP='science', dataset='dataset/archives'):
         """
         SQL insert scienceprogram
         @set: scienceprogram title
@@ -89,7 +89,7 @@ class insert(compoments.compoment):
         if not science_program_id:
             # SQL INSERT scienceprogram
             sql = """INSERT INTO scienceprogram(title,status,contact,observing_time,type,dataset) VALUES(?,?,?,?,?,?);"""
-            dataresources = (title,status,contact,observing_time,type,dataset)
+            dataresources = (title,status,contact,observing_time,type_SP,dataset)
             self.cursor.execute(sql, dataresources) 
             
             # SQL commit to database
@@ -125,6 +125,7 @@ class insert(compoments.compoment):
     def close_scienceprogram(self, scienceprogram_title: str):
         """
         SQL close science program, status = 0
+        @set: scienceprogram_title
         """
         self.cursor = self.connection.cursor()
         science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
@@ -139,6 +140,29 @@ class insert(compoments.compoment):
         else:
             return False        
         
+    def target(self, observation_id:int, name:'dafault', class_type:'default', RA=0.0, DEC=0.0, notes='default'):
+        """
+        SQL insert target
+        @set: observation_id
+        @set: name
+        @set: class_type
+        @set: RA
+        @set: DEC
+        @set: notes     
+        """
+        self.cursor = self.connection.cursor()
+        observation = self.cursor.execute("SELECT observation_id FROM observation WHERE observation_id=?", (observation_id,)).fetchone()
+        if observation:
+            # Observation_id resources
+            OBS_id = observation[0]
+            # SQL INSERT sequence
+            sql = """INSERT INTO target(observation_id,name,class,RA,DEC,notes) VALUES(?,?,?,?,?,?);"""
+            dataresources = (OBS_id, name, class_type, RA, DEC, notes)
+            self.cursor.execute(sql, dataresources) 
+
+            # SQL commit to database
+            self.connection.commit()           
+        self.cursor.close()
 
 
 

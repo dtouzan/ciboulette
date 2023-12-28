@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur mer. déc. 27 22:23:51 2023
+-- Fichier généré par SQLiteStudio v3.4.4 sur jeu. déc. 28 22:18:19 2023
 --
 -- Encodage texte utilisé : System
 --
@@ -1894,6 +1894,7 @@ DROP TABLE IF EXISTS ScienceProgram;
 CREATE TABLE IF NOT EXISTS ScienceProgram (SCIENCE_PROGRAM_ID INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT, TITLE TEXT (1024), STATUS INTEGER DEFAULT (1), CONTACT TEXT (1024) DEFAULT "dtouzan@gmail.com", OBSERVING_TIME REAL, TYPE TEXT (1024) DEFAULT science, DATASET TEXT (1024) DEFAULT dataset);
 INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1000, 'UT1 science program 2016-2023', 1, 'dtouzan@gmail.com', 0.0, 'science', 'dataset/archives');
 INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1001, 'UT1 science program 2024', 1, 'dtouzan@gmail.com', 0.0, 'science', 'dataset/archives');
+INSERT INTO ScienceProgram (SCIENCE_PROGRAM_ID, TITLE, STATUS, CONTACT, OBSERVING_TIME, TYPE, DATASET) VALUES (1002, 'Spectrum in Cygnus Be stars', 1, 'dtouzan@gmail.com', 0.0, 'spectrum', 'dataset/archives');
 
 -- Tableau : Sequence
 DROP TABLE IF EXISTS Sequence;
