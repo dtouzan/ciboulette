@@ -17,6 +17,21 @@ class insert(compoments.compoment):
     SQL insert class
     """
 
+    def _insert_for_observation(self, sql_request:str, dataresources):
+        """
+        SQL insert for observation elements
+        """
+        self.cursor = self.connection.cursor()
+        observation = self.cursor.execute("SELECT observation_id FROM observation WHERE observation_id=?", (dataresources[0],)).fetchone()
+        if observation:
+            # Observation_id resources
+            OBS_id = observation[0]
+            # SQL INSERT sequence
+            self.cursor.execute(sql_request, dataresources) 
+            # SQL commit to database
+            self.connection.commit()           
+        self.cursor.close()
+        
     def mast(self,scienceprogram_title: str, mast_dataset: str):
         """
         SQL update
@@ -90,12 +105,28 @@ class insert(compoments.compoment):
             # SQL INSERT scienceprogram
             sql = """INSERT INTO scienceprogram(title,status,contact,observing_time,type,dataset) VALUES(?,?,?,?,?,?);"""
             dataresources = (title,status,contact,observing_time,type_SP,dataset)
-            self.cursor.execute(sql, dataresources) 
-            
+            self.cursor.execute(sql, dataresources)             
             # SQL commit to database
             self.connection.commit()
         else:
             return False
+
+    def close_scienceprogram(self, scienceprogram_title: str):
+        """
+        SQL close science program, status = 0
+        @set: scienceprogram_title
+        """
+        self.cursor = self.connection.cursor()
+        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
+        if science_program_id:
+            # SQLupdate scienceprogram status
+            sql = """UPDATE scienceprogram SET status=0  WHERE science_program_id=?;"""
+            dataresources = science_program_id
+            self.cursor.execute(sql, dataresources)          
+            # SQL commit to database
+            self.connection.commit()
+        else:
+            return False        
 
     def sequence(self, observation_id: int, title='sequence', label='001', type='light', timeline_min=0, timeline_max=0, compoment='None'):
         """
@@ -108,38 +139,10 @@ class insert(compoments.compoment):
         @set: timeline_max
         @set: compoment       
         """
-        self.cursor = self.connection.cursor()
-        observation = self.cursor.execute("SELECT observation_id FROM observation WHERE observation_id=?", (observation_id,)).fetchone()
-        if observation:
-            # Observation_id resources
-            OBS_id = observation[0]
-            # SQL INSERT sequence
-            sql = """INSERT INTO sequence(observation_id,title,label,type,timeline_min,timeline_max,compoment) VALUES(?,?,?,?,?,?,?);"""
-            dataresources = (OBS_id, title, label, type, timeline_min, timeline_max, compoment)
-            self.cursor.execute(sql, dataresources) 
-
-            # SQL commit to database
-            self.connection.commit()           
-        self.cursor.close()
-        
-    def close_scienceprogram(self, scienceprogram_title: str):
-        """
-        SQL close science program, status = 0
-        @set: scienceprogram_title
-        """
-        self.cursor = self.connection.cursor()
-        science_program_id = self.cursor.execute("SELECT science_program_id FROM scienceprogram WHERE title=?", (scienceprogram_title,)).fetchone()
-        if science_program_id:
-            # SQLupdate scienceprogram status
-            sql = """UPDATE scienceprogram SET status=0  WHERE science_program_id=?;"""
-            dataresources = science_program_id
-            self.cursor.execute(sql, dataresources) 
-            
-            # SQL commit to database
-            self.connection.commit()
-        else:
-            return False        
-        
+        sql_request = """INSERT INTO sequence(observation_id,title,label,type,timeline_min,timeline_max,compoment) VALUES(?,?,?,?,?,?,?);"""
+        dataresources = (observation_id, title, label, type, timeline_min, timeline_max, compoment)
+        self._insert_for_observation(sql_request, dataresources)
+               
     def target(self, observation_id:int, name:'dafault', class_type:'default', RA=0.0, DEC=0.0, notes='default'):
         """
         SQL insert target
@@ -150,21 +153,37 @@ class insert(compoments.compoment):
         @set: DEC
         @set: notes     
         """
-        self.cursor = self.connection.cursor()
-        observation = self.cursor.execute("SELECT observation_id FROM observation WHERE observation_id=?", (observation_id,)).fetchone()
-        if observation:
-            # Observation_id resources
-            OBS_id = observation[0]
-            # SQL INSERT sequence
-            sql = """INSERT INTO target(observation_id,name,class,RA,DEC,notes) VALUES(?,?,?,?,?,?);"""
-            dataresources = (OBS_id, name, class_type, RA, DEC, notes)
-            self.cursor.execute(sql, dataresources) 
+        sql_request = """INSERT INTO target(observation_id,name,class,RA,DEC,notes) VALUES(?,?,?,?,?,?);"""
+        dataresources = (observation_id, name, class_type, RA, DEC, notes)
+        self._insert_for_observation(sql_request, dataresources)
+        
+    def observinglog(self, observation_id:int, label='default', filename='default_observinglog.txt', comment='default observing log file'):
+        """
+        SQL insert observinglog
+        @set: observation_id
+        @set: label
+        @set: filename
+        @set: comment  
+        """
+        sql_request = """INSERT INTO observinglog(observation_id,label,filename,comment) VALUES(?,?,?,?);"""
+        dataresources = (observation_id, label, filename, comment)
+        self._insert_for_observation(sql_request, dataresources)
 
-            # SQL commit to database
-            self.connection.commit()           
-        self.cursor.close()
-
-
+    def observingconditions(self, observation_id:int, sky_background=100, cloud_cover=20, image_quality=80, water_vapor=60, elevation_constraint=30, timming_window='night'):
+        """
+        SQL insert observingconditions
+        @set: observation_id
+        @set: sky_background
+        @set: cloud_cover
+        @set: image_quality
+        @set: water_vapor
+        @set: elevation_constraint
+        @set: timming_window
+        """
+        sql_request = """INSERT INTO observingconditions(observation_id,sky_background,cloud_cover,image_quality,\
+                                    water_vapor,elevation_constraint,timming_window) VALUES(?,?,?,?,?,?,?);"""
+        dataresources = (observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
+        self._insert_for_observation(sql_request, dataresources)
 
 
 

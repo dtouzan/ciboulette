@@ -259,3 +259,21 @@ class interfaces(compoments.compoment):
         data_in.connect
         data_in.target(observation_id, name, class_type, RA, DEC, notes)
         data_in.close
+
+    def observinglog(self, observation_id:int, label='default', filename='default_observinglog.txt', comment='default observing log file'):
+        """
+        View SQL insert observinglog
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.observinglog(observation_id, label, filename, comment)
+        data_in.close
+
+    def observingconditions(self, observation_id:int, sky_background=100, cloud_cover=20, image_quality=80, water_vapor=60, elevation_constraint=30, timming_window='night'):
+        """
+        View SQL insert observingconditions
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
+        data_in.close
