@@ -277,3 +277,13 @@ class interfaces(compoments.compoment):
         data_in.connect
         data_in.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
         data_in.close
+
+    def instrument(self, observation_id:int, name='imx219', filter='IR-CUT', disperser='Nan', camera='imx219', exposure_time=10, 
+                    position_angle=0,binning_x=1, binning_y=1, focal=0.085, aperture=0.06):
+        """
+        View SQL insert instrument
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.instrument(observation_id, name, filter, disperser, camera, exposure_time, position_angle,binning_x, binning_y, focal, aperture)
+        data_in.close

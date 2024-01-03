@@ -169,7 +169,8 @@ class insert(compoments.compoment):
         dataresources = (observation_id, label, filename, comment)
         self._insert_for_observation(sql_request, dataresources)
 
-    def observingconditions(self, observation_id:int, sky_background=100, cloud_cover=20, image_quality=80, water_vapor=60, elevation_constraint=30, timming_window='night'):
+    def observingconditions(self, observation_id:int, sky_background=100, cloud_cover=20, image_quality=80, water_vapor=60, elevation_constraint=30, 
+                            timming_window='night'):
         """
         SQL insert observingconditions
         @set: observation_id
@@ -185,8 +186,28 @@ class insert(compoments.compoment):
         dataresources = (observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
         self._insert_for_observation(sql_request, dataresources)
 
-
-
+    def instrument(self, observation_id:int, name:str, filter:str, disperser:str, camera:str, exposure_time:float, 
+                    position_angle:float,binning_x:int, binning_y:int, focal:float, aperture:float):
+        """
+        SQL insert instrument
+        @set: observation_id
+        @set: name
+        @set: filter
+        @set: disperser
+        @set: camera
+        @set: exposure_time
+        @set: position_angle
+        @set: binning_x
+        @set: binning_y
+        @set: focal
+        @set: aperture
+        """
+        sql_request = """INSERT INTO instrument(observation_id,name,filter,disperser,\
+                                    camera,exposure_time,position_angle,binning_x,\
+                                    binning_y,focal,aperture) VALUES(?,?,?,?,?,?,?,?,?,?,?);"""
+        dataresources = (observation_id, name, filter, disperser, camera, exposure_time, position_angle, binning_x, binning_y, focal, aperture)
+        self._insert_for_observation(sql_request, dataresources)
+ 
 
 
 
