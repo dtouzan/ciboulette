@@ -287,3 +287,18 @@ class interfaces(compoments.compoment):
         data_in.connect
         data_in.instrument(observation_id, name, filter, disperser, camera, exposure_time, position_angle,binning_x, binning_y, focal, aperture)
         data_in.close
+
+    def observation(self, science_program_id:int, title='default', collection='OT_Library_UT1', proposal_pi='dtouzan@gmail.com',
+                    priority=3, status=1, scheduling='1900-01-01T00:00:00', fits_file='default.fits', note_file='fits', calibration='1'):
+        """
+        View SQL insert observation
+        """
+        observation_id = 1
+        data_out = selection.select() 
+        data_out.connect
+        id = data_out.observation_last_id[observation_id] + 1
+        data_out.close
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.observation(science_program_id, id, title, collection, proposal_pi, priority, status, scheduling, fits_file, note_file, calibration)
+        data_in.close

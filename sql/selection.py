@@ -186,6 +186,14 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    @property
+    def observation_last_id(self):
+        """
+        @return: observation last id 
+        """
+        resources = self._selectone("SELECT * FROM observation_last_id")
+        return resources
+        
     def observation_by_id(self, id:int):
         """
         @return: observation data by id (dict)

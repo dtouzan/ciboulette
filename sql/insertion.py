@@ -108,7 +108,9 @@ class insert(compoments.compoment):
             self.cursor.execute(sql, dataresources)             
             # SQL commit to database
             self.connection.commit()
+            self.cursor.close()
         else:
+            self.cursor.close()
             return False
 
     def close_scienceprogram(self, scienceprogram_title: str):
@@ -125,7 +127,9 @@ class insert(compoments.compoment):
             self.cursor.execute(sql, dataresources)          
             # SQL commit to database
             self.connection.commit()
+            self.cursor.close()
         else:
+            self.cursor.close()
             return False        
 
     def sequence(self, observation_id: int, title='sequence', label='001', type='light', timeline_min=0, timeline_max=0, compoment='None'):
@@ -208,7 +212,30 @@ class insert(compoments.compoment):
         dataresources = (observation_id, name, filter, disperser, camera, exposure_time, position_angle, binning_x, binning_y, focal, aperture)
         self._insert_for_observation(sql_request, dataresources)
  
-
+    def observation(self, science_program_id:int, observation_id:int, title='default', collection='OT_Library_UT1', proposal_pi='dtouzan@gmail.com',
+                    priority=3, status=1, scheduling='1900-01-01T00:00:00', fits_file='default.fits', note_file='fits', calibration='1'):
+        """
+        SQL insert observation
+        @set: science_program_id
+        @set: observation_id
+        @set: title
+        @set: collection
+        @set: proposal_pi
+        @set: priority
+        @set: status
+        @set: scheduling
+        @set: fits_file
+        @set: note_file
+        @set: calibration
+        """
+        sql_request = """INSERT INTO observation(science_program_id,observation_id,title,collection,proposal_pi,\
+                                    priority,status,scheduling,fits_file,note_file,calibration) VALUES(?,?,?,?,?,?,?,?,?,?,?);"""
+        dataresources = (science_program_id, observation_id, title, collection, proposal_pi, priority, status, scheduling, fits_file, note_file, calibration)
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(sql_request, dataresources)             
+        # SQL commit to database
+        self.connection.commit()
+        self.cursor.close()
 
 
 
