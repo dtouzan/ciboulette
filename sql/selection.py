@@ -161,6 +161,16 @@ class select(compoments.compoment):
         resources = self._selectall("SELECT * FROM scienceprogram_title")
         return resources
 
+    def scienceprogram_by_id(self, science_program_id:int):
+        """
+        @return: scienceprogram data for science program id
+        @set: science_program_id
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM scienceprogram WHERE science_program_id=?", (science_program_id,)).fetchone()
+        self.cursor.close()
+        return resources
+
     def scienceprogram_by_title(self, scienceprogram_title:str):
         """
         @return: scienceprogram data for the title
@@ -258,6 +268,17 @@ class select(compoments.compoment):
         """
         self.cursor = self.connection.cursor()
         resources = self.cursor.execute("SELECT * FROM target WHERE observation_id=?", (id,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    def target_by_name(self, name:str):
+        """
+        @return: target data by name (dict)
+        @set: target id
+        """
+        term = (f'%{name}%',)
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM target WHERE name LIKE ?", term).fetchall()
         self.cursor.close()
         return resources
 

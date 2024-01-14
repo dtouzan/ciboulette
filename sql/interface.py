@@ -200,6 +200,24 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def target_by_name(self, name:str):
+        """
+        @return: target data by name 
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.target_by_name(name)
+        """
+        if dataset:
+            headers = data_out.target_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        """
+        resources = dataset
+        return resources
+
     def observinglog_by_id(self, id:int):
         """
         @return: observinglog data by id (dict)
@@ -302,3 +320,109 @@ class interfaces(compoments.compoment):
         data_in.connect
         data_in.observation(science_program_id, id, title, collection, proposal_pi, priority, status, scheduling, fits_file, note_file, calibration)
         data_in.close
+
+    def observation_print(self,observation_id:int):
+        data_out = selection.select() 
+        data_out.connect
+        observation_data = data_out.observation_by_id(observation_id)
+        scienceprogramp_id = observation_data[0]
+        scienceprogram_data = data_out.scienceprogram_by_id(scienceprogramp_id)
+        instrument_data = data_out.instrument_by_id(observation_id)
+        target_data = data_out.target_by_id(observation_id)
+        observingconditions_data = data_out.observingconditions_by_id(observation_id)
+        observinglog_data = data_out.observinglog_by_id(observation_id)
+        sequence_data = data_out.sequence_by_id(observation_id)
+        
+        scienceprogram_header = data_out.scienceprogram_header[0].split(';')
+        observation_header = data_out.observation_header[0].split(';')
+        target_header = data_out.target_header[0].split(';')
+        observingconditions_header = data_out.observingconditions_header[0].split(';')
+        observinglog_header = data_out.observinglog_header[0].split(';')
+        sequence_header = data_out.sequence_header[0].split(';')
+        data_out.close
+        
+        print('# Science Program')
+        for header, data in zip(scienceprogram_header, scienceprogram_data):
+            if len(header) <= 7:
+                tab = '\t\t\t'
+            else:
+                if len(header) < 15:
+                    tab = '\t\t'
+                else:
+                    tab = '\t' 
+            print(f'\t{header}{tab}:{data}')
+
+        print('\t+ Observation')
+        for header, data in zip(observation_header, observation_data):
+            if header != scienceprogram_header[0]:
+                if len(header) <= 7:
+                    tab = '\t\t' 
+                else:
+                    tab = '\t'
+                print(f'\t\t{header}{tab}: {data}')
+
+
+        print('\t- Target: ')
+        for header, data in zip(target_header, target_data):
+            if header != observation_header[1]:
+                if len(header) <= 7:
+                    tab = '\t\t' 
+                else:
+                    tab = '\t'
+                print(f'\t\t{header}{tab}: {data}')
+
+        print('\t- Observing condiftions')
+        if observingconditions_data != None:
+            for header, data in zip(observingconditions_header, observingconditions_data):
+                if header != observation_header[1]:
+                    if len(header) <= 7:
+                        tab = '\t\t\t'
+                    else:
+                        if len(header) < 15:
+                            tab = '\t\t'
+                        else:
+                            tab = '\t' 
+                    print(f'\t\t{header}{tab}: {data}')
+
+        print('\t- Observing log')
+        if observinglog_data != None:
+            for header, data in zip(observinglog_header, observinglog_data):
+                if header != observation_header[1]:
+                    if len(header) <= 7:
+                        tab = '\t\t' 
+                    else:
+                        tab = '\t'
+                    print(f'\t\t{header}{tab}: {data}')
+
+        for sequence_line in sequence_data:
+            header_line = '\t- Sequence'
+            for header, data in zip(sequence_header,sequence_data[0]):
+                if header != observation_header[1]:
+                    header_line = header_line+'\t'+header+': '+str(data)
+            print(header_line)
+                
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
