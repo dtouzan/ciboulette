@@ -214,6 +214,20 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def observation_by_collection(self,collection:str):
+        """
+        @return: observation data by collection (dict)
+        @set: collection name
+        """
+        resources = list()
+        dataset = self.collection
+        self.cursor = self.connection.cursor()
+        for data in dataset:
+            if collection in data[0]:
+                resources = self.cursor.execute("SELECT * FROM observation WHERE collection=?", (data[0],)).fetchall()
+        self.cursor.close()
+        return resources
+
     @property
     def observation_header(self):
         """

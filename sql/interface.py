@@ -150,6 +150,22 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def observation_by_collection(self, collection:str):
+        """
+        @return: observation data by collection (dict)
+        @set: observation collection
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.observation_by_collection(collection)
+        #if dataset:
+        #    headers = data_out.observation_header
+        #    for header, value in zip(headers[0].split(';'), dataset):
+        #        resources.setdefault(header, value)  
+        data_out.close
+        return dataset
+
     def sequence_by_id(self, id:int):
         """
         @return: observation data by id (dict)
@@ -206,16 +222,30 @@ class interfaces(compoments.compoment):
         """
         data_out = selection.select() 
         data_out.connect
-        resources = dict()
+        data_collection = list()
         dataset = data_out.target_by_name(name)
-        """
         if dataset:
             headers = data_out.target_header
-            for header, value in zip(headers[0].split(';'), dataset):
-                resources.setdefault(header, value)  
+            for data in dataset:
+                resources = dict()
+                for header, value in zip(headers[0].split(';'), data):
+                    resources.setdefault(header, value)  
+                data_collection.append(resources)
         data_out.close
+        return data_collection
+
+    def target_coordinates(self, target:str):
         """
-        resources = dataset
+        @Return: target coordinates RA,DEC
+        """
+        RA = DEC = 0
+        resources = list()
+        dataset = self.target_by_name(target)
+        if dataset:
+            for data in dataset:
+                RA = data['RA']
+                DEC = data['DEC']
+                resources.append((RA,DEC))
         return resources
 
     def observinglog_by_id(self, id:int):
@@ -322,6 +352,10 @@ class interfaces(compoments.compoment):
         data_in.close
 
     def observation_print(self,observation_id:int):
+        """
+        Print observation text type
+        @set: observation_id
+        """
         data_out = selection.select() 
         data_out.connect
         observation_data = data_out.observation_by_id(observation_id)
@@ -332,7 +366,7 @@ class interfaces(compoments.compoment):
         observingconditions_data = data_out.observingconditions_by_id(observation_id)
         observinglog_data = data_out.observinglog_by_id(observation_id)
         sequence_data = data_out.sequence_by_id(observation_id)
-        
+        # Header
         scienceprogram_header = data_out.scienceprogram_header[0].split(';')
         observation_header = data_out.observation_header[0].split(';')
         target_header = data_out.target_header[0].split(';')
@@ -401,11 +435,6 @@ class interfaces(compoments.compoment):
                     header_line = header_line+'\t'+header+': '+str(data)
             print(header_line)
                 
-  
-
-
-
-
 
 
 
