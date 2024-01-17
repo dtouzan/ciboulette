@@ -157,14 +157,17 @@ class interfaces(compoments.compoment):
         """
         data_out = selection.select() 
         data_out.connect
-        resources = dict()
+        resources = []
         dataset = data_out.observation_by_collection(collection)
-        #if dataset:
-        #    headers = data_out.observation_header
-        #    for header, value in zip(headers[0].split(';'), dataset):
-        #        resources.setdefault(header, value)  
+        if dataset:
+            headers = data_out.observation_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
         data_out.close
-        return dataset
+        return resources
 
     def sequence_by_id(self, id:int):
         """
