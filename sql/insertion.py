@@ -237,9 +237,14 @@ class insert(compoments.compoment):
         self.connection.commit()
         self.cursor.close()
 
-
-
-
+    def function_library(self, OT_library='OT_library_UT1', target_class='star'):
+        """
+        SQL function: select function_library(OT_library,target_class)
+            update observation set collection=? where observation.observation_id in (select observation.OBSERVATION_ID from target join observation where target.OBSERVATION_ID=observation.OBSERVATION_ID and target.CLASS=?)
+        @set: OT_library
+        @set: target_class
+        """
+        return true
 
 
 
