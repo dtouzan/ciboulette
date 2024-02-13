@@ -354,6 +354,18 @@ class interfaces(compoments.compoment):
         data_in.observation(science_program_id, id, title, collection, proposal_pi, priority, status, scheduling, fits_file, note_file, calibration)
         data_in.close
 
+    def collection_update(self, OT_library='OT_library_UT1', target_class='star'):
+        """
+        SQL function: function_collection
+        Update OT library with target class
+        @set: OT_library
+        @set: target_class
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.function_library(OT_library, target_class)
+        data_in.close
+    
     def observation_print(self,observation_id:int):
         """
         Print observation text type
