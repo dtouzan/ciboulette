@@ -39,9 +39,15 @@ class datarecords(interface.interfaces):
             if self.filters == datarecords.filter_names[1]:
                 if self.header == 'id':
                     self.observation_print(int(self.values))
+                    
+                if self.header == 'collection':
+                    for data in self.observation_by_collection(self.values):
+                        self.observation_print(data['observation_id'])
+                    
                 if self.header == 'title':
                     #self.observation_print(int(self.values))
                     print(self.values)
+                    
                 if self.header == 'scheduling':
                     #self.observation_print(int(self.values))
                     print(self.values)

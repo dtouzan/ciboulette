@@ -399,7 +399,7 @@ class interfaces(compoments.compoment):
                     tab = '\t\t'
                 else:
                     tab = '\t' 
-            print(f'\t{header}{tab}:{data}')
+            print(f'\t{header}{tab}: {data}')
 
         print('\t+ Observation')
         for header, data in zip(observation_header, observation_data):

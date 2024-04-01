@@ -224,7 +224,7 @@ class select(compoments.compoment):
         self.cursor = self.connection.cursor()
         for data in dataset:
             if collection in data[0]:
-                resources = self.cursor.execute("SELECT * FROM observation WHERE collection=?", (data[0],)).fetchall()
+                 resources = self.cursor.execute("SELECT * FROM observation WHERE collection=?", (data[0],)).fetchall()
         self.cursor.close()
         return resources
 
