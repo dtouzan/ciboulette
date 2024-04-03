@@ -45,8 +45,8 @@ class datarecords(interface.interfaces):
                         self.observation_print(data['observation_id'])
                     
                 if self.header == 'title':
-                    #self.observation_print(int(self.values))
-                    print(self.values)
+                    for data in self.observation_by_title(self.values):
+                        self.observation_print(data['observation_id'])
                     
                 if self.header == 'scheduling':
                     #self.observation_print(int(self.values))

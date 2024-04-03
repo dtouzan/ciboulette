@@ -169,6 +169,25 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def observation_by_title(self, observation_title:str):
+        """
+        @return: observation data for the title (dict)
+        @set: observation title
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.observation_by_title(observation_title)
+        if dataset:
+            headers = data_out.observation_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+
     def sequence_by_id(self, id:int):
         """
         @return: observation data by id (dict)
@@ -420,7 +439,7 @@ class interfaces(compoments.compoment):
                     tab = '\t'
                 print(f'\t\t{header}{tab}: {data}')
 
-        print('\t- Observing condiftions')
+        print('\t- Observing conditions')
         if observingconditions_data != None:
             for header, data in zip(observingconditions_header, observingconditions_data):
                 if header != observation_header[1]:

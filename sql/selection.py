@@ -228,6 +228,18 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def observation_by_title(self,observation_title:str):
+        """
+        @return: observation data by title (dict)
+        @set: observation title
+        """
+        resources = list()
+        title = '%' + observation_title + '%'
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observation WHERE title LIKE ?", (title,)).fetchall()
+        self.cursor.close()
+        return resources
+
     @property
     def observation_header(self):
         """
