@@ -209,8 +209,8 @@ class interfaces(compoments.compoment):
 
     def sequence_by_id(self, id:int):
         """
-        @return: observation data by id (dict)
-        @set: observation id
+        @return: sequence data by id (dict)
+        @set: sequence id
         """
         data_out = selection.select() 
         data_out.connect
@@ -226,19 +226,38 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
-    def instrument_by_id(self, id:int):
+    def instrument_by_id(self, instrument_id:int):
         """
         @return: instrument data by id (dict)
-        @set: observation id
+        @set: instrument id
         """
         data_out = selection.select() 
         data_out.connect
         resources = dict()
-        dataset = data_out.instrument_by_id(id)
+        dataset = data_out.instrument_by_id(instrument_id)
         if dataset:
             headers = data_out.instrument_header
             for header, value in zip(headers[0].split(';'), dataset):
                 resources.setdefault(header, value)  
+        data_out.close
+        return resources
+        
+    def instrument_by_name(self, instrument_name:str):
+        """
+        @return: instrument data by name (dict)
+        @set: instrument name
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.instrument_by_name(instrument_name)
+        if dataset:
+            headers = data_out.instrument_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
         data_out.close
         return resources
 
@@ -422,6 +441,7 @@ class interfaces(compoments.compoment):
         # Header
         scienceprogram_header = data_out.scienceprogram_header[0].split(';')
         observation_header = data_out.observation_header[0].split(';')
+        instrument_header = data_out.instrument_header[0].split(';')
         target_header = data_out.target_header[0].split(';')
         observingconditions_header = data_out.observingconditions_header[0].split(';')
         observinglog_header = data_out.observinglog_header[0].split(';')
@@ -448,6 +468,14 @@ class interfaces(compoments.compoment):
                     tab = '\t'
                 print(f'\t\t{header}{tab}: {data}')
 
+        print('\t- Instrument: ')
+        for header, data in zip(instrument_header, instrument_data):
+            if header != observation_header[1]:
+                if len(header) <= 7:
+                    tab = '\t\t' 
+                else:
+                    tab = '\t'
+                print(f'\t\t{header}{tab}: {data}')
 
         print('\t- Target: ')
         for header, data in zip(target_header, target_data):

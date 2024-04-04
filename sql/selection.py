@@ -290,6 +290,16 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def instrument_by_name(self, name:str):
+        """
+        @return: instrument data by name (dict)
+        @set: instrument name
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE name=?", (name,)).fetchall()
+        self.cursor.close()
+        return resources
+
     @property
     def instrument_header(self):
         """

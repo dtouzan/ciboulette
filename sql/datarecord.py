@@ -58,4 +58,45 @@ class datarecords(interface.interfaces):
                         self.observation_print(data['observation_id'])
 
             #INSTRUMENT/NAME,FILTER,DISPERSER,CAMERA
-            #OBSERVATION,SCHEDULING
+            if self.filters == datarecords.filter_names[2]:
+                if self.header == 'name':
+                    for data in self.instrument_by_name(self.values):
+                        self.observation_print(data['observation_id'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
