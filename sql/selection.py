@@ -240,6 +240,18 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def observation_by_scheduling(self,observation_scheduling:str):
+        """
+        @return: observation data by scheduling (dict)
+        @set: observation scheduling, AAAA-MM-DD 
+        """
+        resources = list()
+        scheduling = '%' + observation_scheduling + '%'
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observation WHERE scheduling LIKE ?", (scheduling,)).fetchall()
+        self.cursor.close()
+        return resources
+
     @property
     def observation_header(self):
         """

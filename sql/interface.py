@@ -188,6 +188,25 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def observation_by_scheduling(self, observation_scheduling:str):
+        """
+        @return: observation data for the scheduling (dict)
+        @set: observation scheduling, AAAA-MM-DD
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.observation_by_scheduling(observation_scheduling)
+        if dataset:
+            headers = data_out.observation_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+
     def sequence_by_id(self, id:int):
         """
         @return: observation data by id (dict)
