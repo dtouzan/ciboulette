@@ -16,14 +16,11 @@ from ciboulette.sql import compoments, interface
 class datarecords(interface.interfaces):
     filter_names = ['scienceprogram', 'observation', 'instrument', 'target', 'sequence', 'ObservingConditions', 'Observinglog']
 
-# faire class datarecord pour la création d'une observation complète (héritage interface)
-# datarecord.edit visualise les infos en fonction du filtre
-# datarecord.filter paramettrer le filtre de recherche (target,observation,scienprogram....)
-# datarecord.find en fonction du filter editer l'observation(s)
 # datarecord.put avoir toutes les valeurs et faire les fonction
 #                     sienceprogram,observation,instrument,target,sequence,observingconditions,observinglog
 # datarecord.get en fonction du filter editer la valeur
 # calcul du champ en recherchant et en prenant INSTRUMENT/CAMERA (à rechercher dans TABLE/camera)    
+
     def __init__(self):
         self.filters = datarecords.filter_names[1]
         self.header = 'id'
@@ -52,19 +49,27 @@ class datarecords(interface.interfaces):
                     for data in self.observation_by_scheduling(self.values):
                         self.observation_print(data['observation_id'])
         
-            if self.filters == datarecords.filter_names[3]:
-                if self.header == 'name':
-                    for data in self.target_by_name(self.values):
-                        self.observation_print(data['observation_id'])
-
-            #INSTRUMENT/NAME,FILTER,DISPERSER,CAMERA
             if self.filters == datarecords.filter_names[2]:
                 if self.header == 'name':
                     for data in self.instrument_by_name(self.values):
                         self.observation_print(data['observation_id'])
 
+                if self.header == 'filter':
+                    for data in self.instrument_by_filter(self.values):
+                        self.observation_print(data['observation_id'])
 
+                if self.header == 'disperser':
+                    for data in self.instrument_by_disperser(self.values):
+                        self.observation_print(data['observation_id'])
 
+                if self.header == 'camera':
+                    for data in self.instrument_by_camera(self.values):
+                        self.observation_print(data['observation_id'])
+
+            if self.filters == datarecords.filter_names[3]:
+                if self.header == 'name':
+                    for data in self.target_by_name(self.values):
+                        self.observation_print(data['observation_id'])
 
 
 

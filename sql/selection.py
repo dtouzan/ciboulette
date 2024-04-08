@@ -290,13 +290,43 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
-    def instrument_by_name(self, name:str):
+    def instrument_by_name(self, instrument_name:str):
         """
         @return: instrument data by name (dict)
         @set: instrument name
         """
         self.cursor = self.connection.cursor()
-        resources = self.cursor.execute("SELECT * FROM instrument WHERE name=?", (name,)).fetchall()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE name=?", (instrument_name,)).fetchall()
+        self.cursor.close()
+        return resources
+
+    def instrument_by_filter(self, instrument_filter:str):
+        """
+        @return: instrument data by filter (dict)
+        @set: instrument filter
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE filter=?", (instrument_filter,)).fetchall()
+        self.cursor.close()
+        return resources
+
+    def instrument_by_disperser(self, instrument_disperser:str):
+        """
+        @return: instrument data by disperser (dict)
+        @set: instrument disperser
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE disperser=?", (instrument_disperser,)).fetchall()
+        self.cursor.close()
+        return resources
+
+    def instrument_by_camera(self, instrument_camera:str):
+        """
+        @return: instrument data by camera (dict)
+        @set: instrument camera
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM instrument WHERE camera=?", (instrument_camera,)).fetchall()
         self.cursor.close()
         return resources
 

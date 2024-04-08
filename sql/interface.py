@@ -261,6 +261,63 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def instrument_by_filter(self, instrument_filter:str):
+        """
+        @return: instrument data by filter (dict)
+        @set: instrument filter
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.instrument_by_filter(instrument_filter)
+        if dataset:
+            headers = data_out.instrument_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+
+    def instrument_by_disperser(self, instrument_disperser:str):
+        """
+        @return: instrument data by disperser (dict)
+        @set: instrument disperser
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.instrument_by_disperser(instrument_disperser)
+        if dataset:
+            headers = data_out.instrument_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+
+    def instrument_by_camera(self, instrument_camera:str):
+        """
+        @return: instrument data by camera (dict)
+        @set: instrument camera
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.instrument_by_camera(instrument_camera)
+        if dataset:
+            headers = data_out.instrument_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+
     def target_by_id(self, id:int):
         """
         @return: target data by id (dict)
