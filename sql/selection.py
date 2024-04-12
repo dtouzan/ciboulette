@@ -90,6 +90,15 @@ class select(compoments.compoment):
         return resources
 
     @property
+    def camera_header(self):
+        """
+        SQL view camera_header
+        @return: data of camera header
+        """
+        resources = self._selectone("SELECT * FROM camera_header")
+        return resources
+
+    @property
     def scienceprogram(self):
         """
         SQL view scienceprogram_select
@@ -405,4 +414,14 @@ class select(compoments.compoment):
         @return: observingconditions header
         """
         resources = self._selectone("SELECT * FROM observingconditions_header")
+        return resources
+
+    def camera_by_name(self, camera_name:str):
+        """
+        @return: camera data by camera (dict)
+        @set: camera name
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM camera WHERE name=?", (camera_name,)).fetchone()
+        self.cursor.close()
         return resources

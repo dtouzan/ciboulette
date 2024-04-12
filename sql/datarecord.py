@@ -10,6 +10,8 @@ __copyright__ = "MIT"
 __date__ = "2024-03-12"
 __version__= "1.0.0"
 
+# Globals mods
+import math
 # User mods
 from ciboulette.sql import compoments, interface
 
@@ -72,7 +74,19 @@ class datarecords(interface.interfaces):
                         self.observation_print(data['observation_id'])
 
 
-
+    def observation_table(self, observation_id: str):
+        """
+        @return: instrument and field of observation ID
+        @set: observation ID
+        """
+        data = self.instrument_by_id(int(observation_id))
+        camera = data['camera']
+        focal = data['focal']
+        data_camera = self.camera_by_name(data['camera'])
+        size_x = data_camera['size_x']*data_camera['size_pixel']
+        size_y = data_camera['size_y']*data_camera['size_pixel']
+        Mv = math.log10(data['aperture']*1000)*5+7.2
+        return camera, focal, size_x, size_y, Mv        
 
 
 

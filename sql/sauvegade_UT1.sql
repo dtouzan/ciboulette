@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur lun. avr. 8 21:27:58 2024
+-- Fichier généré par SQLiteStudio v3.4.4 sur ven. avr. 12 22:40:40 2024
 --
 -- Encodage texte utilisé : System
 --
@@ -8,12 +8,12 @@ BEGIN TRANSACTION;
 
 -- Tableau : Camera
 DROP TABLE IF EXISTS Camera;
-CREATE TABLE IF NOT EXISTS Camera (ID INTEGER UNIQUE, NAME TEXT (1024), SIZE_X INTEGER DEFAULT (0), SIZE_Y INTEGER DEFAULT (0), SIZE_PIXEL REAL, COLD INTEGER DEFAULT (0), GAIN REAL DEFAULT (0.0));
+CREATE TABLE IF NOT EXISTS Camera (ID INTEGER UNIQUE, NAME TEXT (1024) UNIQUE, SIZE_X INTEGER DEFAULT (0), SIZE_Y INTEGER DEFAULT (0), SIZE_PIXEL REAL, COLD INTEGER DEFAULT (0), GAIN REAL DEFAULT (0.0));
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (0, 'Atik 383L+', 3354, 2529, 5.4, 1, 0.0);
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (1, 'ZWO ASI 120Mini', 1280, 960, 3.75, 0, 0.0);
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (2, 'QHY5-M', 1280, 1024, 5.2, 0, 0.0);
-INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (3, 'adonis2101_imx219', 3280, 2464, 1.12, 0, 0.0);
-INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (4, 'nefertiti3199_imx477', 4032, 3040, 1.55, 0, 0.0);
+INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (3, 'adonis2101', 3280, 2464, 1.12, 0, 0.0);
+INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (4, 'nefertiti3199', 4032, 3040, 1.55, 0, 0.0);
 
 -- Tableau : Collection
 DROP TABLE IF EXISTS Collection;
@@ -56,8 +56,8 @@ INSERT INTO FilterWheel (ID, NAME, DATA, SLOTS, DIAMETER, DATASET) VALUES (1, 'Z
 
 -- Tableau : Header
 DROP TABLE IF EXISTS Header;
-CREATE TABLE IF NOT EXISTS Header (NAME TEXT (1024), DATA TEXT (1024), RELEASE TEXT (1024) DEFAULT (1.0));
-INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'name;label;spectral_axis;flux', '1.0.0');
+CREATE TABLE IF NOT EXISTS Header (NAME TEXT (1024) UNIQUE NOT NULL, DATA TEXT (1024), RELEASE TEXT (1024) DEFAULT (1.0));
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'filter_id;name;label;spectral_axis;flux', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collection;instrument_name;filters;disperser;target_name;target_classification;obs_id;s_ra;s_dec;proposal_pi;dataproduct_type;calib_level;scheduling;t_min;t_max;t_exptime;obs_title;focal;format;url', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram', 'science_program_id;title;status;contact;observing_time;type;dataset', '1.0.0');
@@ -67,6 +67,7 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('instrument', 'observation_id;n
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('target', 'observation_id;name;class;RA;DEC;notes', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observinglog', 'observation_id;label;filename;comment', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observationconditions', 'observation_id;sky_background;cloud_cover;image_quality;water_vapor;elevation_constraint;timming_windows', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('camera', 'camera_id;name;size_x;size_y;size_pixel;cold;gain', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -963,13 +964,13 @@ INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSUR
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (890, 'UT1', 'IR-CUT', 'SA200', 'UT1', 700.0, NULL, NULL, NULL, 0.085, 0.06);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (891, 'UT1', 'IR-CUT', 'SA200', 'UT1', 1000.0, NULL, NULL, NULL, 0.085, 0.06);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (892, 'UT1', 'IR-CUT', 'SA200', 'UT1', 600.0, NULL, NULL, NULL, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (893, 'UT1', 'IR-CUT', '', 'imx219', 1330.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (894, 'UT1', 'IR-CUT', '', 'imx219', 980.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (895, 'UT1', 'IR-CUT', '', 'imx219', 330.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (896, 'UT1', 'IR-CUT', '', 'imx219', 330.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (897, 'UT1', 'IR-CUT', '', 'imx219', 700.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (898, 'UT1', 'IR-CUT', '', 'imx219', 540.0, 0.0, 1, 1, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (899, 'UT1', 'IR-CUT', '', 'imx219', 560.0, 0.0, 1, 1, 0.085, 0.06);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (893, 'UT1', 'IR-CUT', '', 'adonis2101', 1330.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (894, 'UT1', 'IR-CUT', '', 'adonis2101', 980.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (895, 'UT1', 'IR-CUT', '', 'adonis2101', 330.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (896, 'UT1', 'IR-CUT', '', 'adonis2101', 330.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (897, 'UT1', 'IR-CUT', '', 'adonis2101', 700.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (898, 'UT1', 'IR-CUT', '', 'adonis2101', 540.0, 0.0, 1, 1, 0.085, 0.03);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (899, 'UT1', 'IR-CUT', '', 'adonis2101', 560.0, 0.0, 1, 1, 0.085, 0.03);
 
 -- Tableau : Mount
 DROP TABLE IF EXISTS Mount;
@@ -3717,17 +3718,21 @@ INSERT INTO Target (OBSERVATION_ID, NAME, CLASS, RA, DEC, NOTES) VALUES (897, 'm
 INSERT INTO Target (OBSERVATION_ID, NAME, CLASS, RA, DEC, NOTES) VALUES (898, 'm38', 'OpenCluster', 82.16708333333332, 35.8238888888889, NULL);
 INSERT INTO Target (OBSERVATION_ID, NAME, CLASS, RA, DEC, NOTES) VALUES (899, 'm44', 'OpenCluster', 130.05416666666665, 19.62111111111111, NULL);
 
+-- Vue : camera_header
+DROP VIEW IF EXISTS camera_header;
+CREATE VIEW IF NOT EXISTS camera_header AS SELECT data FROM Header WHERE name = 'camera';
+
 -- Vue : collection_select
 DROP VIEW IF EXISTS collection_select;
 CREATE VIEW IF NOT EXISTS collection_select AS SELECT * FROM Collection;
 
 -- Vue : filter_header
 DROP VIEW IF EXISTS filter_header;
-CREATE VIEW IF NOT EXISTS filter_header AS SELECT data FROM header WHERE name='filter';
+CREATE VIEW IF NOT EXISTS filter_header AS SELECT data FROM Header WHERE name = 'filter';
 
 -- Vue : instrument_header
 DROP VIEW IF EXISTS instrument_header;
-CREATE VIEW IF NOT EXISTS instrument_header AS SELECT data FROM header WHERE name='instrument';
+CREATE VIEW IF NOT EXISTS instrument_header AS SELECT data FROM Header WHERE name = 'instrument';
 
 -- Vue : instrument_mast_values
 DROP VIEW IF EXISTS instrument_mast_values;
@@ -3735,7 +3740,7 @@ CREATE VIEW IF NOT EXISTS instrument_mast_values AS SELECT name, filter, dispers
 
 -- Vue : mast_header
 DROP VIEW IF EXISTS mast_header;
-CREATE VIEW IF NOT EXISTS mast_header AS SELECT data FROM header WHERE name='mast';
+CREATE VIEW IF NOT EXISTS mast_header AS SELECT data FROM Header WHERE name = 'mast';
 
 -- Vue : mast_select
 DROP VIEW IF EXISTS mast_select;
@@ -3743,7 +3748,7 @@ CREATE VIEW IF NOT EXISTS mast_select AS SELECT ScienceProgram.type, collection,
 
 -- Vue : observation_header
 DROP VIEW IF EXISTS observation_header;
-CREATE VIEW IF NOT EXISTS observation_header AS SELECT data FROM header WHERE name='observation';
+CREATE VIEW IF NOT EXISTS observation_header AS SELECT data FROM Header WHERE name = 'observation';
 
 -- Vue : observation_last_id
 DROP VIEW IF EXISTS observation_last_id;
@@ -3755,11 +3760,11 @@ CREATE VIEW IF NOT EXISTS observation_mast_values AS SELECT collection, observat
 
 -- Vue : observingconditions_header
 DROP VIEW IF EXISTS observingconditions_header;
-CREATE VIEW IF NOT EXISTS observingconditions_header AS SELECT data FROM header WHERE name='observationconditions';
+CREATE VIEW IF NOT EXISTS observingconditions_header AS SELECT data FROM Header WHERE name = 'observationconditions';
 
 -- Vue : observinglog_header
 DROP VIEW IF EXISTS observinglog_header;
-CREATE VIEW IF NOT EXISTS observinglog_header AS SELECT data FROM header WHERE name='observinglog';
+CREATE VIEW IF NOT EXISTS observinglog_header AS SELECT data FROM Header WHERE name = 'observinglog';
 
 -- Vue : scheduling_last
 DROP VIEW IF EXISTS scheduling_last;
@@ -3771,7 +3776,7 @@ CREATE VIEW IF NOT EXISTS scheduling_table AS SELECT timeline_min, timeline_max 
 
 -- Vue : scienceprogram_header
 DROP VIEW IF EXISTS scienceprogram_header;
-CREATE VIEW IF NOT EXISTS scienceprogram_header AS SELECT data FROM header WHERE name='scienceprogram';
+CREATE VIEW IF NOT EXISTS scienceprogram_header AS SELECT data FROM Header WHERE name = 'scienceprogram';
 
 -- Vue : scienceprogram_mast_values
 DROP VIEW IF EXISTS scienceprogram_mast_values;
@@ -3787,11 +3792,11 @@ CREATE VIEW IF NOT EXISTS scienceprogram_title AS SELECT title FROM scienceprogr
 
 -- Vue : scienceprogram_type_header
 DROP VIEW IF EXISTS scienceprogram_type_header;
-CREATE VIEW IF NOT EXISTS scienceprogram_type_header AS SELECT data FROM header WHERE name='scienceprogram_type';
+CREATE VIEW IF NOT EXISTS scienceprogram_type_header AS SELECT data FROM Header WHERE name = 'scienceprogram_type';
 
 -- Vue : sequence_header
 DROP VIEW IF EXISTS sequence_header;
-CREATE VIEW IF NOT EXISTS sequence_header AS SELECT data FROM header WHERE name='sequence';
+CREATE VIEW IF NOT EXISTS sequence_header AS SELECT data FROM Header WHERE name = 'sequence';
 
 -- Vue : sequence_mast_values
 DROP VIEW IF EXISTS sequence_mast_values;
@@ -3799,7 +3804,7 @@ CREATE VIEW IF NOT EXISTS sequence_mast_values AS SELECT type, timeline_min, tim
 
 -- Vue : target_header
 DROP VIEW IF EXISTS target_header;
-CREATE VIEW IF NOT EXISTS target_header AS SELECT data FROM header WHERE name='target';
+CREATE VIEW IF NOT EXISTS target_header AS SELECT data FROM Header WHERE name = 'target';
 
 -- Vue : target_mast_values
 DROP VIEW IF EXISTS target_mast_values;

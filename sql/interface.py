@@ -381,6 +381,22 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def camera_by_name(self, camera_name: str):
+        """
+        @return: camera info
+        @set:  camera name
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.camera_by_name(camera_name)
+        if dataset:
+            headers = data_out.camera_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
     def observingconditions_by_id(self, id:int):
         """
         @return: observingconditions data by id (dict)
@@ -478,8 +494,8 @@ class interfaces(compoments.compoment):
         data_in = insertion.insert() 
         data_in.connect
         data_in.function_library(OT_library, target_class)
-        data_in.close
-    
+        data_in.close       
+        
     def observation_print(self,observation_id:int):
         """
         Print observation text type
