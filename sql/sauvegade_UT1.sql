@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur ven. avr. 12 22:40:40 2024
+-- Fichier généré par SQLiteStudio v3.4.4 sur mar. avr. 16 23:12:02 2024
 --
 -- Encodage texte utilisé : System
 --
@@ -68,6 +68,7 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('target', 'observation_id;name;
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observinglog', 'observation_id;label;filename;comment', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observationconditions', 'observation_id;sky_background;cloud_cover;image_quality;water_vapor;elevation_constraint;timming_windows', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('camera', 'camera_id;name;size_x;size_y;size_pixel;cold;gain', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation_table', 'object;camera;focal;F/D;sampling;field.x'';field.y'';Instrument magnitude', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -3757,6 +3758,10 @@ CREATE VIEW IF NOT EXISTS observation_last_id AS SELECT * FROM Observation ORDER
 -- Vue : observation_mast_values
 DROP VIEW IF EXISTS observation_mast_values;
 CREATE VIEW IF NOT EXISTS observation_mast_values AS SELECT collection, observation_id, proposal_pi, calibration, scheduling, title, note_file, fits_file FROM Observation;
+
+-- Vue : observation_table_header
+DROP VIEW IF EXISTS observation_table_header;
+CREATE VIEW IF NOT EXISTS observation_table_header AS SELECT data FROM Header WHERE name = 'observation_table';
 
 -- Vue : observingconditions_header
 DROP VIEW IF EXISTS observingconditions_header;

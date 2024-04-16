@@ -99,6 +99,15 @@ class select(compoments.compoment):
         return resources
 
     @property
+    def observation_table_header(self):
+        """
+        SQL view observation_table_header
+        @return: data of observation table header
+        """
+        resources = self._selectone("SELECT * FROM observation_table_header")
+        return resources
+
+    @property
     def scienceprogram(self):
         """
         SQL view scienceprogram_select

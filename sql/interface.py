@@ -207,6 +207,20 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    @property
+    def observation_table_header(self):
+        """
+        @return: observation table header (dict)
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.observation_table_header
+        if dataset:
+            resources = dataset[0].split(';')
+        data_out.close
+        return resources
+        
     def sequence_by_id(self, id:int):
         """
         @return: sequence data by id (dict)

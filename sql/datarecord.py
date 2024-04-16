@@ -79,14 +79,36 @@ class datarecords(interface.interfaces):
         @return: instrument and field of observation ID
         @set: observation ID
         """
-        data = self.instrument_by_id(int(observation_id))
-        camera = data['camera']
-        focal = data['focal']
-        data_camera = self.camera_by_name(data['camera'])
-        size_x = data_camera['size_x']*data_camera['size_pixel']
-        size_y = data_camera['size_y']*data_camera['size_pixel']
-        Mv = math.log10(data['aperture']*1000)*5+7.2
-        return camera, focal, size_x, size_y, Mv        
+        dataset = []
+        resources = dict()
+        data_target = self.target_by_id(int(observation_id))
+        dataset.append(data_target['name'])
+        
+        data_instrument = self.instrument_by_id(int(observation_id))
+        dataset.append(data_instrument['camera'])
+        dataset.append(data_instrument['focal'])
+        dataset.append(round(data_instrument['focal']/data_instrument['aperture'], 1))
+               
+        data_camera = self.camera_by_name(data_instrument['camera'])
+        
+        sampling = (2*math.atan((data_camera['size_pixel']/1000)/(2*data_instrument['focal']*1000)))*216000
+        dataset.append(round(sampling, 2))
+        
+        field_ccd = data_camera['size_x']*data_camera['size_pixel']/1000 
+        field_x = 2 * math.atan(field_ccd/(2*data_instrument['focal']*1000))*3600
+        dataset.append(round(field_x, 2))
+
+        field_ccd = data_camera['size_y']*data_camera['size_pixel']/1000 
+        field_y = 2 * math.atan(field_ccd/(2*data_instrument['focal']*1000))*3600
+        dataset.append(round(field_y, 2))
+        
+        dataset.append(round(math.log10(data_instrument['aperture']*1000)*5+7.2, 2))
+
+        headers = self.observation_table_header
+        if dataset:
+            for header, value in zip(headers, dataset):
+                    resources.setdefault(header, value)
+        return resources        
 
 
 
