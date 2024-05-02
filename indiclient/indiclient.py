@@ -905,9 +905,8 @@ class indiblob(indielement):
         self.format = attrs.get('format', "").strip()
 
     def _get_decoded_value(self):
-        """
-        
-        /!\ base64.encodestring replaced by base64.b64decode Python 3.9
+        """       
+        base64.encodestring replaced by base64.b64decode Python 3.9
         
         Decodes the value of the BLOB it does the base64 decoding as well as zlib decompression.
         zlib decompression is done only if the current L{format} string ends with C{.z}.
@@ -925,9 +924,8 @@ class indiblob(indielement):
             return base64.b64decode(value)
 
     def _encode_and_set_value(self, value, format):
-        """
-        
-        /!\ base64.encodestring replaced by base64.b64decode Python 3.9
+        """       
+        base64.encodestring replaced by base64.b64decode Python 3.9
         
         Encodes the value to be written into the BLOB it does the base64 encoding as well as
         zlib compression. Zlib compression is done only if the current L{format} string ends with C{.z}.
