@@ -411,6 +411,54 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def filter_by_name(self, filter_name: str):
+        """
+        @return: filter info
+        @set:  filter name
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.filter_by_name(filter_name)
+        if dataset:
+            headers = data_out.filter_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+    def filter_data_iso(self, filter_data:str):
+        """
+        @return: filter_data_iso header
+        @set: filter data
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = filter_data
+        headers = data_out.filter_data_iso_header
+        if headers:
+            for header, value in zip(headers[0].split(';'), dataset.split(';')):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
+    def disperser_by_name(self, disperser_name: str):
+        """
+        @return: disperser info
+        @set:  disperser name
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.disperser_by_name(disperser_name)
+        if dataset:
+            headers = data_out.disperser_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close
+        return resources
+
     def observingconditions_by_id(self, id:int):
         """
         @return: observingconditions data by id (dict)

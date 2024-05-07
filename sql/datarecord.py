@@ -81,19 +81,29 @@ class datarecords(interface.interfaces):
         """
         dataset = []
         resources = dict()
+
+        # Get target
         data_target = self.target_by_id(int(observation_id))
         dataset.append(data_target['name'])
-        
+
+        # Get scheduling 
+        data_observation = self.observation_by_id(int(observation_id))
+        dataset.append(data_observation['scheduling'])
+
+        # Get instrument data
         data_instrument = self.instrument_by_id(int(observation_id))
         dataset.append(data_instrument['camera'])
         dataset.append(data_instrument['focal'])
         dataset.append(round(data_instrument['focal']/data_instrument['aperture'], 1))
-               
+
+        # Get camera data
         data_camera = self.camera_by_name(data_instrument['camera'])
-        
+
+        # Get sampling
         sampling = (2*math.atan((data_camera['size_pixel']/1000)/(2*data_instrument['focal']*1000)))*216000
         dataset.append(round(sampling, 2))
-        
+
+        # Get field x, y
         field_ccd = data_camera['size_x']*data_camera['size_pixel']/1000 
         field_x = 2 * math.atan(field_ccd/(2*data_instrument['focal']*1000))*3600
         dataset.append(round(field_x, 2))
@@ -101,19 +111,34 @@ class datarecords(interface.interfaces):
         field_ccd = data_camera['size_y']*data_camera['size_pixel']/1000 
         field_y = 2 * math.atan(field_ccd/(2*data_instrument['focal']*1000))*3600
         dataset.append(round(field_y, 2))
-        
+
+        # Get magnitude
         dataset.append(round(math.log10(data_instrument['aperture']*1000)*5+7.2, 2))
 
+        # Get Filter data
+        data_filter = self.filter_by_name(data_instrument['filter'])
+        dataset.append(data_filter['name'] + " [" + str(data_filter['min']) + ":" + str(data_filter['max']) + "]nm")
+        dataset.append(data_filter['data'])
+        data_filter_iso = self.filter_data_iso(data_filter['data'])
+        dataset.append(data_filter_iso['spectral axis'])
+        dataset.append(data_filter_iso['flux'])
+
+        # Get disperser if exist
+        data_disperser = data_instrument['disperser']
+        if data_disperser:
+            data_of_disperser = self.disperser_by_name(data_disperser)
+            dataset.append(data_of_disperser['name'])
+            dataset.append(data_of_disperser['line'])
+            dataset.append(data_of_disperser['grism angle'])
+        
         headers = self.observation_table_header
         if dataset:
             for header, value in zip(headers, dataset):
                     resources.setdefault(header, value)
         return resources        
 
-
-
-
-
+        
+# supplément à MAST pour les autre données
 
 
 

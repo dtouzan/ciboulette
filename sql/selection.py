@@ -434,3 +434,56 @@ class select(compoments.compoment):
         resources = self.cursor.execute("SELECT * FROM camera WHERE name=?", (camera_name,)).fetchone()
         self.cursor.close()
         return resources
+
+    def filter_by_name(self, filter_name:str):
+        """
+        @return: filter data by filter (dict)
+        @set: filter name
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM filter WHERE name=?", (filter_name,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def filter_data_iso_header(self):
+        """
+        SQL view filter_data_iso_header
+        @return: filter_data_iso header
+        """
+        resources = self._selectone("SELECT * FROM filter_data_iso_header")
+        return resources
+
+    def disperser_by_name(self, disperser_name:str):
+        """
+        @return: disperser data by disperser (dict)
+        @set: disperser name
+        """
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM disperser WHERE name=?", (disperser_name,)).fetchone()
+        self.cursor.close()
+        return resources
+
+    @property
+    def disperser_header(self):
+        """
+        SQL view disperser_header
+        @return: disperser header
+        """
+        resources = self._selectone("SELECT * FROM disperser_header")
+        return resources
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        

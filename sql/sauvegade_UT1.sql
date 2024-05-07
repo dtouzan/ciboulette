@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur mar. mai 7 13:34:41 2024
+-- Fichier généré par SQLiteStudio v3.4.4 sur mar. mai 7 17:53:13 2024
 --
 -- Encodage texte utilisé : System
 --
@@ -14,6 +14,7 @@ INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (1,
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (3, 'adonis2101-imx219', 3280, 2464, 1.12, 0, 0.0);
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (4, 'nefertiti3199-imx477', 4032, 3040, 1.55, 0, 0.0);
 INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (5, 'Taranis5370-imx477', 4032, 3040, 1.55, 0, 0.0);
+INSERT INTO Camera (ID, NAME, SIZE_X, SIZE_Y, SIZE_PIXEL, COLD, GAIN) VALUES (6, 'UT1', 3354, 2529, 5.4, 1, 0.0);
 
 -- Tableau : Collection
 DROP TABLE IF EXISTS Collection;
@@ -45,10 +46,10 @@ INSERT INTO Disperser (ID, NAME, LINES, GRISM, DIAMETER) VALUES (0, 'SA200', 200
 
 -- Tableau : Filter
 DROP TABLE IF EXISTS Filter;
-CREATE TABLE IF NOT EXISTS Filter (ID INTEGER UNIQUE, NAME TEXT (1024), DATA TEXT (1024), WAVELENGTH_MIN REAL, WAVELENGTH_MAX REAL);
-INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX) VALUES (0, 'IR-CUT', 'UV/IR-Cut;L0;3800,4000,6850,7000;0,0.9,0.9,0', 380.0, 700.0);
-INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX) VALUES (1, 'Ha35nm', 'Ha35nm;Ha35;6200, 6300, 6500, 6600, 6700;0, 0.70, 0.95, 0.85, 0', 630.0, 670.0);
-INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX) VALUES (2, 'CLS', 'CLS;cls;4400, 4600, 4800, 5000, 5200, 5400, 5600, 5800, 6000, 6200, 6400, 6600, 6800, 7000;0, 0.90, 0.95, 0.95, 0.90, 0.15, 0.01, 0.01, 0.01, 0.15, 0.85, 0.93, 0.95, 0', 460.0, 680.0);
+CREATE TABLE IF NOT EXISTS Filter (ID INTEGER UNIQUE, NAME TEXT (1024), DATA TEXT (1024), WAVELENGTH_MIN REAL, WAVELENGTH_MAX REAL, DATA_ISO TEXT DEFAULT FILTER_DATA_ISO);
+INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX, DATA_ISO) VALUES (0, 'IR-CUT', 'UV/IR-Cut;L0;3800,4000,6850,7000;0,0.9,0.9,0', 380.0, 700.0, 'FILTER_DATA_ISO');
+INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX, DATA_ISO) VALUES (1, 'Ha35nm', 'Ha35nm;Ha35;6200, 6300, 6500, 6600, 6700;0, 0.70, 0.95, 0.85, 0', 630.0, 670.0, 'FILTER_DATA_ISO');
+INSERT INTO Filter (ID, NAME, DATA, WAVELENGTH_MIN, WAVELENGTH_MAX, DATA_ISO) VALUES (2, 'CLS', 'CLS;cls;4400, 4600, 4800, 5000, 5200, 5400, 5600, 5800, 6000, 6200, 6400, 6600, 6800, 7000;0, 0.90, 0.95, 0.95, 0.90, 0.15, 0.01, 0.01, 0.01, 0.15, 0.85, 0.93, 0.95, 0', 460.0, 680.0, 'FILTER_DATA_ISO');
 
 -- Tableau : FilterWheel
 DROP TABLE IF EXISTS FilterWheel;
@@ -59,7 +60,7 @@ INSERT INTO FilterWheel (ID, NAME, DATA, SLOTS, DIAMETER, DATASET) VALUES (1, 'Z
 -- Tableau : Header
 DROP TABLE IF EXISTS Header;
 CREATE TABLE IF NOT EXISTS Header (NAME TEXT (1024) UNIQUE NOT NULL, DATA TEXT (1024), RELEASE TEXT (1024) DEFAULT (1.0));
-INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'filter_id;name;label;spectral_axis;flux', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter', 'filter_id;name;data;min;max;data_iso', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('mast', 'intentType;obs_collection;instrument_name;filters;disperser;target_name;target_classification;obs_id;s_ra;s_dec;proposal_pi;dataproduct_type;calib_level;scheduling;t_min;t_max;t_exptime;obs_title;focal;format;url', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram_type', 'science;spectrum;archive', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('scienceprogram', 'science_program_id;title;status;contact;observing_time;type;dataset', '1.0.0');
@@ -70,7 +71,9 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('target', 'observation_id;name;
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observinglog', 'observation_id;label;filename;comment', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observationconditions', 'observation_id;sky_background;cloud_cover;image_quality;water_vapor;elevation_constraint;timming_windows', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('camera', 'camera_id;name;size_x;size_y;size_pixel;cold;gain', '1.0.0');
-INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation_table', 'object;camera;focal;F/D;sampling;field.x'';field.y'';Instrument magnitude', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation_table', 'target;scheduling;camera;focal;F/D;sampling;field.x'';field.y'';Instrument magnitude;filter;filter data;spectral axis;flux;disperser;lines;grism angle', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter_data_iso', 'name;label;spectral axis;flux', NULL);
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('disperser', 'disperser_id;name;line;grism angle;diameter', NULL);
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -964,9 +967,9 @@ INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSUR
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (887, 'UT1', 'Ha35nm', '', 'UT1', 4500.0, 0.0, NULL, NULL, 0.2, 0.06);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (888, 'UT1', 'IR-CUT', '', 'UT1', 4800.0, 0.0, NULL, NULL, 0.085, 0.06);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (889, 'UT1', 'Ha35nm', '', 'UT1', 3600.0, 0.0, NULL, NULL, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (890, 'UT1', 'IR-CUT', 'SA200', 'UT1', 700.0, 0.0, NULL, NULL, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (891, 'UT1', 'IR-CUT', 'SA200', 'UT1', 1000.0, 0.0, NULL, NULL, 0.085, 0.06);
-INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (892, 'UT1', 'IR-CUT', 'SA200', 'UT1', 600.0, 0.0, NULL, NULL, 0.085, 0.06);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (890, 'UT1', 'IR-CUT', 'SA200', 'Atik 383L+', 700.0, 0.0, NULL, NULL, 0.085, 0.06);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (891, 'UT1', 'IR-CUT', 'SA200', 'Atik 383L+', 1000.0, 0.0, NULL, NULL, 0.085, 0.06);
+INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (892, 'UT1', 'IR-CUT', 'SA200', 'Atik 383L+', 600.0, 0.0, NULL, NULL, 0.085, 0.06);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (893, 'UT1', 'IR-CUT', '', 'adonis2101-imx219', 1330.0, 0.0, 1, 1, 0.085, 0.03);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (894, 'UT1', 'IR-CUT', '', 'adonis2101-imx219', 980.0, 0.0, 1, 1, 0.085, 0.03);
 INSERT INTO Instrument (OBSERVATION_ID, NAME, FILTER, DISPERSER, CAMERA, EXPOSURE_TIME, POSITION_ANGLE, BINNING_X, BINNING_Y, FOCAL, APERTURE) VALUES (895, 'UT1', 'IR-CUT', '', 'adonis2101-imx219', 330.0, 0.0, 1, 1, 0.085, 0.03);
@@ -3752,6 +3755,14 @@ CREATE VIEW IF NOT EXISTS camera_header AS SELECT data FROM Header WHERE name = 
 -- Vue : collection_select
 DROP VIEW IF EXISTS collection_select;
 CREATE VIEW IF NOT EXISTS collection_select AS SELECT * FROM Collection;
+
+-- Vue : disperser_header
+DROP VIEW IF EXISTS disperser_header;
+CREATE VIEW IF NOT EXISTS disperser_header AS SELECT data FROM Header WHERE name = 'disperser';
+
+-- Vue : filter_data_iso_header
+DROP VIEW IF EXISTS filter_data_iso_header;
+CREATE VIEW IF NOT EXISTS filter_data_iso_header AS SELECT data FROM Header WHERE name = 'filter_data_iso';
 
 -- Vue : filter_header
 DROP VIEW IF EXISTS filter_header;
