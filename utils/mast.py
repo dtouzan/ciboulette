@@ -498,8 +498,8 @@ class Mast():
         comet = ('P_', '_P', 'C_')
         ra = 0
         dec = 0
-        otype = 'NaN'
-        disperser = 'NaN'
+        otype = ''
+        disperser = ''
 
         #For spectrum name
         String = string.upper()
@@ -571,6 +571,8 @@ class Mast():
                         print(obs_id, name)
                         intent_type = 'S' # For Science
                         ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
+                        print("+", ra, dec, otype)
+                        print('.')
                         print(f'{self.intent_type_format(intent_type)},'
                                 f'{self.obs_collection},'
                                 f'{self.instrument_name},'
