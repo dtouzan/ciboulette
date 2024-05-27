@@ -93,6 +93,51 @@ class insert(compoments.compoment):
             self.connection.commit()           
         self.cursor.close()
 
+    def mast_observation_upgrade(self, observation_id: int, priority=0, statut=0, calibration=1):
+        """
+        SQL insert priority, statut and calibration observation for id observation
+        @set: priority, statut and calibration observation      
+        """
+        sql_request = """UPDATE observation SET priority=?,statut=?,calibration=? WHERE observation_id=?;"""
+        dataresources = (priority, statut, calibration, observation_id)
+        self._insert_for_observation(sql_request, dataresources)
+
+    def mast_observation_title(self, observation_id: int, title_observation='Observation with UT1'):
+        """
+        SQL insert title observation for id observation
+        @set: title observation   
+        """
+        sql_request = """UPDATE observation SET title=?  WHERE observation_id=?;"""
+        dataresources = (title_observation, observation_id)
+        self._insert_for_observation(sql_request, dataresources)
+
+    def mast_target_note(self, observation_id: int, notes=''):        
+        """
+        SQL insert note target for id observation
+        @set: note target   
+        """
+        sql_request = """UPDATE target SET notes=?  WHERE observation_id=?;"""
+        dataresources = (notes, observation_id)
+        self._insert_for_observation(sql_request, dataresources)
+
+    def mast_instrument_upgrade(self, observation_id: int, binning_x=1, binning_y=1, aperture=0.30):        
+        """
+        SQL insert binning and aperture for id observation
+        @set: binning, aperture    
+        """
+        sql_request = """UPDATE instrument SET binning_x=?,binning_y=?,aperture=? WHERE observation_id=?;"""
+        dataresources = (binning_x, binning_y, aperture, observation_id)
+        self._insert_for_observation(sql_request, dataresources)
+
+    def mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'):        
+        """
+        SQL insert camera for id observation
+        @set: camera name
+        """ 
+        sql_request = """UPDATE instrument SET camera=?  WHERE observation_id=?;"""
+        dataresources = (camera, observation_id)
+        self._insert_for_observation(sql_request, dataresources)
+        
     def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type_SP='science', dataset='dataset/archives'):
         """
         SQL insert scienceprogram
@@ -132,7 +177,7 @@ class insert(compoments.compoment):
             self.cursor.close()
             return False        
 
-    def sequence(self, observation_id: int, title='sequence', label='001', type='light', timeline_min=0, timeline_max=0, compoment='None'):
+    def sequence(self, observation_id: int, title='sequence', label='001', sequence_type='light', timeline_min=0, timeline_max=0, compoment='None'):
         """
         SQL insert sequence
         @set: observation_id
@@ -144,10 +189,10 @@ class insert(compoments.compoment):
         @set: compoment       
         """
         sql_request = """INSERT INTO sequence(observation_id,title,label,type,timeline_min,timeline_max,compoment) VALUES(?,?,?,?,?,?,?);"""
-        dataresources = (observation_id, title, label, type, timeline_min, timeline_max, compoment)
+        dataresources = (observation_id, title, label, sequence_type, timeline_min, timeline_max, compoment)
         self._insert_for_observation(sql_request, dataresources)
                
-    def target(self, observation_id:int, name:'dafault', class_type:'default', RA=0.0, DEC=0.0, notes='default'):
+    def target(self, observation_id:int, name:'default', class_type:'default', RA=0.0, DEC=0.0, notes='default'):
         """
         SQL insert target
         @set: observation_id
@@ -190,7 +235,7 @@ class insert(compoments.compoment):
         dataresources = (observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
         self._insert_for_observation(sql_request, dataresources)
 
-    def instrument(self, observation_id:int, name:str, filter:str, disperser:str, camera:str, exposure_time:float, 
+    def instrument(self, observation_id:int, name:str, instrument_filter:str, disperser:str, camera:str, exposure_time:float, 
                     position_angle:float,binning_x:int, binning_y:int, focal:float, aperture:float):
         """
         SQL insert instrument
@@ -209,7 +254,7 @@ class insert(compoments.compoment):
         sql_request = """INSERT INTO instrument(observation_id,name,filter,disperser,\
                                     camera,exposure_time,position_angle,binning_x,\
                                     binning_y,focal,aperture) VALUES(?,?,?,?,?,?,?,?,?,?,?);"""
-        dataresources = (observation_id, name, filter, disperser, camera, exposure_time, position_angle, binning_x, binning_y, focal, aperture)
+        dataresources = (observation_id, name, instrument_filter, disperser, camera, exposure_time, position_angle, binning_x, binning_y, focal, aperture)
         self._insert_for_observation(sql_request, dataresources)
  
     def observation(self, science_program_id:int, observation_id:int, title='default', collection='OT_Library_UT1', proposal_pi='dtouzan@gmail.com',

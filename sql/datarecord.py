@@ -74,7 +74,7 @@ class datarecords(interface.interfaces):
                         self.observation_print(data['observation_id'])
 
 
-    def observation_table(self, observation_id: str):
+    def observation_json(self, observation_id: str):
         """
         @return: instrument and field of observation ID
         @set: observation ID
@@ -137,10 +137,23 @@ class datarecords(interface.interfaces):
                     resources.setdefault(header, value)
         return resources        
 
-        
-# supplément à MAST pour les autre données
+"""        
+# supplément à MAST pour les autre données id observation
+    observation 
+            title
+            priority 0
+            statut 0
+            calibration 1
+    
+    target 
+        note
 
-
+    instrument 
+        camera
+        filter
+        binning x, y
+        aperture
+"""
 
 
 
