@@ -31,7 +31,22 @@ class insert(compoments.compoment):
             # SQL commit to database
             self.connection.commit()           
         self.cursor.close()
-        
+
+    def _update_for_observation(self, sql_request:str, dataresources):
+        """
+        SQL update for observation elements
+        """
+        self.cursor = self.connection.cursor()
+        observation = self.cursor.execute("SELECT observation_id FROM observation WHERE observation_id=?", (dataresources[-1],)).fetchone()       
+        if observation:
+            # Observation_id resources
+            OBS_id = observation[0]
+            # SQL UPDATE sequence
+            self.cursor.execute(sql_request, dataresources) 
+            # SQL commit to database
+            self.connection.commit()           
+        self.cursor.close()
+
     def mast(self,scienceprogram_title: str, mast_dataset: str):
         """
         SQL update
@@ -93,14 +108,14 @@ class insert(compoments.compoment):
             self.connection.commit()           
         self.cursor.close()
 
-    def mast_observation_upgrade(self, observation_id: int, priority=0, statut=0, calibration=1):
+    def mast_observation_upgrade(self, observation_id: int, priority=0, status=0, calibration=1):
         """
         SQL insert priority, statut and calibration observation for id observation
         @set: priority, statut and calibration observation      
         """
-        sql_request = """UPDATE observation SET priority=?,statut=?,calibration=? WHERE observation_id=?;"""
-        dataresources = (priority, statut, calibration, observation_id)
-        self._insert_for_observation(sql_request, dataresources)
+        sql_request = """UPDATE observation SET priority=?,status=?,calibration=? WHERE observation_id=?;"""
+        dataresources = (priority, status, calibration, observation_id)
+        self._update_for_observation(sql_request, dataresources)
 
     def mast_observation_title(self, observation_id: int, title_observation='Observation with UT1'):
         """
@@ -109,16 +124,16 @@ class insert(compoments.compoment):
         """
         sql_request = """UPDATE observation SET title=?  WHERE observation_id=?;"""
         dataresources = (title_observation, observation_id)
-        self._insert_for_observation(sql_request, dataresources)
+        self._update_for_observation(sql_request, dataresources)
 
-    def mast_target_note(self, observation_id: int, notes=''):        
+    def mast_target_note(self, observation_id: int, notes='not specified'):        
         """
         SQL insert note target for id observation
         @set: note target   
         """
         sql_request = """UPDATE target SET notes=?  WHERE observation_id=?;"""
         dataresources = (notes, observation_id)
-        self._insert_for_observation(sql_request, dataresources)
+        self._update_for_observation(sql_request, dataresources)
 
     def mast_instrument_upgrade(self, observation_id: int, binning_x=1, binning_y=1, aperture=0.30):        
         """
@@ -127,7 +142,7 @@ class insert(compoments.compoment):
         """
         sql_request = """UPDATE instrument SET binning_x=?,binning_y=?,aperture=? WHERE observation_id=?;"""
         dataresources = (binning_x, binning_y, aperture, observation_id)
-        self._insert_for_observation(sql_request, dataresources)
+        self._update_for_observation(sql_request, dataresources)
 
     def mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'):        
         """
@@ -136,7 +151,7 @@ class insert(compoments.compoment):
         """ 
         sql_request = """UPDATE instrument SET camera=?  WHERE observation_id=?;"""
         dataresources = (camera, observation_id)
-        self._insert_for_observation(sql_request, dataresources)
+        self._update_for_observation(sql_request, dataresources)
         
     def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type_SP='science', dataset='dataset/archives'):
         """

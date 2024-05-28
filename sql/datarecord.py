@@ -137,23 +137,6 @@ class datarecords(interface.interfaces):
                     resources.setdefault(header, value)
         return resources        
 
-"""        
-# supplément à MAST pour les autre données id observation
-    observation 
-            title
-            priority 0
-            statut 0
-            calibration 1
-    
-    target 
-        note
-
-    instrument 
-        camera
-        filter
-        binning x, y
-        aperture
-"""
 
 
 

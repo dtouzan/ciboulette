@@ -53,6 +53,19 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources[1]
 
+    def mast_upgrade(self,observation_id: int):
+        """
+        Upgrade default mast information to observation id
+        @set: observation_id
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.mast_observation_upgrade(observation_id)
+        data_in.mast_observation_title(observation_id)
+        data_in.mast_target_note(observation_id)
+        data_in.mast_instrument_upgrade(observation_id)
+        data_in.mast_instrument_camera(observation_id)
+        data_in.close
     
     @property
     def scienceprogram_type_header(self):
