@@ -27,11 +27,22 @@ class datarecords(interface.interfaces):
         self.filters = datarecords.filter_names[1]
         self.header = 'id'
         self.values = '1'
+
     
     @property
     def edit(self):
         """
-        Print observation text type
+        Print observation id
+        """
+        self.observation_print(int(self.values))
+    
+    @property
+    def find(self):
+        """
+        find observation text type
+
+        A REPRENDRE
+        
         """
         if type(self.values) == 'string' or type(self.values) != '':
             
@@ -73,12 +84,13 @@ class datarecords(interface.interfaces):
                     for data in self.target_by_name(self.values):
                         self.observation_print(data['observation_id'])
 
-
-    def observation_json(self, observation_id: str):
+    @property
+    def settings(self):
         """
         @return: instrument and field of observation ID
         @set: observation ID
         """
+        observation_id = int(self.values)
         dataset = []
         resources = dict()
 
