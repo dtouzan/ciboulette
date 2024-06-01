@@ -220,6 +220,26 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    def observation_by_notes(self, observation_notes:str):
+        """
+        @return: observation data for the notes (dict)
+        @set: observation notes
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = []
+        dataset = data_out.observation_by_notes(observation_notes)
+        if dataset:
+            headers = data_out.observation_header
+            for datatable in dataset:
+                datadict = dict()
+                for header, value in zip(headers[0].split(';'), datatable):
+                    datadict.setdefault(header, value)
+                resources.append(datadict)               
+        data_out.close
+        return resources
+    
+
     @property
     def observation_table_header(self):
         """
@@ -368,6 +388,24 @@ class interfaces(compoments.compoment):
         data_out.connect
         data_collection = list()
         dataset = data_out.target_by_name(name)
+        if dataset:
+            headers = data_out.target_header
+            for data in dataset:
+                resources = dict()
+                for header, value in zip(headers[0].split(';'), data):
+                    resources.setdefault(header, value)  
+                data_collection.append(resources)
+        data_out.close
+        return data_collection
+
+    def target_by_notes(self, notes:str):
+        """
+        @return: target data by notes 
+        """
+        data_out = selection.select() 
+        data_out.connect
+        data_collection = list()
+        dataset = data_out.target_by_notes(notes)
         if dataset:
             headers = data_out.target_header
             for data in dataset:

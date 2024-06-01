@@ -270,6 +270,18 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
+    def observation_by_notes(self,observation_notes:str):
+        """
+        @return: observation data by notes (dict)
+        @set: observation notes
+        """
+        resources = list()
+        notes = '%' + observation_notes + '%'
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM observation WHERE note_file LIKE ?", (notes,)).fetchall()
+        self.cursor.close()
+        return resources
+
     @property
     def observation_header(self):
         """
@@ -375,6 +387,17 @@ class select(compoments.compoment):
         term = (f'%{name}%',)
         self.cursor = self.connection.cursor()
         resources = self.cursor.execute("SELECT * FROM target WHERE name LIKE ?", term).fetchall()
+        self.cursor.close()
+        return resources
+
+    def target_by_notes(self, notes:str):
+        """
+        @return: target data by bnotes (dict)
+        @set: target notes
+        """
+        term = (f'%{notes}%',)
+        self.cursor = self.connection.cursor()
+        resources = self.cursor.execute("SELECT * FROM target WHERE notes LIKE ?", term).fetchall()
         self.cursor.close()
         return resources
 
