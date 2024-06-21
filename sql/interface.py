@@ -53,7 +53,7 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources[1]
 
-    def mast_upgrade(self,observation_id: int):
+    def mast_upgrade(self,observation_id: int, unit='UT1'):
         """
         Upgrade default mast information to observation id
         @set: observation_id
@@ -61,10 +61,15 @@ class interfaces(compoments.compoment):
         data_in = insertion.insert() 
         data_in.connect
         data_in.mast_observation_upgrade(observation_id)
-        data_in.mast_observation_title(observation_id)
         data_in.mast_target_note(observation_id)
-        data_in.mast_instrument_upgrade(observation_id)
-        data_in.mast_instrument_camera(observation_id)
+        if unit == 'UT1':
+            data_in.mast_observation_title(observation_id)
+            data_in.mast_instrument_upgrade(observation_id, 1, 1, 0.30)
+            data_in.mast_instrument_camera(observation_id, 'nefertiti3199-imx477')
+        if unit == 'UT2':
+            data_in.mast_observation_title(observation_id, 'Observation with UT2')
+            data_in.mast_instrument_upgrade(observation_id, 1, 1, 0.30)
+            data_in.mast_instrument_camera(observation_id, 'taranis-imx477')
         data_in.close
     
     @property
