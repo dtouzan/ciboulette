@@ -20,33 +20,7 @@ class datarecords(interface.interfaces):
 
 # datarecord.put avoir toutes les valeurs et faire les fonction
 #                     sienceprogram,observation,instrument,target,sequence,observingconditions,observinglog
-# find recherche par (date, de A à B)
-# setting par camera/instrument
-# UT1	IR-CUT		Taranis5370-imx477		0	1	1	0.135	0.03
-# mast_observation_title(self, observation_id: int, title_observation='Observation with UT1'):
-# mast_target_note(self, observation_id: int, notes='not specified'):
-# mast_observation_upgrade(self, observation_id: int, priority=0, status=0, calibration=1):
-# mast_instrument_upgrade(self, observation_id: int, focal=0.135, binning_x=1, binning_y=1, aperture=0.30): 
-# mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'): 
-    
-# UT2	IR-CUT		nefertiti3199-imx477	0	1	1	0.085	0.03
-# mast_observation_title(self, observation_id: int, title_observation='Observation with UT2'):
-# mast_target_note(self, observation_id: int, notes='not specified'):
-# mast_observation_upgrade(self, observation_id: int, priority=0, status=0, calibration=1):
-# mast_instrument_upgrade(self, observation_id: int, focal=0.085, binning_x=1, binning_y=1, aperture=0.30): 
-# mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'): 
-
-# UT3	CLS/LPRO		nefertiti3199-imx477		0	1	1	0.085	0.03
-# mast_observation_title(self, observation_id: int, title_observation='Observation with UT3'):
-# mast_target_note(self, observation_id: int, notes='not specified'):
-# mast_observation_upgrade(self, observation_id: int, priority=0, status=0, calibration=1):
-# mast_instrument_upgrade(self, observation_id: int, focal=0.085, binning_x=1, binning_y=1, aperture=0.30):  
-# mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'):   
-#
-
-
-
-    
+# find recherche par (date, de A à B)  
 
     def __init__(self):
         self.filters = datarecords.filter_names[1]

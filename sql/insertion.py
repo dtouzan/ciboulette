@@ -135,13 +135,13 @@ class insert(compoments.compoment):
         dataresources = (notes, observation_id)
         self._update_for_observation(sql_request, dataresources)
 
-    def mast_instrument_upgrade(self, observation_id: int, binning_x=1, binning_y=1, aperture=0.30):        
+    def mast_instrument_upgrade(self, observation_id: int, name='UT1', binning_x=1, binning_y=1, aperture=0.030):        
         """
         SQL insert binning and aperture for id observation
-        @set: binning, aperture    
+        @set: name, binning, aperture    
         """
-        sql_request = """UPDATE instrument SET binning_x=?,binning_y=?,aperture=? WHERE observation_id=?;"""
-        dataresources = (binning_x, binning_y, aperture, observation_id)
+        sql_request = """UPDATE instrument SET name=?,binning_x=?,binning_y=?,aperture=? WHERE observation_id=?;"""
+        dataresources = (name, binning_x, binning_y, aperture, observation_id)
         self._update_for_observation(sql_request, dataresources)
 
     def mast_instrument_camera(self, observation_id: int, camera='nefertiti3199-imx477'):        
