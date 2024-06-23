@@ -22,7 +22,6 @@ class datarecords(interface.interfaces):
 
 # datarecord.put avoir toutes les valeurs et faire les fonction
 #                     sienceprogram,observation,instrument,target,sequence,observingconditions,observinglog
-# find recherche par (date, de A à B)  
 
     def __init__(self):
         self.filters = datarecords.filter_names[1]
