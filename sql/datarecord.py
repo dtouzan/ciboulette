@@ -12,6 +12,8 @@ __version__= "1.0.0"
 
 # Globals mods
 import math
+# Astropy mods
+from astropy.time import Time
 # User mods
 from ciboulette.sql import compoments, interface
 
@@ -38,58 +40,67 @@ class datarecords(interface.interfaces):
     @property
     def find(self):
         """
-        find observation text type
-
-        A REPRENDRE
-        
+        Find observation, instrument or target text type. Return observation id list
         """
+        resources = list()
         if type(self.values) == 'string' or type(self.values) != '':
             
-            if self.filters == datarecords.filter_names[1]:
-                if self.header == 'id':
-                    self.observation_print(int(self.values))
-                    
+            if self.filters == datarecords.filter_names[1]:                  
                 if self.header == 'collection':
                     for data in self.observation_by_collection(self.values):
-                        self.observation_print(data['observation_id'])
+                        #self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
                     
                 if self.header == 'title':
                     for data in self.observation_by_title(self.values):
-                        self.observation_print(data['observation_id'])
+                        #self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
                     
                 if self.header == 'scheduling':
-                    for data in self.observation_by_scheduling(self.values):
-                        self.observation_print(data['observation_id'])
+                    if ";" in self.values:
+                        min, max = self.values.split(";")
+                        jd_min = Time(min)
+                        jd_max = Time(max)
+                        for data in range(1, int(self.observation_last_id['observation_id'])+1):
+                            scheduling = self.observation_by_id(data)['scheduling']   
+                            jd_scheduling = Time(scheduling)
+                            if jd_min < jd_scheduling < jd_max:
+                                resources.append(data)
+                    else:
+                        for data in self.observation_by_scheduling(self.values):
+                            resources.append(data['observation_id'])
 
                 if self.header == 'notes':
                     for data in self.observation_by_notes(self.values):
-                        self.observation_print(data['observation_id'])
+                        #self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
         
             if self.filters == datarecords.filter_names[2]:
                 if self.header == 'name':
                     for data in self.instrument_by_name(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
 
                 if self.header == 'filter':
                     for data in self.instrument_by_filter(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
 
                 if self.header == 'disperser':
                     for data in self.instrument_by_disperser(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
 
                 if self.header == 'camera':
                     for data in self.instrument_by_camera(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
 
             if self.filters == datarecords.filter_names[3]:
                 if self.header == 'name':
                     for data in self.target_by_name(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
 
                 if self.header == 'notes':
                     for data in self.target_by_notes(self.values):
-                        self.observation_print(data['observation_id'])
+                        resources.append(data['observation_id'])
+        return resources
 
     @property
     def settings(self):

@@ -232,7 +232,7 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
-    def observation_by_collection(self,collection:str):
+    def observation_by_collection(self, collection:str):
         """
         @return: observation data by collection (dict)
         @set: collection name
@@ -246,7 +246,7 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
-    def observation_by_title(self,observation_title:str):
+    def observation_by_title(self, observation_title:str):
         """
         @return: observation data by title (dict)
         @set: observation title
@@ -258,7 +258,7 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
-    def observation_by_scheduling(self,observation_scheduling:str):
+    def observation_by_scheduling(self, observation_scheduling:str):
         """
         @return: observation data by scheduling (dict)
         @set: observation scheduling, AAAA-MM-DD 
@@ -270,7 +270,7 @@ class select(compoments.compoment):
         self.cursor.close()
         return resources
 
-    def observation_by_notes(self,observation_notes:str):
+    def observation_by_notes(self, observation_notes:str):
         """
         @return: observation data by notes (dict)
         @set: observation notes

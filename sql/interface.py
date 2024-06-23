@@ -69,7 +69,7 @@ class interfaces(compoments.compoment):
         if unit == 'UT2':
             data_in.mast_observation_title(observation_id, 'Observation with UT2')
             data_in.mast_instrument_upgrade(observation_id, unit, 1, 1, 0.030)
-            data_in.mast_instrument_camera(observation_id, 'taranis-imx477')
+            data_in.mast_instrument_camera(observation_id, 'taranis5370-imx477')
         data_in.close
     
     @property
@@ -151,6 +151,22 @@ class interfaces(compoments.compoment):
             result = result+(resource[0])
         data_out.close
         return result
+
+    @property
+    def observation_last_id(self):
+        """
+        @return: observation last id 
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = dict()
+        dataset = data_out.observation_last_id
+        if dataset:
+            headers = data_out.observation_header
+            for header, value in zip(headers[0].split(';'), dataset):
+                resources.setdefault(header, value)  
+        data_out.close        
+        return resources
 
     def observation_by_id(self, id:int):
         """
