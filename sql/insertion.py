@@ -90,8 +90,8 @@ class insert(compoments.compoment):
             self.cursor.execute(sql, dataresources) 
 
             # SQL INSERT instrument
-            sql = """INSERT INTO instrument(observation_id,name,filter,disperser,camera,exposure_time) VALUES(?,?,?,?,?,?);"""
-            dataresources = (observation_id, instrument_name, filters, disperser, focal, exposure_time)
+            sql = """INSERT INTO instrument(observation_id,name,filter,disperser,exposure_time,focal) VALUES(?,?,?,?,?,?);"""
+            dataresources = (observation_id, instrument_name, filters, disperser, exposure_time, focal)
             self.cursor.execute(sql, dataresources) 
 
             # SQL INSERT target
