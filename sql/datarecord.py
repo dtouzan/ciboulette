@@ -22,8 +22,6 @@ class datarecords(interface.interfaces):
 
 # datarecord.put avoir toutes les valeurs et faire les fonction
 #                     sienceprogram,observation,instrument,target,sequence,observingconditions,observinglo
-# insertion avec mast_upgrade
-# insertion avec le observation/titre,observation/collection,target/notes
 # faire une classe observing_condition(value default.... , 50%, 20%)
 # faire une classe observing_log(value default None, pdf, notebook)
     

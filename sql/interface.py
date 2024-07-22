@@ -53,23 +53,35 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources[1]
 
-    def mast_upgrade(self,observation_id: int, unit='UT1'):
+    def mast_default(self,observation_id: int, name='UT1', camera='nefertiti3199-imx477', binning_x=1, binning_y=1, aperture=0.030):
         """
         Upgrade default mast information to observation id
         @set: observation_id
+        @set: instrument name
+        @set: instrument camera
+        @set: instrument binning_x
+        @set: instrument binning_y
         """
         data_in = insertion.insert() 
         data_in.connect
         data_in.mast_observation_upgrade(observation_id)
-        data_in.mast_target_note(observation_id)
-        if unit == 'UT1':
-            data_in.mast_observation_title(observation_id)
-            data_in.mast_instrument_upgrade(observation_id, unit, 1, 1, 0.030)
-            data_in.mast_instrument_camera(observation_id, 'nefertiti3199-imx477')
-        if unit == 'UT2':
-            data_in.mast_observation_title(observation_id, 'Observation with UT2')
-            data_in.mast_instrument_upgrade(observation_id, unit, 1, 1, 0.030)
-            data_in.mast_instrument_camera(observation_id, 'taranis5370-imx477')
+        data_in.mast_instrument_upgrade(observation_id, name, binning_x, binning_y, aperture)
+        data_in.mast_instrument_camera(observation_id, camera)
+        data_in.close
+
+    def mast_update(self,observation_id: int, observation_title='Observation with UT1', observation_collection='OT_Library_UT1', target_note='not specified'):
+        """
+        Update default mast information to observation id
+        @set: observation_id
+        @set: observation_title
+        @set: observation_collection
+        @set: target_note
+        """
+        data_in = insertion.insert() 
+        data_in.connect
+        data_in.mast_observation_title(observation_id, observation_title)
+        data_in.mast_observation_collection(observation_id, observation_collection)
+        data_in.mast_target_note(observation_id, target_note)
         data_in.close
     
     @property
