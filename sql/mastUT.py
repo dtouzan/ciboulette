@@ -15,10 +15,28 @@ from ciboulette.sql import compoments, interface
 
 class mast_UT1(interface.interfaces):
 
-    def default(slef, observation_id: int):
+    def default(self, observation_id: int):
+        """
+        Upgrade default mast information to observation and instrument
+        @set: observation_id
+        @set: instrument name
+        @set: instrument camera
+        @set: instrument binning_x
+        @set: instrument binning_y
+        @set: instrument aperture
+        """
         self.mast_default(observation_id, 'UT1', 'nefertiti3199-imx477', 1, 1, 0.030)
 
 class mast_UT2(interface.interfaces):
 
-    def defualt(slef, observation_id: int):
+    def default(self, observation_id: int):
+        """
+        Upgrade default mast information to observation and instrument
+        @set: observation_id
+        @set: instrument name
+        @set: instrument camera
+        @set: instrument binning_x
+        @set: instrument binning_y
+        @set: instrument aperture
+        """
         self.mast_default(observation_id, 'UT2', 'taranis5370-imx477', 1, 1, 0.050)

@@ -55,12 +55,13 @@ class interfaces(compoments.compoment):
 
     def mast_default(self,observation_id: int, name='UT1', camera='nefertiti3199-imx477', binning_x=1, binning_y=1, aperture=0.030):
         """
-        Upgrade default mast information to observation id
+        Upgrade default mast information to observation and instrument
         @set: observation_id
         @set: instrument name
         @set: instrument camera
         @set: instrument binning_x
         @set: instrument binning_y
+        @set: instrument aperture
         """
         data_in = insertion.insert() 
         data_in.connect
@@ -71,7 +72,7 @@ class interfaces(compoments.compoment):
 
     def mast_update(self,observation_id: int, observation_title='Observation with UT1', observation_collection='OT_Library_UT1', target_note='not specified'):
         """
-        Update default mast information to observation id
+        Update default mast information to observation and target
         @set: observation_id
         @set: observation_title
         @set: observation_collection

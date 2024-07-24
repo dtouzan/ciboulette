@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur lun. juil. 22 21:49:13 2024
+-- Fichier généré par SQLiteStudio v3.4.4 sur mer. juil. 24 22:17:59 2024
 --
 -- Encodage texte utilisé : System
 --
@@ -2013,6 +2013,7 @@ CREATE TABLE IF NOT EXISTS ObservingConditions (
 	FOREIGN KEY ( OBSERVATION_ID ) REFERENCES Observation( OBSERVATION_ID )  
  );
 INSERT INTO ObservingConditions (OBSERVATION_ID, SKY_BACKGROUND, CLOUD_COVER, IMAGE_QUALITY, WATER_VAPOR, ELEVATION_CONSTRAINT, TIMMING_WINDOW) VALUES (1, 100, 20, 100, 60, 80, 'ANY');
+INSERT INTO ObservingConditions (OBSERVATION_ID, SKY_BACKGROUND, CLOUD_COVER, IMAGE_QUALITY, WATER_VAPOR, ELEVATION_CONSTRAINT, TIMMING_WINDOW) VALUES (956, 90, 5, 90, 60, 20, 'night');
 
 -- Tableau : ObservingLog
 DROP TABLE IF EXISTS ObservingLog;
@@ -2024,6 +2025,7 @@ CREATE TABLE IF NOT EXISTS ObservingLog (
 	FOREIGN KEY ( OBSERVATION_ID ) REFERENCES Observation( OBSERVATION_ID )  
  );
 INSERT INTO ObservingLog (OBSERVATION_ID, LABEL, FILENAME, COMMENT) VALUES (1, 'default', 'default_observinglog.txt', 'default observing log file');
+INSERT INTO ObservingLog (OBSERVATION_ID, LABEL, FILENAME, COMMENT) VALUES (956, 'log_956', 'None', 'default');
 
 -- Tableau : ScienceProgram
 DROP TABLE IF EXISTS ScienceProgram;
