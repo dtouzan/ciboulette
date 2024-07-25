@@ -713,7 +713,7 @@ class interfaces(compoments.compoment):
                     if len(header) <= 7:
                         tab = '\t\t\t'
                     else:
-                        if len(header) < 15:
+                        if len(header) < 17:
                             tab = '\t\t'
                         else:
                             tab = '\t' 
