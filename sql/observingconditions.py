@@ -19,7 +19,7 @@ class conditions(interface.interfaces):
         self.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
 
     def default(self, observation_id: int):
-        sky_background = 90
+        sky_background = 100
         cloud_cover = 5
         image_quality = 90
         water_vapor = 60
@@ -27,5 +27,24 @@ class conditions(interface.interfaces):
         timming_window = 'night'
         self.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
 
+    def medium(self, observation_id: int):
+        sky_background = 80
+        cloud_cover = 5
+        image_quality = 75
+        water_vapor = 60
+        elevation_constraint = 20
+        timming_window = 'night'
+        self.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
+
+    def minimum(self, observation_id: int):
+        sky_background = 50
+        cloud_cover = 5
+        image_quality = 50
+        water_vapor = 60
+        elevation_constraint = 20
+        timming_window = 'night'
+        self.observingconditions(observation_id, sky_background, cloud_cover, image_quality, water_vapor, elevation_constraint, timming_window)
+
 # observing_condition_alert
 # ...
+#
