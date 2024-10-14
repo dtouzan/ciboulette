@@ -258,7 +258,7 @@ class CCDCam(indiclient):
         self.process_events()
         return c_vec
 
-    def expose(self, exptime=1.0, exptype="Light", latency=1):
+    def expose(self, exptime=1.0, exptype="Light"):
         """
         Take exposure and return FITS data
         """
@@ -281,7 +281,7 @@ class CCDCam(indiclient):
         run = True
 
         t = time.time()
-        timeout = exptime * latency
+        timeout = exptime * 3
         while run:
             self.process_receive_vector_queue()
             while self.receive_event_queue.empty() is False:               
@@ -289,14 +289,15 @@ class CCDCam(indiclient):
                 if vector.tag.get_type() == "BLOBVector":
                     log.info("Reading FITS image out...")
                     blob = vector.get_first_element()
+                    #print(vector.tag.get_type(), blob.get_plain_format(),blob.get_data())
                     if blob.get_plain_format() == ".fits":
                         buf = io.BytesIO(blob.get_data())
                         fitsdata = fits.open(buf)
                         if 'FILTER' not in fitsdata[0].header:
                             fitsdata[0].header['FILTER'] = self.filter
                         fitsdata[0].header['CAMERA'] = self.camera_name
-                    run = False
-                    break
+                        run = False
+                        break
                 if vector.tag.get_type() == "message":
                     msg = vector.get_text()
                     if "ERROR" in msg:
