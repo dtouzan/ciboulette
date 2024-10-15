@@ -69,8 +69,36 @@ class SIMULCam(CCDCam):
         super(SIMULCam, self).__init__(host, port, driver="CCD Simulator")
         self.observer = "INDI CCD Simulator"
         self.camera_name = "SIMULCam"
-        self.filter = "0"
+        self.gain = 5
 
     @property
     def cooling_power(self):
         return None
+
+    @property
+    def gain(self):
+        self.process_events()
+        gain = self.get_float(self.driver, "CCD_GAIN", "GAIN")
+        return gain
+
+    @gain.setter
+    def gain(self,f):
+        if f >=0 and f <=100:
+            self.set_and_send_float(self.driver, 'CCD_GAIN', 'GAIN', f) 
+            self.process_events()
+
+    def set_filters_names(self):
+        """Initialization filters table
+            Ex: ['B','Ha','H_alpha', etc]
+        Attributes:
+            filters (list): Name filters list.
+        """
+        name_list = ['IR/UV cut', 'CLS', 'Ha', 'RVB', 'N/A', 'N/A', 'N/A','N/A']
+        slot = 1
+        if len(name_list) > 0:
+            for name in name_list:
+                self.set_and_send_text(self.driver, "FILTER_NAME", "FILTER_SLOT_NAME_"+str(slot), name)
+                slot +=1
+
+
+
