@@ -7,53 +7,66 @@ Astronomy packages for CCD/CMOS and photographic lens
 [![alpaca](http://img.shields.io/badge/powered%20by-Alpaca-orange.svg?style=flat)](https://ascom-standards.org/Developer/Alpaca.htm) 
 
 ## Prerequisite
-  -yca 1.0.0
+  - Astropy
   - Astroquery
   - Specutils
-  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license),, no package 
+  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
   - Internet connexion
 
 ### Installation
-**Operating system (Windows, Ubuntu PC)**
+**Operating system (Windows)**
   - miniconda site : https://docs.conda.io/en/latest/miniconda.html
-ating system (Ubuntu Raspberry pi4)**
+
+**Operating system (Raspberry pi4)**
 ```sh
 sudo apt update
-sudo apt upgra apt-get installttps://indilib.org/down
-**Jupyter lab (Windows, Ubuntu PC)**
+sudo apt upgrade
+sudo apt install pip
+sudo reboot
+```
+
+**Indilib**
+  
+  - Indilib.org site: https://indilib.org/download.html
+
+**Jupyter lab (Windows)**
 ```sh
 conda install jupyter
 conda install jupyterlab
-jupyter notebook --genonfig
+jupyter notebook --generate-config
 ```      
 
-**Jupyter lab (Ubuntu Raspberry pi4)**
+**Jupyter lab (Raspberry pi4)**
 ```sh
 pip install jupyter
 pip install jupyterlab
-~/.local/bin/jupyter notebook --generate-c     
+~/.local/bin/jupyter notebook --generate-config
+```      
 
-**Astronomy Packages (Windows, Ubuntu PC)**
+**Astronomy Packages (Windows)**
 ```sh
 conda install git
 conda install matplotlib
 conda install numpy
-a install bs4
-conda install -c conda-forge astropy=5.0
+conda install bs4
+conda install -c conda-forge astropy
 conda install -c conda-forge astroquery
-conda install -c condconda install -c conda-forge specutils
-pip install alpyca
+conda install -c conda-forge reproject
+conda install -c conda-forge specutils
 pip install wget
 ```      
 
-**Astronomy Packages (Ubuntu Raspberry pi4)**
+**Astronomy Packages (Raspberry pi4)**
 ```sh
 pip install matplotlib
 pip install numpy
-pip install b install astroquery
-pip install reproje availableails.
-  - See [IP Netplan](./configuration/ip.netplan) file for more details.
-
+pip install bs4
+pip install astropy
+pip install astroquery
+pip install reproject
+conda install specutils
+pip install wget
+```      
 
 ## Authors and Contributors
 
