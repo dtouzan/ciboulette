@@ -7,56 +7,41 @@ Astronomy packages for CCD/CMOS and photographic lens
 [![alpaca](http://img.shields.io/badge/powered%20by-Alpaca-orange.svg?style=flat)](https://ascom-standards.org/Developer/Alpaca.htm) 
 
 ## Prerequisite
-  - Astropy
-  - Alpyca 1.0.0
+  -yca 1.0.0
   - Astroquery
   - Specutils
-  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package 
-  - Phd2client (sources https://github.com/agalasso/phd2client, MIT License), no package 
+  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license),, no package 
   - Internet connexion
 
 ### Installation
 **Operating system (Windows, Ubuntu PC)**
   - miniconda site : https://docs.conda.io/en/latest/miniconda.html
-
-**Operating system (Ubuntu Raspberry pi4)**
+ating system (Ubuntu Raspberry pi4)**
 ```sh
 sudo apt update
-sudo apt upgrade
-sudo apt install pip
-curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-sudo apt-get install -y nodejs
-sudo reboot
-```
-
-**Indilib for (Ubuntu)**
-  
-  - Indilib.org site: https://indilib.org/download.html
-
+sudo apt upgra apt-get installttps://indilib.org/down
 **Jupyter lab (Windows, Ubuntu PC)**
 ```sh
 conda install jupyter
 conda install jupyterlab
-jupyter notebook --generate-config
+jupyter notebook --genonfig
 ```      
 
 **Jupyter lab (Ubuntu Raspberry pi4)**
 ```sh
 pip install jupyter
 pip install jupyterlab
-~/.local/bin/jupyter notebook --generate-config
-```      
+~/.local/bin/jupyter notebook --generate-c     
 
 **Astronomy Packages (Windows, Ubuntu PC)**
 ```sh
 conda install git
 conda install matplotlib
 conda install numpy
-conda install bs4
+a install bs4
 conda install -c conda-forge astropy=5.0
 conda install -c conda-forge astroquery
-conda install -c conda-forge reproject
-conda install -c conda-forge specutils
+conda install -c condconda install -c conda-forge specutils
 pip install alpyca
 pip install wget
 ```      
@@ -65,19 +50,8 @@ pip install wget
 ```sh
 pip install matplotlib
 pip install numpy
-pip install bs4
-pip install astropy
-pip install astroquery
-pip install reproject=0.7.1 (0.8.0 not available)
-pip install specutils
-pip install wget
-pip install alpyca
-```      
-
-**Ubuntu service & IP static**
-
-  - See [indiserver service](./configuration/indiserver.service) file for more details.
-  - See [jupyterlab service](./configuration/jupyterlab.service) file for more details.
+pip install b install astroquery
+pip install reproje availableails.
   - See [IP Netplan](./configuration/ip.netplan) file for more details.
 
 
