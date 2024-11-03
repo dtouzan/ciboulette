@@ -111,6 +111,9 @@ class CCDCam(indiclient):
 
     @property
     def frame_types(self):
+        """
+        Return: ['Light', 'Bias', 'Dark', 'Flat']
+        """
         types = [e.label for e in self.get_vector(self.driver, "CCD_FRAME_TYPE").elements]
         return types
 
@@ -124,6 +127,9 @@ class CCDCam(indiclient):
 
     @property
     def filter(self):
+        """
+        Return: name selected filter
+        """
         slot = int(self.get_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE")) - 1  # filter slots 1-indexed
         if slot >= 0 and slot < len(self.filters):
             f = self.filters[slot]
@@ -133,9 +139,13 @@ class CCDCam(indiclient):
 
     @filter.setter
     def filter(self, f):
+        """
+        Select filter index
+        Set: Filter number  
+        """
         if isinstance(f, int):
             if f >= 0 and f < len(self.filters):
-                self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", f+1)
+                self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", f)
         else:
             if f in self.filters:
                 self.set_and_send_float(self.driver, "FILTER_SLOT", "FILTER_SLOT_VALUE", self.filters.index(f)+1)
@@ -281,20 +291,19 @@ class CCDCam(indiclient):
         run = True
 
         t = time.time()
-        timeout = exptime * 3
+        timeout = 1000 # 1000s (16 min)
         while run:
             self.process_receive_vector_queue()
             while self.receive_event_queue.empty() is False:               
                 vector = self.receive_event_queue.get()
                 if vector.tag.get_type() == "BLOBVector":
                     log.info("Reading FITS image out...")
-                    blob = vector.get_first_element()
-                    #print(vector.tag.get_type(), blob.get_plain_format(),blob.get_data())
+                    blob = vector.get_first_element()              
                     if blob.get_plain_format() == ".fits":
                         buf = io.BytesIO(blob.get_data())
                         fitsdata = fits.open(buf)
                         if 'FILTER' not in fitsdata[0].header:
-                            fitsdata[0].header['FILTER'] = self.filter
+                            fitsdata[0].header['FILTER'] = ''
                         fitsdata[0].header['CAMERA'] = self.camera_name
                         run = False
                         break
@@ -311,41 +320,18 @@ class CCDCam(indiclient):
    
         return fitsdata
     
-    def startexposure(self, exptime: float, Light: bool):
-        """
-        Start an exposure (Alpaca compatibility)      
-        Notes:
-            Use ImageReady to check when the exposure is complete.
-            Duration (float): Duration of exposure in seconds.
-            Light (bool): True if light frame, false if dark frame.
-        """
-        if Light:
-            exptype = "Light"
-        else:
-            exptype = "Black"
-        self.expose(exptime,exptype)
-
-    def abortexposure(self):
+    def abort(self):
         """
         Abort the current exposure, if any, and returns the camera to Idle state.
-        (Alpaca compatibility) 
         """ 
         vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_ABORT_EXPOSURE", "On")
         self.process_events()
         return vec
-    
-    def stopexposure(self):
+
+    @property
+    def ready(self):
         """
-        Stop the current exposure, if any. (Alpaca compatibility) 
-        Notes:
-            If an exposure is in progress, the readout process is initiated. Ignored if
-            readout is already in process.
-        """
-        self.abortexposure()
-        
-    def imageready(self):
-        """
-        Indicate that an image is ready to be downloaded. (Alpaca compatibility)
+        Indicate that an image is ready to be downloaded.
         """
         if self.get_float(self.driver, "CCD_EXPOSURE", "CCD_EXPOSURE_VALUE") <= 0:
             return True
