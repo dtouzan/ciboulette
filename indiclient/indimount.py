@@ -51,7 +51,7 @@ class Telescope(indiclient):
 
     def connect(self):
         """
-        Enable camera connection
+        Enable mount connection
         """
         vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CONNECTION", "Connect")
         if self.debug and vec is not None:
@@ -61,7 +61,7 @@ class Telescope(indiclient):
 
     def disconnect(self):
         """
-        Disable camera connection
+        Disable mount connection
         """
         vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CONNECTION", "Disconnect")
         if self.debug:

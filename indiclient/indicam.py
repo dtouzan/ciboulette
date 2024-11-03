@@ -39,6 +39,7 @@ class CCDCam(indiclient):
         self.process_events()
         self.defvectorlist = []
         self.vector_dict = {v.name: v for v in self.indivectors.list}
+        self.ready = True
 
     @property
     def ccd_info(self):
@@ -272,6 +273,7 @@ class CCDCam(indiclient):
         """
         Take exposure and return FITS data
         """
+        self.ready = False
         if exptype not in self.frame_types:
             raise Exception("Invalid exposure type, %s. Must be one of %s'." % (exptype, repr(self.frame_types)))
 
@@ -305,6 +307,7 @@ class CCDCam(indiclient):
                         if 'FILTER' not in fitsdata[0].header:
                             fitsdata[0].header['FILTER'] = ''
                         fitsdata[0].header['CAMERA'] = self.camera_name
+                        self.ready = True
                         run = False
                         break
                 if vector.tag.get_type() == "message":
@@ -329,14 +332,11 @@ class CCDCam(indiclient):
         return vec
 
     @property
-    def ready(self):
+    def finished(self):
         """
         Indicate that an image is ready to be downloaded.
         """
-        if self.get_float(self.driver, "CCD_EXPOSURE", "CCD_EXPOSURE_VALUE") <= 0:
-            return True
-        else:
-            return False
+        return sefl.ready
 
     @property
     def activedevices(self):
