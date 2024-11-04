@@ -39,7 +39,6 @@ class CCDCam(indiclient):
         self.process_events()
         self.defvectorlist = []
         self.vector_dict = {v.name: v for v in self.indivectors.list}
-        self.ready = True
 
     @property
     def ccd_info(self):
@@ -273,7 +272,7 @@ class CCDCam(indiclient):
         """
         Take exposure and return FITS data
         """
-        self.ready = False
+        self.ctrl = 1
         if exptype not in self.frame_types:
             raise Exception("Invalid exposure type, %s. Must be one of %s'." % (exptype, repr(self.frame_types)))
 
@@ -307,7 +306,7 @@ class CCDCam(indiclient):
                         if 'FILTER' not in fitsdata[0].header:
                             fitsdata[0].header['FILTER'] = ''
                         fitsdata[0].header['CAMERA'] = self.camera_name
-                        self.ready = True
+                        self.ctrl = 0
                         run = False
                         break
                 if vector.tag.get_type() == "message":
@@ -318,11 +317,13 @@ class CCDCam(indiclient):
                         log.info(msg)
             if ((time.time() - t) > timeout):
                 log.warning("Exposure timed out.")
+                self.ctrl = 0
                 break
             time.sleep(1)
    
         return fitsdata
-    
+
+    @property
     def abort(self):
         """
         Abort the current exposure, if any, and returns the camera to Idle state.
@@ -332,12 +333,34 @@ class CCDCam(indiclient):
         return vec
 
     @property
-    def finished(self):
+    def ready(self):
         """
-        Indicate that an image is ready to be downloaded.
-        """
-        return sefl.ready
+        IMX 477 control camera
+        Return  CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE, 0 ready, 1 in shoot, ...
+        """ 
+        value = self.get_float(self.driver, "CAMCTRL_EXPOSUREVALUE", "EXPOSUREVALUE")
+        if value==0:
+            return True
+        else:
+            return False
 
+    @property
+    def ctrl(self):
+        """
+        IMX 477 control camera
+        Return  CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE, 0 ready, 1 in shoot, ...
+        """ 
+        value = self.get_float(self.driver, "CAMCTRL_EXPOSUREVALUE", "EXPOSUREVALUE")
+        return value
+        
+    @ctrl.setter
+    def ctrl(self, ctrl_value=0):
+        """
+        IMX 477 control camera
+        set  CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE, 0 ready, 1 shoot, ...
+        """ 
+        self.set_and_send_float(self.driver, "CAMCTRL_EXPOSUREVALUE", "EXPOSUREVALUE", ctrl_value)       
+     
     @property
     def activedevices(self):
         """
@@ -433,200 +456,3 @@ class CCDCam(indiclient):
         """
         self.set_and_send_text(self.driver, 'ACTIVE_DEVICES', 'ACTIVE_SKYQUALITY', string)
 
-class ASICam(CCDCam):
-    """
-    Wrap CCDCam, set driver to ASI CCD, and point to localhost by default.
-    """
-    def __init__(self, host='localhost', port=7624):
-        super(ASICam, self).__init__(host, port, driver="ASI CCD")
-        self.camera_name = "ZWO ASI Camera"
-        self.process_events()
-
-    @property
-    def filters(self):
-        return ["N/A"]
-
-    @property
-    def filter(self):
-        return "N/A"
-
-    @filter.setter
-    def filter(self, f):
-        pass
-
-    @property
-    def gain(self):
-        self.process_events()
-        gain = self.get_float(self.driver, "CCD_CONTROLS", "Gain")
-        return gain
-    
-    
-class RATCam(CCDCam):
-    """
-    Wrap CCDCam, set the driver to the SBIG driver, and point to the server for the RAT camera, a monochrome ST-IM
-    """
-    def __init__(self, host="ratcam.mmto.arizona.edu", port=7624):
-        super(RATCam, self).__init__(host, port, driver="SBIG CCD")
-        self.observer = "Rotator Alignment Telescope"
-        self.camera_name = "RATcam"
-        self.process_events()
-
-    # turn off a bunch of functionality that doesn't apply to the ST-I series
-    @property
-    def temperature(self):
-        return None
-
-    @property
-    def cooling_power(self):
-        return None
-
-    @property
-    def cooler(self):
-        return None
-
-    @property
-    def fan(self):
-        return None
-
-    @property
-    def filters(self):
-        return ["N/A"]
-
-    @property
-    def filter(self):
-        return "N/A"
-
-    @filter.setter
-    def filter(self, f):
-        pass
-
-    def cooling_on(self):
-        pass
-
-    def cooling_off(self):
-        pass
-
-
-class SimCam(CCDCam):
-    """
-    The INDI CCD simulator device does not have a vector for cooling power. Set this sub-class up to work around that.
-    """
-    def __init__(self, host="localhost", port=7624):
-        super(SimCam, self).__init__(host, port, driver="CCD Simulator")
-        self.observer = "INDI CCD Simulator"
-        self.camera_name = "SimCam"
-
-    @property
-    def cooling_power(self):
-        return None
-
-
-class MATCam(CCDCam):
-    """
-    Wrap CCDCam, set the driver to the SBIG driver, and point to the server to an ST-402 with BVR filters.
-    The specific camera is ID #06111391 and has Johnson BVR filters installed.  It is currently installed on the MAT.
-    """
-    def __init__(self, host="matcam.mmto.arizona.edu", port=7624):
-        super(MATCam, self).__init__(host, port, driver="SBIG CCD")
-
-        # enable filter wheel
-        self.enable_cfw()
-
-        self.observer = "Mount Alignment Telescope"
-        self.camera_name = "MATcam"
-        self.process_events()
-
-        time.sleep(1)
-
-    def enable_cfw(self):
-        type_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CFW_TYPE", "CFW-402")
-        cfw_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CFW_CONNECTION", "Connect")
-        self.process_events()
-        return cfw_vec, type_vec
-
-    def disable_cfw(self):
-        cfw_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CFW_CONNECTION", "Disconnect")
-        self.process_events()
-        return cfw_vec
-
-
-class F9WFSCam(CCDCam):
-    """
-    Wrap CCDCam, set the driver to the SBIG driver, and point to the server for the F9WFS camera.
-    """
-    def __init__(self, host="f9indi.mmto.arizona.edu", port=7624):
-        super(F9WFSCam, self).__init__(host, port, driver="SBIG CCD")
-        self.camera_name = "F/9 WFS"
-        self.connect()
-        time.sleep(1)
-        self.process_events()
-
-    @property
-    def filters(self):
-        return ["N/A"]
-
-    @property
-    def filter(self):
-        return "N/A"
-
-    @filter.setter
-    def filter(self, f):
-        pass
-
-    def wfs_setup(self):
-        """
-        Configure camera for WFS use. Set observer and set up detector config
-        """
-        self.process_events()
-        self.observer = "F/9 WFS"
-        self.wfs_config()
-
-    def fan_on(self):
-        """
-        Turn the fan on (DISABLED due to bug in SBIG library)
-        """
-        # f_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_FAN", "On")
-        f_vec = None
-        return f_vec
-
-    def fan_off(self):
-        """
-        Turn the fan off (DISABLED due to bug in SBIG library)
-        """
-        # f_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_FAN", "Off")
-        f_vec = None
-        return f_vec
-
-    def default_config(self):
-        """
-        Configure camera to full frame and 1x1 binning
-        """
-        self.binning = {"X": 1, "Y": 1}
-        ccdinfo = self.ccd_info
-        framedict = {
-            'X': 0,
-            'Y': 0,
-            'width': int(ccdinfo['CCD_MAX_X']),
-            'height': int(ccdinfo['CCD_MAX_Y'])
-        }
-        self.frame = framedict
-
-    def wfs_subim(self):
-        ccdinfo = self.ccd_info
-        diff = ccdinfo['CCD_MAX_X'] - ccdinfo['CCD_MAX_Y']
-
-        # interestingly, the starting coords are in binned coords, but the width/height are unbinned
-        framedict = {
-            'X': int(diff/6),
-            'Y': 0,
-            'width': int(ccdinfo['CCD_MAX_Y']),
-            'height': int(ccdinfo['CCD_MAX_Y'])
-        }
-        self.frame = framedict
-
-    def wfs_config(self):
-        """
-        Configure camera to be square with 3x3 binning for WFS imaging
-        """
-        self.binning = {"X": 3, "Y": 3}
-        self.wfs_subim()
