@@ -268,60 +268,6 @@ class CCDCam(indiclient):
         self.process_events()
         return c_vec
 
-    def expose(self, exptime=1.0, exptype="Light"):
-        """
-        Take exposure and return FITS data
-        """
-        self.ctrl = 1
-        if exptype not in self.frame_types:
-            raise Exception("Invalid exposure type, %s. Must be one of %s'." % (exptype, repr(self.frame_types)))
-
-        if exptime < 0.0 or exptime > 3600.0:
-            raise Exception("Invalid exposure time, %f. Must be >= 0 and <= 3600 sec." % exptime)
-
-        ft_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_FRAME_TYPE", exptype)
-        if self.debug:
-            ft_vec.tell()
-
-        exp_vec = self.set_and_send_float(self.driver, "CCD_EXPOSURE", "CCD_EXPOSURE_VALUE", exptime)
-        if self.debug:
-            exp_vec.tell()
-
-        self.defvectorlist = []
-        fitsdata = None
-        run = True
-
-        t = time.time()
-        timeout = 1000 # 1000s (16 min)
-        while run:
-            self.process_receive_vector_queue()
-            while self.receive_event_queue.empty() is False:               
-                vector = self.receive_event_queue.get()
-                if vector.tag.get_type() == "BLOBVector":
-                    log.info("Reading FITS image out...")
-                    blob = vector.get_first_element()              
-                    if blob.get_plain_format() == ".fits":
-                        buf = io.BytesIO(blob.get_data())
-                        fitsdata = fits.open(buf)
-                        if 'FILTER' not in fitsdata[0].header:
-                            fitsdata[0].header['FILTER'] = ''
-                        fitsdata[0].header['CAMERA'] = self.camera_name
-                        self.ctrl = 0
-                        run = False
-                        break
-                if vector.tag.get_type() == "message":
-                    msg = vector.get_text()
-                    if "ERROR" in msg:
-                        log.error(msg)
-                    else:
-                        log.info(msg)
-            if ((time.time() - t) > timeout):
-                log.warning("Exposure timed out.")
-                self.ctrl = 0
-                break
-            time.sleep(1)
-   
-        return fitsdata
 
     @property
     def abort(self):
@@ -329,6 +275,7 @@ class CCDCam(indiclient):
         Abort the current exposure, if any, and returns the camera to Idle state.
         """ 
         vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_ABORT_EXPOSURE", "On")
+        self.ctrl = 0
         self.process_events()
         return vec
 

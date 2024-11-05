@@ -285,6 +285,121 @@ class imx477Cam(CCDCam):
         self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_LOCAL', 'Off')
         self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_CLIENT', 'On')
 
+    def dir(self, string):
+        """
+        Set UPLOAD_SETTINGS.UPLOAD_DIR
+        """
+        if len(string) > 0:
+            self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_DIR', string)
+     
+    def prefix(self, string):
+        """
+        Set UPLOAD_SETTINGS.UPLOAD_PREFIX
+        """
+        if len(string) > 0:
+            self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_PREFIX', string)       
+
+    def expose(self, exptime=1.0, exptype="Light"):
+        """
+        Take exposure and return FITS data
+        """
+        self.ctrl = 1
+        if exptype not in self.frame_types:
+            raise Exception("Invalid exposure type, %s. Must be one of %s'." % (exptype, repr(self.frame_types)))
+
+        if exptime < 0.0 or exptime > 3600.0:
+            raise Exception("Invalid exposure time, %f. Must be >= 0 and <= 3600 sec." % exptime)
+
+        ft_vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_FRAME_TYPE", exptype)
+        if self.debug:
+            ft_vec.tell()
+
+        exp_vec = self.set_and_send_float(self.driver, "CCD_EXPOSURE", "CCD_EXPOSURE_VALUE", exptime)
+        if self.debug:
+            exp_vec.tell()
+
+        self.defvectorlist = []
+        fitsdata = None
+
+        local = self.get_text(self.driver, "UPLOAD_MODE", "UPLOAD_LOCAL")
+        if local=='On':
+            run = False
+        else:
+            run = True
+
+        t = time.time()
+        timeout = 1000 # 1000s (16 min)
+        while run:
+            self.process_receive_vector_queue()
+            while self.receive_event_queue.empty() is False:               
+                vector = self.receive_event_queue.get()
+                if vector.tag.get_type() == "BLOBVector":
+                    log.info("Reading FITS image out...")
+                    blob = vector.get_first_element()              
+                    if blob.get_plain_format() == ".fits":
+                        buf = io.BytesIO(blob.get_data())
+                        fitsdata = fits.open(buf)
+                        if 'FILTER' not in fitsdata[0].header:
+                            fitsdata[0].header['FILTER'] = 'L'
+                        fitsdata[0].header['CAMERA'] = self.camera_name
+                        self.ctrl = 0
+                        run = False
+                        break
+                    
+                if vector.tag.get_type() == "message":
+                    msg = vector.get_text()
+                    if "ERROR" in msg:
+                        log.error(msg)
+                    else:
+                        if "saving image to file" in msg:
+                            fitsdata = msg
+                            self.ctrl = 0
+                            run = False
+                        log.info(msg)
+            
+            if ((time.time() - t) > timeout):
+                log.warning("Exposure timed out.")
+                self.ctrl = 0
+                break
+            time.sleep(1)
+            
+        self.ctrl = 0
+        return fitsdata
+
+    @property
+    def isfile(self):
+        """
+        Validated FITS file for local
+        """
+        self.ctrl = 1
+        run = True
+        t = time.time()
+        timeout = 1000 # 1000s (16 min)
+        self.defvectorlist = []
+        while run:
+            self.process_receive_vector_queue()
+            while self.receive_event_queue.empty() is False:               
+                vector = self.receive_event_queue.get()                   
+                if vector.tag.get_type() == "message":
+                    msg = vector.get_text()
+                    if "ERROR" in msg:
+                        log.error(msg)
+                    else:
+                        if "saving image to file" in msg:
+                            fitsdata = msg
+                            self.ctrl = 0
+                            run = False
+                        log.info(msg)
+            
+            if ((time.time() - t) > timeout):
+                log.warning("Exposure timed out.")
+                self.ctrl = 0
+                break
+            time.sleep(1)
+            
+        self.ctrl = 0
+        return fitsdata
+        
     @property
     def getprop(self):
         """
@@ -405,7 +520,6 @@ class imx477Cam(CCDCam):
                         'CONFIG_PROCESS.CONFIG_DEFAULT',
                         'CONFIG_PROCESS.CONFIG_PURGE',]
         
-        #list_getprop = ['CAMERA_SELECTION.CAM0',]
         for line in list_getprop:
             value = line.split('.')
             vector = value[0]
