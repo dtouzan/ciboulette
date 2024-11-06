@@ -520,11 +520,12 @@ class imx477Cam(CCDCam):
                         'CONFIG_PROCESS.CONFIG_DEFAULT',
                         'CONFIG_PROCESS.CONFIG_PURGE',]
         
+        listing = ""
         for line in list_getprop:
             value = line.split('.')
             vector = value[0]
             element = value[1]
             values = self.get_text(self.driver, vector, element)
-            print(f'{self.driver}.{line}={values}')
-
+            listing = listing + f'{self.driver}.{line}={values}\n'
+        return listing
 
