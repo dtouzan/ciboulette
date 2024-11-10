@@ -189,16 +189,14 @@ class imx477Cam(CCDCam):
         """
         Turn CCD_CAPTURE_FORMAT.INDI_RGB=On
         """
-        self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "INDI_RAW", "Off")
-        self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "INDI_RGB", "On")
+        self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RGB")
 
     @property
     def raw(self):
         """
         Turn CCD_CAPTURE_FORMAT.INDI_RAW=On
         """
-        self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "INDI_RGB", "Off")
-        self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "INDI_RAW", "On")
+        self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RAW")
     
     @property
     def default(self):
@@ -217,6 +215,7 @@ class imx477Cam(CCDCam):
         self.rgbframe(False)
         self.binning1
         self.ctrl = 0
+        self.client
         self.gain = 5
 
     @property
@@ -274,16 +273,14 @@ class imx477Cam(CCDCam):
         """
         Turn UPLOAD_MODE.UPLOAD_LOCAL=On
         """
-        self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_CLIENT', 'Off')
-        self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_LOCAL', 'On')
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'UPLOAD_MODE', 'Local')
 
     @property
     def client(self):
         """
         Turn UPLOAD_MODE.UPLOAD_CLIENT=On
         """
-        self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_LOCAL', 'Off')
-        self.set_and_send_text(self.driver, 'UPLOAD_MODE', 'UPLOAD_CLIENT', 'On')
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'UPLOAD_MODE', 'Client')
 
     def dir(self, string):
         """
@@ -400,132 +397,4 @@ class imx477Cam(CCDCam):
         self.ctrl = 0
         return fitsdata
         
-    @property
-    def getprop(self):
-        """
-        Indi_getprop for imx477
-        """
-        list_getprop = ['CAMERA_SELECTION.CAM0',
-                        'CONNECTION.CONNECT',
-                        'CONNECTION.DISCONNECT',
-                        'DRIVER_INFO.DRIVER_NAME',
-                        'DRIVER_INFO.DRIVER_EXEC',
-                        'DRIVER_INFO.DRIVER_VERSION',
-                        'DRIVER_INFO.DRIVER_INTERFACE',
-                        'LOGGING_LEVEL.LOGGING_DEBUG',
-                        'LOGGING_LEVEL.LOGGING_INFO',
-                        'LOGGING_LEVEL.LOGGING_WARN',
-                        'LOGGING_LEVEL.LOGGING_ERROR',
-                        'POLLING_PERIOD.PERIOD_MS',
-                        'GEOGRAPHIC_COORD.LAT',
-                        'GEOGRAPHIC_COORD.LONG',
-                        'GEOGRAPHIC_COORD.ELEV',
-                        'EQUATORIAL_EOD_COORD.RA',
-                        'EQUATORIAL_EOD_COORD.DEC',
-                        'TELESCOPE_PIER_SIDE.PIER_WEST',
-                        'TELESCOPE_PIER_SIDE.PIER_EAST',
-                        'TELESCOPE_INFO.TELESCOPE_APERTURE',
-                        'TELESCOPE_INFO.TELESCOPE_FOCAL_LENGTH',
-                        'TELESCOPE_INFO.GUIDER_APERTURE',
-                        'TELESCOPE_INFO.GUIDER_FOCAL_LENGTH',
-                        'CAMERA_LENS.PRIMARY_LENS',
-                        'CAMERA_LENS.GUIDER_LENS',
-                        'DO_SNOOPING.SNOOP',
-                        'DO_SNOOPING.NO_SNOOP',
-                        'ACTIVE_DEVICES.ACTIVE_TELESCOPE',
-                        'CAMERA_INFO.CAMERA_MODEL',
-                        'CAMERA_INFO.CAMERA_PIXELARRAYSIZE',
-                        'CAMERA_INFO.CAMERA_PIXELARRAYACTIVEAREA',
-                        'CAMERA_INFO.CAMERA_UNITCELLSIZE',
-                        'CCD_CAPTURE_FORMAT.INDI_RAW',
-                        'CCD_CAPTURE_FORMAT.INDI_RGB',
-                        'RAW_FORMAT.RAWFORMAT0',
-                        'RAW_FORMAT.RAWFORMAT1',
-                        'RAW_FORMAT.RAWFORMAT2',
-                        'RAW_FORMAT.RAWFORMAT3',
-                        'CCD_PROCFRAME.WIDTH',
-                        'CCD_PROCFRAME.HEIGHT',
-                        'CAMCTRL_AEENABLE.INDI_ENABLED',
-                        'CAMCTRL_AEENABLE.INDI_DISABLED',
-                        'CAMCTRL_AECONSTRAINTMODE.NORMAL',
-                        'CAMCTRL_AECONSTRAINTMODE.HIGHLIGHT',
-                        'CAMCTRL_AECONSTRAINTMODE.SHADOWS',
-                        'CAMCTRL_AECONSTRAINTMODE.CUSTOM',
-                        'CAMCTRL_AEEXPOSUREMODE.NORMAL',
-                        'CAMCTRL_AEEXPOSUREMODE.SHORT',
-                        'CAMCTRL_AEEXPOSUREMODE.LONG',
-                        'CAMCTRL_AEEXPOSUREMODE.CUSTOM',
-                        'CAMCTRL_AEMETERINGMODE.CENTREWEIGHTED',
-                        'CAMCTRL_AEMETERINGMODE.SPOT',
-                        'CAMCTRL_AEMETERINGMODE.MATRIX',
-                        'CAMCTRL_AEMETERINGMODE.CUSTOM',
-                        'CAMCTRL_AWBENABLE.INDI_ENABLED',
-                        'CAMCTRL_AWBENABLE.INDI_DISABLED',
-                        'CAMCTRL_AWBMODE.AUTO',
-                        'CAMCTRL_AWBMODE.TUNGSTEN',
-                        'CAMCTRL_AWBMODE.FLUORESCENT',
-                        'CAMCTRL_AWBMODE.INDOOR',
-                        'CAMCTRL_AWBMODE.DAYLIGHT',
-                        'CAMCTRL_AWBMODE.CLOUDY',
-                        'CAMCTRL_AWBMODE.CUSTOM',
-                        'CAMCTRL_BRIGHTNESS.BRIGHTNESS',
-                        'CAMCTRL_COLOURGAINS.REDGAIN',
-                        'CAMCTRL_COLOURGAINS.BLUEGAIN',
-                        'CAMCTRL_CONTRAST.CONTRAST',
-                        'CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE',
-                        'CAMCTRL_NOISEREDUCTIONMODE.OFF',
-                        'CAMCTRL_NOISEREDUCTIONMODE.FAST',
-                        'CAMCTRL_NOISEREDUCTIONMODE.HIGHQUALITY',
-                        'CAMCTRL_SATURATION.SATURATION',
-                        'CAMCTRL_SHARPNESS.SHARPNESS',
-                        'CCD_EXPOSURE.CCD_EXPOSURE_VALUE',
-                        'CCD_ABORT_EXPOSURE.ABORT',
-                        'CCD_FRAME.X',
-                        'CCD_FRAME.Y',
-                        'CCD_FRAME.WIDTH',
-                        'CCD_FRAME.HEIGHT',
-                        'CCD_BINNING.HOR_BIN',
-                        'CCD_BINNING.VER_BIN',
-                        'CCD_TEMPERATURE.CCD_TEMPERATURE_VALUE',
-                        'CCD_INFO.CCD_MAX_X',
-                        'CCD_INFO.CCD_MAX_Y',
-                        'CCD_INFO.CCD_PIXEL_SIZE',
-                        'CCD_INFO.CCD_PIXEL_SIZE_X',
-                        'CCD_INFO.CCD_PIXEL_SIZE_Y',
-                        'CCD_INFO.CCD_BITSPERPIXEL',
-                        'CCD_COMPRESSION.CCD_COMPRESS',
-                        'CCD_COMPRESSION.CCD_RAW',
-                        'CCD_FRAME_TYPE.FRAME_LIGHT',
-                        'CCD_FRAME_TYPE.FRAME_BIAS',
-                        'CCD_FRAME_TYPE.FRAME_DARK',
-                        'CCD_FRAME_TYPE.FRAME_FLAT',
-                        'UPLOAD_MODE.UPLOAD_CLIENT',
-                        'UPLOAD_MODE.UPLOAD_LOCAL',
-                        'UPLOAD_MODE.UPLOAD_BOTH',
-                        'UPLOAD_SETTINGS.UPLOAD_DIR',
-                        'UPLOAD_SETTINGS.UPLOAD_PREFIX',
-                        'CCD_FAST_TOGGLE.INDI_ENABLED',
-                        'CCD_FAST_TOGGLE.INDI_DISABLED',
-                        'CCD_FAST_COUNT.FRAMES',
-                        'CCD_GAIN.GAIN',
-                        'APPLY_CONFIG.CONFIG1',
-                        'APPLY_CONFIG.CONFIG2',
-                        'APPLY_CONFIG.CONFIG3',
-                        'APPLY_CONFIG.CONFIG4',
-                        'APPLY_CONFIG.CONFIG5',
-                        'APPLY_CONFIG.CONFIG6',
-                        'CONFIG_NAME.CONFIG_NAME',
-                        'CONFIG_PROCESS.CONFIG_LOAD',
-                        'CONFIG_PROCESS.CONFIG_SAVE',
-                        'CONFIG_PROCESS.CONFIG_DEFAULT',
-                        'CONFIG_PROCESS.CONFIG_PURGE',]
-        
-        listing = ""
-        for line in list_getprop:
-            value = line.split('.')
-            vector = value[0]
-            element = value[1]
-            values = self.get_text(self.driver, vector, element)
-            listing = listing + f'{self.driver}.{line}={values}\n'
-        return listing
 

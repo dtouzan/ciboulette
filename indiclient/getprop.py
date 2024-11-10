@@ -18,7 +18,7 @@ import logging
 import logging.handlers
 
 from .indiclient import indiclient
-from .getproplist import list_pylibcamera
+from .getproplist import list_pylibcamera, list_pylibcamera_float
 
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
@@ -28,19 +28,27 @@ class indi_getprop(indiclient):
         
     def __init__(self, host, port):
         super(indi_getprop, self).__init__(host, port)
-        self.list_getprop = list_pylibcamera
 
     @property
     def getprop(self):
-        for line in self.list_getprop:
+        for line in list_pylibcamera:
             value = line.split('.')
             driver = value[0]
             vector = value[1]
             element = value[2]
             values = self.get_text(driver, vector, element)
             print(f'{line}={values}')
-    
-    def properties(self, string=list()):
+
+        for line in list_pylibcamera_float:
+            value = line.split('.')
+            driver = value[0]
+            vector = value[1]
+            element = value[2]
+            values = self.get_float(driver, vector, element)
+            print(f'{line}={values}')
+
+    @getprop.setter
+    def getprop(self, string=list()):
         for line in string:
             value = line.split('.')
             driver = value[0]
