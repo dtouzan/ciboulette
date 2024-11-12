@@ -20,38 +20,7 @@ from ciboulette.indiclient.indimount import Telescope
 
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
-
-class telescopesimul(Telescope):
-    """
-    Wrap Mount, set driver to Simulator mount, and point to localhost by default.
-    """
-    def __init__(self, host='localhost', port=7624):
-        super(telescopesimul, self).__init__(host, port, driver="Telescope Simulator")
-        self.mount_name = "Telescope Simulator"
-        self.process_events()
-    
-    @property
-    def target_pier_side(self):
-        return ["N/A"]
-
-    @target_pier_side.setter
-    def target_pier_side(self,string):
-        pass
-
-    @property
-    def telescope_park_position(self):
-        return ["N/A"]
-
-class CelestronGPS(Telescope):
-    """
-    Wrap Mount, set driver to EQMod mount, and point to localhost by default.
-    """
-    def __init__(self, host='localhost', port=7624):
-        super(CelestronGPS, self).__init__(host, port, driver="Celestron GPS")
-        self.mount_name = "CelestronGPS"
-        self.process_events()  
-    
-    
+   
 class EQMod(Telescope):
     """
     Wrap Mount, set driver to EQMod mount, and point to localhost by default.
@@ -157,62 +126,126 @@ class EQMod(Telescope):
             vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "AUXENCODER", "Off")       
             if self.debug:
                 vec.tell()                         
-                
-class LX200Generic(Telescope):
-    """
-    Wrap Mount, set driver to LX200 mount, and point to localhost by default.
-    """
-    def __init__(self, host='localhost', port=7624):
-        super(LX200Generic, self).__init__(host, port, driver="Standard LX200")
-        self.mount_name = "LX200"
-        self.process_events()
-        self.initdate
-        self.initsite
 
-    @property    
-    def initdate(self):
-        """
-        Configure Date, Time
-        """
-        date = Time( Time.now(), format='fits', scale='utc', out_subfmt='date_hms').value
-        self.utc = date
-        self.offset = 0
-        """
-        For old equipment
-        """
-        time.sleep(5)
-
-    @property    
-    def initsite(self):
-        """
-        Configure site location
-        """
-        """
-        It's for my location LX650 mount 
-        """
-        self.set_and_send_switchvector_by_elementlabel(self.driver, "Sites", "Site 4")
-        """
-        For old equipment
-        """
-        time.sleep(5)
-
-        
     @property
-    def tracking(self):
-        """
-        Turn track on
-        """
-        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "On")
-        if self.debug:
-            vec.tell()
-        return vec
+    def ppec(self):
+        value = self.get_text(self.driver, "PPEC", "PPEC_ON")
+        if value == "On":
+            return True
+        else:
+            return False
 
-    @property    
-    def untrack(self):
+    @ppec.setter
+    def ppec(self, label = 'Y'):
         """
-        Turn untrack on
+        Set PPEC Yes, PPEC.PPEC_ON=On
         """
-        vec = self.set_and_send_switchvector_by_elementlabel(self.driver, "ON_COORD_SET", "Off")
-        if self.debug:
-            vec.tell()
-        return vec
+        if label == 'Y':
+            self.set_and_send_text(self.driver, "PPEC", "PPEC_OFF", "Off") 
+            vec = self.set_and_send_text(self.driver, "PPEC", "PPEC_ON", "On")   
+            if self.debug:
+                vec.tell() 
+        if label == 'N':
+            self.set_and_send_text(self.driver, "PPEC", "PPEC_ON", "Off") 
+            vec = self.set_and_send_text(self.driver, "PPEC", "PPEC_OFF", "On") 
+            if self.debug:
+                vec.tell() 
+
+    @property
+    def RA(self):
+        """
+        Return the telescope's right ascension coordinate.
+         The right ascension (hours) of the telescope's current equatorial
+         coordinates, in the coordinate system given by the EquatorialSystem
+         property.
+        """
+        return self.rightascension
+
+    @property
+    def DEC(self):
+        """
+        Return the telescope's declination.
+         Reading the property will raise an error if the value is unavailable.
+         The declination (degrees) of the telescope's current equatorial coordinates,
+         in the coordinate system given by the EquatorialSystem property.        
+        """
+        return self.declination
+
+    @property
+    def observatory(self):
+        """
+        Return site Longitude, latitude and elevation
+        """
+        longitude = self.sitelongitude
+        latitude = self.sitelongitude
+        elevation = self.siteelevation
+        observatory_info = {
+            'longitude': self.sitelongitude,
+            'latitude': self.sitelongitude,
+            'elevation': self.siteelevation
+        }
+        return observatory_info
+        
+class EQsimul(Telescope):
+
+    def __init__(self, host='localhost', port=7624):
+        super(EQsimul, self).__init__(host, port, driver="Telescope Simulator")
+        self.mount_name = "EQsimul"
+
+    @property
+    def RA(self):
+        """
+        Return the telescope's right ascension coordinate.
+         The right ascension (hours) of the telescope's current equatorial
+         coordinates, in the coordinate system given by the EquatorialSystem
+         property.
+        """
+        return self.rightascension
+
+    @property
+    def DEC(self):
+        """
+        Return the telescope's declination.
+         Reading the property will raise an error if the value is unavailable.
+         The declination (degrees) of the telescope's current equatorial coordinates,
+         in the coordinate system given by the EquatorialSystem property.        
+        """
+        return self.declination
+
+    @property
+    def observatory(self):
+        """
+        Return site Longitude, latitude and elevation
+        """
+        longitude = self.sitelongitude
+        latitude = self.sitelongitude
+        elevation = self.siteelevation
+        observatory_info = {
+            'longitude': self.sitelongitude,
+            'latitude': self.sitelongitude,
+            'elevation': self.siteelevation
+        }
+        return observatory_info
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

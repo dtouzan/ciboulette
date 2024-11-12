@@ -24,7 +24,7 @@ class Telescope(indiclient):
     Wrap indiclient.indiclient with some filter-specific utility functions to simplify things like taking,
     mount, etc.
     """
-    def __init__(self, host, port, driver="Mount Simulator", debug=True):
+    def __init__(self, host, port, driver="Telescope Simulator", debug=True):
         super(Telescope, self).__init__(host, port)
         self.mount_name = "Mount Default"
         self.driver = driver
