@@ -176,16 +176,24 @@ class EQMod(Telescope):
         """
         Return site Longitude, latitude and elevation
         """
-        longitude = self.sitelongitude
-        latitude = self.sitelongitude
-        elevation = self.siteelevation
         observatory_info = {
             'longitude': self.sitelongitude,
             'latitude': self.sitelongitude,
             'elevation': self.siteelevation
         }
         return observatory_info
-        
+
+    @property
+    def coords(self):
+        """
+        Return site RA an Dec
+        """
+        coords_info = {
+            'RA': self.RA,
+            'DEC': self.DEC,
+        }
+        return coords_info
+
 class EQsimul(Telescope):
 
     def __init__(self, host='localhost', port=7624):
@@ -217,9 +225,6 @@ class EQsimul(Telescope):
         """
         Return site Longitude, latitude and elevation
         """
-        longitude = self.sitelongitude
-        latitude = self.sitelongitude
-        elevation = self.siteelevation
         observatory_info = {
             'longitude': self.sitelongitude,
             'latitude': self.sitelongitude,
@@ -227,6 +232,16 @@ class EQsimul(Telescope):
         }
         return observatory_info
 
+    @property
+    def coords(self):
+        """
+        Return site RA an Dec
+        """
+        coords_info = {
+            'RA': self.RA,
+            'DEC': self.DEC,
+        }
+        return coords_info
 
 
 
