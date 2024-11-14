@@ -178,7 +178,7 @@ class EQMod(Telescope):
         """
         observatory_info = {
             'longitude': self.sitelongitude,
-            'latitude': self.sitelongitude,
+            'latitude': self.sitelatitude,
             'elevation': self.siteelevation
         }
         return observatory_info
@@ -193,6 +193,13 @@ class EQMod(Telescope):
             'DEC': self.DEC,
         }
         return coords_info
+
+    @property
+    def baud_rate_115200(self):
+        """
+        Set baud rate 115200
+        """
+        self.baud_rate = '115200'
 
 class EQsimul(Telescope):
 
@@ -227,7 +234,7 @@ class EQsimul(Telescope):
         """
         observatory_info = {
             'longitude': self.sitelongitude,
-            'latitude': self.sitelongitude,
+            'latitude': self.sitelatitude,
             'elevation': self.siteelevation
         }
         return observatory_info
