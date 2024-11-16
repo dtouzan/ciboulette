@@ -13,7 +13,7 @@ from ciboulette.utils import planning
 from ciboulette.utils.mast import Mast
 
 
-class _database(object):
+class compoment():
     
         def __init__(self,table):
             self.data = table
@@ -23,23 +23,40 @@ class _database(object):
             self.marker = 'o'
             self.alpha = 0.8
          
-        def properties(self,title='',size=2,color='blue',marker='o',alpha='0.8'):
+        def properties(self,style=dict()):
             """
-            Properties initialisation
+            set properties
             """
-            self.title = title
-            self.size = size
-            self.color = color
-            self.marker = marker
-            self.alpha = alpha      
-        
+            self.size = style['size']
+            self.color = style['color']
+            self.marker = style['marker']
+            self.alpha = style['alpha']
+       
         def plot(self):
             """
             Plot database
             """
             plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color=self.color, markersize=self.size, alpha=self.alpha)
 
-class _databaseconstellation(_database):
+        @property
+        def get(self):
+            """
+            Return dict of data
+            """
+            return {'title': self.title, 'RA': self.data['RA'].value, 'DEC': self.data['DEC'].value}
+
+
+class compoment_cluster(compoment):
+    
+        def plot(self):
+            """
+            Plot database
+            """
+            plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color=self.color, markersize=self.size, alpha=self.alpha)
+            plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color='black', markersize=self.size+1, alpha=self.alpha/2)
+
+            
+class compoment_constellation(compoment):
     
         def plot(self):
             """
@@ -47,7 +64,7 @@ class _databaseconstellation(_database):
             """
             plt.plot(self.data['RA'], self.data['DEC'], ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
 
-class _databaseaera(_database):
+class compoment_aera(compoment):
     
         def plot(self):
             """
@@ -55,119 +72,127 @@ class _databaseaera(_database):
             """
             plt.plot(self.data['RA'], self.data['DEC'],  ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
             plt.fill_between(self.data['RA'],self.data['DEC'], color=self.color, alpha=self.alpha-0.1)           
-            
-"""
-Main class
-"""           
+                
 
 class Projection(object):
         
-    def __init__(self,title=''):
-            self.title = title
-            self.width = 8
-            self.height = 6
-            self.ra = 0
-            self.dec = 0
-            self.date = Time.now()
-            self.sct = Sct.Sector()
-            self.databaselist = []
- 
-    def _datacursor(self,name,size,color,marker,alpha,data):
-        """
-        Create aera for database
-        """
-        _ra = []
-        _dec = []
-        if len(data) > 0:
-            for line in data:
-                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-                _dec.append(c.dec.radian)
-            database = _database(Table([_ra,_dec], names=['RA','DEC']))
-            database.properties(title=name,size=size,color=color,marker=marker,alpha=alpha)
-            self.databaselist.append(database)           
-
-    def _dataaera(self,name,size,color,marker,alpha,data):
-        """
-        Create aera for database
-        """
-        _ra = []
-        _dec = []
-        if len(data) > 0:
-            for line in data:
-                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-                _dec.append(c.dec.radian)
-            database = _databaseaera(Table([_ra,_dec], names=['RA','DEC']))
-            database.properties(title=name,size=size,color=color,marker=marker,alpha=alpha)
-            self.databaselist.append(database)           
-
-    def _dataconstellation(self,name,size,color,marker,alpha,data):
-        """
-        Create aera for database
-        """
-        _ra = []
-        _dec = []
-        if len(data) > 0:
-            for line in data:
-                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-                _dec.append(c.dec.radian)
-            database = _databaseconstellation(Table([_ra,_dec], names=['RA','DEC']))
-            database.properties(title=name,size=size,color=color,marker=marker,alpha=alpha)
-            self.databaselist.append(database)           
+    def __init__(self,type_projection='aitoff',title=''):
+        self.type_projection=type_projection
+        self.title = title
+        self.width = 8
+        self.height = 6
+        self.date = Time.now()
+        self.databaselist = []
+        self.size = 1
+        self.color = 'black'
+        self.mark = 'dotted'
+        self.alpha = 0.2
 
 
-    def _cursor(self):
+    def marker(self, table=dict(), style=dict()):
         """
-        Set cursor for display
+        Set marker
+            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
+            style: {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.8}
         """
-        _ra = []
-        _dec = []
-        ra=float(self.ra)*15*u.deg
-        dec=float(self.dec)*u.deg
-        c = SkyCoord(ra, dec, frame='icrs', unit=(u.deg, u.deg))
-        _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-        _dec.append(c.dec.radian)
-        self.databaselist.append(_database(Table([_ra,_dec], names=['RA','DEC'])))
+        if not style:
+            style = {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.8}
+        ra = []
+        dec = []
+        RA=float(table['RA'])*15*u.deg
+        DEC=float(table['DEC'])*u.deg       
+        c = SkyCoord(RA, DEC, unit = (u.deg, u.deg), frame='icrs')
+        ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+        dec.append(c.dec.radian)
+        data = compoment(Table([ra, dec], names=['RA','DEC']))
+        data.properties(style)
+        data.title = table['title']
+        self.databaselist.append(data)
         
-    def _lmc(self):
+    def cursor(self,table=dict(), style=dict()):
+        """
+        Create cursor for database
+            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
+            style: {'marker': '+', 'color': 'red', 'size': 4, 'alpha': 0.8}
+        """
+        if not style:
+            style = {'marker': '+', 'color': 'red', 'size': 4, 'alpha': 0.8}
+        self.marker(table, style)      
+
+    def aera(self,name, style, data):
+        """
+        Create aera for database
+        """
+        ra = []
+        dec = []
+        if len(data) > 0:
+            for line in data:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+                dec.append(c.dec.radian)
+            database = compoment_aera(Table([ra,dec], names=['RA','DEC']))
+            database.properties(style)
+            database.title = name
+            self.databaselist.append(database)           
+
+    
+    def lmc(self, style=dict()):
         """
         Set LMC for display
+            style: {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.25}
         """
-        lmc = self.sct.lmc
-        self._dataaera('LMC',1,'blue','-',0.2,lmc)
+        if not style:
+            style = {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.25}
+        sct = Sct.Sector()
+        data = sct.lmc
+        self.aera('LMC', style, data)
         
-    def _smc(self):
+    def smc(self, style=dict()):
         """
         Set SMC for display
+            style: {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.25}
         """
-        smc = self.sct.smc
-        self._dataaera('SMC',1,'blue','-',0.2,smc)
+        if not style:
+            style = {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.25}
+        sct = Sct.Sector()
+        data = sct.smc
+        self.aera('SMC', style, data)
 
-    def _milkyway(self):
+    def milkyway(self, style=dict()):
         """
         Set milkyway for display
+            style: {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.2}
         """
-        milkyway = self.sct.MilkyWay
-        self._dataaera('MilkyWay',1,'blue','-',0.2,milkyway)
+        if not style:
+            style = {'marker': 'dotted', 'color': 'blue', 'size': 1, 'alpha': 0.2}
+        sct = Sct.Sector()
+        data = sct.MilkyWay
+        self.aera('MilkyWay', style, data)
         
-    def _constellation(self):
+
+    def constellation(self, table=dict(), style=dict()):
         """
         Set constellation for display
+            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
+            style: {'marker': 'dotted', 'color': 'green', 'size': 1, 'alpha': 0.4}
         """
+        if not style:
+            style = {'marker': 'dotted', 'color': 'green', 'size': 1, 'alpha': 0.4}
+        sct = Sct.Sector()
+        data = sct.constellation
         _ra = []
         _dec = []
-        constellation = self.sct.constellation
-        self._dataconstellation('Cyg',1,'black','--',0.4,constellation)   
-    
-    def _archive(self,archives):
-        """
-        Attribut : archives(string): archives fits repository
-        """
-        archive = self.sct.readarchives(archives)
-        self._datacursor('Archives',5,'blue','s',0.2,archive)
+        if len(data) > 0:
+            for line in data:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+                _dec.append(c.dec.radian)
+            database = compoment_constellation(Table([_ra,_dec], names=['RA','DEC']))
+            database.properties(style)
+            database.title = table['title']
+            self.databaselist.append(database)           
 
+    
     def Moon(self,date,latitude,longitude,elevation):
         """
         Set moon for display
@@ -176,57 +201,52 @@ class Projection(object):
         moon = self.sct.miriademoon(date,location)
         self._datacursor('Moon',10,'black','o',0.25,moon)
  
-    def planning(self,planning):
+    
+    def mast(self, table=dict(), style=dict()):
         """
-        Set cursors with planning for display
+        Set marker with mast object for display
+            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
+            style: {'marker': 's', 'color': 'green', 'size': 5, 'alpha': 0.2}
         """
-        self.title = 'Planning projection\n'           
+        if not style:
+            style = {'marker': 's', 'color': 'green', 'size': 5, 'alpha': 0.2}
+        data = Mast()
+        data.read(table['title'])
         _ra = []
         _dec = []
-        for plan in planning.observations:
-            ra,dec = planning.coordinates(plan)
-            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian) 
-        database = _database(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(title='Planning',size=15,color='red',marker='s',alpha=0.2)
-        self.databaselist.append(database)   
-
-    def mast(self,mast):
-        """
-        Set cursors with mast object for display
-        """
-        self.title = 'Mast projection\n'
-        _ra = []
-        _dec = []
-        for obs in mast.observations:
-            ra,dec = mast.coordinates(obs)
+        for obs in data.observations:
+            ra,dec = data.coordinates(obs)
             c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian)
-        database = _database(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(title='Mast',size=5,color='green',marker='s',alpha=0.2)
+        database = compoment(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(style)
+        database.title = table['title']
         self.databaselist.append(database)   
         
-    @property
-    def opencluster(self):
+
+    def opencluster(self, style=dict()):
         """
         Create open cluster for display
+            style: {'marker': 'o', 'color': 'orange', 'size': 2, 'alpha': 0.4}
         """ 
-        self.title = 'Open cluster catalog less than magnitude 18\n'
-        opc = self.sct.opencluster
+        if not style:
+            style = {'marker': 'o', 'color': 'orange', 'size': 2, 'alpha': 0.4}
+        sct = Sct.Sector()
+        data = sct.opencluster
         _ra = []
         _dec = []
-        for line in opc:
+        for line in data:
             c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
             ra = c.ra*15
             _ra.append(-ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian) 
-        database = _database(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(title='Open cluster',size=2,color='blue',marker='o',alpha=0.25)
+        database = compoment_cluster(Table([_ra,_dec], names=['RA','DEC']))
+        database.properties(style)
+        database.title = 'Open cluster catalog less than magnitude 18'
         self.databaselist.append(database)   
  
-    @property
+
     def HerbigAeBe(self):
         """
         Create open cluster for display
@@ -243,7 +263,7 @@ class Projection(object):
         database.properties(title='Herbig',size=2,color='blue',marker='o',alpha=0.25)
         self.databaselist.append(database)   
  
-    @property
+
     def cepheid(self):
         """
         Create cepheid for display
@@ -260,27 +280,26 @@ class Projection(object):
         database = _database(Table([_ra,_dec], names=['RA','DEC']))
         database.properties(title='Cepheid',size=2,color='blue',marker='o',alpha=0.25)
         self.databaselist.append(database)   
-        
-    def projections(self,RA,DEC,archives):
+
+    
+    def properties(self,style=dict()):
         """
-        Create the archived sectors, cursor, milkyway, lmc, smc, moon for display
+        set properties
         """
-        self.title = 'Standard projection\n'
-        self.ra = RA
-        self.dec = DEC
-        self._cursor()
-        self._archive(archives)
-        self._lmc()
-        self._smc()
-        self._milkyway()
-        self._constellation()
+        if not style:
+            style = {'marker': 'dotted', 'color': 'black', 'size': 1, 'alpha': 0.2}
+        self.size = style['size']
+        self.color = style['color']
+        self.mark = style['marker']
+        self.alpha = style['alpha']
+
 
     def plot(self,axe):
         """
         Display projection 
-        """              
-        plt.grid(True,axis='both',linestyle='--')
+        """ 
+        plt.grid(True,axis='both',color= self.color, linestyle=self.mark, linewidth=self.size, alpha=self.alpha)
         for database in self.databaselist:
             database.plot()       
-        axe.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=0.4)
+        axe.set_xticklabels(['10h','08h','06h','04h','02h','0h','22h','20h','18h','16h','14h'],alpha=self.alpha+0.1)
         axe.set_title(self.title, fontsize = 8)
