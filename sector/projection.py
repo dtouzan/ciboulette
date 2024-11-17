@@ -55,18 +55,12 @@ class compoment_catalog(compoment):
             plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color=self.color, markersize=self.size, alpha=self.alpha)
             plt.plot(self.data['RA'], self.data['DEC'],ls='', marker=self.marker, color='black', markersize=self.size+1, alpha=self.alpha/2)
 
-            
-class compoment_constellation(compoment):
-    
-        def plot(self):
-            """
-            Plot database
-            """
-            plt.plot(self.data['RA'], self.data['DEC'], ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
-
 
 class compoment_constellations(compoment):
-    
+
+        def nodes(self, table):
+            self.nodes = table
+            
         def plot(self):
             """
             Plot database
@@ -208,28 +202,6 @@ class Projection(object):
         self.aera('MilkyWay', style, data)
         
 
-    def constellation(self, table=dict(), style=dict()):
-        """
-        Set constellation for display
-            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
-            style: {'marker': 'dotted', 'color': 'green', 'size': 1, 'alpha': 0.4}
-        """
-        if not style:
-            style = {'marker': 'dotted', 'color': 'green', 'size': 1, 'alpha': 0.4}
-        sct = Sct.Sector()
-        data = sct.constellation
-        _ra = []
-        _dec = []
-        if len(data) > 0:
-            for line in data:
-                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-                _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-                _dec.append(c.dec.radian)
-            database = compoment_constellation(Table([_ra,_dec], names=['RA','DEC']))
-            database.properties(style)
-            database.title = table['title']
-            self.databaselist.append(database)           
-
     def constellations(self, table=dict(), style=dict()):
         """
         Set constellation for display
@@ -242,12 +214,15 @@ class Projection(object):
         data = sct.constellations(table['title'])
         ra = []
         dec = []
+        node = []
         if len(data) > 0:
             for line in data:
                 c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
                 ra.append(-c.ra.wrap_at(180 * u.deg).radian)
                 dec.append(c.dec.radian)
+                node.append(line['MAIN_ID'])
             database = compoment_constellations(Table([ra,dec], names=['RA','DEC']))
+            database.nodes(data['MAIN_ID'])
             database.properties(style)
             database.title = table['title']
             self.databaselist.append(database)           
