@@ -303,7 +303,7 @@ class Sector(object):
             for line in table:
                 ra.append(line[0])
                 dec.append(line[1])
-                main_id.append('Herbig Ae/Be')                        
+                main_id.append(line[2])                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
 
     @property
@@ -323,10 +323,11 @@ class Sector(object):
             for line in table:
                 ra.append(line[0])
                 dec.append(line[1])
-                main_id.append(line[2])                        
+                main_id.append(line[4])                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])  
+
     
-    def aavso(self,string):
+    def aavso(self, string):
         """
         Return AAVSO variable star 
         Catalog Title: B/vsx/vsx       
@@ -337,3 +338,24 @@ class Sector(object):
         for table_name in result.keys():
             table = result[table_name]                       
         return table
+
+    
+    def aavso_by(self, RA=0, DEC=0, magnitude=15):
+        """
+        Return AAVSO variable star 
+        Catalog Title: B/vsx/vsx       
+        """       
+        mag_max = {'max': f'<={str(magnitude)}'}
+        v = Vizier(catalog='B/vsx/vsx', column_filters=mag_max, columns=['_RAJ2000', '_DEJ2000', '*'])
+        v.ROW_LIMIT = 500000
+        result = v.query_region(SkyCoord(ra=RA*15, dec=DEC, unit=(u.deg, u.deg), frame='icrs'), width="10d")
+        ra = []
+        dec = []
+        main_id = []    
+        for table_name in result.keys():
+            table = result[table_name]  
+            for line in table:
+                ra.append(line[0])
+                dec.append(line[1])
+                main_id.append(line[4])                                    
+        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])

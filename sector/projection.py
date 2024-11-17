@@ -46,7 +46,7 @@ class compoment():
             return {'title': self.title, 'RA': self.data['RA'].value, 'DEC': self.data['DEC'].value}
 
 
-class compoment_cluster(compoment):
+class compoment_catalog(compoment):
     
         def plot(self):
             """
@@ -122,6 +122,9 @@ class Projection(object):
     def aera(self,name, style, data):
         """
         Create aera for database
+        set name  : string
+        set style : {'marker': string, 'color': string, 'size': int, 'alpha': float}
+        set data  : Table
         """
         ra = []
         dec = []
@@ -135,6 +138,31 @@ class Projection(object):
             database.title = name
             self.databaselist.append(database)           
 
+
+    def catalog(self,name, style, data, degree=True):
+        """
+        Create database with catalog
+        set name  : string
+        set style : {'marker': string, 'color': string, 'size': int, 'alpha': float}
+        set data  : Table
+        set degree: True/False type of value data
+        """
+        ra = []
+        dec = []
+        if len(data) > 0:
+            for line in data:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                if degree:
+                    RA = c.ra
+                else:
+                    RA = c.ra*15
+                ra.append(-RA.wrap_at(180 * u.deg).radian)
+                dec.append(c.dec.radian)
+            database = compoment_catalog(Table([ra,dec], names=['RA','DEC']))
+            database.properties(style)
+            database.title = name
+            self.databaselist.append(database)           
+        
     
     def lmc(self, style=dict()):
         """
@@ -216,7 +244,7 @@ class Projection(object):
         _dec = []
         for obs in data.observations:
             ra,dec = data.coordinates(obs)
-            c = SkyCoord(ra*15*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
+            c = SkyCoord(ra*u.deg, dec*u.deg, frame='icrs', unit=(u.deg, u.deg))
             _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
             _dec.append(c.dec.radian)
         database = compoment(Table([_ra,_dec], names=['RA','DEC']))
@@ -234,52 +262,46 @@ class Projection(object):
             style = {'marker': 'o', 'color': 'orange', 'size': 2, 'alpha': 0.4}
         sct = Sct.Sector()
         data = sct.opencluster
-        _ra = []
-        _dec = []
-        for line in data:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            ra = c.ra*15
-            _ra.append(-ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian) 
-        database = compoment_cluster(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(style)
-        database.title = 'Open cluster catalog less than magnitude 18'
-        self.databaselist.append(database)   
+        self.catalog('Open cluster catalog', style, data, False)
  
 
-    def HerbigAeBe(self):
+    def HerbigAeBe(self, style=dict()):
         """
-        Create open cluster for display
+        Create Herbig Ae/Be for display
+            style: {'marker': 's', 'color': 'blue', 'size': 2, 'alpha': 0.25}
         """ 
-        self.title = 'Herbig Ae/Be catalog\n'
-        opc = self.sct.HerbigAeBeStars
-        _ra = []
-        _dec = []
-        for line in opc:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian) 
-        database = _database(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(title='Herbig',size=2,color='blue',marker='o',alpha=0.25)
-        self.databaselist.append(database)   
- 
+        if not style:
+            style = {'marker': 's', 'color': 'blue', 'size': 2, 'alpha': 0.25}
+        sct = Sct.Sector()
+        data = sct.HerbigAeBeStars
+        self.catalog('Herbig Ae/Be catalog', style, data, True)
+        
 
-    def cepheid(self):
+    def cepheid(self, style=dict()):
         """
         Create cepheid for display
+            style: {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.25}
         """ 
-        self.title = 'Cepheid star catalog\n'
-        opc = self.sct.CepheidStars
-        _ra = []
-        _dec = []
-        for line in opc:
-            c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
-            ra = c.ra*15
-            _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
-            _dec.append(c.dec.radian) 
-        database = _database(Table([_ra,_dec], names=['RA','DEC']))
-        database.properties(title='Cepheid',size=2,color='blue',marker='o',alpha=0.25)
-        self.databaselist.append(database)   
+        if not style:
+            style = {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.25}
+        sct = Sct.Sector()
+        data = sct.CepheidStars
+        self.catalog('Cepheid catalog', style, data, True)
+
+    
+    def aavso_by(self, table=dict(), style=dict()):
+        """
+        Create cepheid for display
+            table: {'RA': right ascention heure, 'DEC':declination degre, 'magnitude': 15}
+            style: {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.25}
+        """ 
+        if not table:
+            table = {'RA': 0, 'DEC': 0, 'magnitude': 15}
+        if not style:
+            style = {'marker': 'o', 'color': 'blue', 'size': 2, 'alpha': 0.25}
+        sct = Sct.Sector()
+        data = sct.aavso_by(table['RA'], table['DEC'], table['magnitude'])
+        self.catalog('AAVSO', style, data, True)
 
     
     def properties(self,style=dict()):
