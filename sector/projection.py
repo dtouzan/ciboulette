@@ -71,7 +71,8 @@ class compoment_aera(compoment):
             Plot database
             """
             plt.plot(self.data['RA'], self.data['DEC'],  ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
-            plt.fill_between(self.data['RA'],self.data['DEC'], color=self.color, alpha=self.alpha-0.1)           
+            #plt.fill_between(self.data['RA'],self.data['DEC'], color=self.color, alpha=self.alpha-0.1) 
+            plt.fill(self.data['RA'],self.data['DEC'], facecolor=self.color, edgecolor=self.color, alpha=self.alpha-0.1) 
                 
 
 class Projection(object):
