@@ -64,6 +64,16 @@ class compoment_constellation(compoment):
             """
             plt.plot(self.data['RA'], self.data['DEC'], ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
 
+
+class compoment_constellations(compoment):
+    
+        def plot(self):
+            """
+            Plot database
+            """
+            plt.plot(self.data['RA'], self.data['DEC'], ls='', marker=self.marker, color=self.color, markersize=self.size, alpha=self.alpha)
+
+
 class compoment_aera(compoment):
     
         def plot(self):
@@ -71,7 +81,6 @@ class compoment_aera(compoment):
             Plot database
             """
             plt.plot(self.data['RA'], self.data['DEC'],  ls=self.marker, color=self.color, lw=self.size, alpha=self.alpha)
-            #plt.fill_between(self.data['RA'],self.data['DEC'], color=self.color, alpha=self.alpha-0.1) 
             plt.fill(self.data['RA'],self.data['DEC'], facecolor=self.color, edgecolor=self.color, alpha=self.alpha-0.1) 
                 
 
@@ -217,6 +226,28 @@ class Projection(object):
                 _ra.append(-c.ra.wrap_at(180 * u.deg).radian)
                 _dec.append(c.dec.radian)
             database = compoment_constellation(Table([_ra,_dec], names=['RA','DEC']))
+            database.properties(style)
+            database.title = table['title']
+            self.databaselist.append(database)           
+
+    def constellations(self, table=dict(), style=dict()):
+        """
+        Set constellation for display
+            table: {'title': title, 'RA': right ascention heure, 'DEC':declination degre}
+            style: {'marker': 'dotted', 'color': 'green', 'size': 1, 'alpha': 0.4}
+        """
+        if not style:
+            style = {'marker': 'o', 'color': 'green', 'size': 1, 'alpha': 0.4}
+        sct = Sct.Sector()
+        data = sct.constellations(table['title'])
+        ra = []
+        dec = []
+        if len(data) > 0:
+            for line in data:
+                c = SkyCoord(ra = line['RA'], dec = line['DEC'], unit = (u.deg, u.deg), frame='icrs')
+                ra.append(-c.ra.wrap_at(180 * u.deg).radian)
+                dec.append(c.dec.radian)
+            database = compoment_constellations(Table([ra,dec], names=['RA','DEC']))
             database.properties(style)
             database.title = table['title']
             self.databaselist.append(database)           

@@ -269,6 +269,30 @@ class Sector(object):
        
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
 
+
+    def constellations(self, constellation="Cyg"):
+        """
+        Return Table of the constellation
+        Catalog Title: Constellation Boundary Data (Davenhall+ 1989)
+        Boundaries for J2000 (updated version) (12948 rows)
+        VI/49/bound_20
+        """
+        filters = {'cst': f'{constellation}'}
+        v = Vizier(catalog="VI/49/bound_20", column_filters=filters, columns=['_RAJ2000', '_DEJ2000', '*'])
+        v.ROW_LIMIT = 50000
+        result = v.query_constraints()        
+        ra = []
+        dec = []
+        main_id = []    
+        for table_name in result.keys():
+            table = result[table_name]
+            for line in table:
+                ra.append(line[0])
+                dec.append(line[1])
+                main_id.append(line[5])                        
+        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
+
+    
     @property
     def opencluster(self):
         """
@@ -303,9 +327,10 @@ class Sector(object):
             for line in table:
                 ra.append(line[0])
                 dec.append(line[1])
-                main_id.append(line[2])                        
+                main_id.append(line[3])                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
 
+        
     @property
     def CepheidStars(self):
         """
@@ -345,8 +370,8 @@ class Sector(object):
         Return AAVSO variable star 
         Catalog Title: B/vsx/vsx       
         """       
-        mag_max = {'max': f'<={str(magnitude)}'}
-        v = Vizier(catalog='B/vsx/vsx', column_filters=mag_max, columns=['_RAJ2000', '_DEJ2000', '*'])
+        filters = {'max': f'<={str(magnitude)}'}
+        v = Vizier(catalog='B/vsx/vsx', column_filters=filters, columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 500000
         result = v.query_region(SkyCoord(ra=RA*15, dec=DEC, unit=(u.deg, u.deg), frame='icrs'), width="10d")
         ra = []
