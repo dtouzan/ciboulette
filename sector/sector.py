@@ -68,7 +68,7 @@ class Sector(object):
         return Table([t_object,t_frameid,t_datatype,t_RA,t_DEC], names=['SECTOR','FRAMEID','DATATYPE','RA','DEC'])
 
     
-    def regionincatalog(self,astre_ra,astre_dec,angle_width,angle_height,mag,catalog_name,field_ra,field_dec,field_mag):
+    def regionincatalog(self, astre_ra, astre_dec, angle_width, angle_height, mag, catalog_name, field_ra, field_dec, field_mag, source_id):
         """
         Returns the table of RA, DEC and markers        
         Attributes:
@@ -84,16 +84,17 @@ class Sector(object):
         """ 
         table_ra = []
         table_dec = []
-        table_marker = []    
+        table_marker = [] 
+        table_source_id = []
         # Recherche dans le catalog 
         # Field catalog : _RAJ2000, _DEJ2000, Vmag, r'mag, Gmag ...
-        v = Vizier(columns=[field_ra, field_dec, field_mag])    
+        v = Vizier(columns=[field_ra, field_dec, field_mag, source_id])    
         # Nombre limite de recherche
         v.ROW_LIMIT = 500000    
         # Recherche et création de la table
-        mag_format = '<'+str(mag)
+        mag_format = {'Gmag': f'<={mag}'}
         result = v.query_region(SkyCoord(ra=astre_ra, dec=astre_dec, unit=(u.deg, u.deg),frame='icrs'), width=Angle(angle_width, "deg"), 
-                                height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters={'Gmag':mag_format}) 
+                                height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters=mag_format) 
         if mag < 15 :
             stars = constant.starslow
             stars[0] = -2
@@ -112,6 +113,7 @@ class Sector(object):
                 ra = float(line[0])
                 dec = float(line[1])
                 mv = float(line[2])
+                source = line[3]
                 if mv != 'masked' :
                     if int(mv)+stars[0] < 1 :
                         marker_size = 150
@@ -119,8 +121,9 @@ class Sector(object):
                         marker_size = stars[int(mv)+stars[0]]
                     table_ra.append(ra)
                     table_dec.append(dec)
-                    table_marker.append(marker_size) 
-            return Table([table_ra,table_dec,table_marker], names=['RA', 'DEC', 'MARKER'])
+                    table_marker.append(marker_size)
+                    table_source_id.append(source)
+            return Table([table_ra, table_dec, table_marker, table_source_id], names=['RA', 'DEC', 'MARKER', 'SOURCE ID'])
     
     def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
         """

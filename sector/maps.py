@@ -17,7 +17,7 @@ class Map(object):
         self.WCS = wcs
         self.target = Table()
    
-    def stars(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,instrument,telescope_name,observer_name,filter_name):
+    def gaiaedr3(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
         Set data, WCS and title for display
         """
@@ -25,22 +25,26 @@ class Map(object):
         self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
         field = self.WCS.wcs.cdelt[1]*naxis2
-        mag = 9
-    
-        if field >= 1.5:
-            field = 1.5
-            mag = 12.5
-        if field < 1.5:   
-            mag = 14.5
-        if field < 0.75:   
-            mag = 16    
-        if field < 0.30:  
-            mag = 18    
+        mag = 8
 
-        catalog = 'GAIA-EDR3'
-        self.data = sct.regionincatalog(ra*15, dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag')   
-        resolv = str("%.2f" %(206*pixelXY/focal))
-        self.title = self.title+'VizieR-'+catalog+' | F'+str(focal)+' | '+instrument+' | '+telescope_name+' | '+observer_name+' | '+filter_name+' | '+resolv+ '"/p'+ ':Mv '+str(mag) +'\n'
+        if field > 5:
+            field = 5
+        
+        if field <= 5:
+            mag = 8
+        if field <= 3:
+            mag = 12.5
+        if field <= 1.5: 
+            mag = 14.5
+        if field <= 0.75:
+            mag = 16    
+        if field <= 0.30:
+            mag = 18  
+            
+        catalog = 'I/350/gaiaedr3'
+        self.data = sct.regionincatalog(ra*15, dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag', 'Source')   
+        #resolv = str("%.2f" %(206*pixelXY/focal))
+        return {'field': field, 'mag': mag}
         
     def trajectory(self,target,epoch,epoch_step,epoch_nsteps,latitude,longitude,elevation):
         """
@@ -69,9 +73,11 @@ class Map(object):
         """
         Plot map
         """
-        axe.grid(b = True, linestyle = '--', color = 'black', alpha = 0.40)
+        axe.grid(linestyle = '--', color = 'black', alpha = 0.40)
         if len(self.data) > 0:
             axe.scatter(self.data['RA'], self.data['DEC'], transform=axe.get_transform('icrs'), s=self.data['MARKER'],edgecolor='black', facecolor='black')
         axe.set_title(self.title, fontsize = 8)
         plt.xlabel(constant.RA_J2000)
         plt.ylabel(constant.DEC_J2000)
+
+          
