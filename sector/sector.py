@@ -174,7 +174,7 @@ class Sector(object):
                 marker.append(1)                   
         return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER']) 
      
-    def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
+    def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection='TAN'):
         """
         Return WSC for sector
         """    
@@ -186,7 +186,10 @@ class Sector(object):
         cdelt2 = (206*int(pixelXY)*int(binXY)/focal)/3600
         # Header WCS
         w = wcs.WCS(naxis=2)
-        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+        P_RA = "RA---" + projection
+        P_DEC = "DEC--" + projection
+        print
+        w.wcs.ctype = [P_RA, P_DEC] 
         # CRVAL 
         w.wcs.crval = [ra * 15, dec] 
         # CRPIX Vecteur à 2 éléments donnant les coordonnées X et Y du pixel de référence 
@@ -255,22 +258,6 @@ class Sector(object):
               -69.21964,-68.97936,-68.95427,-69.08469,-69.34739,-69.48988,-69.42599,-68.93654,-68.53427,-68.29889] 
        
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC']) 
-
-    @property
-    def constellation(self):
-        """
-        Return Table of cygnus constellation
-        """
-        name_id = ['cyg01','cyg02','cyg03','cyg04','cyg05','cyg06','cyg04','cyg08','cyg09','cyg10','cyg11','cyg12','cyg13','cyg014',
-                   'cyg15','cyg16','cyg17','cyg18','cyg19','cyg20','cyg21','cyg22','cyg23','cyg24','cyg25','cyg26','cyg27','cyg28']
-    
-        ra = [290.27454,296.37044,296.37566,315.01756,315.16620,327.28906,327.35796,329.40071,329.51316,330.69816,330.75935,309.92472,309.58739,308.39034,
-              308.26438,297.17667,297.16272,291.68812,292.00975,287.00677,287.17769,288.31124,288.40571,292.07598,292.18753,291.54741,290.09924,290.27454]
-        
-        dec= [27.75807,27.71632,29.32198,29.43792,28.47269,28.59526,36.61681,36.69658,44.43569,44.73737,55.48212,55.37129,61.32503,61.36405,
-              59.92392,59.63124,58.21273,58.31922,55.67147,55.67877,47.82238,47.67719,43.67811,43.72546,36.82807,30.33083,30.21923,27.75807]
-       
-        return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
 
 
     def constellations(self, constellation="Cyg"):
@@ -387,3 +374,39 @@ class Sector(object):
                 dec.append(line[1])
                 main_id.append(line[4])                                    
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
+
+    def marker(self, RA=0, DEC=0, magnitude=15, source='marker'):
+        """
+        Return marker 
+        Catalog Title: none      
+        """ 
+        ra_id = []
+        dec_id = []
+        mag_id = []
+        source_id = []
+        ra_id.append(RA*15)
+        dec_id.append(DEC)
+        mag_id.append(magnitude)
+        source_id.append(source)     
+        return Table([ra_id,dec_id,mag_id,source_id], names=['RA', 'DEC', 'MARKER', 'SOURCE_ID'])
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+        

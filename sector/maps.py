@@ -14,12 +14,44 @@ class Map(object):
         self.size = size
         self.title = ''
         self.data = Table()
+        self.databaselist = []
         self.WCS = wcs
         self.target = Table()
-   
+
+    def new(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection='TAN'):
+        """
+        Set data, WCS for display
+        """
+        sct = sector.Sector()
+        self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection)
+        #field_RA = WCS.wcs.cdelt[0]*self.naxis1
+        field = self.WCS.wcs.cdelt[1]*naxis2
+        self.size = 15
+        self.title = ''
+        self.databaselist = []
+        return {'field': field}
+
+    def marker(self, ra=0, dec=0, mag=12, source=''):
+        """
+        Set data, WCS for display
+        """
+        sct = sector.Sector()
+        data = sct.marker(ra, dec, mag, source)
+        self.databaselist.append(data)
+        
+    def constellations(self, table=dict()):
+        sct = sector.Sector()
+        data = sct.constellations(table['title'])
+        ra = []
+        dec = []
+        node = []
+        if len(data) > 0:
+            self.databaselist.append(data)      
+
+            
     def gaiaedr3(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
         """
-        Set data, WCS and title for display
+        Set data, WCS for display
         """
         sct = sector.Sector()
         self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal)
@@ -62,12 +94,14 @@ class Map(object):
         location = str(longitude) + ' ' + str(latitude) + ' ' + str(elevation)
         self.target = sct.miriadeincatalog(target,epoch,epoch_step,epoch_nsteps,1,location)
         self.title = self.title+target+' | '+epoch.value+'\n'        
-    
-    def cursor(self,axe):
+
+    @property
+    def cursor(self):
         """
-        Plot cursor map
+        Add cursor map
         """
-        axe.scatter(self.WCS.wcs.crval[0], self.WCS.wcs.crval[1], transform=axe.get_transform('icrs'), s=250, edgecolor='red', linewidths=5, facecolor='none', alpha=0.2)
+        self.marker(self.WCS.wcs.crval[0]/15, self.WCS.wcs.crval[1], mag=1, source='cursor')
+
         
     def plot(self,axe):
         """
@@ -80,4 +114,19 @@ class Map(object):
         plt.xlabel(constant.RA_J2000)
         plt.ylabel(constant.DEC_J2000)
 
-          
+    def ploting(self, axe):
+        axe.grid(linestyle = '--', color = 'black', alpha = 0.40)
+        
+        for data in self.databaselist:
+                if 'MARKER' in data.colnames: 
+                    if 'cursor' in data['SOURCE_ID']:
+                        axe.scatter(data['RA'], data['DEC'], transform=axe.get_transform('icrs'), s=250, edgecolor='red', linewidths=5, facecolor='none', alpha=0.2)
+                    else:
+                        axe.scatter(data['RA'], data['DEC'], transform=axe.get_transform('icrs'), s=data['MARKER'],edgecolor='black', facecolor='black')
+                if 'MAIN_ID' in data.colnames:
+                    axe.scatter(data['RA'], data['DEC'], transform=axe.get_transform('icrs'), s=2, edgecolor='red', facecolor='red', alpha=0.3)
+                    
+        axe.set_title(self.title, fontsize = 8)
+        plt.xlabel(constant.RA_J2000)
+        plt.ylabel(constant.DEC_J2000)
+        
