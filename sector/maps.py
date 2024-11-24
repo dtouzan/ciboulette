@@ -81,7 +81,7 @@ class compoment_scale(compoment):
             label = str(self.data['MARKER'].value[0])
             RA, DEC = self.data['RA'].value[0], self.data['DEC'].value[0]
             axe.arrow(RA, DEC, 0, self.data['MARKER'].value[0], head_width=0, head_length=0, fc='white', ec=self.color, width=self.size, transform=axe.get_transform('icrs'))
-            plt.text(RA + 0.4, DEC+0.4, label, color='black', rotation=self.angle, transform=axe.get_transform('icrs'))
+            plt.text(RA + 1, DEC+(self.data['MARKER'].value[0]/2), label, color='black', rotation=self.angle, transform=axe.get_transform('icrs'))
 
 
 class Map(object):
