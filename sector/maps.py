@@ -30,7 +30,7 @@ class compoment():
             """
             Plot database
             """
-            axe.scatter(self.data['RA'], self.data['DEC'], transform=axe.get_transform('icrs'), s=self.data['MARKER'],edgecolor=self.color, facecolor=self.color, alpha=self.alpha)
+            axe.scatter(self.data['RA'], self.data['DEC'], transform=axe.get_transform('icrs'), s=self.data['MARKER']*10,edgecolor=self.color, facecolor=self.color, alpha=self.alpha)
 
         @property
         def get(self):
@@ -78,32 +78,51 @@ class compoment_scale(compoment):
             """
             Plot database
             """
-            label = str(self.data['MARKER'].value[0])
+            label = str(self.data['MARKER'].value[0]) + '°'
             RA, DEC = self.data['RA'].value[0], self.data['DEC'].value[0]
-            axe.arrow(RA, DEC, 0, self.data['MARKER'].value[0], head_width=0, head_length=0, fc='white', ec=self.color, width=self.size, transform=axe.get_transform('icrs'))
-            plt.text(RA + 1, DEC+(self.data['MARKER'].value[0]/2), label, color='black', rotation=self.angle, transform=axe.get_transform('icrs'))
+            axe.arrow(RA, DEC, 0, self.data['MARKER'].value[0], head_width=0, head_length=0, fc=self.color, ec=self.color, width=self.size, transform=axe.get_transform('icrs'), alpha=self.alpha)
+            plt.text(RA+0.1, DEC+(self.data['MARKER'].value[0]/2), label, color='black', rotation=self.angle, transform=axe.get_transform('icrs'))
+
+class compoment_stars(compoment):
+
+        def plot(self, axe):
+            """
+            Plot database
+            """
+            axe.scatter(self.data['RA'], self.data['DEC'], transform=axe.get_transform('icrs'), s=self.data['MARKER'],edgecolor=self.color, facecolor=self.color, alpha=self.alpha)
 
 
 class Map(object):
     
-    def __init__(self,size=15):
-        self.size = size
+    def __init__(self):
+        self.size = 5
         self.title = ''
         self.databaselist = []
         self.WCS = wcs
 
-    def new(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection='TAN'):
+    def new(self, table=dict()):
         """
         Set data, WCS for display
+            table: {'RA': right ascention heure, 'DEC': declination degre, 'naxis1': naxis1, 'naxis2': naxis2, 'binXY': binning, 'pixelXY': pixel size, 'focal': focal, 'projection': 'TAN'}
         """
+        if not table:
+            table = {'RA': 0, 'DEC': 0, 'naxis1': 4000, 'naxis2': 3000, 'binXY': 1, 'pixelXY': 1.55, 'focal': 85, 'projection': 'TAN'}
+
+        ra = table['RA']
+        dec = table['DEC']
+        naxis1 = table['naxis1']
+        naxis2 = table['naxis2']
+        binXY = table['binXY']
+        pixelXY = table['pixelXY']
+        focal = table['focal']
+        projection = table['projection']    
         sct = sector.Sector()
         self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection)
         #field_RA = WCS.wcs.cdelt[0]*self.naxis1
-        field = self.WCS.wcs.cdelt[1]*naxis2
-        self.size = 15
+        self.size = self.WCS.wcs.cdelt[1]*naxis2
         self.title = ''
         self.databaselist = []
-        return {'wcs.field': field}
+        return {'coords': (self.WCS.wcs.crval[0], self.WCS.wcs.crval[1]), 'field': self.size}
 
     
     def marker(self, table=dict(), style=dict()):
@@ -144,33 +163,39 @@ class Map(object):
             self.databaselist.append(data)      
 
             
-    def gaiaedr3(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal):
+    def gaiaedr3(self, style=dict()):
         """
-        Set data, WCS for display
+        Set gaiaedr3 catalog
+            style: {'color': 'black', 'size': 0, 'alpha': 0.4}
         """
-        sct = sector.Sector()
-        self.WCS = sct.WCS(ra,dec,naxis1,naxis2,binXY,pixelXY,focal)
-        #field_RA = WCS.wcs.cdelt[0]*self.naxis1
-        field = self.WCS.wcs.cdelt[1]*naxis2
-        mag = 8
+        if not style:
+            style = {'color': 'black', 'size': 1, 'alpha': 1}
+
+        magnitude = 8
+        field = self.size
 
         if field > 5:
             field = 5
         
         if field <= 5:
-            mag = 8
+            magnitude = 8
         if field <= 3:
-            mag = 12.5
+            magnitude = 12.5
         if field <= 1.5: 
-            mag = 14.5
+            magnitude = 14.5
         if field <= 0.75:
-            mag = 16    
+            magnitude = 16    
         if field <= 0.30:
-            mag = 18  
+            mamagnitudeg = 18  
             
         catalog = 'I/350/gaiaedr3'
-        self.data = sct.regionincatalog(ra*15, dec,field,field,mag,catalog,'_RAJ2000', '_DEJ2000', 'Gmag', 'Source')   
-        return {'field': field, 'mag': mag}
+        sct = sector.Sector()
+        data = compoment_stars(sct.regionincatalog(self.WCS.wcs.crval[0], self.WCS.wcs.crval[1], field, field, magnitude, catalog, '_RAJ2000', '_DEJ2000', 'Gmag', 'Source'))   
+        if data:
+            data.properties(style)
+            data.title = 'gaia_edr3'
+            self.databaselist.append(data)      
+
         
     def trajectory(self,target,epoch,epoch_step,epoch_nsteps,latitude,longitude,elevation):
         """
