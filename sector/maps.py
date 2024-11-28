@@ -2,9 +2,18 @@
 Maps class
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2024-11-27"
+__version__= "1.0.0"
+
+# Global mods
 import matplotlib.pyplot as plt
+# Astropy mods
 from astropy.table import Table
 from astropy import wcs
+#  local mods
 from ciboulette.sector import sector
 from ciboulette.base import constant
 

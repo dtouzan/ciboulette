@@ -2,7 +2,15 @@
 Sector class
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2024-11-27"
+__version__= "1.0.0"
+
+# Globals mods
 import os
+# Astropy mods
 from astropy.table import Table
 from astropy.io import fits
 from astroquery.vizier import Vizier
@@ -13,6 +21,7 @@ from astropy import wcs
 from astropy.time import Time
 from astropy.io import ascii
 from astroquery.imcce import Miriade, MiriadeClass
+# Local mods
 from ciboulette.base import constant
 
 class Sector(object):

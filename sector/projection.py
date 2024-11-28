@@ -2,12 +2,21 @@
 Projection class
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2024-11-27"
+__version__= "1.0.0"
+
+# global mods
+import matplotlib.pyplot as plt
+# Astropy mods
 from astropy.time import Time
 from astropy.table import Table
 from astropy.coordinates import SkyCoord, Angle
 from astropy import units as u
 from astropy import wcs
-import matplotlib.pyplot as plt
+# loacl mods
 from ciboulette.sector import sector as Sct
 from ciboulette.utils import planning
 from ciboulette.utils.mast import Mast
