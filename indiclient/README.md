@@ -1,4 +1,4 @@
-## Map
+## 3DIMX
 3DIMX for astronomy packages
 
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/) 
