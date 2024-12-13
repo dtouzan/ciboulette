@@ -1,11 +1,11 @@
 ## Map
-3DIMX for astronomy packages
+Map for astronomy packages
 
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/) 
 
 ## Prerequisite
   - Astropy
-  - Indiclient (sources https://github.com/MMTObservatory/indiclient, BSD 3-clause license), no package
+  - Astroquery
 
 ## Authors and Contributors
 
