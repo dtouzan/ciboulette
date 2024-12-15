@@ -97,13 +97,21 @@ class Sector(object):
         table_source_id = []
         # Recherche dans le catalog 
         # Field catalog : _RAJ2000, _DEJ2000, Vmag, r'mag, Gmag ...
-        v = Vizier(columns=[field_ra, field_dec, field_mag, source_id])    
+        v = Vizier(columns=[field_ra, 
+                            field_dec, 
+                            field_mag, 
+                            source_id])    
         # Nombre limite de recherche
         v.ROW_LIMIT = 500000    
         # Recherche et création de la table
         mag_format = {'Gmag': f'<={mag}'}
-        result = v.query_region(SkyCoord(ra=astre_ra, dec=astre_dec, unit=(u.deg, u.deg),frame='icrs'), width=Angle(angle_width, "deg"), 
-                                height=Angle(angle_height, "deg"), catalog=catalog_name,column_filters=mag_format) 
+        result = v.query_region(SkyCoord(ra=astre_ra, 
+                                         dec=astre_dec, 
+                                         unit=(u.deg, u.deg),
+                                         frame='icrs'), 
+                                width=Angle(angle_width, "deg"), 
+                                height=Angle(angle_height, "deg"), 
+                                catalog=catalog_name,column_filters=mag_format) 
         if mag < 15 :
             stars = constant.starslow
             stars[0] = -2
@@ -133,6 +141,7 @@ class Sector(object):
                     table_marker.append(marker_size)
                     table_source_id.append(source)
             return Table([table_ra, table_dec, table_marker, table_source_id], names=['RA', 'DEC', 'MARKER', 'SOURCE ID'])
+
     
     def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     
         """
@@ -145,9 +154,15 @@ class Sector(object):
                 coordtype (int)         : Miriade definition
                 location (string)       : Miriade definition
         """
-        epoch_iso = Time(epoch,format='fits')
+        epoch_iso = Time(epoch,
+                         format='fits')
         epoch_iso.format = 'iso'
-        eph = Miriade.get_ephemerides(target, epoch=epoch_iso.value, epoch_step=epoch_step, epoch_nsteps=epoch_nsteps, coordtype=coordtype, location=location)
+        eph = Miriade.get_ephemerides(target, 
+                                      epoch=epoch_iso.value, 
+                                      epoch_step=epoch_step, 
+                                      epoch_nsteps=epoch_nsteps, 
+                                      coordtype=coordtype, 
+                                      location=location)
         ra = []
         dec = []
         marker = []    
@@ -156,7 +171,8 @@ class Sector(object):
             dec.append(line['DEC'])
             marker.append(int(line['V']))                        
         return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER'])        
-    
+
+        
     def miriademoon(self,epoch,location):     
         """
         Returns the table of RA, DEC and markers with Miriade calulator
@@ -168,9 +184,15 @@ class Sector(object):
                 coordtype (int)         : Miriade definition
                 location (string)       : Miriade definition
         """
-        epoch_iso = Time(epoch,format='fits')
+        epoch_iso = Time(epoch,
+                         format='fits')
         epoch_iso.format = 'iso'
-        eph = Miriade.get_ephemerides('p:moon', epoch=epoch_iso.value, epoch_step='1m', epoch_nsteps=1, coordtype=1, location=location)
+        eph = Miriade.get_ephemerides('p:moon', 
+                                      epoch=epoch_iso.value, 
+                                      epoch_step='1m', 
+                                      epoch_nsteps=1, 
+                                      coordtype=1, 
+                                      location=location)
         ra = []
         dec = []
         marker = []    
@@ -182,7 +204,8 @@ class Sector(object):
             else: 
                 marker.append(1)                   
         return Table([ra,dec,marker], names=['RA', 'DEC', 'MARKER']) 
-     
+
+    
     def WCS(self,ra,dec,naxis1,naxis2,binXY,pixelXY,focal,projection='TAN'):
         """
         Return WSC for sector
@@ -208,6 +231,7 @@ class Sector(object):
         w.wcs.cdelt = [-cdelt1, cdelt2]      
         return w
 
+    
     @property
     def MilkyWay(self):
         """
@@ -235,36 +259,149 @@ class Sector(object):
               -7.03323,-17.05423,-38.26060,-47.33652,-59.27516,-71.99297,-49.42058]
 
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])     
+
     
     @property
     def smc(self):
         """
         Return Table of SMC
         """
-        name_id = ['smc01','smc02','smc03','smc04','smc05','smc06','smc07','smc08','smc09',
-                   'smc10','smc11','smc12','smc13','smc14','smc15','smc16','smc17','smc18','smc19']
+        name_id = ['smc01',
+                   'smc02',
+                   'smc03',
+                   'smc04',
+                   'smc05',
+                   'smc06',
+                   'smc07',
+                   'smc08',
+                   'smc09',
+                   'smc10',
+                   'smc11',
+                   'smc12',
+                   'smc13',
+                   'smc14',
+                   'smc15',
+                   'smc16',
+                   'smc17',
+                   'smc18',
+                   'smc19']
     
-        ra = [15.71412,13.35367,12.35204,11.46044,11.04552,10.56770,10.59704,11.87215,13.35488,
-              14.05924,14.38190,14.35466,14.39971,14.53188,14.85369,15.78852,16.07202,16.09278,15.71412]
+        ra = [15.71412,
+              13.35367,
+              12.35204,
+              11.46044,
+              11.04552,
+              10.56770,
+              10.59704,
+              11.87215,
+              13.35488,
+              14.05924,
+              14.38190,
+              14.35466,
+              14.39971,
+              14.53188,
+              14.85369,
+              15.78852,
+              16.07202,
+              16.09278,
+              15.71412]
         
-        dec= [-71.80571,-72.10860,-72.42878,-72.64489,-72.83957,-73.22119,-73.38194,-73.59739,-73.66183,-73.57383,
-              -73.36562,-73.03905,-72.74186,-72.57571,-72.41027,-72.25918,-72.17162,-72.06272,-71.80571] 
+        dec= [-71.80571,
+              -72.10860,
+              -72.42878,
+              -72.64489,
+              -72.83957,
+              -73.22119,
+              -73.38194,
+              -73.59739,
+              -73.66183,
+              -73.57383,
+              -73.36562,
+              -73.03905,
+              -72.74186,
+              -72.57571,
+              -72.41027,
+              -72.25918,
+              -72.17162,
+              -72.06272,
+              -71.80571] 
        
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
-            
+
+        
     @property
     def lmc(self):
         """
         Return Table of LMC
         """
-        name_id = ['lmc01','lmc02','lmc03','lmc04','lmc05','lmc06','lmc07','lmc08','lmc09','lmc10','lmc11',
-                   'lmc12','lmc13','lmc14','lmc15','lmc16','lmc17','lmc18','lmc19','lmc20','lmc21','lmc22',]
+        name_id = ['lmc01',
+                   'lmc02',
+                   'lmc03',
+                   'lmc04',
+                   'lmc05',
+                   'lmc06',
+                   'lmc07',
+                   'lmc08',
+                   'lmc09',
+                   'lmc10',
+                   'lmc11',
+                   'lmc12',
+                   'lmc13',
+                   'lmc14',
+                   'lmc15',
+                   'lmc16',
+                   'lmc17',
+                   'lmc18',
+                   'lmc19',
+                   'lmc20',
+                   'lmc21',
+                   'lmc22',]
     
-        ra = [76.93533,75.85622,75.06883,75.18691,77.14843,78.95547,80.53301,83.01741,84.75381,85.35961,85.67452,85.75220,
-              85.60654,85.26041,84.61699,83.88328,83.12758,82.58079,81.56873,79.37675,77.83528,76.93533]
+        ra = [76.93533,
+              75.85622,
+              75.06883,
+              75.18691,
+              77.14843,
+              78.95547,
+              80.53301,
+              83.01741,
+              84.75381,
+              85.35961,
+              85.67452,
+              85.75220,
+              85.60654,
+              85.26041,
+              84.61699,
+              83.88328,
+              83.12758,
+              82.58079,
+              81.56873,
+              79.37675,
+              77.83528,
+              76.93533]
         
-        dec= [-68.29889,-68.75113,-69.14459,-69.37773,-69.68735,-69.96248,-70.27100,-70.44125,-70.41966,-70.35244,-70.12480,-69.58027,
-              -69.21964,-68.97936,-68.95427,-69.08469,-69.34739,-69.48988,-69.42599,-68.93654,-68.53427,-68.29889] 
+        dec= [-68.29889,
+              -68.75113,
+              -69.14459,
+              -69.37773,
+              -69.68735,
+              -69.96248,
+              -70.27100,
+              -70.44125,
+              -70.41966,
+              -70.35244,
+              -70.12480,
+              -69.58027,
+              -69.21964,
+              -68.97936,
+              -68.95427,
+              -69.08469,
+              -69.34739,
+              -69.48988,
+              -69.42599,
+              -68.93654,
+              -68.53427,
+              -68.29889] 
        
         return Table([name_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC']) 
 
@@ -277,7 +414,9 @@ class Sector(object):
         VI/49/bound_20
         """
         filters = {'cst': f'{constellation}'}
-        v = Vizier(catalog="VI/49/bound_20", column_filters=filters, columns=['_RAJ2000', '_DEJ2000', '*'])
+        v = Vizier(catalog="VI/49/bound_20", 
+                   column_filters=filters, 
+                   columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 50000
         result = v.query_constraints()        
         ra = []
@@ -289,7 +428,7 @@ class Sector(object):
                 ra.append(line[0])
                 dec.append(line[1])
                 main_id.append(line[5])                        
-        return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
+        return Table([main_id,ra,dec], names=['main_id', 'ra', 'dec'])        
 
     
     @property
@@ -297,16 +436,18 @@ class Sector(object):
         """
         Return Table of Open Cluster, constraints Vmag < 18.1
         """
-        result = Simbad.query_criteria('Vmag<18.1',maintype='OpC')
+        result = Simbad.query_criteria('Vmag<18.1',
+                                       maintype='OpC')
         ra = []
         dec = []
         main_id = []    
         for line in result:
-            ra.append(line['RA'])
-            dec.append(line['DEC'])
-            main_id.append(line['MAIN_ID'])                        
+            ra.append(line['ra'])
+            dec.append(line['dec'])
+            main_id.append(line['main_id'])                        
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])        
 
+        
     @property
     def HerbigAeBeStars(self):
         """
@@ -315,7 +456,8 @@ class Sector(object):
         Accretion properties of Herbig Ae/Be stars in Vioque et al. (2018, Cat. J/A+A/620/A128)
         J/MNRAS/493/234
         """
-        v = Vizier(catalog="J/MNRAS/493/234", columns=['_RAJ2000', '_DEJ2000', '*'])
+        v = Vizier(catalog="J/MNRAS/493/234", 
+                   columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 50000
         result = v.query_constraints()        
         ra = []
@@ -336,7 +478,8 @@ class Sector(object):
         Return Table of Cepheid
         Catalog Title: I/345/cepheid       
         """
-        v = Vizier(catalog="I/345/cepheid", columns=['_RAJ2000', '_DEJ2000', '*'])
+        v = Vizier(catalog="I/345/cepheid", 
+                   columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 50000
         result = v.query_constraints()        
         ra = []
@@ -356,7 +499,8 @@ class Sector(object):
         Return AAVSO variable star 
         Catalog Title: B/vsx/vsx       
         """       
-        v = Vizier(catalog='B/vsx/vsx', columns=['_RAJ2000', '_DEJ2000', '*'])
+        v = Vizier(catalog='B/vsx/vsx', 
+                   columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 500000
         result = v.query_constraints(Name = string)        
         for table_name in result.keys():
@@ -370,9 +514,13 @@ class Sector(object):
         Catalog Title: B/vsx/vsx       
         """       
         filters = {'max': f'<={str(magnitude)}'}
-        v = Vizier(catalog='B/vsx/vsx', column_filters=filters, columns=['_RAJ2000', '_DEJ2000', '*'])
+        v = Vizier(catalog='B/vsx/vsx', 
+                   column_filters=filters, 
+                   columns=['_RAJ2000', '_DEJ2000', '*'])
         v.ROW_LIMIT = 500000
-        result = v.query_region(SkyCoord(ra=RA*15, dec=DEC, unit=(u.deg, u.deg), frame='icrs'), width="10d")
+        result = v.query_region(SkyCoord(ra=RA*15, dec=DEC, unit=(u.deg, u.deg), 
+                                         frame='icrs'), 
+                                width="10d")
         ra = []
         dec = []
         main_id = []    
@@ -384,6 +532,7 @@ class Sector(object):
                 main_id.append(line[4])                                    
         return Table([main_id,ra,dec], names=['MAIN_ID', 'RA', 'DEC'])
 
+        
     def marker(self, RA=0, DEC=0, magnitude=15, source='marker'):
         """
         Return marker 
@@ -397,12 +546,33 @@ class Sector(object):
         dec_id.append(DEC)
         mag_id.append(magnitude)
         source_id.append(source)     
-        return Table([ra_id,dec_id,mag_id,source_id], names=['RA', 'DEC', 'MARKER', 'SOURCE_ID'])
+        return Table([ra_id,dec_id,mag_id,source_id], names=['ra', 'dec', 'angle', 'main_id'])
         
 
-
-
-
+    def simbad(self, RA=0, DEC=0, angle=1, magnitude=8.5, otype="'OpC'"):
+        """
+        Return Table of DSO with simbad.query_criteria
+        """
+        simbad = Simbad()
+        simbad.ROW_LIMIT = 10000  
+        simbad.TIMEOUT = 300
+        simbad.add_votable_fields("dimensions", 
+                                  "flux(G)", 
+                                  "flux(V)", 
+                                  "flux(B)", 
+                                  "otype")  
+        
+        if DEC>=0:
+            mark = '+'
+        else:
+            mark = ''
+        if angle<=0:
+            angle = 1
+        
+        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & (otype={otype}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
+        print(f'simbad.query_criteria("{query}")')
+        result = simbad.query_criteria(query)
+        return result
 
 
 
