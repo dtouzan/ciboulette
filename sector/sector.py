@@ -549,7 +549,7 @@ class Sector(object):
         return Table([ra_id,dec_id,mag_id,source_id], names=['ra', 'dec', 'angle', 'main_id'])
         
 
-    def simbad(self, RA=0, DEC=0, angle=1, magnitude=8.5, otype="'OpC'"):
+    def simbad(self, RA=0, DEC=0, angle=1, magnitude=8.5, otype="'OpC',"):
         """
         Return Table of DSO with simbad.query_criteria
         """
@@ -568,8 +568,9 @@ class Sector(object):
             mark = ''
         if angle<=0:
             angle = 1
-        
-        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & (otype={otype}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
+
+        otypes = "otype in (" + otype + ")"
+        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
         print(f'simbad.query_criteria("{query}")')
         result = simbad.query_criteria(query)
         return result

@@ -132,7 +132,7 @@ class opencluster(component):
             for value in self.data:
                 masked = str(value['GALDIM_MAJAXIS'])
                 if '-' in masked :
-                    size = (3 / 120) * u.degree
+                    size = (1 / 120) * u.degree
                 else:
                     size = (value['GALDIM_MAJAXIS'] / 120) * u.degree
                 coords = SkyCoord(ra=value['RA'], 
@@ -160,7 +160,7 @@ class globularcluster(component):
             for value in self.data:
                 masked = str(value['GALDIM_MAJAXIS'])
                 if '-' in masked :
-                    size = (3 / 120) * u.degree
+                    size = (1 / 120) * u.degree
                 else:
                     size = (value['GALDIM_MAJAXIS'] / 120) * u.degree
                 coords = SkyCoord(ra=value['RA'], 
@@ -189,7 +189,7 @@ class galaxy(component):
             for value in self.data:
                 masked = str(value['GALDIM_MAJAXIS'])
                 if '-' in masked :
-                    size = (3 / 120) * u.degree
+                    size = (1 / 120) * u.degree
                 else:
                     size = (value['GALDIM_MAJAXIS'] / 120) * u.degree
                 coords = SkyCoord(ra=value['RA'], 
@@ -217,7 +217,7 @@ class planetarynebula(component):
             for value in self.data:
                 masked = str(value['GALDIM_MAJAXIS'])
                 if '-' in masked :
-                    size = (3 / 120) * u.degree
+                    size = (1 / 120) * u.degree
                 else:
                     size = (value['GALDIM_MAJAXIS'] / 120) * u.degree
                 coords = SkyCoord(ra=value['RA'], 
@@ -281,6 +281,9 @@ class label(component):
             """
             Plot database
             """
+            fontstyle = 'normal'
+            if self.data['angle'].value[0] == 1:
+                fontstyle = 'italic'             
             label = str(self.data['main_id'].value[0]) 
             ra = self.data['ra'].value[0]
             dec = self.data['dec'].value[0]           
@@ -291,12 +294,14 @@ class label(component):
                             va='center', 
                             alpha=self.alpha, 
                             size=self.size, 
+                            fontstyle=fontstyle,
                             rotation=self.angle, 
                             transform=axe.get_transform('icrs'))
             text.set_path_effects([patheffects.Stroke(linewidth=3, 
                                                       foreground='white'), 
                                    patheffects.Normal()])
-
+          
+            
 class LABEL(component):
 
         def rotation(self, angle=0):
@@ -309,6 +314,9 @@ class LABEL(component):
             """
             Plot database
             """
+            fontstyle = 'normal' 
+            if self.data['angle'].value[0] == 1:
+                fontstyle = 'italic'              
             label = str(self.data['main_id'].value[0]) 
             ra = self.data['ra'].value[0]
             dec = self.data['dec'].value[0]           
@@ -319,6 +327,7 @@ class LABEL(component):
                             va='center', 
                             alpha=self.alpha, 
                             size=self.size,
+                            fontstyle=fontstyle,
                             fontweight='bold', 
                             rotation=self.angle, 
                             transform=axe.get_transform('icrs'))
@@ -362,13 +371,40 @@ class i(component):
                                                       foreground='white'), 
                                    patheffects.Normal()])
 
-"""
+
 class s(component):
 
-class S(component):
+        def rotation(self, angle=0):
+            """
+            set angle
+            """   
+            self.angle = angle
+           
+        def plot(self,axe):
+            """
+            Plot database
+            """
+            fontstyle = 'normal'
+            if self.data['angle'].value[0] == 1:
+                fontstyle = 'italic'             
+            label = "$\\" + self.data['main_id'].value[0] + "$"
+            ra = self.data['ra'].value[0]
+            dec = self.data['dec'].value[0]           
+            text = plt.text(ra, dec, 
+                            s=label, 
+                            color='black', 
+                            ha='center', 
+                            va='center', 
+                            alpha=self.alpha, 
+                            size=self.size, 
+                            fontstyle=fontstyle,
+                            rotation=self.angle, 
+                            transform=axe.get_transform('icrs'))
+            text.set_path_effects([patheffects.Stroke(linewidth=3, 
+                                                      foreground='white'), 
+                                   patheffects.Normal()])
 
-"""
-
+    
 class red(component):
 
         def rotation(self, angle=0):

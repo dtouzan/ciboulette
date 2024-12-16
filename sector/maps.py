@@ -295,7 +295,7 @@ class Map(object):
                                          self.WCS.wcs.crval[1],
                                          angle=self.size/2, 
                                          magnitude=18, 
-                                         otype="'G'"))
+                                         otype="'LSB','bCG','SBG','H2G','EmG','AGN','SyG','Sy1','Sy2','rG','LIN','QSO','Bla','BLL','GiC','PaG','GrG','CGG','ClG'"))
         if data.data:
             data.properties(style)
             data.title = 'Simbad galaxy'           
@@ -323,7 +323,7 @@ class Map(object):
                                                   otype="'PN'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad Planetary nebula'           
+            data.title = 'Simbad planetary nebula'           
             self.databaselist.append(data)
 
 
@@ -443,8 +443,37 @@ class Map(object):
         marker = markers.label(Table([ra,dec,angle,main_id], names=['ra', 'dec', 'angle', 'main_id']))
         if marker.data:
             self._labelmarker(marker, style)
+            
 
-    
+    def s(self, table=dict(), style=dict()):
+        """
+        Set text symbole style
+            table: {'ra': right ascention hour, 
+                    'dec':declination degre, 
+                    'main_id': 'None'}
+            style: {'color': 'black', 
+                    'size': 10, 
+                    'angle': 0, 
+                    'alpha':1}
+        """
+        if not table:
+            table: {'ra': 0, 
+                    'dec': 0, 
+                    'angle': 0, 
+                    'main_id': 'None'}
+        if not style:
+            style = {'color': 
+                     'black', 
+                     'size': 10, 
+                     'angle': 0, 
+                     'alpha': 1}
+
+        ra, dec, angle, main_id = self._labelvalue(table)
+        marker = markers.s(Table([ra,dec,angle,main_id], names=['ra', 'dec', 'angle', 'main_id']))
+        if marker.data:
+            self._labelmarker(marker, style)
+
+            
     def LABEL(self, table=dict(), style=dict()):
         """
         Set text bold style
@@ -471,7 +500,7 @@ class Map(object):
         marker = markers.LABEL(Table([ra,dec,angle,main_id], names=['ra', 'dec', 'angle', 'main_id']))
         if marker.data:
             self._labelmarker(marker, style)      
-
+         
     
     def i(self, table=dict(), style=dict()):
         """
