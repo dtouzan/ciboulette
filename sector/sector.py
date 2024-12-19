@@ -570,7 +570,8 @@ class Sector(object):
             angle = 1
 
         otypes = "otype in (" + otype + ")"
-        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
+        #query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
+        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes})"
         print(f'simbad.query_criteria("{query}")')
         result = simbad.query_criteria(query)
         return result

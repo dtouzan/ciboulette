@@ -61,7 +61,7 @@ class marker(component):
             """
             ra = self.data['ra']
             dec = self.data['dec']
-            angle = self.data['angle']/2
+            angle = self.data['angle']/120
             c = SphericalCircle((ra * u.degree, dec * u.degree), 
                                 angle * u.degree, 
                                 edgecolor='black', 
@@ -96,12 +96,12 @@ class cursor(component):
             """
             ra = self.data['ra']
             dec = self.data['dec']
-            angle = self.data['angle']/2
+            angle = self.data['angle']/120
             c = SphericalCircle((ra * u.degree, dec * u.degree), 
                                 angle * u.degree, 
                                 edgecolor='red', 
                                 linewidth=self.size, 
-                                facecolor='white', 
+                                facecolor='none', 
                                 alpha=self.alpha, 
                                 transform=axe.get_transform('icrs')
                                )
@@ -439,6 +439,52 @@ class red(component):
             text.set_path_effects([patheffects.Stroke(linewidth=2, 
                                                       foreground='red'), 
                                    patheffects.Normal()])
+
+
+class blue(component):
+    
+        def rotation(self, angle=0):
+            """
+            set angle
+            """   
+            self.angle = angle
+           
+        def plot(self,axe):
+            """
+            Plot database
+            """
+            label = str(self.data['main_id'].value[0]) 
+            ra = self.data['ra'].value[0]
+            dec = self.data['dec'].value[0]
+            size = (self.data['angle'] / 120)          
+            c = SphericalCircle((ra * u.degree, dec * u.degree), 
+                                size * u.degree, 
+                                edgecolor='blue', 
+                                ls='-',
+                                linewidth=2, 
+                                facecolor='none', 
+                                alpha=self.alpha, 
+                                transform=axe.get_transform('icrs')
+                                )
+            axe.add_patch(c)
+            box=dict(boxstyle="round",
+                   ec='white',
+                   fc='white',
+                   )           
+            text = plt.text(ra, dec + size, s=label, 
+                            color='blue', 
+                            ha='center', 
+                            va='center', 
+                            alpha=self.alpha, 
+                            size=self.size, 
+                            bbox=box,
+                            rotation=self.angle, 
+                            transform=axe.get_transform('icrs')
+                           )
+            text.set_path_effects([patheffects.Stroke(linewidth=4, 
+                                                      foreground='white'), 
+                                   patheffects.Normal()])   
+
 
 class date(component):
 

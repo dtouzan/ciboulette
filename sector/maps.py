@@ -199,10 +199,9 @@ class Map(object):
         self.title = self.title+target+' | '+epoch.value+'\n'        
 
 
-    def cursor(self, angle=0.2, style=dict()):
+    def cursor(self, angle=30, style=dict()):
         """
         Set cursor map
-            table: {'angle': 0.2}
             style: {'color': 'red', 
                     'size': 5, 
                     'alpha': 0.3}
@@ -244,7 +243,7 @@ class Map(object):
                             self.WCS.wcs.crval[1], 
                             angle=self.size/2, 
                             magnitude=18, 
-                            otype="'OpC'")
+                            otype="'OpC','As*'")
         data = markers.opencluster(result)
         if data.data:
             data.properties(style)
@@ -333,19 +332,19 @@ class Map(object):
         Nb = Bright emission or reflection nebula
             style: {'color': 'green', 
                     'size': 1, 
-                    'alpha': 0.4}
+                    'alpha': 0.2}
         """
         if not style:
             style = {'color': 'green', 
                      'size': 1, 
-                     'alpha': 0.4}
+                     'alpha': 0.2}
 
         sct = sector.Sector()
         data = markers.brightnebula(sct.simbad(self.WCS.wcs.crval[0], 
                                                self.WCS.wcs.crval[1], 
                                                angle=self.size/2,
                                                magnitude=18, 
-                                               otype="'ISM'"))
+                                               otype="'ISM','Cld','GNe','RNe','MoC','DNe','glb','CGb','HVC','HII','SFR'"))
         if data.data:
             data.properties(style)
             data.title = 'Simbad Bright nebula'           
@@ -420,7 +419,8 @@ class Map(object):
         """
         Set text normal style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle, 
                     'main_id': 'None'}
             style: {'color': 'black', 
                     'size': 10, 
@@ -449,7 +449,8 @@ class Map(object):
         """
         Set text symbole style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle,  
                     'main_id': 'None'}
             style: {'color': 'black', 
                     'size': 10, 
@@ -478,7 +479,8 @@ class Map(object):
         """
         Set text bold style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle, 
                     'main_id': 'None'}
             style: {'color': 'black', 
                     'size': 10, 
@@ -506,7 +508,8 @@ class Map(object):
         """
         Set text information style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle,  
                     'main_id': 'None'}
             style: {'color': 'black', 
                     'size': 8, 'angle': 0, 
@@ -533,7 +536,8 @@ class Map(object):
         """
         Set text red box style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle, 
                     'main_id': 'None'}
             style: {'color': 
                     'black', 
@@ -557,12 +561,43 @@ class Map(object):
         if marker.data:
             self._labelmarker(marker, style)     
 
+    
+    def blue(self, table=dict(), style=dict()):
+        """
+        Set text blue circle box style
+            table: {'ra': right ascention hour, 
+                    'dec': declination degre, 
+                    'angle': size angle, 
+                    'main_id': 'None'}
+            style: {'color': 
+                    'black', 
+                    'size': 5, 
+                    'angle': 0, 
+                    'alpha':1}
+        """
+        if not table:
+            table: {'ra': 0, 
+                    'dec': 0, 
+                    'angle': 30, 
+                    'main_id': 'None'}
+        if not style:
+            style = {'color': 'black', 
+                     'size': 12, 
+                     'angle': 0, 
+                     'alpha': 1}
 
+        ra, dec, angle, main_id = self._labelvalue(table)
+        marker = markers.blue(Table([ra,dec,angle,main_id], names=['ra', 'dec', 'angle', 'main_id']))
+        if marker.data:
+            self._labelmarker(marker, style)     
+
+            
     def date(self, table=dict(), style=dict()):
         """
         Set text red box style
             table: {'ra': right ascention hour, 
-                    'dec':declination degre, 
+                    'dec': declination degre, 
+                    'angle': size angle,  
                     'main_id': 'None'}
             style: {'color': 'black', 
                     'size': 10, 
