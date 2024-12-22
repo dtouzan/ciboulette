@@ -52,6 +52,13 @@ class component():
             """
             return self.title
 
+        @property
+        def view(self):
+            """
+            MAIN_ID, RA, DEC, OTYPE, FLUX_G, FLUX_V, COO_BIBCODE
+            """
+            self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'COO_BIBCODE'].pprint(max_lines=1000, max_width=128)
+
 
 class marker(component):
 
@@ -73,6 +80,14 @@ class marker(component):
                                )
             axe.add_patch(c)
 
+        @property
+        def view(self):
+            """
+            main_id, ra , dec, angle
+            """
+            self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
+
+
 class constellations(component):
 
         def plot(self,axe):
@@ -86,6 +101,12 @@ class constellations(component):
                         facecolor=self.color, 
                         alpha=self.alpha)
 
+        @property
+        def view(self):
+            """
+            main_id, ra, dec
+            """
+            self.data['main_id', 'ra', 'dec'].pprint(max_lines=1000, max_width=128)
 
 
 class cursor(component):
@@ -106,7 +127,15 @@ class cursor(component):
                                 transform=axe.get_transform('icrs')
                                )
             axe.add_patch(c)
-           
+
+
+        @property
+        def view(self):
+            """
+            main_id, ra , dec, angle
+            """
+            self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
+
 
 class stars(component):
 
@@ -121,6 +150,13 @@ class stars(component):
                         edgecolor=self.color, 
                         facecolor=self.color, 
                         alpha=self.alpha)
+
+        @property
+        def view(self):
+            """
+            SOURCE ID, RA, DEC, MARKER
+            """
+            self.data['SOURCE ID', 'RA', 'DEC', 'MARKER'].pprint(max_lines=1000, max_width=128)
 
 
 class opencluster(component):

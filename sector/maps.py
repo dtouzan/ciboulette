@@ -637,8 +637,30 @@ class Map(object):
             if value.catalog not in values:
                 values.append(value.catalog)
         return values       
-        
+
     
+    def view(self, catalog='all'):
+        """
+        List data in catalog
+        """
+        if catalog == 'all':
+            values = self.catalogs
+        else:
+            values = [catalog,]
+        number = 1
+        for cat in values: 
+            title = f'Table {number}: {cat}'
+            print(title)
+            print('________________________________________________________________________________________________________________________________')
+            print('________________________________________________________________________________________________________________________________')
+            for value in self.databaselist:
+                if value.catalog in cat:
+                    value.view
+            print('________________________________________________________________________________________________________________________________')
+            print()
+            number +=1
+
+        
     def plot(self,axe):
         """
         Plot map
