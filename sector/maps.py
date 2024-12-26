@@ -28,6 +28,7 @@ class Map(object):
         self.title = ''
         self.databaselist = []
         self.WCS = wcs
+        self.unlimited
 
     
     def new(self, table=dict()):
@@ -73,7 +74,60 @@ class Map(object):
         self.size = self.WCS.wcs.cdelt[1]*naxis2
         self.title = ''
         self.databaselist = []
+
+
+    def into(self, table=dict()):
+        """
+        Return true if in size
+            table: {'ra': right ascention hour, 
+                    'dec': declination degre}        
+        """
+        if not table:
+            table = {'ra': 0, 
+                     'dec': 0}
+        value = False
+        field = (self.size/2)
+        ra_max = self.WCS.wcs.crval[0]+field
+        ra_min = self.WCS.wcs.crval[0]-field
+        dec_max = self.WCS.wcs.crval[1]+field
+        dec_min = self.WCS.wcs.crval[1]-field
+        if ra_min < table['ra'] < ra_max:
+            if dec_min < table['dec'] < dec_max:
+                value =True        
+        return value
+
+    
+    @property
+    def light(self):
+        """
+        Set magnitude 8.5
+        """
+        self.magnitude = 8.5
+
+    
+    @property
+    def medium(self):
+        """
+        Set magnitude 12
+        """
+        self.magnitude = 12
         
+
+    @property
+    def low(self):
+        """
+        Set magnitude 18
+        """
+        self.magnitude = 18
+
+
+    @property
+    def unlimited(self):
+        """
+        Set magnitude -99
+        """
+        self.magnitude = -99
+
     
     def marker(self, table=dict(), style=dict()):
         """
@@ -177,7 +231,7 @@ class Map(object):
                                                  'Source'))   
         if data.data:
             data.properties(style)
-            data.title = 'gaia_edr3'
+            data.title = 'gaia edr3.CDS'
             self.databaselist.append(data)      
 
         
@@ -242,12 +296,12 @@ class Map(object):
         result = sct.simbad(self.WCS.wcs.crval[0], 
                             self.WCS.wcs.crval[1], 
                             angle=self.size/2, 
-                            magnitude=18, 
+                            magnitude=self.magnitude, 
                             otype="'OpC','As*'")
         data = markers.opencluster(result)
         if data.data:
             data.properties(style)
-            data.title = 'Simbad open cluster'           
+            data.title = 'Simbad.CDS open cluster'           
             self.databaselist.append(data)
 
     
@@ -268,11 +322,11 @@ class Map(object):
         data = markers.globularcluster(sct.simbad(self.WCS.wcs.crval[0], 
                                                   self.WCS.wcs.crval[1], 
                                                   angle=self.size/2, 
-                                                  magnitude=18, 
+                                                  magnitude=self.magnitude, 
                                                   otype="'GlC'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad globular cluster'                   
+            data.title = 'Simbad.CDS globular cluster'                   
             self.databaselist.append(data)
 
     
@@ -293,11 +347,11 @@ class Map(object):
         data = markers.galaxy(sct.simbad(self.WCS.wcs.crval[0], 
                                          self.WCS.wcs.crval[1],
                                          angle=self.size/2, 
-                                         magnitude=18, 
+                                         magnitude=self.magnitude, 
                                          otype="'LSB','bCG','SBG','H2G','EmG','AGN','SyG','Sy1','Sy2','rG','LIN','QSO','Bla','BLL','GiC','PaG','GrG','CGG','ClG'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad galaxy'           
+            data.title = 'Simbad.CDS galaxy'           
             self.databaselist.append(data)
 
     
@@ -318,11 +372,11 @@ class Map(object):
         data = markers.planetarynebula(sct.simbad(self.WCS.wcs.crval[0], 
                                                   self.WCS.wcs.crval[1], 
                                                   angle=self.size/2, 
-                                                  magnitude=18, 
+                                                  magnitude=self.magnitude, 
                                                   otype="'PN'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad planetary nebula'           
+            data.title = 'Simbad.CDS planetary nebula'           
             self.databaselist.append(data)
 
 
@@ -343,11 +397,11 @@ class Map(object):
         data = markers.brightnebula(sct.simbad(self.WCS.wcs.crval[0], 
                                                self.WCS.wcs.crval[1], 
                                                angle=self.size/2,
-                                               magnitude=18, 
+                                               magnitude=self.magnitude, 
                                                otype="'ISM','Cld','GNe','RNe','MoC','DNe','glb','CGb','HVC','HII','SFR'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad Bright nebula'           
+            data.title = 'Simbad.CDS Bright nebula'           
             self.databaselist.append(data)
 
 
@@ -361,7 +415,7 @@ class Map(object):
         dec.set_axislabel('DEC (J2000)')
         
 
-    def scalebar_minutes(self, axe, minutes=1):
+    def minutes(self, axe, minutes=1):
         """
         Set scalebar minutes degree
             minutes: minutes    
@@ -374,7 +428,7 @@ class Map(object):
                      color="black")
 
 
-    def scalebar_degree(self, axe, degree=1):
+    def degree(self, axe, degree=1):
         """
         Set scalebar minutes degree
             minutes: minutes    
@@ -651,12 +705,9 @@ class Map(object):
         for cat in values: 
             title = f'Table {number}: {cat}'
             print(title)
-            print('________________________________________________________________________________________________________________________________')
-            print('________________________________________________________________________________________________________________________________')
             for value in self.databaselist:
                 if value.catalog in cat:
                     value.view
-            print('________________________________________________________________________________________________________________________________')
             print()
             number +=1
 

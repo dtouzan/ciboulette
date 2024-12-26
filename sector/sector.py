@@ -562,32 +562,20 @@ class Sector(object):
                                   "flux(B)", 
                                   "otype")  
         
-        if DEC>=0:
+        if DEC >= 0:
             mark = '+'
         else:
             mark = ''
-        if angle<=0:
+        if angle <= 0:
             angle = 1
 
         otypes = "otype in (" + otype + ")"
-        #query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
-        query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes})"
+        if magnitude == -99:
+            query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes})"
+        else:
+            query = f"region(circle, {RA} {mark}{DEC}, {angle}d) & ({otypes}) & (Vmag<={magnitude} | Bmag<={magnitude} | Gmag<={magnitude})"
         print(f'simbad.query_criteria("{query}")')
         result = simbad.query_criteria(query)
         return result
 
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-        
+    
