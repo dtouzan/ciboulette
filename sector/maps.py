@@ -100,9 +100,9 @@ class Map(object):
     @property
     def light(self):
         """
-        Set magnitude 8.5
+        Set magnitude 8
         """
-        self.magnitude = 8.5
+        self.magnitude = 8
 
     
     @property
@@ -281,7 +281,7 @@ class Map(object):
     
     def opencluster(self, style=dict()):
         """
-        Set scale map
+        Set open cluster map
             Open star cluster: OpC
             style: {'color': 'yellow', 
                     'size': 1, 
@@ -307,7 +307,7 @@ class Map(object):
     
     def globularcluster(self, style=dict()):
         """
-        Set scale map
+        Set globular cluster map
         Gb = Globular star cluster, usually in the Milky Way Galaxy
             style: {'color': 'yellow', 
                     'size': 1, 
@@ -332,7 +332,7 @@ class Map(object):
     
     def galaxy(self, style=dict()):
         """
-        Set scale map
+        Set galaxy map
         Gx = Galaxy
             style: {'color': 'red', 
                     'size': 1, 
@@ -357,7 +357,7 @@ class Map(object):
     
     def planetarynebula(self, style=dict()):
         """
-        Set scale map
+        Set planeta rynebula map
         Pl = Planetary nebula
             style: {'color': 'green', 
                     'size': 1, 
@@ -382,7 +382,7 @@ class Map(object):
 
     def brightnebula(self, style=dict()):
         """
-        Set scale map
+        Set bright nebula map
         Nb = Bright emission or reflection nebula
             style: {'color': 'green', 
                     'size': 1, 
@@ -404,8 +404,23 @@ class Map(object):
             data.title = 'Simbad.CDS Bright nebula'           
             self.databaselist.append(data)
 
+    
+    def stars(self):
+        """
+        Set stars map
+        """
+        sct = sector.Sector()
+        data = markers.starsimbad(sct.simbad(self.WCS.wcs.crval[0], 
+                                               self.WCS.wcs.crval[1], 
+                                               angle=self.size/2,
+                                               magnitude=self.magnitude, 
+                                               otype="*"))
+        if data.data:
+            data.title = 'Simbad.CDS stars'           
+            self.databaselist.append(data)   
 
-    def labels_J2000(self,axe):
+    
+    def J2000(self,axe):
         """
         Draw label RA (J2000) and DEC (J2000)
         """

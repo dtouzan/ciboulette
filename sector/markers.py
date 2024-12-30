@@ -9,6 +9,7 @@ __date__ = "2024-11-27"
 __version__= "1.0.0"
 
 # Global mods
+import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.patheffects as patheffects
@@ -57,7 +58,7 @@ class component():
             """
             MAIN_ID, RA, DEC, OTYPE, FLUX_G, FLUX_V, COO_BIBCODE
             """
-            self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'COO_BIBCODE'].pprint(max_lines=1000, max_width=128)
+            self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'SP_TYPE', 'COO_BIBCODE'].pprint(max_lines=1000, max_width=128)
 
 
 class marker(component):
@@ -159,6 +160,54 @@ class stars(component):
             self.data['SOURCE ID', 'RA', 'DEC', 'MARKER'].pprint(max_lines=1000, max_width=128)
 
 
+class starsimbad(component):
+
+        def plot(self, axe):
+            """
+            Plot database
+            """
+            ra = []
+            dec = []
+            size = []
+            min_flux = min(self.data['FLUX_V'])
+            max_flux = max(self.data['FLUX_V'])
+            if min_flux < 0:
+                flux_scale = (abs(min_flux) + max_flux)+1
+            else:
+                flux_scale = (max_flux - min_flux)+1
+
+            for value in self.data:
+                masked = str(value['FLUX_V'])
+                if '--' in masked :
+                    size.append(2)
+                else:
+                    x=3
+                    if value['FLUX_V'] > 8:
+                        x = 3
+                    if value['FLUX_V'] < 6.5:
+                        x = 4*(flux_scale/10)   
+                    if value['FLUX_V'] < 5:
+                        x = 6*(flux_scale/8) 
+                    if value['FLUX_V'] < 4:
+                        x = 8*(flux_scale/6) 
+                    if value['FLUX_V'] < 3:
+                        x = 12*(flux_scale/2) 
+                    size.append(x)
+
+                coords = SkyCoord(ra=value['RA'], 
+                                  dec=value['DEC'], 
+                                  unit=(u.h, u.deg), frame='icrs')
+                ra.append(coords.ra.value)
+                dec.append(coords.dec.value)
+            axe.scatter(ra, 
+                        dec, 
+                        s=size,
+                        edgecolor='white', 
+                        facecolor='black', 
+                        alpha=1,
+                        transform=axe.get_transform('icrs'))
+
+            
 class opencluster(component):
 
         def plot(self, axe):

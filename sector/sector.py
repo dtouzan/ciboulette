@@ -560,7 +560,8 @@ class Sector(object):
                                   "flux(G)", 
                                   "flux(V)", 
                                   "flux(B)", 
-                                  "otype")  
+                                  "otype",
+                                  "sptype")  
         
         if DEC >= 0:
             mark = '+'
