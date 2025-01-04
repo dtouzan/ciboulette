@@ -554,8 +554,8 @@ class Sector(object):
         Return Table of DSO with simbad.query_criteria
         """
         simbad = Simbad()
-        simbad.ROW_LIMIT = 10000  
-        simbad.TIMEOUT = 300
+        simbad.ROW_LIMIT = 50000  
+        simbad.TIMEOUT = 600
         simbad.add_votable_fields("dimensions", 
                                   "flux(G)", 
                                   "flux(V)", 

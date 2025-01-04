@@ -100,9 +100,9 @@ class Map(object):
     @property
     def light(self):
         """
-        Set magnitude 8
+        Set magnitude 6
         """
-        self.magnitude = 8
+        self.magnitude = 6
 
     
     @property
@@ -401,7 +401,7 @@ class Map(object):
                                                otype="'ISM','Cld','GNe','RNe','MoC','DNe','glb','CGb','HVC','HII','SFR'"))
         if data.data:
             data.properties(style)
-            data.title = 'Simbad.CDS Bright nebula'           
+            data.title = 'Simbad.CDS bright nebula'           
             self.databaselist.append(data)
 
     

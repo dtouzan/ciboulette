@@ -171,34 +171,29 @@ class starsimbad(component):
             size = []
             min_flux = min(self.data['FLUX_V'])
             max_flux = max(self.data['FLUX_V'])
-            if min_flux < 0:
-                flux_scale = (abs(min_flux) + max_flux)+1
-            else:
-                flux_scale = (max_flux - min_flux)+1
+            Mv_coef = (max_flux - min_flux) / 10
 
             for value in self.data:
                 masked = str(value['FLUX_V'])
                 if '--' in masked :
-                    size.append(2)
+                    size.append(3)
                 else:
-                    x=3
-                    if value['FLUX_V'] > 8:
-                        x = 3
-                    if value['FLUX_V'] < 6.5:
-                        x = 4*(flux_scale/10)   
-                    if value['FLUX_V'] < 5:
-                        x = 6*(flux_scale/8) 
-                    if value['FLUX_V'] < 4:
-                        x = 8*(flux_scale/6) 
-                    if value['FLUX_V'] < 3:
-                        x = 12*(flux_scale/2) 
-                    size.append(x)
-
+                    index = 0
+                    renderer = dict()
+                    for renderer_value in range(int(min_flux),int(max_flux)+1):
+                        index += 1
+                        Mv = (1 / index) * 50 * Mv_coef
+                        if Mv < 3:
+                            Mv = 3
+                        renderer.setdefault(renderer_value,Mv)
+                    size.append(renderer[int(value['FLUX_V'])])
+ 
                 coords = SkyCoord(ra=value['RA'], 
                                   dec=value['DEC'], 
                                   unit=(u.h, u.deg), frame='icrs')
                 ra.append(coords.ra.value)
                 dec.append(coords.dec.value)
+
             axe.scatter(ra, 
                         dec, 
                         s=size,
@@ -587,9 +582,10 @@ class date(component):
             ra = self.data['ra'].value[0]
             dec = self.data['dec'].value[0]
             box=dict(boxstyle="round", 
-                     fc=(0.3, 0.3, 0.3), 
-                     ec=(0.3, 0.3, 0.3), 
-                     alpha=0.15
+                     fc='white', 
+                     ec='black', 
+                     alpha=self.alpha,
+                     linewidth=1
                     )          
             text = plt.text(ra, dec, s=label, 
                             color='black', 
