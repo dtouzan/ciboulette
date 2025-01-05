@@ -199,13 +199,14 @@ class Map(object):
             style = {'color': 'black', 
                      'size': 1, 
                      'alpha': 1}
-
+        
         magnitude = 8
         field = self.size
 
         if field > 5:
             field = 5
-        
+
+        """
         if field <= 5:
             magnitude = 10
         if field <= 3:
@@ -216,22 +217,24 @@ class Map(object):
             magnitude = 16    
         if field <= 0.30:
             mamagnitudeg = 18  
-            
+        """
+        if field <= 5:
+            magnitude = 14
+        if field <= 1.5:
+            magnitude = 18  
+        if field <= 0.5:
+            magnitude = 25  
+        
         catalog = 'I/350/gaiaedr3'
         sct = sector.Sector()
-        data = markers.stars(sct.regionincatalog(self.WCS.wcs.crval[0], 
-                                                 self.WCS.wcs.crval[1],                                                  
-                                                 field, 
-                                                 field, 
-                                                 magnitude, 
-                                                 catalog, 
-                                                 '_RAJ2000', 
-                                                 '_DEJ2000', 
-                                                 'Gmag', 
-                                                 'Source'))   
+        data = markers.stars_gaiaedr3(sct.gaiaedr3(self.WCS.wcs.crval[0], 
+                                                         self.WCS.wcs.crval[1],                                                  
+                                                         field, 
+                                                         field, 
+                                                         magnitude))   
         if data.data:
             data.properties(style)
-            data.title = 'gaia edr3.CDS'
+            data.title = 'gaia edr3.CDS.I/350/gaiaedr3'
             self.databaselist.append(data)      
 
         
@@ -410,7 +413,7 @@ class Map(object):
         Set stars map
         """
         sct = sector.Sector()
-        data = markers.starsimbad(sct.simbad(self.WCS.wcs.crval[0], 
+        data = markers.stars_simbad(sct.simbad(self.WCS.wcs.crval[0], 
                                                self.WCS.wcs.crval[1], 
                                                angle=self.size/2,
                                                magnitude=self.magnitude, 

@@ -77,70 +77,38 @@ class Sector(object):
         return Table([t_object,t_frameid,t_datatype,t_RA,t_DEC], names=['SECTOR','FRAMEID','DATATYPE','RA','DEC'])
 
     
-    def regionincatalog(self, astre_ra, astre_dec, angle_width, angle_height, mag, catalog_name, field_ra, field_dec, field_mag, source_id):
+    def gaiaedr3(self, astre_ra, astre_dec, angle_width, angle_height, mag):
         """
-        Returns the table of RA, DEC and markers        
+        Returns the table of GAIA Edr3 catalog        
         Attributes:
                 astre_ra (float)        : RA
                 astre_dec (float)       : DEC
                 angle_width (float)     : Degrees
                 angle_height (float)    : Degrees
                 mag (float)             : Maximun magnitude
-                catalog_name (str)      : Catalog Vizier name
-                field_ra (float)        : field of RA
-                field_dec (float)       : Field of DEC,
-                field_mag (float)       : Field maximun magnitude        
         """ 
-        table_ra = []
-        table_dec = []
-        table_marker = [] 
-        table_source_id = []
         # Recherche dans le catalog 
         # Field catalog : _RAJ2000, _DEJ2000, Vmag, r'mag, Gmag ...
-        v = Vizier(columns=[field_ra, 
-                            field_dec, 
-                            field_mag, 
-                            source_id])    
+        v = Vizier(columns=['Source',
+                            'RAJ2000',
+                            'DEJ2000', 
+                            'Gmag',
+                            'BP-G'])    
         # Nombre limite de recherche
         v.ROW_LIMIT = 500000    
+        v.TIMEOUT = 600
         # Recherche et création de la table
         mag_format = {'Gmag': f'<={mag}'}
+        catalog = 'I/350/gaiaedr3'
         result = v.query_region(SkyCoord(ra=astre_ra, 
                                          dec=astre_dec, 
                                          unit=(u.deg, u.deg),
                                          frame='icrs'), 
                                 width=Angle(angle_width, "deg"), 
                                 height=Angle(angle_height, "deg"), 
-                                catalog=catalog_name,column_filters=mag_format) 
-        if mag < 15 :
-            stars = constant.starslow
-            stars[0] = -2
-        if mag <= 12.5 :
-            stars = constant.starslow
-            stars[0] = 0          
-        if mag >= 15 :
-            stars = constant.starslow
-            stars[0] = -2
-        if mag > 16 :
-            stars = constant.starslow
-            stars[0] = -4        
-        for table_name in result.keys():
-            table = result[table_name]
-            for line in table:
-                ra = float(line[0])
-                dec = float(line[1])
-                mv = float(line[2])
-                source = line[3]
-                if mv != 'masked' :
-                    if int(mv)+stars[0] < 1 :
-                        marker_size = 150
-                    else :
-                        marker_size = stars[int(mv)+stars[0]]
-                    table_ra.append(ra)
-                    table_dec.append(dec)
-                    table_marker.append(marker_size)
-                    table_source_id.append(source)
-            return Table([table_ra, table_dec, table_marker, table_source_id], names=['RA', 'DEC', 'MARKER', 'SOURCE ID'])
+                                catalog=catalog, 
+                                column_filters=mag_format) 
+        return result[0]
 
     
     def miriadeincatalog(self,target,epoch,epoch_step,epoch_nsteps,coordtype,location):     

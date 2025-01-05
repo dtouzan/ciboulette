@@ -9,6 +9,7 @@ __date__ = "2024-11-27"
 __version__= "1.0.0"
 
 # Global mods
+import numpy
 import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -138,29 +139,7 @@ class cursor(component):
             self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
 
 
-class stars(component):
-
-        def plot(self, axe):
-            """
-            Plot database
-            """
-            axe.scatter(self.data['RA'], 
-                        self.data['DEC'], 
-                        transform=axe.get_transform('icrs'), 
-                        s=self.data['MARKER'],
-                        edgecolor=self.color, 
-                        facecolor=self.color, 
-                        alpha=self.alpha)
-
-        @property
-        def view(self):
-            """
-            SOURCE ID, RA, DEC, MARKER
-            """
-            self.data['SOURCE ID', 'RA', 'DEC', 'MARKER'].pprint(max_lines=1000, max_width=128)
-
-
-class starsimbad(component):
+class stars_gaiaedr3(component):
 
         def plot(self, axe):
             """
@@ -169,22 +148,63 @@ class starsimbad(component):
             ra = []
             dec = []
             size = []
-            min_flux = min(self.data['FLUX_V'])
-            max_flux = max(self.data['FLUX_V'])
+            min_flux = numpy.ma.min(self.data['Gmag'])
+            max_flux = numpy.ma.max(self.data['Gmag'])
             Mv_coef = (max_flux - min_flux) / 10
 
             for value in self.data:
-                masked = str(value['FLUX_V'])
-                if '--' in masked :
+                if type(value['Gmag']) == numpy.ma.core.MaskedConstant:
                     size.append(3)
                 else:
                     index = 0
                     renderer = dict()
                     for renderer_value in range(int(min_flux),int(max_flux)+1):
                         index += 1
-                        Mv = (1 / index) * 50 * Mv_coef
-                        if Mv < 3:
-                            Mv = 3
+                        Mv = ((1 / index) * Mv_coef * 100) - 7
+                        renderer.setdefault(renderer_value,Mv)
+                    size.append(renderer[int(value['Gmag'])])
+ 
+                ra.append(value['RAJ2000'])
+                dec.append(value['DEJ2000'])
+
+            axe.scatter(ra, 
+                        dec, 
+                        s=size,
+                        edgecolor='white', 
+                        facecolor='black', 
+                        alpha=1,
+                        transform=axe.get_transform('icrs')) 
+            
+        @property
+        def view(self):
+            """
+            Print Source, RA, DEC, Gmag, BP-G
+            """
+            self.data['Source', 'RAJ2000', 'DEJ2000', 'Gmag', 'BP-G'].pprint(max_lines=1000, max_width=128)
+
+
+class stars_simbad(component):
+
+        def plot(self, axe):
+            """
+            Plot database
+            """
+            ra = []
+            dec = []
+            size = []
+            min_flux = numpy.ma.min(self.data['FLUX_V'])
+            max_flux = numpy.ma.max(self.data['FLUX_V'])
+            Mv_coef = (max_flux - min_flux) / 10
+
+            for value in self.data:
+                if type(value['FLUX_V']) == numpy.ma.core.MaskedConstant:
+                    size.append(3)
+                else:
+                    index = 0
+                    renderer = dict()
+                    for renderer_value in range(int(min_flux),int(max_flux)+1):
+                        index += 1
+                        Mv = ((1 / index) * Mv_coef * 100) - 7
                         renderer.setdefault(renderer_value,Mv)
                     size.append(renderer[int(value['FLUX_V'])])
  
