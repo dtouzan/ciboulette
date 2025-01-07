@@ -710,15 +710,24 @@ class Map(object):
                 values.append(value.catalog)
         return values       
 
+
+    def catalog(self, catalog=str):
+        """
+        Return databaselist catalog
+        """
+        for value in self.databaselist:
+            if catalog in value.catalog :
+                return value.data      
+
     
-    def view(self, catalog='all'):
+    def view(self, catalog=list()):
         """
         List data in catalog
         """
-        if catalog == 'all':
+        if catalog == []:
             values = self.catalogs
         else:
-            values = [catalog,]
+            values = catalog
         number = 1
         for cat in values: 
             title = f'Table {number}: {cat}'
@@ -729,6 +738,15 @@ class Map(object):
             print()
             number +=1
 
+    def find(self, dataset=str):
+        """
+        Return data in catalog
+        """
+        for value in self.databaselist:
+            values = value.find(dataset)
+            if values:
+                return values
+                
         
     def plot(self,axe):
         """

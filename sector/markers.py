@@ -61,7 +61,17 @@ class component():
             """
             self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'SP_TYPE', 'COO_BIBCODE'].pprint(max_lines=1000, max_width=128)
 
+        def find(self, dataset=str):
+            """
+            Return data
+                dataset: name find
+            """           
+            for value in self.data:
+                if dataset in value['MAIN_ID']:
+                    print(dataset)
+                    return value 
 
+                
 class marker(component):
 
         def plot(self, axe):
@@ -89,6 +99,12 @@ class marker(component):
             """
             self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
 
+        def find(self, dataset=str):
+            """
+            Return False
+            """           
+            return False 
+            
 
 class constellations(component):
 
@@ -109,6 +125,12 @@ class constellations(component):
             main_id, ra, dec
             """
             self.data['main_id', 'ra', 'dec'].pprint(max_lines=1000, max_width=128)
+        
+        def find(self, dataset=str):
+            """
+            Return False
+            """           
+            return False 
 
 
 class cursor(component):
@@ -130,13 +152,18 @@ class cursor(component):
                                )
             axe.add_patch(c)
 
-
         @property
         def view(self):
             """
             main_id, ra , dec, angle
             """
             self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
+
+        def find(self, dataset=str):
+            """
+            Return False
+            """           
+            return False 
 
 
 class stars_gaiaedr3(component):
@@ -181,6 +208,15 @@ class stars_gaiaedr3(component):
             Print Source, RA, DEC, Gmag, BP-G
             """
             self.data['Source', 'RAJ2000', 'DEJ2000', 'Gmag', 'BP-G'].pprint(max_lines=1000, max_width=128)
+
+        def find(self, dataset=str):
+            """
+            Return data
+                dataset: name find
+            """           
+            for value in self.data:
+                if dataset in str(value['Source']):
+                    return value 
 
 
 class stars_simbad(component):
@@ -369,14 +405,30 @@ class brightnebula(component):
                 axe.add_patch(r)
 
 
-class label(component):
+class componentlabel(component):
 
         def rotation(self, angle=0):
             """
             set angle
             """   
             self.angle = angle
-           
+
+        @property
+        def view(self):
+            """
+            main_id, ra , dec, angle
+            """
+            self.data['main_id', 'ra', 'dec', 'angle'].pprint(max_lines=1000, max_width=128)
+
+        def find(self, dataset=str):
+            """
+            Return False
+            """           
+            return False 
+
+
+class label(componentlabel):
+          
         def plot(self,axe):
             """
             Plot database
@@ -400,16 +452,10 @@ class label(component):
             text.set_path_effects([patheffects.Stroke(linewidth=3, 
                                                       foreground='white'), 
                                    patheffects.Normal()])
-          
-            
-class LABEL(component):
 
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
+            
+class LABEL(componentlabel):
+          
         def plot(self,axe):
             """
             Plot database
@@ -436,14 +482,8 @@ class LABEL(component):
                                    patheffects.Normal()])
 
 
-class i(component):
-
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
+class i(componentlabel):
+          
         def plot(self,axe):
             """
             Plot database
@@ -472,14 +512,8 @@ class i(component):
                                    patheffects.Normal()])
 
 
-class s(component):
+class s(componentlabel):
 
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
         def plot(self,axe):
             """
             Plot database
@@ -504,15 +538,9 @@ class s(component):
                                                       foreground='white'), 
                                    patheffects.Normal()])
 
-    
-class red(component):
 
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
+class red(componentlabel):
+
         def plot(self,axe):
             """
             Plot database
@@ -541,14 +569,8 @@ class red(component):
                                    patheffects.Normal()])
 
 
-class blue(component):
+class blue(componentlabel):
     
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
         def plot(self,axe):
             """
             Plot database
@@ -586,14 +608,8 @@ class blue(component):
                                    patheffects.Normal()])   
 
 
-class date(component):
-
-        def rotation(self, angle=0):
-            """
-            set angle
-            """   
-            self.angle = angle
-           
+class date(componentlabel):
+          
         def plot(self,axe):
             """
             Plot database
@@ -620,8 +636,6 @@ class date(component):
             text.set_path_effects([patheffects.Stroke(linewidth=2, 
                                                       foreground='white'), 
                                    patheffects.Normal()])
-
-
 
 
 
