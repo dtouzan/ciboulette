@@ -59,7 +59,7 @@ class component():
             """
             MAIN_ID, RA, DEC, OTYPE, FLUX_G, FLUX_V, COO_BIBCODE
             """
-            self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'SP_TYPE', 'COO_BIBCODE'].pprint(max_lines=1000, max_width=128)
+            self.data['MAIN_ID', 'RA', 'DEC', 'OTYPE', 'FLUX_G', 'FLUX_V', 'SP_TYPE', 'COO_BIBCODE'].pprint(max_lines=5000, max_width=256)
 
         def find(self, dataset=str):
             """
@@ -124,7 +124,7 @@ class constellations(component):
             """
             main_id, ra, dec
             """
-            self.data['main_id', 'ra', 'dec'].pprint(max_lines=1000, max_width=128)
+            self.data['main_id', 'ra', 'dec'].pprint(max_width=128)
         
         def find(self, dataset=str):
             """
@@ -207,7 +207,7 @@ class stars_gaiaedr3(component):
             """
             Print Source, RA, DEC, Gmag, BP-G
             """
-            self.data['Source', 'RAJ2000', 'DEJ2000', 'Gmag', 'BP-G'].pprint(max_lines=1000, max_width=128)
+            self.data['Source', 'RAJ2000', 'DEJ2000', 'Gmag', 'BP-G'].pprint(max_lines=5000, max_width=128)
 
         def find(self, dataset=str):
             """
@@ -234,15 +234,21 @@ class stars_simbad(component):
 
             for value in self.data:
                 if type(value['FLUX_V']) == numpy.ma.core.MaskedConstant:
-                    size.append(3)
+                    if type(value['FLUX_G']) == numpy.ma.core.MaskedConstant:
+                        Mv_star = max_flux
+                    else:
+                        Mv_star = value['FLUX_G']
                 else:
-                    index = 0
-                    renderer = dict()
-                    for renderer_value in range(int(min_flux),int(max_flux)+1):
-                        index += 1
-                        Mv = ((1 / index) * Mv_coef * 100) - 7
-                        renderer.setdefault(renderer_value,Mv)
-                    size.append(renderer[int(value['FLUX_V'])])
+                    Mv_star = value['FLUX_V']
+                index = 0
+                renderer = dict()
+                for renderer_value in range(int(min_flux),int(max_flux)+1):
+                    index += 1
+                    Mv = ((1 / index) * Mv_coef * 100) - 7
+                    renderer.setdefault(renderer_value,Mv)
+                if Mv_star > max_flux:
+                    Mv_star = max_flux
+                size.append(renderer[int(Mv_star)])
  
                 coords = SkyCoord(ra=value['RA'], 
                                   dec=value['DEC'], 

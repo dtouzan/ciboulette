@@ -100,6 +100,8 @@ class Sector(object):
         # Recherche et création de la table
         mag_format = {'Gmag': f'<={mag}'}
         catalog = 'I/350/gaiaedr3'
+        query = f"SkyCoord(ra={astre_ra}, dec={astre_dec}, unit=(u.deg, u.deg), frame='icrs'), width=Angle({angle_width}, 'deg'),  height=Angle({angle_height}, 'deg'), catalog={catalog}, column_filters={mag_format}"
+        print(f'simbad.query_region({query})')
         result = v.query_region(SkyCoord(ra=astre_ra, 
                                          dec=astre_dec, 
                                          unit=(u.deg, u.deg),

@@ -108,9 +108,9 @@ class Map(object):
     @property
     def medium(self):
         """
-        Set magnitude 12
+        Set magnitude 14
         """
-        self.magnitude = 12
+        self.magnitude = 14
         
 
     @property
@@ -200,24 +200,12 @@ class Map(object):
                      'size': 1, 
                      'alpha': 1}
         
-        magnitude = 8
+        magnitude = 10
         field = self.size
 
         if field > 5:
             field = 5
 
-        """
-        if field <= 5:
-            magnitude = 10
-        if field <= 3:
-            magnitude = 12.5
-        if field <= 1.5: 
-            magnitude = 14.5
-        if field <= 0.75:
-            magnitude = 16    
-        if field <= 0.30:
-            mamagnitudeg = 18  
-        """
         if field <= 5:
             magnitude = 14
         if field <= 1.5:
