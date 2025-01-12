@@ -68,7 +68,6 @@ class component():
             """           
             for value in self.data:
                 if dataset in value['MAIN_ID']:
-                    print(dataset)
                     return value 
 
                 
@@ -474,7 +473,7 @@ class LABEL(componentlabel):
             dec = self.data['dec'].value[0]           
             text = plt.text(ra, dec, 
                             s=label, 
-                            color='black', 
+                            color=self.color, 
                             ha='center', 
                             va='center', 
                             alpha=self.alpha, 
