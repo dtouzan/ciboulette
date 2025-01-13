@@ -24,8 +24,8 @@ class interfaces(compoments.compoment):
         """
         data_in = insertion.insert() 
         data_in.connect
-        with open(mast_file, 'r') as file:
-            reader = csv.reader(file, delimiter='\n')
+        with open(mast_file, 'r', newline='') as file:
+            reader = csv.reader(file, delimiter=' ', quotechar=',')
             for row in reader:
                 print(row[0])
                 data_in.mast(scienceprogram_title, row[0])
