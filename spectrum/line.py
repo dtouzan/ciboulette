@@ -116,7 +116,7 @@ class lines():
         # flux : flux value
         # font_size : size
         self.axis.vlines(self.wavelength, flux, max_flux + 0.2, linewidths=1, linestyles = 'dashed', colors = 'red', alpha = 0.5)
-        self.axis.annotate(f'{self.labels['label']}', xy=(self.wavelength, flux), xytext=(font_size,0), textcoords='offset points', rotation=90, va='bottom', ha='center', annotation_clip=False, fontsize=font_size)
+        self.axis.annotate(f'{self.labels["label"]}', xy=(self.wavelength, flux), xytext=(font_size,0), textcoords='offset points', rotation=90, va='bottom', ha='center', annotation_clip=False, fontsize=font_size)
 
 
 
