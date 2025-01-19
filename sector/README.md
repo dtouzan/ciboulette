@@ -71,3 +71,16 @@ MyMap.titlemap(ax)
 plt.show()
 ```
 ![image](output.png)
+```python
+MyMap.catalogs
+['Simbad.CDS open cluster',  'Simbad.CDS galaxy',  'gaia edr3.CDS.I/350/gaiaedr3',  'label']
+ 
+MyMap.view(['Simbad.CDS open cluster',])
+ 
+Table 1: Simbad.CDS open cluster
+ MAIN_ID      RA        DEC       OTYPE    FLUX_G FLUX_V SP_TYPE     COO_BIBCODE    
+           "h:m:s"    "d:m:s"               mag    mag                              
+--------- ---------- --------- ----------- ------ ------ ------- -------------------
+NGC  2281 06 48 21.8 +41 03 36 OpenCluster     --    5.4         2021A&A...647A..19T
+ OCSN 228    06 48.3    +41 04 OpenCluster     --     --         2023ApJS..265...12Q
+```
