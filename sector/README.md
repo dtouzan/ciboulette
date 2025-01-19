@@ -83,11 +83,5 @@ Table 1: Simbad.CDS open cluster
 NGC  2281 06 48 21.8 +41 03 36 OpenCluster     --    5.4         2021A&A...647A..19T
  OCSN 228    06 48.3    +41 04 OpenCluster     --     --         2023ApJS..265...12Q
  
-MyMap.catalog('Simbad.CDS open cluster')
-Table length=2
-MAIN_ID	RA	DEC	RA_PREC	DEC_PREC	COO_ERR_MAJA	COO_ERR_MINA	COO_ERR_ANGLE	COO_QUAL	COO_WAVELENGTH	COO_BIBCODE	GALDIM_MAJAXIS	GALDIM_MINAXIS	GALDIM_ANGLE	GALDIM_QUAL	GALDIM_WAVELENGTH	GALDIM_BIBCODE	FLUX_G	FLUX_V	FLUX_B	OTYPE	SP_TYPE	SP_QUAL	SP_BIBCODE	SCRIPT_NUMBER_ID
-"h:m:s"	"d:m:s"			mas	mas	deg				arcmin	arcmin	deg				mag	mag	mag					
-object	str13	str13	int16	int16	float32	float32	int16	str1	str1	object	float32	float32	int16	str1	str1	object	float32	float32	float32	object	object	str1	object	int32
-NGC 2281	06 48 21.8	+41 03 36	5	5	--	--	0	D	O	2021A&A...647A..19T	50.0	50.0	0	D	O	2020A&A...633A..99C	--	5.4	6.05	OpenCluster				0
-OCSN 228	06 48.3	+41 04	3	3	--	--	0	E	O	2023ApJS..265...12Q	--	--	0				--	--	--	OpenCluster				0
+MyMap.catalog('Simbad.CDS open cluster') # View Table Astropy type
 ```
