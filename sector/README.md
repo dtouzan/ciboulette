@@ -72,6 +72,7 @@ plt.show()
 ```
 ![image](output.png)
 ```python
+# Read data catalogs
 MyMap.catalogs
 ['Simbad.CDS open cluster',  'Simbad.CDS galaxy',  'gaia edr3.CDS.I/350/gaiaedr3',  'label']
  
