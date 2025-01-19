@@ -26,7 +26,7 @@ from matplotlib import pyplot as plt
 # Create map (imx477 and Samyang 85mm data)
 MyMap = Map()
 data_wcs = {'RA':6+(50/60), 
-			'DEC': 41+(3/60), 
+		'DEC': 41+(3/60), 
 			'naxis1': 4000, 
 			'naxis2': 3000, 
 			'binXY': 1, 
