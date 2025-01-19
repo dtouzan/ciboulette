@@ -33,6 +33,7 @@ data_wcs = {'RA':6+(50/60),
 	'pixelXY': 1.55, 
 	'focal': 85, 
 	'projection': 'TAN'}
+MyMap.new(data_wcs)
 
 # Read DSO
 MyMap.opencluster()
