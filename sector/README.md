@@ -147,7 +147,7 @@ MyMap.degree(ax,5)
 plt.savefig('Ganymed.png')
 plt.show()
 ```
-![image](Ganimed.png)
+![image](Ganymed.png)
 ```python
 # Read data catalogs
 MyMap.catalogs
