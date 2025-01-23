@@ -80,7 +80,7 @@ Ha.get
  'wavelength': 6562.85175,
  'spectrum': np.str_('H I')}
 ```
- ## Example whit filter
+ ## Example with filter
 ```python
 # Read modules
 from matplotlib import pyplot as plt
@@ -100,7 +100,7 @@ plt.savefig('Filter_Ha.png')                    # Optional
 plt.show()
 ```
 ![image](Filter_Ha.png)
-## Example whit spectrum SA200
+## Example with spectrum SA200
 ```python
 # Read module
 from matplotlib import pyplot as plt
@@ -115,7 +115,7 @@ axis = figure.subplots(1, 1)
 sa.axis = Ha.axis = filter_Ha.axis = axis
 filter_Ha.plot()
 sa.plot()
-Ha.marker(flux=1.05, max_flux=1.8)
+Ha.marker(flux=1.05, max_flux=1.8)              # Doted red line
 sa.xytitle
 plt.savefig('Spectrum_Ha.png')                  # Optional
 plt.show()
