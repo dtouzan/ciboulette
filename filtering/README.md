@@ -26,6 +26,7 @@ Under the MIT license. See the included [LICENSE.md](./LICENSE.md) file for more
 - H$$\alpha$ : HA35nm
 - CLS : CLS_ccd
 - OIII : OIII12nm
+[!NOTE] Other filters in development.
 
 ```python
 # Read modules
