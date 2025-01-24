@@ -19,13 +19,14 @@ Under the MIT license. See the included [LICENSE.md](./LICENSE.md) file for more
 ## Example
 
 #### Existing filter
-
-- SDSS   : SDSS_sloan_g, SDSS_sloan_r, sdss_sloan_u, SDSS_sloan_i, SDSS_sloan_z_s, -SDSS_sloan_y
-- BESSEL : BESSEL_v, BESSEL_b, BESSEL_r, BESSEL_u, BESSEL_i
-- RGB    : RGB_r, RGB_g, RGB_b
-- Ha     : HA35nm
-- CLS    : CLS_ccd
-- OIII   : OIII12nm
+|      Types | Names                                                                                   |
+| ---------: | :-------------------------------------------------------------------------------------- |
+| **SDSS**   | *SDSS_sloan_g, SDSS_sloan_r, sdss_sloan_u, SDSS_sloan_i, SDSS_sloan_z_s, -SDSS_sloan_y* |
+| **BESSEL** | *BESSEL_v, BESSEL_b, BESSEL_r, BESSEL_u, BESSEL_i*                                      |
+| **RGB**    | *RGB_r, RGB_g, RGB_b*                                                                   |
+| **Ha**     | *HA35nm*                                                                                |
+| **CLS**    | *CLS_ccd*                                                                               |
+| **OIII**   | *OIII12nm*                                                                              |
   
 >[!NOTE] 
 >Other filters possibles.
