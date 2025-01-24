@@ -80,6 +80,7 @@ plt.show()
 ```
 > [!TIP]
 > Optional : "plt.savefig('Filters.png')".
+
 ![image](Filters.png)
 
 
