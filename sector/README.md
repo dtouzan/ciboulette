@@ -5,7 +5,7 @@ Map for astronomy packages
 
 ## Prerequisite
   - Astropy
-  - Astroquery
+  - Astroquery 0.4.7 (New 0.4.8 in dev)
 
 ## Authors and Contributors
 
