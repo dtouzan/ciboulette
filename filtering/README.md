@@ -28,7 +28,7 @@ Under the MIT license. See the included [LICENSE.md](./LICENSE.md) file for more
 - OIII : OIII12nm
   
 >[!NOTE] 
->Other filters possible.
+>Other filters possibles.
 
 ```python
 # Read modules
