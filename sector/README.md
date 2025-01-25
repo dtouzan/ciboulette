@@ -102,6 +102,10 @@ MyMap.new(data_wcs)
 MyMap.light
 MyMap.stars()
 
+# Read DSO open cluster
+MyMap.magnitude = 8
+MyMap.opencluster()
+
 # Create markers
 data = [['2024-08-01T21:03:00', '1036-20240801-2103-9x60s-f85.fits', 290.72333333333336, 52.595, 53, 1500, 5000],
         ['2024-08-02T20:56:00', '1036-20240802-2056-18x60s-f85.fits', 290.6895833333333, 52.83555555555556, 53, 1800, 5000],
