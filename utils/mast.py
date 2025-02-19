@@ -96,6 +96,7 @@ class Mast():
         self.observation = Table()
         self.disperser = 'SA200'
         self.observation_number = -3 # Header file create
+        self.calibration_level = 1
         
     @property
     def exist(self):
@@ -430,9 +431,33 @@ class Mast():
     @property
     def calib_level(self):
         """
-        @return:  A value representing calibration level (1, 2 or 3)
+        @return:  A value representing calibration level 
+            1: Dark and flat processing
+            2: Coordinates calibration 
+            3: Diffusion and process control
         """
-        return 1
+        return self.calibration_level
+
+    @property
+    def calib_processing(self):
+        """
+        @set:  calibration level 1
+        """
+        self.calibration_level = 1
+
+    @property
+    def calib_coordinates(self):
+        """
+        @set:  calibration level 2
+        """
+        self.calibration_level = 2
+
+    @property
+    def calib_control(self):
+        """
+        @set:  calibration level 3
+        """
+        self.calibration_level = 3
 
     @property
     def obs_collection(self):

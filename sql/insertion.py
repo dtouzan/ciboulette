@@ -108,13 +108,13 @@ class insert(compoments.compoment):
             self.connection.commit()           
         self.cursor.close()
 
-    def mast_observation_upgrade(self, observation_id: int, priority=0, status=0, calibration=1):
+    def mast_observation_upgrade(self, observation_id: int, priority=0, status=0):
         """
         SQL insert priority, statut and calibration observation for id observation
         @set: priority, statut and calibration observation      
         """
-        sql_request = """UPDATE observation SET priority=?,status=?,calibration=? WHERE observation_id=?;"""
-        dataresources = (priority, status, calibration, observation_id)
+        sql_request = """UPDATE observation SET priority=?,status=? WHERE observation_id=?;"""
+        dataresources = (priority, status, observation_id)
         self._update_for_observation(sql_request, dataresources)
 
     def mast_observation_title(self, observation_id: int, title_observation='Observation with UT1'):
@@ -126,6 +126,15 @@ class insert(compoments.compoment):
         dataresources = (title_observation, observation_id)
         self._update_for_observation(sql_request, dataresources)
 
+    def mast_observation_collection(self, observation_id: int, collection_observation='OT_Library_UT1'):
+        """
+        SQL insert title observation for id observation
+        @set: collection observation   
+        """
+        sql_request = """UPDATE observation SET collection=?  WHERE observation_id=?;"""
+        dataresources = (collection_observation, observation_id)
+        self._update_for_observation(sql_request, dataresources)
+        
     def mast_target_note(self, observation_id: int, notes='not specified'):        
         """
         SQL insert note target for id observation
