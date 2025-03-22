@@ -184,8 +184,8 @@ class Sector(object):
         crpix1 = int(naxis1)/2
         crpix2 = int(naxis2)/2
         # Element for CDELT
-        cdelt1 = (206*int(pixelXY)*int(binXY)/focal)/3600
-        cdelt2 = (206*int(pixelXY)*int(binXY)/focal)/3600
+        cdelt1 = (206*pixelXY*int(binXY)/focal)/3600
+        cdelt2 = (206*pixelXY*int(binXY)/focal)/3600
         # Header WCS
         w = wcs.WCS(naxis=2)
         P_RA = "RA---" + projection
