@@ -25,7 +25,7 @@ class mast_UT1(interface.interfaces):
         @set: instrument binning_y
         @set: instrument aperture
         """
-        self.mast_default(observation_id, 'UT1', 'nefertiti3199-imx477', 1, 1, 0.030)
+        self.mast_default(observation_id, 'UT1', 'nefertiti3199-imx477', 1, 1, 0.070)
 
 class mast_UT2(interface.interfaces):
 
@@ -39,4 +39,4 @@ class mast_UT2(interface.interfaces):
         @set: instrument binning_y
         @set: instrument aperture
         """
-        self.mast_default(observation_id, 'UT2', 'taranis5370-imx477', 1, 1, 0.050)
+        self.mast_default(observation_id, 'UT2', 'taranis5370-imx477', 1, 1, 0.030)
