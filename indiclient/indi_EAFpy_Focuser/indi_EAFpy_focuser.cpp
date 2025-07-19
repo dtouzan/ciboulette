@@ -73,6 +73,8 @@ bool EAFpyFocuser::initProperties()
     DelayNP[0].fill("DELAY_VALUE", "Value (uS)", "%.f", 2, 50, 1, 10);
     DelayNP.fill(getDeviceName(), "DELAY", "Delay", OPTIONS_TAB, IP_RW, 60, IPS_IDLE);
 
+    addAuxControls();
+
     return true;
 }
 
