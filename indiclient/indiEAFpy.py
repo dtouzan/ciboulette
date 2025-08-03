@@ -11,7 +11,7 @@ Classes and utility functions for communicating with cameras via the INDI protoc
 __authors__ = ("Dominique Touzan","ciboulette module")
 __contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
 __copyright__ = "MIT"
-__date__ = "2025-07-28"
+__date__ = "2025-08-03"
 __version__= "1.0.0"
 
 import time
