@@ -5,6 +5,12 @@
 Classes and utility functions for communicating with mount a the INDI protocol, http://www.indilib.org.
 """
 
+__authors__ = ("Dominique Touzan","ciboulette module")
+__contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
+__copyright__ = "MIT"
+__date__ = "2025-07-28"
+__version__= "1.0.0"
+
 import time
 import io
 
