@@ -126,6 +126,7 @@ __contact__ = ("dtouzan@gmail.com","https://github.com/dtouzan/ciboulette")
 __copyright__ = "MIT"
 __date__ = "2024-11-02"
 __version__= "1.0.0"
+__citation__ = "MMT Observatory package. https://github.com/MMTObservatory/indiclient"
 
 import time
 import io
