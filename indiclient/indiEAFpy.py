@@ -67,8 +67,11 @@ class EAFpy(Focuser):
     @property
     def default(self):
         """
-        Configure Focuser to speed 1, timer 10ms, Increment 25, direction
+        Configure Focuser to speed 1, delay 10ms, direction outward
         """
+        self.speed1
+        self.delay = 10
+        self.outward        
     
     @property
     def ticks(self):
