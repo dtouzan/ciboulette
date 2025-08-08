@@ -26,6 +26,8 @@ An INDI Client Library
 @version: 0.13
 """
 
+__citation__ = "MMT Observatory package. https://github.com/MMTObservatory/indiclient"
+
 import socket
 import xml.parsers.expat
 import base64
