@@ -65,6 +65,19 @@ class EAFpy(Focuser):
         self.focuser_name = "EAFpy"
 
     @property
+    def config(self):
+        """
+        Return base config {json} 
+        """
+        json_info = {'speed': self.speed,\
+                     'ticks': self.ticks,\
+                     'delay': self.delay,\
+                     'direction': self.direction }
+        value = { 'EAFpy': json_info }
+        return value
+        
+        
+    @property
     def default(self):
         """
         Configure Focuser to speed 1, delay 10ms, direction outward
