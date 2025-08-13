@@ -539,6 +539,7 @@ class Mast():
             number = int(name_object)
             otype = 'Asteroid'
             ephemerid = MPC.get_ephemeris(target=number, start=scheduling, step=1*u.d, number=1)
+            print(ephemerid)
             ra = ephemerid['RA'].value[0]
             dec = ephemerid['Dec'].value[0]
         except ValueError:
@@ -569,11 +570,12 @@ class Mast():
                     customSimbad = Simbad()
                     customSimbad.add_votable_fields('otype')
                     result_table = customSimbad.query_object(name_object)
+                    print(result_table)
                     if result_table:
-                        c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                        c = SkyCoord(ra=result_table['ra'], dec=result_table['dec'], unit=(u.deg, u.deg), frame='icrs')
                         ra = c.ra.deg[0]*15    
                         dec = c.dec.deg[0]  
-                        otype = result_table['OTYPE'][0]
+                        otype = result_table['otype'][0]
                             
         return ra, dec, otype, disperser
         
