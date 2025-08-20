@@ -573,7 +573,7 @@ class Mast():
                     print(result_table)
                     if result_table:
                         c = SkyCoord(ra=result_table['ra'], dec=result_table['dec'], unit=(u.deg, u.deg), frame='icrs')
-                        ra = c.ra.deg[0]*15    
+                        ra = c.ra.deg[0]   
                         dec = c.dec.deg[0]  
                         otype = result_table['otype'][0]
                             
