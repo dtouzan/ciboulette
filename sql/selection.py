@@ -496,6 +496,24 @@ class select(compoments.compoment):
         resources = self._selectone("SELECT * FROM disperser_header")
         return resources
 
+    @property
+    def skychart_header(self):
+        """
+        SQL view skychart_header
+        @return: skychart header
+        """
+        resources = self._selectone("SELECT * FROM skychart_header")
+        return resources
+
+    @property
+    def skychart_values(self):
+        """
+        SQL view skychart_value
+        @return: target list and observation.title list 
+        """
+        resources = self._selectall("SELECT * FROM skychart_values")
+        return resources
+
 
 
 

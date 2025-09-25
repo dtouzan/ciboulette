@@ -560,6 +560,44 @@ class interfaces(compoments.compoment):
         data_out.close
         return resources
 
+    @property
+    def skychart_filename(self):
+        """
+        @return: skychart file name 
+        """
+        data_out = selection.select() 
+        data_out.connect
+        headers = data_out.skychart_header
+        resources = headers[0].split(';')[0]
+        data_out.close        
+        return resources
+        
+    @property
+    def skychart_values(self):
+        """
+        @return: skychart values
+        """
+        data_out = selection.select() 
+        data_out.connect
+        resources = list()
+        dataset = data_out.skychart_values
+        headers = data_out.skychart_header
+        length_title = int(headers[0].split(';')[1])
+        length_ra = int(headers[0].split(';')[2])
+        length_dec = int(headers[0].split(';')[3])
+        length_label = int(headers[0].split(';')[4])
+        
+        if dataset:
+            for values in dataset:
+                title = f'{values[0]:{length_title}}'
+                ra = f'{values[1]:00{length_ra}.5f}'
+                dec = f'{values[2]:0{length_dec}.5f}'
+                label = f'{values[3]:{length_label}}'           
+                line = title + str(ra) + ' ' + str(dec) + ' ' + title + label
+                resources.append(line)  
+        data_out.close        
+        return resources
+
     def scienceprogram(self, title: str, status=1, contact='dtouzan@gmail.com', observing_time=0, type_SP='science', dataset='dataset/archives'):
         """
         View SQL insert scienceprogram

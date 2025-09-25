@@ -14,17 +14,23 @@ from ciboulette.sql import interface
 class Observationlist():
 
     def __init__(self, fileoutput='NewObsList.txt'):
-        self.fileoutput = fileoutput
-        self.observations = Table()
-        self.title = ''               # 32 digits
-        self.ra = ''                  # 9 digits
-        self.dec = ''                 # 8 digits
-        self.label = ''               # 32 digits
-        self.observation = ''         # 50 digits
-        
+        self.fileoutput = fileoutput     
 
     @property
-    def create(self):
+    def get(self):
         """
-        Return list for skymap
+        @Return: list for skymap
         """
+        interfaces = interface.interfaces()
+        return interfaces.skychart_values
+
+    @property
+    def file(self):
+        """
+        @Return: create file for skymap
+        """
+        interfaces = interface.interfaces()
+        filename = interfaces.skychart_filename
+        with open(filename, 'w') as file_skychart:
+            for value in interfaces.skychart_values:
+                print(f'{value}', file=file_skychart)
