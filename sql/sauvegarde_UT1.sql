@@ -1,5 +1,5 @@
 --
--- Fichier généré par SQLiteStudio v3.4.4 sur mer. sept. 24 21:38:12 2025
+-- Fichier généré par SQLiteStudio v3.4.4 sur jeu. sept. 25 18:43:07 2025
 --
 -- Encodage texte utilisé : System
 --
@@ -72,8 +72,9 @@ INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observinglog', 'observation_id
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observationconditions', 'observation_id;sky_background;cloud_cover;image_quality;water_vapor;elevation_constraint;timming_windows', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('camera', 'camera_id;name;size_x;size_y;size_pixel;cold;gain', '1.0.0');
 INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('observation_table', 'target;scheduling;camera;focal;F/D;sampling;field.x'';field.y'';Instrument magnitude;filter;filter data;spectral axis;flux;disperser;lines;grism angle', '1.0.0');
-INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter_data_iso', 'name;label;spectral axis;flux', NULL);
-INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('disperser', 'disperser_id;name;line;grism angle;diameter', NULL);
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('filter_data_iso', 'name;label;spectral axis;flux', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('disperser', 'disperser_id;name;line;grism angle;diameter', '1.0.0');
+INSERT INTO Header (NAME, DATA, RELEASE) VALUES ('skychart', 'NewObsList.txt;32;9;1;8;2;32;50', '1.0.0');
 
 -- Tableau : Instrument
 DROP TABLE IF EXISTS Instrument;
@@ -5205,6 +5206,10 @@ CREATE VIEW IF NOT EXISTS sequence_header AS SELECT data FROM Header WHERE name 
 -- Vue : sequence_mast_values
 DROP VIEW IF EXISTS sequence_mast_values;
 CREATE VIEW IF NOT EXISTS sequence_mast_values AS SELECT type, timeline_min, timeline_max FROM Sequence;
+
+-- Vue : skychart_header
+DROP VIEW IF EXISTS skychart_header;
+CREATE VIEW IF NOT EXISTS skychart_header AS SELECT data FROM Header WHERE name = 'skychart';
 
 -- Vue : skychart_values
 DROP VIEW IF EXISTS skychart_values;
