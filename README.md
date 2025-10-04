@@ -49,7 +49,7 @@ conda install matplotlib
 conda install numpy
 conda install bs4
 conda install -c conda-forge astropy
-conda install -c conda-forge astroquery
+conda install -c conda-forge astroquery=0.4.7
 conda install -c conda-forge reproject
 conda install -c conda-forge specutils
 pip install wget
@@ -61,7 +61,7 @@ pip install matplotlib
 pip install numpy
 pip install bs4
 pip install astropy
-pip install astroquery
+pip install astroquery=0.4.7
 pip install reproject
 conda install specutils
 pip install wget
