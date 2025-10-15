@@ -76,12 +76,14 @@ import time
 import os
 from collections import Counter, OrderedDict
 from datetime import datetime
+from packaging.version import parse
 import csv
 # Astropy mods
 from astropy.table import Table, unique, vstack
 from astropy import units as u
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, Angle, ICRS
+import astroquery
 from astroquery.simbad import Simbad
 from astroquery.mpc import MPC
 # User mods
@@ -570,12 +572,22 @@ class Mast():
                     customSimbad = Simbad()
                     customSimbad.add_votable_fields('otype')
                     result_table = customSimbad.query_object(name_object)
-                    print(result_table)
+                    result_table.pprint(max_width=255)
                     if result_table:
-                        c = SkyCoord(ra=result_table['ra'], dec=result_table['dec'], unit=(u.deg, u.deg), frame='icrs')
-                        ra = c.ra.deg[0]   
-                        dec = c.dec.deg[0]  
-                        otype = result_table['otype'][0]
+                        '''
+                        Version control < "0.4.8", astroquery is updated after "0.4.7"
+                        '''
+                        version = parse(astroquery.__version__)
+                        if version < parse("0.4.8"):
+                            c = SkyCoord(ra=result_table['RA'], dec=result_table['DEC'], unit=(u.deg, u.deg), frame='icrs')
+                            ra = c.ra.deg[0]*15   
+                            otype = result_table['OTYPE'][0]
+                        else:
+                            c = SkyCoord(ra=result_table['ra'], dec=result_table['dec'], unit=(u.deg, u.deg), frame='icrs')
+                            ra = c.ra.deg[0]
+                            otype = result_table['otype'][0]
+                            
+                        dec = c.dec.deg[0]    
                             
         return ra, dec, otype, disperser
         
@@ -596,11 +608,16 @@ class Mast():
                         obs_id += 1
                         name_object = self.target_name_format(name_list)
                         scheduling = self.scheduling(name_list)
-                        print(obs_id, name)
                         intent_type = 'S' # For Science
+                        print('#########|#########|#########|#########|#########|#########|#########|#########|')
                         ra, dec, otype, disperser = self.get_coordinates(name_object, scheduling)
-                        print("+", ra, dec, otype)
-                        print('.')
+                        print()
+                        print(f'Observation ID: {obs_id}')
+                        print(f'File name: {name}')
+                        print(f'ra: {ra}')
+                        print(f'dec: {dec}')
+                        print(f'Type: {otype}')
+
                         print(f'{self.intent_type_format(intent_type)},'
                                 f'{self.obs_collection},'
                                 f'{self.instrument_name},'
