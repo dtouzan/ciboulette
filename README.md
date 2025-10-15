@@ -61,7 +61,7 @@ pip install matplotlib
 pip install numpy
 pip install bs4
 pip install astropy
-pip install astroquery=0.4.7
+pip install astroquery==0.4.7
 pip install reproject
 pip install specutils
 pip install wget
