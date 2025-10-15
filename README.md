@@ -63,7 +63,7 @@ pip install bs4
 pip install astropy
 pip install astroquery=0.4.7
 pip install reproject
-conda install specutils
+pip install specutils
 pip install wget
 ```      
 
