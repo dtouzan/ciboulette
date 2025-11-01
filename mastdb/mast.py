@@ -98,7 +98,7 @@ class Mast():
         self.observation = Table()
         self.disperser = 'SA200'
         self.observation_number = -3 # Header file create
-        self.calibration_level = 1
+        self.calibration_level = 2
         
     @property
     def exist(self):
