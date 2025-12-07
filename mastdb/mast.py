@@ -560,7 +560,7 @@ class Mast():
                 if c in comet[1]:
                     name = names[0]+names[1]
                 else:
-                    name = names[0]+'/'+names[1]+'-'+names[2]
+                    name = names[0]+'/'+names[1]+' '+names[2]
                     print(name)
                 ephemerid = MPC.get_ephemeris(name, start=scheduling, step=1*u.d, number=1)
                 ra = ephemerid['RA'].value[0]
