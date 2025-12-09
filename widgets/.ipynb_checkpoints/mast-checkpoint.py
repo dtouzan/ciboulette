@@ -12,7 +12,7 @@ __version__= "1.0.0"
 import ipywidgets as widgets
 
 # User mods
-from ciboulette.sql import interface, mastUT
+from ciboulette.sql import interface
 
 # Interfaces init
 data_interface = interface.interfaces()
@@ -39,12 +39,11 @@ def import_func(b):
     with output_import:
         output_import.clear_output()
         print(widget_science_program.label)
-        #data_interface.mast_in(mast.widget_science_program.label)
 
 widget_import.on_click(import_func)
 
 # Telescope Unit
-units = ['UT1', 'UT2', 'UT3', 'UT4']
+units = ['UT1', 'UT2', 'UT3', 'UT4', 'UT5' , 'UT6', 'UT7', 'UT8']
 widget_unit = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(units)], value=1, description='Unit:')
 
 # Observation ID
@@ -85,26 +84,6 @@ def valid_func(b):
         print(widget_collection.label)
         print(widget_target_note.label)
         print(widget_observing_condition.label)
-
-        match widget_unit.label:
-            case "UT1": ut = mastUT.mast_UT1()
-            case "UT2": ut = mastUT.mast_UT2()
-            case "UT3": ut = mastUT.mast_UT3()
-            case "UT4": ut = mastUT.mast_UT4()
-        
-        ut.connect
-        print(ut.database)
-        ut.close
-        """
-        # Instrument Type 
-        ut.default(widget_id.value)
-        # ID, Title observation, Collection, target notes
-        ut.mast_update(widget_id.value), widget_title.value, widget_collection.label, widget_target_note.label)
-        obs_log = observinglog.log()
-        obs_log.default(id)
-        obs_conditons = observingconditions.conditions()
-        obs_conditons.medium(widget_id.value))
-        """
 
 widget_valid.on_click(valid_func)
 

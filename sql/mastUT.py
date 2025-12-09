@@ -40,3 +40,32 @@ class mast_UT2(interface.interfaces):
         @set: instrument aperture
         """
         self.mast_default(observation_id, 'UT2', 'taranis5370-imx477', 1, 1, 0.030)
+
+class mast_UT3(interface.interfaces):
+
+    def default(self, observation_id: int):
+        """
+        Upgrade default mast information to observation and instrument
+        @set: observation_id
+        @set: instrument name
+        @set: instrument camera
+        @set: instrument binning_x
+        @set: instrument binning_y
+        @set: instrument aperture
+        """
+        self.mast_default(observation_id, 'UT3', 'irene14-imx477', 1, 1, 0.030)
+
+class mast_UT4(interface.interfaces):
+
+    def default(self, observation_id: int):
+        """
+        Upgrade default mast information to observation and instrument
+        @set: observation_id
+        @set: instrument name
+        @set: instrument camera
+        @set: instrument binning_x
+        @set: instrument binning_y
+        @set: instrument aperture
+        """
+        self.mast_default(observation_id, 'UT4', 'uranus-n-imx585', 1, 1, 0.030)
+
