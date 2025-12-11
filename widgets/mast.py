@@ -20,6 +20,17 @@ data_interface = interface.interfaces()
 # 3D line
 HR3D = widgets.HTML(value='<P><HR SIZE="2"></P>', placeholder='', description='')
 
+#####################################################################################
+#
+# Export function and IDE
+#
+#####################################################################################
+
+#####################################################################################
+#
+# Import function and IDE
+#
+#####################################################################################
 # Science Programe available
 science_programs = data_interface.scienceprogram_title
 widget_science_program = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(science_programs)], value=3, description='Available:')
@@ -43,6 +54,11 @@ def import_func(b):
 
 widget_import.on_click(import_func)
 
+#####################################################################################
+#
+# Update function and IDE
+#
+#####################################################################################
 # Telescope Unit
 units = ['UT1', 'UT2', 'UT3', 'UT4']
 widget_unit = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(units)], value=1, description='Unit:')
@@ -108,7 +124,42 @@ def valid_func(b):
 
 widget_valid.on_click(valid_func)
 
+#####################################################################################
+#
+# Compress function and IDE
+#
+#####################################################################################
+# Compress directory
+widget_directory = widgets.Text(description='Directory:', disabled=False)
+widget_directory.value = '../archive'
+
+# Compress button
+widget_compress = widgets.Button(
+    description='Compress',
+    disabled=False,
+    button_style='', # 'success', 'info', 'warning', 'danger' or ''
+    tooltip='Compress',
+)
+
+# Valid Output
+output_compress = widgets.Output()
+
+def compress_func(b):
+    with output_compress:
+        output_compress.clear_output()
+        import os
+        import py7zr
+        os.chdir(widget_directory.value)
+        files = os.listdir()
+        for file in files:
+            print(file+'.7z')
+            with py7zr.SevenZipFile(file+'.7z', 'w') as archive:
+                archive.write(file)
+                
+widget_compress.on_click(compress_func)
+
              
 # Mast VBox
 box_import= widgets.VBox([widget_science_program, HR3D, widget_import, output_import])
 box_mast = widgets.VBox([widget_unit, widget_id, widget_title , widget_collection, widget_target_note, widget_observing_condition, HR3D, widget_valid, output_valid]) 
+box_compress = widgets.VBox([widget_directory, HR3D, widget_compress, output_compress])
