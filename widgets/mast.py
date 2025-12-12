@@ -10,9 +10,12 @@ __version__= "1.0.0"
 
 # Globals mods
 import ipywidgets as widgets
+import os
+import py7zr
 
 # User mods
 from ciboulette.sql import interface, mastUT
+from ciboulette.mastdb import mast
 
 # Interfaces init
 data_interface = interface.interfaces()
@@ -25,6 +28,34 @@ HR3D = widgets.HTML(value='<P><HR SIZE="2"></P>', placeholder='', description=''
 # Export function and IDE
 #
 #####################################################################################
+# Export directory
+widget_catalog = widgets.Text(description='Catalog:', disabled=False)
+widget_catalog.value = 'UT1_MAST_CATALOG.csv'
+
+
+widget_mast_directory = widgets.Text(description='Directory:', disabled=False)
+widget_mast_directory.value = '../archive'
+
+# Export button
+widget_export = widgets.Button(
+    description='Export',
+    disabled=False,
+    button_style='', # 'success', 'info', 'warning', 'danger' or ''
+    tooltip='Export',
+)
+
+# Export Output
+output_export = widgets.Output()
+
+def export_func(b):
+    with output_export:
+        output_export.clear_output()
+        data = mast.Mast()
+        data.read(widget_catalog.value)
+        data.get_number(widget_catalog.value)
+        data.create(widget_mast_directory.value)
+                
+widget_export.on_click(export_func)
 
 #####################################################################################
 #
@@ -141,14 +172,12 @@ widget_compress = widgets.Button(
     tooltip='Compress',
 )
 
-# Valid Output
+# Compress Output
 output_compress = widgets.Output()
 
 def compress_func(b):
     with output_compress:
         output_compress.clear_output()
-        import os
-        import py7zr
         os.chdir(widget_directory.value)
         files = os.listdir()
         for file in files:
@@ -160,6 +189,7 @@ widget_compress.on_click(compress_func)
 
              
 # Mast VBox
-box_import= widgets.VBox([widget_science_program, HR3D, widget_import, output_import])
+box_export = widgets.VBox([widget_mast_directory, HR3D, widget_export, output_export])
+box_import = widgets.VBox([widget_science_program, HR3D, widget_import, output_import])
 box_mast = widgets.VBox([widget_unit, widget_id, widget_title , widget_collection, widget_target_note, widget_observing_condition, HR3D, widget_valid, output_valid]) 
 box_compress = widgets.VBox([widget_directory, HR3D, widget_compress, output_compress])
