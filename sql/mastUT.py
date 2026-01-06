@@ -67,5 +67,5 @@ class mast_UT4(interface.interfaces):
         @set: instrument binning_y
         @set: instrument aperture
         """
-        self.mast_default(observation_id, 'UT4', 'uranus-n-imx585', 1, 1, 0.030)
+        self.mast_default(observation_id, 'UT4', 'uranus-M-imx585', 1, 1, 0.030)
 

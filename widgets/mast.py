@@ -14,7 +14,7 @@ import os
 import py7zr
 
 # User mods
-from ciboulette.sql import interface, mastUT
+from ciboulette.sql import interface, mastUT, observingconditions, observinglog
 from ciboulette.mastdb import mast
 
 # Interfaces init
@@ -81,7 +81,7 @@ def import_func(b):
     with output_import:
         output_import.clear_output()
         print(widget_science_program.label)
-        #data_interface.mast_in(mast.widget_science_program.label)
+        data_interface.mast_in(widget_science_program.label)
 
 widget_import.on_click(import_func)
 
@@ -142,16 +142,14 @@ def valid_func(b):
         ut.connect
         print(ut.database)
         ut.close
-        """
         # Instrument Type 
         ut.default(widget_id.value)
         # ID, Title observation, Collection, target notes
-        ut.mast_update(widget_id.value), widget_title.value, widget_collection.label, widget_target_note.label)
+        ut.mast_update(widget_id.value, widget_title.value, widget_collection.label, widget_target_note.label)
         obs_log = observinglog.log()
-        obs_log.default(id)
+        obs_log.default(widget_id.value)
         obs_conditons = observingconditions.conditions()
-        obs_conditons.medium(widget_id.value))
-        """
+        obs_conditons.medium(widget_id.value)
 
 widget_valid.on_click(valid_func)
 
@@ -187,9 +185,20 @@ def compress_func(b):
                 
 widget_compress.on_click(compress_func)
 
-             
+#####################################################################################
+#
+# IDE
+#
+#####################################################################################             
 # Mast VBox
 box_export = widgets.VBox([widget_mast_directory, HR3D, widget_export, output_export])
 box_import = widgets.VBox([widget_science_program, HR3D, widget_import, output_import])
-box_mast = widgets.VBox([widget_unit, widget_id, widget_title , widget_collection, widget_target_note, widget_observing_condition, HR3D, widget_valid, output_valid]) 
+box_update = widgets.VBox([widget_unit, widget_id, widget_title , widget_collection, widget_target_note, widget_observing_condition, HR3D, widget_valid, output_valid]) 
 box_compress = widgets.VBox([widget_directory, HR3D, widget_compress, output_compress])
+
+# Mast Tab
+tab_contents = ['Export', 'Import', 'Update', 'Compress']
+mast_tabs = widgets.Tab()
+mast_tabs.children = [box_export, box_import, box_update, box_compress]
+mast_tabs.titles = [tab_contents[0],tab_contents[1],tab_contents[2],tab_contents[3]]
+mast_tabs
