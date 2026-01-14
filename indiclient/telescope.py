@@ -29,30 +29,6 @@ class EQMod(Telescope):
         super(EQMod, self).__init__(host, port, driver="EQMod Mount")
         self.mount_name = "EQMod"
         self.process_events()
-        """
-        Set BAUD_RATE at 115200 : https://www.indilib.org/devices/telescopes/eqmod.html
-        
-        For ubuntu server 20.10 , configure the /dev/ttyUSB0 for set 115200 baud rate
-        https://stackoverflow.com/questions/42290052/how-to-set-baud-rate-automatically-when-device-connects
-        
-        Create file rules /etc/udev/rules.d/99-eqmod.rules and reboot
-        
-        #99-eqmod.rules
-        ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", RUN+="/bin/stty -F /dev/%k 115200"
-        
-        For idVendor and idProduct use lsusb for example on RASPBERRY PI4 ubuntu server 20.10
-        ubuntu@ubuntu:/etc/udev/rules.d$ lsusb
-        Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-        Bus 001 Device 004: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
-        Bus 001 Device 003: ID 03c3:120c  USB2.0 Hub
-        Bus 001 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
-        Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-        
-        https://github.com/indilib/indi-3rdparty/tree/master/indi-eqmod:
-        ================================================================
-        The mount is supposed to be parked in the home position (pointing to the celestial pole) 
-        at the first connection, or after each reset of the mount.
-        """
         self.baud_rate = '9600'
         
     @property    
