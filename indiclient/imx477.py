@@ -5,120 +5,120 @@
 Classes and utility functions for communicating with cameras via the INDI protocol, http://www.indilib.org.
 
 # indi_pylibcamera
-indi_pylibcamera.CAMERA_SELECTION.CAM0=On
+pylibcamera Main.CAMERA_SELECTION.CAM0=On
 indi_pylibcamera.CONNECTION.CONNECT=On
-indi_pylibcamera.CONNECTION.DISCONNECT=Off
-indi_pylibcamera.DRIVER_INFO.DRIVER_NAME=indi_pylibcamera
-indi_pylibcamera.DRIVER_INFO.DRIVER_EXEC=/home/ut1/astropy/bin/indi_pylibcamera
-indi_pylibcamera.DRIVER_INFO.DRIVER_VERSION=2.4.0
-indi_pylibcamera.DRIVER_INFO.DRIVER_INTERFACE=2
-indi_pylibcamera.LOGGING_LEVEL.LOGGING_DEBUG=Off
-indi_pylibcamera.LOGGING_LEVEL.LOGGING_INFO=On
-indi_pylibcamera.LOGGING_LEVEL.LOGGING_WARN=Off
-indi_pylibcamera.LOGGING_LEVEL.LOGGING_ERROR=Off
-indi_pylibcamera.POLLING_PERIOD.PERIOD_MS=1000
-indi_pylibcamera.GEOGRAPHIC_COORD.LAT=0
-indi_pylibcamera.GEOGRAPHIC_COORD.LONG=0
-indi_pylibcamera.GEOGRAPHIC_COORD.ELEV=0
-indi_pylibcamera.EQUATORIAL_EOD_COORD.RA=0
-indi_pylibcamera.EQUATORIAL_EOD_COORD.DEC=0
-indi_pylibcamera.TELESCOPE_PIER_SIDE.PIER_WEST=On
-indi_pylibcamera.TELESCOPE_PIER_SIDE.PIER_EAST=Off
-indi_pylibcamera.TELESCOPE_INFO.TELESCOPE_APERTURE=0
-indi_pylibcamera.TELESCOPE_INFO.TELESCOPE_FOCAL_LENGTH=0
-indi_pylibcamera.TELESCOPE_INFO.GUIDER_APERTURE=0
-indi_pylibcamera.TELESCOPE_INFO.GUIDER_FOCAL_LENGTH=0
-indi_pylibcamera.CAMERA_LENS.PRIMARY_LENS=On
-indi_pylibcamera.CAMERA_LENS.GUIDER_LENS=Off
-indi_pylibcamera.DO_SNOOPING.SNOOP=On
-indi_pylibcamera.DO_SNOOPING.NO_SNOOP=Off
-indi_pylibcamera.ACTIVE_DEVICES.ACTIVE_TELESCOPE=
-indi_pylibcamera.CAMERA_INFO.CAMERA_MODEL=imx477
-indi_pylibcamera.CAMERA_INFO.CAMERA_PIXELARRAYSIZE=(4056, 3040)
-indi_pylibcamera.CAMERA_INFO.CAMERA_PIXELARRAYACTIVEAREA=[(8, 16, 4056, 3040)]
-indi_pylibcamera.CAMERA_INFO.CAMERA_UNITCELLSIZE=(1550, 1550)
-indi_pylibcamera.CCD_CAPTURE_FORMAT.INDI_RAW=On
-indi_pylibcamera.CCD_CAPTURE_FORMAT.INDI_RGB=Off
-indi_pylibcamera.RAW_FORMAT.RAWFORMAT0=On
-indi_pylibcamera.RAW_FORMAT.RAWFORMAT1=Off
-indi_pylibcamera.RAW_FORMAT.RAWFORMAT2=Off
-indi_pylibcamera.RAW_FORMAT.RAWFORMAT3=Off
-indi_pylibcamera.CCD_PROCFRAME.WIDTH=4056
-indi_pylibcamera.CCD_PROCFRAME.HEIGHT=3040
-indi_pylibcamera.CAMCTRL_AEENABLE.INDI_ENABLED=Off
-indi_pylibcamera.CAMCTRL_AEENABLE.INDI_DISABLED=On
-indi_pylibcamera.CAMCTRL_AECONSTRAINTMODE.NORMAL=On
-indi_pylibcamera.CAMCTRL_AECONSTRAINTMODE.HIGHLIGHT=Off
-indi_pylibcamera.CAMCTRL_AECONSTRAINTMODE.SHADOWS=Off
-indi_pylibcamera.CAMCTRL_AECONSTRAINTMODE.CUSTOM=Off
-indi_pylibcamera.CAMCTRL_AEEXPOSUREMODE.NORMAL=On
-indi_pylibcamera.CAMCTRL_AEEXPOSUREMODE.SHORT=Off
-indi_pylibcamera.CAMCTRL_AEEXPOSUREMODE.LONG=Off
-indi_pylibcamera.CAMCTRL_AEEXPOSUREMODE.CUSTOM=Off
-indi_pylibcamera.CAMCTRL_AEMETERINGMODE.CENTREWEIGHTED=On
-indi_pylibcamera.CAMCTRL_AEMETERINGMODE.SPOT=Off
-indi_pylibcamera.CAMCTRL_AEMETERINGMODE.MATRIX=Off
-indi_pylibcamera.CAMCTRL_AEMETERINGMODE.CUSTOM=Off
-indi_pylibcamera.CAMCTRL_AWBENABLE.INDI_ENABLED=Off
-indi_pylibcamera.CAMCTRL_AWBENABLE.INDI_DISABLED=On
-indi_pylibcamera.CAMCTRL_AWBMODE.AUTO=On
-indi_pylibcamera.CAMCTRL_AWBMODE.TUNGSTEN=Off
-indi_pylibcamera.CAMCTRL_AWBMODE.FLUORESCENT=Off
-indi_pylibcamera.CAMCTRL_AWBMODE.INDOOR=Off
-indi_pylibcamera.CAMCTRL_AWBMODE.DAYLIGHT=Off
-indi_pylibcamera.CAMCTRL_AWBMODE.CLOUDY=Off
-indi_pylibcamera.CAMCTRL_AWBMODE.CUSTOM=Off
-indi_pylibcamera.CAMCTRL_BRIGHTNESS.BRIGHTNESS=0.0
-indi_pylibcamera.CAMCTRL_COLOURGAINS.REDGAIN=2.0
-indi_pylibcamera.CAMCTRL_COLOURGAINS.BLUEGAIN=2.0
-indi_pylibcamera.CAMCTRL_CONTRAST.CONTRAST=1.0
-indi_pylibcamera.CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE=0.0
-indi_pylibcamera.CAMCTRL_NOISEREDUCTIONMODE.OFF=On
-indi_pylibcamera.CAMCTRL_NOISEREDUCTIONMODE.FAST=Off
-indi_pylibcamera.CAMCTRL_NOISEREDUCTIONMODE.HIGHQUALITY=Off
-indi_pylibcamera.CAMCTRL_SATURATION.SATURATION=1.0
-indi_pylibcamera.CAMCTRL_SHARPNESS.SHARPNESS=0.0
-indi_pylibcamera.CCD_EXPOSURE.CCD_EXPOSURE_VALUE=1.0
-indi_pylibcamera.CCD_ABORT_EXPOSURE.ABORT=Off
-indi_pylibcamera.CCD_FRAME.X=0
-indi_pylibcamera.CCD_FRAME.Y=0
-indi_pylibcamera.CCD_FRAME.WIDTH=4056
-indi_pylibcamera.CCD_FRAME.HEIGHT=3040
-indi_pylibcamera.CCD_BINNING.HOR_BIN=1
-indi_pylibcamera.CCD_BINNING.VER_BIN=1
-indi_pylibcamera.CCD_TEMPERATURE.CCD_TEMPERATURE_VALUE=0
-indi_pylibcamera.CCD_INFO.CCD_MAX_X=4056
-indi_pylibcamera.CCD_INFO.CCD_MAX_Y=3040
-indi_pylibcamera.CCD_INFO.CCD_PIXEL_SIZE=1.55
-indi_pylibcamera.CCD_INFO.CCD_PIXEL_SIZE_X=1.55
-indi_pylibcamera.CCD_INFO.CCD_PIXEL_SIZE_Y=1.55
-indi_pylibcamera.CCD_INFO.CCD_BITSPERPIXEL=12
-indi_pylibcamera.CCD_COMPRESSION.CCD_COMPRESS=Off
-indi_pylibcamera.CCD_COMPRESSION.CCD_RAW=On
-indi_pylibcamera.CCD_FRAME_TYPE.FRAME_LIGHT=On
-indi_pylibcamera.CCD_FRAME_TYPE.FRAME_BIAS=Off
-indi_pylibcamera.CCD_FRAME_TYPE.FRAME_DARK=Off
-indi_pylibcamera.CCD_FRAME_TYPE.FRAME_FLAT=Off
-indi_pylibcamera.UPLOAD_MODE.UPLOAD_CLIENT=On
-indi_pylibcamera.UPLOAD_MODE.UPLOAD_LOCAL=Off
-indi_pylibcamera.UPLOAD_MODE.UPLOAD_BOTH=Off
-indi_pylibcamera.UPLOAD_SETTINGS.UPLOAD_DIR=/home/ut1
-indi_pylibcamera.UPLOAD_SETTINGS.UPLOAD_PREFIX=IMAGE_XXX
-indi_pylibcamera.CCD_FAST_TOGGLE.INDI_ENABLED=Off
-indi_pylibcamera.CCD_FAST_TOGGLE.INDI_DISABLED=On
-indi_pylibcamera.CCD_FAST_COUNT.FRAMES=1
-indi_pylibcamera.CCD_GAIN.GAIN=5.0
-indi_pylibcamera.APPLY_CONFIG.CONFIG1=On
-indi_pylibcamera.APPLY_CONFIG.CONFIG2=Off
-indi_pylibcamera.APPLY_CONFIG.CONFIG3=Off
-indi_pylibcamera.APPLY_CONFIG.CONFIG4=Off
-indi_pylibcamera.APPLY_CONFIG.CONFIG5=Off
-indi_pylibcamera.APPLY_CONFIG.CONFIG6=Off
-indi_pylibcamera.CONFIG_NAME.CONFIG_NAME=
-indi_pylibcamera.CONFIG_PROCESS.CONFIG_LOAD=Off
-indi_pylibcamera.CONFIG_PROCESS.CONFIG_SAVE=Off
-indi_pylibcamera.CONFIG_PROCESS.CONFIG_DEFAULT=Off
-indi_pylibcamera.CONFIG_PROCESS.CONFIG_PURGE=Off
+pylibcamera Main.CONNECTION.DISCONNECT=Off
+pylibcamera Main.DRIVER_INFO.DRIVER_NAME=indi_pylibcamera
+pylibcamera Main.DRIVER_INFO.DRIVER_EXEC=/home/ut1/astropy/bin/indi_pylibcamera
+pylibcamera Main.DRIVER_INFO.DRIVER_VERSION=2.4.0
+pylibcamera Main.DRIVER_INFO.DRIVER_INTERFACE=2
+pylibcamera Main.LOGGING_LEVEL.LOGGING_DEBUG=Off
+pylibcamera Main.LOGGING_LEVEL.LOGGING_INFO=On
+pylibcamera Main.LOGGING_LEVEL.LOGGING_WARN=Off
+pylibcamera Main.LOGGING_LEVEL.LOGGING_ERROR=Off
+pylibcamera Main.POLLING_PERIOD.PERIOD_MS=1000
+pylibcamera Main.GEOGRAPHIC_COORD.LAT=0
+pylibcamera Main.GEOGRAPHIC_COORD.LONG=0
+pylibcamera Main.GEOGRAPHIC_COORD.ELEV=0
+pylibcamera Main.EQUATORIAL_EOD_COORD.RA=0
+pylibcamera Main.EQUATORIAL_EOD_COORD.DEC=0
+pylibcamera Main.TELESCOPE_PIER_SIDE.PIER_WEST=On
+pylibcamera Main.TELESCOPE_PIER_SIDE.PIER_EAST=Off
+pylibcamera Main.TELESCOPE_INFO.TELESCOPE_APERTURE=0
+pylibcamera Main.TELESCOPE_INFO.TELESCOPE_FOCAL_LENGTH=0
+pylibcamera Main.TELESCOPE_INFO.GUIDER_APERTURE=0
+pylibcamera Main.TELESCOPE_INFO.GUIDER_FOCAL_LENGTH=0
+pylibcamera Main.CAMERA_LENS.PRIMARY_LENS=On
+pylibcamera Main.CAMERA_LENS.GUIDER_LENS=Off
+pylibcamera Main.DO_SNOOPING.SNOOP=On
+pylibcamera Main.DO_SNOOPING.NO_SNOOP=Off
+pylibcamera Main.ACTIVE_DEVICES.ACTIVE_TELESCOPE=
+pylibcamera Main.CAMERA_INFO.CAMERA_MODEL=imx477
+pylibcamera Main.CAMERA_INFO.CAMERA_PIXELARRAYSIZE=(4056, 3040)
+pylibcamera Main.CAMERA_INFO.CAMERA_PIXELARRAYACTIVEAREA=[(8, 16, 4056, 3040)]
+pylibcamera Main.CAMERA_INFO.CAMERA_UNITCELLSIZE=(1550, 1550)
+pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_RAW=On
+pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_RGB=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT0=On
+pylibcamera Main.RAW_FORMAT.RAWFORMAT1=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT2=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT3=Off
+pylibcamera Main.CCD_PROCFRAME.WIDTH=4056
+pylibcamera Main.CCD_PROCFRAME.HEIGHT=3040
+pylibcamera Main.CAMCTRL_AEENABLE.INDI_ENABLED=Off
+pylibcamera Main.CAMCTRL_AEENABLE.INDI_DISABLED=On
+pylibcamera Main.CAMCTRL_AECONSTRAINTMODE.NORMAL=On
+pylibcamera Main.CAMCTRL_AECONSTRAINTMODE.HIGHLIGHT=Off
+pylibcamera Main.CAMCTRL_AECONSTRAINTMODE.SHADOWS=Off
+pylibcamera Main.CAMCTRL_AECONSTRAINTMODE.CUSTOM=Off
+pylibcamera Main.CAMCTRL_AEEXPOSUREMODE.NORMAL=On
+pylibcamera Main.CAMCTRL_AEEXPOSUREMODE.SHORT=Off
+pylibcamera Main.CAMCTRL_AEEXPOSUREMODE.LONG=Off
+pylibcamera Main.CAMCTRL_AEEXPOSUREMODE.CUSTOM=Off
+pylibcamera Main.CAMCTRL_AEMETERINGMODE.CENTREWEIGHTED=On
+pylibcamera Main.CAMCTRL_AEMETERINGMODE.SPOT=Off
+pylibcamera Main.CAMCTRL_AEMETERINGMODE.MATRIX=Off
+pylibcamera Main.CAMCTRL_AEMETERINGMODE.CUSTOM=Off
+pylibcamera Main.CAMCTRL_AWBENABLE.INDI_ENABLED=Off
+pylibcamera Main.CAMCTRL_AWBENABLE.INDI_DISABLED=On
+pylibcamera Main.CAMCTRL_AWBMODE.AUTO=On
+pylibcamera Main.CAMCTRL_AWBMODE.TUNGSTEN=Off
+pylibcamera Main.CAMCTRL_AWBMODE.FLUORESCENT=Off
+pylibcamera Main.CAMCTRL_AWBMODE.INDOOR=Off
+pylibcamera Main.CAMCTRL_AWBMODE.DAYLIGHT=Off
+pylibcamera Main.CAMCTRL_AWBMODE.CLOUDY=Off
+pylibcamera Main.CAMCTRL_AWBMODE.CUSTOM=Off
+pylibcamera Main.CAMCTRL_BRIGHTNESS.BRIGHTNESS=0.0
+pylibcamera Main.CAMCTRL_COLOURGAINS.REDGAIN=2.0
+pylibcamera Main.CAMCTRL_COLOURGAINS.BLUEGAIN=2.0
+pylibcamera Main.CAMCTRL_CONTRAST.CONTRAST=1.0
+pylibcamera Main.CAMCTRL_EXPOSUREVALUE.EXPOSUREVALUE=0.0
+pylibcamera Main.CAMCTRL_NOISEREDUCTIONMODE.OFF=On
+pylibcamera Main.CAMCTRL_NOISEREDUCTIONMODE.FAST=Off
+pylibcamera Main.CAMCTRL_NOISEREDUCTIONMODE.HIGHQUALITY=Off
+pylibcamera Main.CAMCTRL_SATURATION.SATURATION=1.0
+pylibcamera Main.CAMCTRL_SHARPNESS.SHARPNESS=0.0
+pylibcamera Main.CCD_EXPOSURE.CCD_EXPOSURE_VALUE=1.0
+pylibcamera Main.CCD_ABORT_EXPOSURE.ABORT=Off
+pylibcamera Main.CCD_FRAME.X=0
+pylibcamera Main.CCD_FRAME.Y=0
+pylibcamera Main.CCD_FRAME.WIDTH=4056
+pylibcamera Main.CCD_FRAME.HEIGHT=3040
+pylibcamera Main.CCD_BINNING.HOR_BIN=1
+pylibcamera Main.CCD_BINNING.VER_BIN=1
+pylibcamera Main.CCD_TEMPERATURE.CCD_TEMPERATURE_VALUE=0
+pylibcamera Main.CCD_INFO.CCD_MAX_X=4056
+pylibcamera Main.CCD_INFO.CCD_MAX_Y=3040
+pylibcamera Main.CCD_INFO.CCD_PIXEL_SIZE=1.55
+pylibcamera Main.CCD_INFO.CCD_PIXEL_SIZE_X=1.55
+pylibcamera Main.CCD_INFO.CCD_PIXEL_SIZE_Y=1.55
+pylibcamera Main.CCD_INFO.CCD_BITSPERPIXEL=12
+pylibcamera Main.CCD_COMPRESSION.CCD_COMPRESS=Off
+pylibcamera Main.CCD_COMPRESSION.CCD_RAW=On
+pylibcamera Main.CCD_FRAME_TYPE.FRAME_LIGHT=On
+pylibcamera Main.CCD_FRAME_TYPE.FRAME_BIAS=Off
+pylibcamera Main.CCD_FRAME_TYPE.FRAME_DARK=Off
+pylibcamera Main.CCD_FRAME_TYPE.FRAME_FLAT=Off
+pylibcamera Main.UPLOAD_MODE.UPLOAD_CLIENT=On
+pylibcamera Main.UPLOAD_MODE.UPLOAD_LOCAL=Off
+pylibcamera Main.UPLOAD_MODE.UPLOAD_BOTH=Off
+pylibcamera Main.UPLOAD_SETTINGS.UPLOAD_DIR=/home/ut1
+pylibcamera Main.UPLOAD_SETTINGS.UPLOAD_PREFIX=IMAGE_XXX
+pylibcamera Main.CCD_FAST_TOGGLE.INDI_ENABLED=Off
+pylibcamera Main.CCD_FAST_TOGGLE.INDI_DISABLED=On
+pylibcamera Main.CCD_FAST_COUNT.FRAMES=1
+pylibcamera Main.CCD_GAIN.GAIN=5.0
+pylibcamera Main.APPLY_CONFIG.CONFIG1=On
+pylibcamera Main.APPLY_CONFIG.CONFIG2=Off
+pylibcamera Main.APPLY_CONFIG.CONFIG3=Off
+pylibcamera Main.APPLY_CONFIG.CONFIG4=Off
+pylibcamera Main.APPLY_CONFIG.CONFIG5=Off
+pylibcamera Main.APPLY_CONFIG.CONFIG6=Off
+pylibcamera Main.CONFIG_NAME.CONFIG_NAME=
+pylibcamera Main.CONFIG_PROCESS.CONFIG_LOAD=Off
+pylibcamera Main.CONFIG_PROCESS.CONFIG_SAVE=Off
+pylibcamera Main.CONFIG_PROCESS.CONFIG_DEFAULT=Off
+pylibcamera Main.CONFIG_PROCESS.CONFIG_PURGE=Off
 """
 
 __authors__ = ("Dominique Touzan","ciboulette module")
@@ -149,7 +149,32 @@ class imx477Cam(CCDCam):
     def __init__(self, host="localhost", port=7624):
         super(imx477Cam, self).__init__(host, port, driver="pylibcamera Main")
         self.camera_name = "imx477"
- 
+
+    @property
+    def driver_info(self):
+        """
+        Get the Driver info.
+        """
+        info_vec = self.get_vector(self.driver, "DRIVER_INFO")
+        info = {}
+        for e in info_vec.elements:
+            info[e.getName()] = e.get_text()
+        return info
+    
+    @property
+    def load_config(self):
+        """
+        Get the load configuration.
+        """
+        self.set_and_send_text(self.driver, 'CONFIG_PROCESS', 'CONFIG_LOAD', 'On')
+
+    @property
+    def save_config(self):
+        """
+        Get the load configuration.
+        """
+        self.set_and_send_text(self.driver, 'CONFIG_PROCESS', 'CONFIG_SAVE', 'On')
+       
     @property
     def gain(self):
         self.process_events()
@@ -225,7 +250,8 @@ class imx477Cam(CCDCam):
         self.binning1
         self.ctrl = 0
         self.client
-        self.gain = 5
+        self.mono
+        self.gain = 10
 
     @property
     def binning2(self):
@@ -316,6 +342,13 @@ class imx477Cam(CCDCam):
         if len(string) > 0:
             self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_PREFIX', string)       
 
+    def load(self, string):
+        """
+        Set UPLOAD_SETTINGS.UPLOAD_PREFIX
+        """
+        if len(string) > 0:
+            self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_PREFIX', string)       
+   
     def expose(self, exptime=1.0, exptype="Light"):
         """
         Take exposure and return FITS data
