@@ -147,7 +147,7 @@ class imx477Cam(CCDCam):
     Wrap CCDCam,set the driver to the imx477 driver 
     """
     def __init__(self, host="localhost", port=7624):
-        super(imx477Cam, self).__init__(host, port, driver="indi_pylibcamera")
+        super(imx477Cam, self).__init__(host, port, driver="pylibcamera Main")
         self.camera_name = "imx477"
  
     @property
@@ -198,6 +198,14 @@ class imx477Cam(CCDCam):
         Turn CCD_CAPTURE_FORMAT.INDI_RAW=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RAW")
+
+    @property
+    def mono(self):
+        """
+        Turn CCD_CAPTURE_FORMAT.RAW_MONO=On
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RAW_MONO")
+        self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "RAW_MONO", "On")
     
     @property
     def default(self):
@@ -249,9 +257,20 @@ class imx477Cam(CCDCam):
             'height': int(ccdinfo['CCD_MAX_Y'])
         }
         self.frame = framedict
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT14', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT13', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT12', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT11', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT10', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT9', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT8', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT7', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT6', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT5', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT4', 'Off')
         self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT3', 'Off')
         self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT2', 'Off')
-        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT1', 'Off')
+        self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT1', 'Off')      
         self.set_and_send_text(self.driver, 'RAW_FORMAT', 'RAWFORMAT0', 'On')
         self.rgbframe(False)
 
