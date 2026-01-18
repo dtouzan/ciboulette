@@ -4,19 +4,19 @@
 """
 Classes and utility functions for communicating with cameras via the INDI protocol, http://www.indilib.org.
 
-# indi_pylibcamera
+# pylibcamera Main
 pylibcamera Main.CAMERA_SELECTION.CAM0=On
-indi_pylibcamera.CONNECTION.CONNECT=On
+pylibcamera Main.CONNECTION.CONNECT=On
 pylibcamera Main.CONNECTION.DISCONNECT=Off
-pylibcamera Main.DRIVER_INFO.DRIVER_NAME=indi_pylibcamera
+pylibcamera Main.DRIVER_INFO.DRIVER_NAME=pylibcamera Main
 pylibcamera Main.DRIVER_INFO.DRIVER_EXEC=/home/ut1/astropy/bin/indi_pylibcamera
-pylibcamera Main.DRIVER_INFO.DRIVER_VERSION=2.4.0
+pylibcamera Main.DRIVER_INFO.DRIVER_VERSION=3.1.0
 pylibcamera Main.DRIVER_INFO.DRIVER_INTERFACE=2
 pylibcamera Main.LOGGING_LEVEL.LOGGING_DEBUG=Off
 pylibcamera Main.LOGGING_LEVEL.LOGGING_INFO=On
 pylibcamera Main.LOGGING_LEVEL.LOGGING_WARN=Off
 pylibcamera Main.LOGGING_LEVEL.LOGGING_ERROR=Off
-pylibcamera Main.POLLING_PERIOD.PERIOD_MS=1000
+pylibcamera Main.POLLING_PERIOD.PERIOD_MS=1000.0
 pylibcamera Main.GEOGRAPHIC_COORD.LAT=0
 pylibcamera Main.GEOGRAPHIC_COORD.LONG=0
 pylibcamera Main.GEOGRAPHIC_COORD.ELEV=0
@@ -24,12 +24,8 @@ pylibcamera Main.EQUATORIAL_EOD_COORD.RA=0
 pylibcamera Main.EQUATORIAL_EOD_COORD.DEC=0
 pylibcamera Main.TELESCOPE_PIER_SIDE.PIER_WEST=On
 pylibcamera Main.TELESCOPE_PIER_SIDE.PIER_EAST=Off
-pylibcamera Main.TELESCOPE_INFO.TELESCOPE_APERTURE=0
-pylibcamera Main.TELESCOPE_INFO.TELESCOPE_FOCAL_LENGTH=0
-pylibcamera Main.TELESCOPE_INFO.GUIDER_APERTURE=0
-pylibcamera Main.TELESCOPE_INFO.GUIDER_FOCAL_LENGTH=0
-pylibcamera Main.CAMERA_LENS.PRIMARY_LENS=On
-pylibcamera Main.CAMERA_LENS.GUIDER_LENS=Off
+pylibcamera Main.SCOPE_INFO.FOCAL_LENGTH=0.0
+pylibcamera Main.SCOPE_INFO.APERTURE=0.0
 pylibcamera Main.DO_SNOOPING.SNOOP=On
 pylibcamera Main.DO_SNOOPING.NO_SNOOP=Off
 pylibcamera Main.ACTIVE_DEVICES.ACTIVE_TELESCOPE=
@@ -37,14 +33,27 @@ pylibcamera Main.CAMERA_INFO.CAMERA_MODEL=imx477
 pylibcamera Main.CAMERA_INFO.CAMERA_PIXELARRAYSIZE=(4056, 3040)
 pylibcamera Main.CAMERA_INFO.CAMERA_PIXELARRAYACTIVEAREA=[(8, 16, 4056, 3040)]
 pylibcamera Main.CAMERA_INFO.CAMERA_UNITCELLSIZE=(1550, 1550)
-pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_RAW=On
+pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_RAW=Off
+pylibcamera Main.CCD_CAPTURE_FORMAT.RAW_MONO=On
 pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_RGB=Off
+pylibcamera Main.CCD_CAPTURE_FORMAT.INDI_MONO=Off
 pylibcamera Main.RAW_FORMAT.RAWFORMAT0=On
 pylibcamera Main.RAW_FORMAT.RAWFORMAT1=Off
 pylibcamera Main.RAW_FORMAT.RAWFORMAT2=Off
 pylibcamera Main.RAW_FORMAT.RAWFORMAT3=Off
-pylibcamera Main.CCD_PROCFRAME.WIDTH=4056
-pylibcamera Main.CCD_PROCFRAME.HEIGHT=3040
+pylibcamera Main.RAW_FORMAT.RAWFORMAT4=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT5=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT6=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT7=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT8=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT9=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT10=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT11=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT12=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT13=Off
+pylibcamera Main.RAW_FORMAT.RAWFORMAT14=Off
+pylibcamera Main.CCD_PROCFRAME.WIDTH=4056.0
+pylibcamera Main.CCD_PROCFRAME.HEIGHT=3040.0
 pylibcamera Main.CAMCTRL_AEENABLE.INDI_ENABLED=Off
 pylibcamera Main.CAMCTRL_AEENABLE.INDI_DISABLED=On
 pylibcamera Main.CAMCTRL_AECONSTRAINTMODE.NORMAL=On
@@ -80,10 +89,10 @@ pylibcamera Main.CAMCTRL_SATURATION.SATURATION=1.0
 pylibcamera Main.CAMCTRL_SHARPNESS.SHARPNESS=0.0
 pylibcamera Main.CCD_EXPOSURE.CCD_EXPOSURE_VALUE=1.0
 pylibcamera Main.CCD_ABORT_EXPOSURE.ABORT=Off
-pylibcamera Main.CCD_FRAME.X=0
-pylibcamera Main.CCD_FRAME.Y=0
-pylibcamera Main.CCD_FRAME.WIDTH=4056
-pylibcamera Main.CCD_FRAME.HEIGHT=3040
+pylibcamera Main.CCD_FRAME.X=0.0
+pylibcamera Main.CCD_FRAME.Y=0.0
+pylibcamera Main.CCD_FRAME.WIDTH=4056.0
+pylibcamera Main.CCD_FRAME.HEIGHT=3040.0
 pylibcamera Main.CCD_BINNING.HOR_BIN=1
 pylibcamera Main.CCD_BINNING.VER_BIN=1
 pylibcamera Main.CCD_TEMPERATURE.CCD_TEMPERATURE_VALUE=0
@@ -107,7 +116,7 @@ pylibcamera Main.UPLOAD_SETTINGS.UPLOAD_PREFIX=IMAGE_XXX
 pylibcamera Main.CCD_FAST_TOGGLE.INDI_ENABLED=Off
 pylibcamera Main.CCD_FAST_TOGGLE.INDI_DISABLED=On
 pylibcamera Main.CCD_FAST_COUNT.FRAMES=1
-pylibcamera Main.CCD_GAIN.GAIN=5.0
+pylibcamera Main.CCD_GAIN.GAIN=10.0
 pylibcamera Main.APPLY_CONFIG.CONFIG1=On
 pylibcamera Main.APPLY_CONFIG.CONFIG2=Off
 pylibcamera Main.APPLY_CONFIG.CONFIG3=Off
@@ -150,39 +159,78 @@ class imx477Cam(CCDCam):
         super(imx477Cam, self).__init__(host, port, driver="pylibcamera Main")
         self.camera_name = "imx477"
 
+    def VECTOR_INFO(self, vector="DRIVER_INFO"):
+        """
+        Get the vector info.
+        """
+        self.process_events()
+        info_vec = self.get_vector(self.driver, vector)
+        info = {}
+        for e in info_vec.elements:
+            if('indinumber' in str(type(e))):
+                info[e.getName()] = e.get_float()
+            else:
+                info[e.getName()] = e.get_text()
+        return info
+        
     @property
-    def driver_info(self):
+    def DRIVER_INFO(self):
         """
         Get the Driver info.
         """
-        info_vec = self.get_vector(self.driver, "DRIVER_INFO")
-        info = {}
-        for e in info_vec.elements:
-            info[e.getName()] = e.get_text()
-        return info
+        return self.VECTOR_INFO('DRIVER_INFO')
+
+    @property
+    def CAMERA_INFO(self):
+        """
+        Get the Camera info.
+        """
+        return self.VECTOR_INFO('CAMERA_INFO')
+
+    @property
+    def CCD_CAPTURE_FORMAT(self):
+        """
+        Get the Capture format info.
+        """
+        return self.VECTOR_INFO("CCD_CAPTURE_FORMAT")
     
     @property
-    def load_config(self):
+    def CCD_FRAME_TYPE(self):
+        """
+        Get the Frame Type format info.
+        """
+        return self.VECTOR_INFO('CCD_FRAME_TYPE')
+
+    @property
+    def CCD_INFO(self):
+        """
+        Get the CCD format info.
+        """
+        return self.VECTOR_INFO('CCD_INFO')
+
+        
+    @property
+    def CONFIG_LOAD(self):
         """
         Get the load configuration.
         """
         self.set_and_send_text(self.driver, 'CONFIG_PROCESS', 'CONFIG_LOAD', 'On')
 
     @property
-    def save_config(self):
+    def CONFIG_SAVE(self):
         """
         Get the load configuration.
         """
         self.set_and_send_text(self.driver, 'CONFIG_PROCESS', 'CONFIG_SAVE', 'On')
        
     @property
-    def gain(self):
+    def GAIN(self):
         self.process_events()
         gain = self.get_float(self.driver, "CCD_GAIN", "GAIN")
         return gain
 
-    @gain.setter
-    def gain(self,f):
+    @GAIN.setter
+    def GAIN(self,f):
         if f >=0 and f <=100:
             self.set_and_send_float(self.driver, 'CCD_GAIN', 'GAIN', f) 
             self.process_events()
@@ -195,15 +243,15 @@ class imx477Cam(CCDCam):
         return 'Raspicam imx477 V1 for astronomy'
 
     @property
-    def compress(self):
+    def COMPRESS(self):
         """
         Turn CCD_COMPRESSION.CCD_COMPRESS=On 
         """
-        self.set_and_send_text(self.driver, "CCD_COMPRESSION", "CCD_RAW", "Off")
         self.set_and_send_text(self.driver, "CCD_COMPRESSION", "CCD_COMPRESS", "On")
+        self.process_events()
 
     @property
-    def uncompress(self):
+    def UNCOMPRESS(self):
         """
         Turn CCD_COMPRESSION.CCD_RAW=On 
         """
@@ -211,25 +259,25 @@ class imx477Cam(CCDCam):
         self.set_and_send_text(self.driver, "CCD_COMPRESSION", "CCD_RAW", "On")
 
     @property
-    def rgb(self):
+    def INDI_RGB(self):
         """
         Turn CCD_CAPTURE_FORMAT.INDI_RGB=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RGB")
 
     @property
-    def raw(self):
+    def RAW(self):
         """
         Turn CCD_CAPTURE_FORMAT.INDI_RAW=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RAW")
 
     @property
-    def mono(self):
+    def RAW_MONO(self):
         """
         Turn CCD_CAPTURE_FORMAT.RAW_MONO=On
         """
-        self.set_and_send_switchvector_by_elementlabel(self.driver, "CCD_CAPTURE_FORMAT", "RAW_MONO")
+        self.RAW
         self.set_and_send_text(self.driver, "CCD_CAPTURE_FORMAT", "RAW_MONO", "On")
     
     @property
@@ -238,23 +286,23 @@ class imx477Cam(CCDCam):
         Configure camera to full frame and 1x1 binning and raw
         """
         ccdinfo = self.ccd_info
-        self.raw
+        self.RAW
         framedict = {
             'X': 0,
             'Y': 0,
             'width': int(ccdinfo['CCD_MAX_X']),
             'height': int(ccdinfo['CCD_MAX_Y'])
         }
-        self.frame = framedict
+        self.FRAME = framedict
         self.rgbframe(False)
-        self.binning1
+        self.BINNING1
         self.ctrl = 0
-        self.client
-        self.mono
-        self.gain = 10
+        self.CLIENT
+        self.RAW_MONO
+        self.GAIN = 10
 
     @property
-    def binning2(self):
+    def BINNING2(self):
         """
         Configure camera to full frame and 2x2 binning
         """
@@ -270,7 +318,7 @@ class imx477Cam(CCDCam):
         self.rgbframe(True)
 
     @property
-    def binning1(self):
+    def BINNING1(self):
         """
         Configure camera to full frame and 1x1 binning
         """
@@ -315,34 +363,27 @@ class imx477Cam(CCDCam):
             self.set_and_send_float(self.driver, 'CCD_PROCFRAME', 'HEIGHT', y) 
 
     @property
-    def local(self):
+    def LOCAL(self):
         """
         Turn UPLOAD_MODE.UPLOAD_LOCAL=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, 'UPLOAD_MODE', 'Local')
 
     @property
-    def client(self):
+    def CLIENT(self):
         """
         Turn UPLOAD_MODE.UPLOAD_CLIENT=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, 'UPLOAD_MODE', 'Client')
 
-    def dir(self, string):
+    def UPLOAD_DIR(self, string):
         """
         Set UPLOAD_SETTINGS.UPLOAD_DIR
         """
         if len(string) > 0:
             self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_DIR', string)
      
-    def prefix(self, string):
-        """
-        Set UPLOAD_SETTINGS.UPLOAD_PREFIX
-        """
-        if len(string) > 0:
-            self.set_and_send_text(self.driver, 'UPLOAD_SETTINGS', 'UPLOAD_PREFIX', string)       
-
-    def load(self, string):
+    def UPLOAD_PREFIX(self, string):
         """
         Set UPLOAD_SETTINGS.UPLOAD_PREFIX
         """
