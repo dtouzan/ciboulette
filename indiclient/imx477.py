@@ -147,6 +147,7 @@ from astropy.io import fits
 
 from .indiclient import indiclient
 from ciboulette.indiclient.indicam import CCDCam
+from ciboulette.indiclient.vectorlist import pylibcamera_vector
 
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
@@ -159,6 +160,16 @@ class imx477Cam(CCDCam):
         super(imx477Cam, self).__init__(host, port, driver="pylibcamera Main")
         self.camera_name = "imx477"
 
+    @property
+    def getprop(self):
+        """
+        Get properties info.
+        """
+        for vector in pylibcamera_vector:
+            info = self.VECTOR_INFO(vector)
+            for item in info.items():
+                print(f'{self.driver}.{vector}.{item[0]}={item[1]}')
+    
     def VECTOR_INFO(self, vector="DRIVER_INFO"):
         """
         Get the vector info.
@@ -166,11 +177,12 @@ class imx477Cam(CCDCam):
         self.process_events()
         info_vec = self.get_vector(self.driver, vector)
         info = {}
-        for e in info_vec.elements:
-            if('indinumber' in str(type(e))):
-                info[e.getName()] = e.get_float()
-            else:
-                info[e.getName()] = e.get_text()
+        if (info_vec):
+            for e in info_vec.elements:
+                if(type(e).__name__ == 'indinumber'):
+                    info[e.getName()] = e.get_float()
+                else:
+                    info[e.getName()] = e.get_text()
         return info
         
     @property
@@ -286,19 +298,18 @@ class imx477Cam(CCDCam):
         Configure camera to full frame and 1x1 binning and raw
         """
         ccdinfo = self.ccd_info
-        self.RAW
+        self.RAW_MONO
         framedict = {
             'X': 0,
             'Y': 0,
             'width': int(ccdinfo['CCD_MAX_X']),
             'height': int(ccdinfo['CCD_MAX_Y'])
         }
-        self.FRAME = framedict
+        self.frame = framedict
         self.rgbframe(False)
         self.BINNING1
         self.ctrl = 0
         self.CLIENT
-        self.RAW_MONO
         self.GAIN = 10
 
     @property
