@@ -243,10 +243,34 @@ class imx477Cam(CCDCam):
 
     @GAIN.setter
     def GAIN(self,f):
-        if f >=0 and f <=100:
+        if f >=0 and f <=22:
             self.set_and_send_float(self.driver, 'CCD_GAIN', 'GAIN', f) 
             self.process_events()
-            
+
+    @property
+    def REDGAIN(self):
+        self.process_events()
+        gain = self.get_float(self.driver, "CAMCTRL_COLOURGAINS", "REDGAIN")
+        return gain
+
+    @REDGAIN.setter
+    def REDGAIN(self,f):
+        if f >=0 and f <=22:
+            self.set_and_send_float(self.driver, 'CAMCTRL_COLOURGAINS', 'REDGAIN', f) 
+            self.process_events()
+
+    @property
+    def BLUEGAIN(self):
+        self.process_events()
+        gain = self.get_float(self.driver, "CAMCTRL_COLOURGAINS", "BLUEGAIN")
+        return gain
+
+    @REDGAIN.setter
+    def BLUEGAIN(self,f):
+        if f >=0 and f <=22:
+            self.set_and_send_float(self.driver, 'CAMCTRL_COLOURGAINS', 'BLUEGAIN', f) 
+            self.process_events()
+
     @property
     def HDUComment(self):
         """
@@ -308,8 +332,8 @@ class imx477Cam(CCDCam):
         self.frame = framedict
         self.rgbframe(False)
         self.BINNING1
-        self.ctrl = 0
-        self.CLIENT
+        self.UPLOAD_CLIENT
+        self.FRAME_LIGHT
         self.GAIN = 10
 
     @property
@@ -374,14 +398,42 @@ class imx477Cam(CCDCam):
             self.set_and_send_float(self.driver, 'CCD_PROCFRAME', 'HEIGHT', y) 
 
     @property
-    def LOCAL(self):
+    def FRAME_LIGHT(self):
+        """
+        Turn CCD_FRAME_TYPE.FRAME_LIGHT=On
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'CCD_FRAME_TYPE', 'Light')
+
+    @property
+    def FRAME_BIAS(self):
+        """
+        Turn CCD_FRAME_TYPE.FRAME_BIAS=On
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'CCD_FRAME_TYPE', 'Bias')
+
+    @property
+    def FRAME_DARK(self):
+        """
+        Turn CCD_FRAME_TYPE.FRAME_DARK=On
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'CCD_FRAME_TYPE', 'Dark')
+
+    @property
+    def FRAME_FLAT(self):
+        """
+        Turn CCD_FRAME_TYPE.FRAME_FLAT=On
+        """
+        self.set_and_send_switchvector_by_elementlabel(self.driver, 'CCD_FRAME_TYPE', 'Flat')
+    
+    @property
+    def UPLOAD_LOCAL(self):
         """
         Turn UPLOAD_MODE.UPLOAD_LOCAL=On
         """
         self.set_and_send_switchvector_by_elementlabel(self.driver, 'UPLOAD_MODE', 'Local')
 
     @property
-    def CLIENT(self):
+    def UPLOAD_CLIENT(self):
         """
         Turn UPLOAD_MODE.UPLOAD_CLIENT=On
         """
