@@ -13,7 +13,7 @@ Astronomy packages for CCD/CMOS and photographic lens
   - Internet connexion
 
 ### Installation
-**Operating system (Windows)**
+**Operating system (MacOS or Windows)**
   - miniconda site : https://docs.conda.io/en/latest/miniconda.html
 
 **Operating system (Raspberry pi4)**
@@ -28,7 +28,7 @@ sudo reboot
   
   - Indilib.org site: https://indilib.org/download.html
 
-**Jupyter lab (Windows)**
+**Jupyter lab (MacOS or Windows)**
 ```sh
 conda install jupyter
 conda install jupyterlab
@@ -42,7 +42,7 @@ pip install jupyterlab
 ~/.local/bin/jupyter notebook --generate-config
 ```      
 
-**Astronomy Packages (Windows)**
+**Astronomy Packages (MacOS or Windows)**
 ```sh
 conda install git
 conda install matplotlib
