@@ -127,7 +127,7 @@ widget_CCD_EXPOSURE_VALUE = widgets.Text(description='Exposure:', disabled=False
 widget_CCD_EXPOSURE_VALUE.value = '2'
 widget_CCD_EXPOSURE = widgets.Dropdown(options=['0.001', '0.005', '0.01', '0.05', '0.1', '0.5', '2', '10', '30', '60', '120', '180', '300'], 
                                        value='2', 
-                                       layout=widgets.Layout(width='5%'))
+                                       layout=widgets.Layout(width='10%'))
 
 def CCD_EXPOSURE_change(change):
     widget_CCD_EXPOSURE_VALUE.value = change.new
@@ -137,6 +137,50 @@ widget_CCD_CAPTURE_FORMAT.observe(CCD_CAPTURE_FORMAT_change, names='value')
 widget_CCD_BINNING.observe(CCD_BINNING_change, names='value')
 widget_CCD_FRAME_TYPE.observe(CCD_FRAME_TYPE_change, names='value')
 widget_CCD_EXPOSURE.observe(CCD_EXPOSURE_change, names='value')
+
+#####################################################################################
+#
+# VISUALISATION
+#
+#####################################################################################    
+# Visu button
+widget_exposure = widgets.Button(
+    description='Exposure',
+    disabled=False,
+    button_style='', # 'success', 'info', 'warning', 'danger' or ''
+    tooltip='Exposure',
+)
+
+# Range option
+widget_range = widgets.IntRangeSlider(
+    value=[2000, 6000],
+    min=0,
+    max=65000,
+    step=1,
+    description='Range:',
+    disabled=False,
+    continuous_update=False,
+    orientation='horizontal',
+    readout=True,
+    readout_format='d',
+    layout=widgets.Layout(width='50%')
+)
+
+def exposure_func(b):
+    with output_visualisation:
+        output_visualisation.clear_output()
+        print('Exposure...')
+        hdul = imx477.expose(exptime=float(widget_CCD_EXPOSURE_VALUE.value), exptype=widget_CCD_FRAME_TYPE.value)
+        print('Translate...')
+        header = hdul[0].header
+        image = hdul[0].data
+        plt.figure(figsize=(20,20))
+        output_visualisation.clear_output()
+        plt.imshow(image, cmap='gray', vmin=widget_range.value[0] ,vmax=widget_range.value[1])
+        plt.show()
+        hdul.close()
+
+widget_exposure.on_click(exposure_func)
 
 #####################################################################################
 #
@@ -156,7 +200,8 @@ box_configuration = widgets.VBox([widgets.HBox([widget_CCD_CAPTURE_FORMAT,
                                   HR3D,
                                   widget_properties,
                                   output_configuration, ])
-box_visu = widgets.VBox([output_visualisation, ])
+box_visu = widgets.VBox([widgets.HBox([widget_exposure, widget_range]),
+                         output_visualisation ])
 
 # Mast Tab
 tab_contents = ['Connect/Disconnect', 'Configuration', 'Visualisation']
