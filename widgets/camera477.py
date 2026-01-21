@@ -122,10 +122,21 @@ def CCD_FRAME_TYPE_change(change):
         if (change.new == 'Flat'):
             imx477.FRAME_FLAT
 
+# Exposition time option
+widget_CCD_EXPOSURE_VALUE = widgets.Text(description='Exposure:', disabled=False)
+widget_CCD_EXPOSURE_VALUE.value = '2'
+widget_CCD_EXPOSURE = widgets.Dropdown(options=['0.001', '0.005', '0.01', '0.05', '0.1', '0.5', '2', '10', '30', '60', '120', '180', '300'], 
+                                       value='2', 
+                                       layout=widgets.Layout(width='5%'))
+
+def CCD_EXPOSURE_change(change):
+    widget_CCD_EXPOSURE_VALUE.value = change.new
+           
 widget_properties.on_click(properties_func)
 widget_CCD_CAPTURE_FORMAT.observe(CCD_CAPTURE_FORMAT_change, names='value')
 widget_CCD_BINNING.observe(CCD_BINNING_change, names='value')
 widget_CCD_FRAME_TYPE.observe(CCD_FRAME_TYPE_change, names='value')
+widget_CCD_EXPOSURE.observe(CCD_EXPOSURE_change, names='value')
 
 #####################################################################################
 #
@@ -140,6 +151,8 @@ box_connect = widgets.VBox([widget_ccd_ip,
 box_configuration = widgets.VBox([widgets.HBox([widget_CCD_CAPTURE_FORMAT,
                                                 widget_CCD_BINNING,
                                                 widget_CCD_FRAME_TYPE]),
+                                  widgets.HBox([widget_CCD_EXPOSURE_VALUE, 
+                                                widget_CCD_EXPOSURE]), 
                                   HR3D,
                                   widget_properties,
                                   output_configuration, ])
