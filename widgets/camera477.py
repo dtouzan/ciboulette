@@ -123,20 +123,22 @@ def CCD_FRAME_TYPE_change(change):
             imx477.FRAME_FLAT
 
 # Exposition time option
-widget_CCD_EXPOSURE_VALUE = widgets.Text(description='Exposure:', disabled=False)
-widget_CCD_EXPOSURE_VALUE.value = '2'
 widget_CCD_EXPOSURE = widgets.Dropdown(options=['0.001', '0.005', '0.01', '0.05', '0.1', '0.5', '2', '10', '30', '60', '120', '180', '300'], 
                                        value='2', 
-                                       layout=widgets.Layout(width='10%'))
+                                       layout=widgets.Layout(width='15%'),
+                                       description='Exposure:')
 
-def CCD_EXPOSURE_change(change):
-    widget_CCD_EXPOSURE_VALUE.value = change.new
-           
+widget_save = widgets.Checkbox(
+    value=False,
+    description='Save',
+    disabled=False,
+    indent=False
+)
+
 widget_properties.on_click(properties_func)
 widget_CCD_CAPTURE_FORMAT.observe(CCD_CAPTURE_FORMAT_change, names='value')
 widget_CCD_BINNING.observe(CCD_BINNING_change, names='value')
 widget_CCD_FRAME_TYPE.observe(CCD_FRAME_TYPE_change, names='value')
-widget_CCD_EXPOSURE.observe(CCD_EXPOSURE_change, names='value')
 
 #####################################################################################
 #
@@ -170,7 +172,7 @@ def exposure_func(b):
     with output_visualisation:
         output_visualisation.clear_output()
         print('Exposure...')
-        hdul = imx477.expose(exptime=float(widget_CCD_EXPOSURE_VALUE.value), exptype=widget_CCD_FRAME_TYPE.value)
+        hdul = imx477.expose(exptime=float(widget_CCD_EXPOSURE.value), exptype=widget_CCD_FRAME_TYPE.value)
         print('Translate...')
         header = hdul[0].header
         image = hdul[0].data
@@ -178,6 +180,8 @@ def exposure_func(b):
         output_visualisation.clear_output()
         plt.imshow(image, cmap='gray', vmin=widget_range.value[0] ,vmax=widget_range.value[1])
         plt.show()
+        if widget_save.value:
+            hdul.writeto('new1.fits', overwrite=True)
         hdul.close()
 
 widget_exposure.on_click(exposure_func)
@@ -195,8 +199,8 @@ box_connect = widgets.VBox([widget_ccd_ip,
 box_configuration = widgets.VBox([widgets.HBox([widget_CCD_CAPTURE_FORMAT,
                                                 widget_CCD_BINNING,
                                                 widget_CCD_FRAME_TYPE]),
-                                  widgets.HBox([widget_CCD_EXPOSURE_VALUE, 
-                                                widget_CCD_EXPOSURE]), 
+                                  widgets.HBox([widget_CCD_EXPOSURE,
+                                                widget_save]), 
                                   HR3D,
                                   widget_properties,
                                   output_configuration, ])
