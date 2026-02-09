@@ -44,7 +44,7 @@ widget_disconnect = widgets.Button(
     description='Disconnect',
     disabled=False,
     button_style='', # 'success', 'info', 'warning', 'danger' or ''
-    tooltip='Disconnect he driver',
+    tooltip='Disconnect the driver',
 )
 
 # CCD name/IP 

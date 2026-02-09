@@ -54,3 +54,19 @@ pylibcamera_vector = ['CAMERA_SELECTION',
                     'APPLY_CONFIG',
                     'CONFIG_NAME',
                     'CONFIG_PROCESS',]
+
+EAFpy_vector = ['CONNECTION',
+                'DRIVER_INFO',
+                'DEBUG', 
+                'POLLING_PERIOD',
+                'SIMULATION',
+                'CONFIG_PROCESS',
+                'FOCUS_MOTION',
+                'REL_FOCUS_POSITION',
+                'USEJOYSTICK', 
+                'USEJOYSTICK',
+                'SNOOP_JOYSTICK',
+                'FOCUS_SPEED_SP',
+                'DELAY',
+                'SNOOP_JOYSTICK',]
+

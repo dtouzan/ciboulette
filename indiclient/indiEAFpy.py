@@ -52,6 +52,8 @@ from astropy.io import fits
 
 from .indiclient import indiclient
 from ciboulette.indiclient.indifocuser import Focuser
+from ciboulette.indiclient.vectorlist import EAFpy_vector
+
 
 log = logging.getLogger("")
 log.setLevel(logging.INFO)
@@ -63,6 +65,38 @@ class EAFpy(Focuser):
     def __init__(self, host="localhost", port=7624):
         super(EAFpy, self).__init__(host, port, driver="EAFpy_Focuser")
         self.focuser_name = "EAFpy"
+
+    @property
+    def getprop(self):
+        """
+        Get properties info.
+        """
+        for vector in EAFpy_vector:
+            info = self.VECTOR_INFO(vector)
+            for item in info.items():
+                print(f'{self.driver}.{vector}.{item[0]}={item[1]}')
+                
+    def VECTOR_INFO(self, vector="DRIVER_INFO"):
+        """
+        Get the vector info.
+        """
+        self.process_events()
+        info_vec = self.get_vector(self.driver, vector)
+        info = {}
+        if (info_vec):
+            for e in info_vec.elements:
+                if(type(e).__name__ == 'indinumber'):
+                    info[e.getName()] = e.get_float()
+                else:
+                    info[e.getName()] = e.get_text()
+        return info
+    
+    @property
+    def CONFIG_LOAD(self):
+        """
+        Get the load configuration.
+        """
+        self.set_and_send_text(self.driver, 'CONFIG_PROCESS', 'CONFIG_LOAD', 'On')
 
     @property
     def config(self):
