@@ -133,7 +133,7 @@ class EAFpy(Focuser):
         """
         Set Ticks with value 0<ticks<500
         """
-        if  0<= value <=500:
+        if  0<= value <=2000:
             self.set_and_send_float(self.driver, 'REL_FOCUS_POSITION', 'FOCUS_RELATIVE_POSITION', value) 
             self.process_events()
 

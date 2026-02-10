@@ -69,8 +69,7 @@ widget_disconnect.on_click(disconnect_func)
 #
 #####################################################################################    
 # Focuser increment
-focuser_values = ['2', '5', '10', '20', '50', '200', '500', '1000']
-widget_focuser_inc = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(focuser_values)], value=4, description='Step:')
+widget_step = widgets.Dropdown(options=['2', '5', '10', '20', '50', '200', '500', '1000'], value='20', description='Step:')
 
 # Up button
 widget_up = widgets.Button(
@@ -86,6 +85,55 @@ disabled=False,
 button_style='', # 'success', 'info', 'warning', 'danger' or ''
 tooltip='Down turn',)
 
+def up_func(b):
+    EAF_focuser.outward
+    EAF_focuser.ticks = int(widget_step.value)
+        
+def down_func(b):
+    EAF_focuser.inward
+    EAF_focuser.ticks = int(widget_step.value)
+
+widget_up.on_click(up_func)
+widget_down.on_click(down_func)
+
+#####################################################################################
+#
+# CONFIGURATION
+#
+#####################################################################################    
+# Delay configure
+widget_delay = widgets.Dropdown(options=['2', '5', '10', '15', '20', '25'], value='10', description='Delay:')
+
+# Speed configure
+# Label
+speed_ladel = widgets.Label(value='Speed:')
+# x1 button
+widget_speed1 = widgets.Button(
+description='1',
+disabled=False,
+button_style='', # 'success', 'info', 'warning', 'danger' or ''
+tooltip='x1',)
+
+# x2 button
+widget_speed2 = widgets.Button(
+description='2',
+disabled=False,
+button_style='', # 'success', 'info', 'warning', 'danger' or ''
+tooltip='x2',)
+
+def speed1_func(b):
+    EAF_focuser.speed1
+        
+def speed2_func(b):
+    EAF_focuser.speed2
+
+def delay_change(change):
+    EAF_focuser.delay = int(widget_delay.value)
+           
+widget_speed1.on_click(speed1_func)
+widget_speed2.on_click(speed2_func)
+widget_delay.observe(delay_change, names='value')
+
 #####################################################################################
 #
 # IDE
@@ -96,13 +144,16 @@ box_connect = widgets.VBox([widget_EAF_ip,
                             HR3D,
                             widgets.HBox([widget_connect, widget_disconnect]), 
                             output_ctrl])
-box_control = widgets.VBox([widgets.HBox([widget_focuser_inc, widget_up, widget_down]), ])
+
+box_configure = widgets.VBox([widgets.HBox([widget_delay, speed_ladel, widget_speed1, widget_speed2]), ])
+
+box_control = widgets.VBox([widgets.HBox([widget_step, widget_up, widget_down]), ])
 
 # Mast Tab
-tab_contents = ['Connect/Disconnect', 'EAF', ]
+tab_contents = ['Connect/Disconnect', 'Configuration', 'EAF', ]
 EAFpy_tabs = widgets.Tab()
-EAFpy_tabs.children = [box_connect, box_control]
-EAFpy_tabs.titles = [tab_contents[0], tab_contents[1]]
+EAFpy_tabs.children = [box_connect, box_configure, box_control]
+EAFpy_tabs.titles = [tab_contents[0], tab_contents[1], tab_contents[2]]
 
 
 
