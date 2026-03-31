@@ -1274,7 +1274,12 @@ INSERT INTO "Instrument" ("OBSERVATION_ID","NAME","FILTER","DISPERSER","CAMERA",
  (1200,'UT1','IR-CUT','','nefertiti3199-imx477',900.0,0.0,1,1,0.2,0.06),
  (1201,'UT1','IR-CUT','','nefertiti3199-imx477',2640.0,0.0,1,1,0.2,0.06),
  (1202,'UT1','IR-CUT','','nefertiti3199-imx477',1260.0,0.0,1,1,0.2,0.06),
- (1203,'UT1','IR-CUT','','nefertiti3199-imx477',2220.0,0.0,1,1,0.2,0.06);
+ (1203,'UT1','IR-CUT','','nefertiti3199-imx477',2220.0,0.0,1,1,0.2,0.06),
+ (1204,'UT4','IR-CUT','','uranus-M-imx585',1200.0,0.0,1,1,0.085,0.03),
+ (1205,'UT4','IR-CUT','','uranus-M-imx585',1800.0,0.0,1,1,0.085,0.03),
+ (1206,'UT4','IR-CUT','','uranus-M-imx585',1320.0,0.0,1,1,0.085,0.03),
+ (1207,'UT4','IR-CUT','','uranus-M-imx585',2880.0,0.0,1,1,0.085,0.03),
+ (1208,'UT4','IR-CUT','','uranus-M-imx585',900.0,0.0,1,1,0.085,0.03);
 INSERT INTO "Mount" ("NAME","LABEL","LONGITUDE","LATITUDE","ALTITUDE") VALUES ('UT1','AZ-EQ5-GT SynScan GoTo',-0.35,49.35,100.0);
 INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLECTION","PROPOSAL_PI","PRIORITY","STATUS","SCHEDULING","FITS_FILE","NOTE_FILE","CALIBRATION") VALUES (1000,1,'NGC 5350 HII in galaxy in CVn','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2019-05-31T23:36:00','ngc5350-20190531-2336-1x300-f750.fits','fits',1),
  (1000,2,'(9) Metis','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2017-04-23T21:20:00','9-20170423-2120-15x60s-f200.fits','fits',1),
@@ -2464,21 +2469,26 @@ INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLEC
  (1002,1186,'NGC 2238 nebula in Mon','OT_Library_NEBULA','dtouzan@gmail.com',0,0,'2025-12-25T23:20:00','ngc2238-20251225-2320-35x60s-f85.fits','fits',2),
  (1002,1187,'NGC 1333 nebula in Per','OT_Library_NEBULA','dtouzan@gmail.com',0,0,'2025-12-24T19:21:00','ngc1333-20251224-1921-53x60s-f85.fits','fits',2),
  (1002,1188,'Messier 38 cluster in Aur','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2025-12-26T21:39:00','m38-20251226-2139-21x60s-f200.fits','fits',2),
- (1002,1189,'NGC 2331 cluster in Gem','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-28T20:46:00','ngc2331-20260128-2046-21x60s-f200.fits','fits',2),
- (1002,1190,'(786) Bredichina','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:38:00','786-20260128-1938-44x60s-f200.fits','fits',2),
- (1002,1191,'NGC 2264 cluster and nebula in Mon','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-23T20:26:00','ngc2264-20260123-2026-6x300s-f200.fits','fits',2),
- (1002,1192,'(133) Cyrene','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T20:46:00','133-20260128-2046-21x60s-f200.fits','fits',2),
- (1002,1193,'(886) Washingtonia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T21:59:00','886-20260128-2159-14x60s-f200.fits','fits',2),
- (1002,1194,'(280) Philia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:21:00','280-20260128-1921-6x60s-f200.fits','fits',2),
- (1002,1195,'NGC 2281 cluster in Aur','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-22T22:43:00','ngc2281-20260122-2243-21x60s-f200.fits','fits',2),
- (1002,1196,'(536) Merapi','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-22T22:08:00','536-20260122-2208-21x60s-f200.fits','fits',2),
- (1002,1197,'(966) Muschi','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-27T22:08:00','966-20260127-2208-19x60s-f200.fits','fits',2),
- (1002,1198,'NGC 3184 galaxy in UMa','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-01-28T22:27:00','ngc3184-20260128-2227-13x300s-f200.fits','fits',2),
- (1002,1199,'(596) Scheila','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-27T21:16:00','596-20260127-2116-20x60s-f200.fits','fits',2),
- (1002,1200,'NGC 2281 cluster in Aur','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-22T23:37:00','ngc2281-20260122-2337-15x60s-f200.fits','fits',2),
- (1002,1201,'(432) Pythia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:38:00','432-20260128-1938-44x60s-f200.fits','fits',2),
- (1002,1202,'(465) Alekto','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T21:21:00','465-20260128-2121-21x60s-f200.fits','fits',2),
- (1002,1203,'(1620) Geographos','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T18:17:00','1620-20260128-1817-37x60s-f200.fits','fits',2);
+ (1004,1189,'NGC 2331 cluster in Gem','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-28T20:46:00','ngc2331-20260128-2046-21x60s-f200.fits','fits',2),
+ (1004,1190,'(786) Bredichina','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:38:00','786-20260128-1938-44x60s-f200.fits','fits',2),
+ (1004,1191,'NGC 2264 cluster and nebula in Mon','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-23T20:26:00','ngc2264-20260123-2026-6x300s-f200.fits','fits',2),
+ (1004,1192,'(133) Cyrene','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T20:46:00','133-20260128-2046-21x60s-f200.fits','fits',2),
+ (1004,1193,'(886) Washingtonia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T21:59:00','886-20260128-2159-14x60s-f200.fits','fits',2),
+ (1004,1194,'(280) Philia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:21:00','280-20260128-1921-6x60s-f200.fits','fits',2),
+ (1004,1195,'NGC 2281 cluster in Aur','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-22T22:43:00','ngc2281-20260122-2243-21x60s-f200.fits','fits',2),
+ (1004,1196,'(536) Merapi','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-22T22:08:00','536-20260122-2208-21x60s-f200.fits','fits',2),
+ (1004,1197,'(966) Muschi','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-27T22:08:00','966-20260127-2208-19x60s-f200.fits','fits',2),
+ (1004,1198,'NGC 3184 galaxy in UMa','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-01-28T22:27:00','ngc3184-20260128-2227-13x300s-f200.fits','fits',2),
+ (1004,1199,'(596) Scheila','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-27T21:16:00','596-20260127-2116-20x60s-f200.fits','fits',2),
+ (1004,1200,'NGC 2281 cluster in Aur','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-22T23:37:00','ngc2281-20260122-2337-15x60s-f200.fits','fits',2),
+ (1004,1201,'(432) Pythia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T19:38:00','432-20260128-1938-44x60s-f200.fits','fits',2),
+ (1004,1202,'(465) Alekto','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T21:21:00','465-20260128-2121-21x60s-f200.fits','fits',2),
+ (1004,1203,'(1620) Geographos','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-01-28T18:17:00','1620-20260128-1817-37x60s-f200.fits','fits',2),
+ (1004,1204,' NGC 4565 galaxy in Com','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-02-24T23:36:00','ngc4565-20260224-2336-20x60s-f85.fits','fits',2),
+ (1004,1205,'Messier 44 cluster in Cnc','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-02-24T21:16:00','m44-20260224-2116-30x60s-f85.fits','fits',2),
+ (1004,1206,'NGC 3184 galaxy in UMa','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-01-28T22:37:00','ngc3184-20260128-2237-22x60s-f85.fits','fits',2),
+ (1004,1207,'NGC 2683 galaxy in Lyn','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-02-24T19:32:00','ngc2683-20260224-1932-48x60s-f85.fits','fits',2),
+ (1004,1208,'NGC 2264 cluster in Lic','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-01-23T20:50:00','ngc2264-20260123-2050-5x180s-f85.fits','fits',2);
 INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVER","IMAGE_QUALITY","WATER_VAPOR","ELEVATION_CONSTRAINT","TIMMING_WINDOW") VALUES (1,100,20,100,60,80,'ANY'),
  (956,90,5,90,60,20,'night'),
  (957,90,5,90,60,20,'night'),
@@ -2731,7 +2741,12 @@ INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVE
  (1200,80,5,75,60,20,'night'),
  (1201,80,5,75,60,20,'night'),
  (1202,80,5,75,60,20,'night'),
- (1203,80,5,75,60,20,'night');
+ (1203,80,5,75,60,20,'night'),
+ (1204,80,5,75,60,20,'night'),
+ (1205,80,5,75,60,20,'night'),
+ (1206,80,5,75,60,20,'night'),
+ (1207,80,5,75,60,20,'night'),
+ (1208,80,5,75,60,20,'night');
 INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUES (1,'default','default_observinglog.txt','default observing log file'),
  (956,'log_956','None','default'),
  (957,'log_957','None','default'),
@@ -2985,11 +3000,17 @@ INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUE
  (1200,'log_1200','None','default'),
  (1201,'log_1201','None','default'),
  (1202,'log_1202','None','default'),
- (1203,'log_1203','None','default');
+ (1203,'log_1203','None','default'),
+ (1204,'log_1204','None','default'),
+ (1205,'log_1205','None','default'),
+ (1206,'log_1206','None','default'),
+ (1207,'log_1207','None','default'),
+ (1208,'log_1208','None','default');
 INSERT INTO "ScienceProgram" ("SCIENCE_PROGRAM_ID","TITLE","STATUS","CONTACT","OBSERVING_TIME","TYPE","DATASET") VALUES (1000,'UT1 science program 2016-2023',0,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
  (1001,'UT1 science program 2024',0,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
- (1002,'UT1 science program 2025',1,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
- (1003,'Spectrum in Cygnus Be stars',1,'dtouzan@gmail.com',0.0,'spectrum','dataset/archives');
+ (1002,'UT1 science program 2025',0,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
+ (1003,'Spectrum in Cygnus Be stars',1,'dtouzan@gmail.com',0.0,'spectrum','dataset/archives'),
+ (1004,'UT1 science program 2026',1,'dtouzan@gmail.com',0.0,'science','dataset/archives');
 INSERT INTO "Sequence" ("OBSERVATION_ID","TITLE","LABEL","TYPE","TIMELINE_MIN","TIMELINE_MAX","COMPOMENT") VALUES (1,'sequence','001','light',58634.9833333333,58634.9868055555,'IR-CUT'),
  (2,'sequence','001','light',57866.8888888889,57866.8993055556,'IR-CUT'),
  (3,'sequence','001','light',57868.8854166667,57868.8958333333,'IR-CUT'),
@@ -4192,7 +4213,12 @@ INSERT INTO "Sequence" ("OBSERVATION_ID","TITLE","LABEL","TYPE","TIMELINE_MIN","
  (1200,'sequence','001','light',61062.9840277778,61062.9944444444,'IR-CUT'),
  (1201,'sequence','001','light',61068.8180555556,61068.8486111111,'IR-CUT'),
  (1202,'sequence','001','light',61068.8895833333,61068.9041666667,'IR-CUT'),
- (1203,'sequence','001','light',61068.7618055556,61068.7875,'IR-CUT');
+ (1203,'sequence','001','light',61068.7618055556,61068.7875,'IR-CUT'),
+ (1204,'sequence','001','light',61095.9833333333,61095.9972222222,'IR-CUT'),
+ (1205,'sequence','001','light',61095.8861111111,61095.9069444444,'IR-CUT'),
+ (1206,'sequence','001','light',61068.9423611111,61068.9576388889,'IR-CUT'),
+ (1207,'sequence','001','light',61095.8138888889,61095.8472222222,'IR-CUT'),
+ (1208,'sequence','001','light',61063.8680555556,61063.8784722222,'IR-CUT');
 INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES (1,'ngc5350','GinPair',208.340096666667,40.3639405555556,'not specified'),
  (2,'9','Asteroid',152.270416666667,19.1741666666667,'not specified'),
  (3,'9','Asteroid',152.47125,18.9888888888889,'not specified'),
@@ -5395,7 +5421,12 @@ INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES
  (1200,'ngc2281','OpenCluster',102.082083333333,41.0430555555556,'Region'),
  (1201,'432','Asteroid',108.81375,30.61,'Asteroid tracking'),
  (1202,'465','Asteroid',114.097916666667,21.9147222222222,'Asteroid tracking'),
- (1203,'1620','Asteroid',116.22375,44.6855555555556,'Asteroid tracking, no find with magnitude');
+ (1203,'1620','Asteroid',116.22375,44.6855555555556,'Asteroid tracking, no find with magnitude'),
+ (1204,'ngc4565','Seyfert2',189.086683333333,25.9873916666667,'Region'),
+ (1205,'m44','OpenCluster',129.993333333333,19.6091666666667,'Region'),
+ (1206,'ngc3184','GtowardsGroup',154.570770833333,41.4243805555556,'Region'),
+ (1207,'ngc2683','AGN',133.17211,33.4218325,'Region'),
+ (1208,'ngc2264','OpenCluster',100.22375,9.87555555555556,'Region');
 CREATE VIEW camera_header AS SELECT data FROM Header WHERE name = 'camera';
 CREATE VIEW collection_select AS SELECT * FROM Collection;
 CREATE VIEW disperser_header AS SELECT data FROM Header WHERE name = 'disperser';

@@ -21,6 +21,7 @@ output_configuration = widgets.Output()
 output_visualisation = widgets.Output()
 
 # 3D line
+# Label
 HR3D = widgets.HTML(value='<P><HR SIZE="2"></P>', placeholder='', description='')
 
 #####################################################################################
@@ -47,17 +48,18 @@ widget_disconnect = widgets.Button(
 # CCD name/IP 
 EAF_ip = ['192.168.1.141',]
 widget_EAF_ip = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(EAF_ip)], value=1, description='EAF IP:')
-EAF_focuser = EAFpy(host=widget_EAF_ip.label, port=7624)
+# EAF
+EAF_focuser = EAFpy(host=widget_EAF_ip.label, port=7624) 
 
 def connect_func(b):
-    with output_ctrl:
-        output_ctrl.clear_output()
+    with output_configuration:
+        output_configuration.clear_output()
         EAF_focuser.CONFIG_LOAD
         EAF_focuser.getprop
         
 def disconnect_func(b):
-    with output_ctrl:
-        output_ctrl.clear_output()
+    with output_configuration:
+        output_configuration.clear_output()
         EAF_focuser.disconnect()
 
 widget_connect.on_click(connect_func)
@@ -140,20 +142,17 @@ widget_delay.observe(delay_change, names='value')
 #
 #####################################################################################             
 # Focuser VBox
-box_connect = widgets.VBox([widget_EAF_ip,
-                            HR3D,
-                            widgets.HBox([widget_connect, widget_disconnect]), 
-                            output_ctrl])
-
-box_configure = widgets.VBox([widgets.HBox([widget_delay, speed_ladel, widget_speed1, widget_speed2]), ])
-
-box_control = widgets.VBox([widgets.HBox([widget_step, widget_up, widget_down]), ])
+box_configure = widgets.VBox( [widgets.HBox([widget_EAF_ip, widget_connect, widget_disconnect]), 
+                               HR3D, 
+                               widgets.HBox([widget_delay, speed_ladel, widget_speed1, widget_speed2]),
+                               widgets.HBox([widget_step, widget_up, widget_down]),
+                               output_configuration, ] )
 
 # Mast Tab
-tab_contents = ['Connect/Disconnect', 'Configuration', 'EAF', ]
+tab_contents = ['EAF', ]
 EAFpy_tabs = widgets.Tab()
-EAFpy_tabs.children = [box_connect, box_configure, box_control]
-EAFpy_tabs.titles = [tab_contents[0], tab_contents[1], tab_contents[2]]
+EAFpy_tabs.children = [box_configure, ]
+EAFpy_tabs.titles = [tab_contents[0], ]
 
 
 

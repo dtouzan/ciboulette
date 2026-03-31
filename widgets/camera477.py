@@ -50,17 +50,18 @@ widget_disconnect = widgets.Button(
 # CCD name/IP 
 ccd_ip = ['192.168.1.10',]
 widget_ccd_ip = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(ccd_ip)], value=1, description='CCD IP:')
+# CCD
 imx477 = imx477Cam(host=widget_ccd_ip.label, port=7624)
 
 def connect_func(b):
-    with output_ctrl:
-        output_ctrl.clear_output()
+    with output_configuration:
+        output_configuration.clear_output()
         imx477.CONFIG_LOAD
         imx477.getprop
         
 def disconnect_func(b):
-    with output_ctrl:
-        output_ctrl.clear_output()
+    with output_configuration:
+        output_configuration.clear_output()
         imx477.disconnect()
 
 
@@ -169,8 +170,8 @@ widget_range = widgets.IntRangeSlider(
 )
 
 def exposure_func(b):
-    with output_visualisation:
-        output_visualisation.clear_output()
+    with output_configuration:
+        output_configuration.clear_output()
         print('Exposure...')
         hdul = imx477.expose(exptime=float(widget_CCD_EXPOSURE.value), exptype=widget_CCD_FRAME_TYPE.value)
         print('Translate...')
@@ -192,24 +193,20 @@ widget_exposure.on_click(exposure_func)
 #
 #####################################################################################             
 # Mast VBox
-box_connect = widgets.VBox([widget_ccd_ip,
-                            HR3D,
-                            widgets.HBox([widget_connect, widget_disconnect]), 
-                            output_ctrl])
-box_configuration = widgets.VBox([widgets.HBox([widget_CCD_CAPTURE_FORMAT,
+box_configure = widgets.VBox([widgets.HBox([widget_ccd_ip, widget_connect, widget_disconnect, widget_properties]),
+                              HR3D,
+                              widgets.HBox([widget_CCD_CAPTURE_FORMAT,
                                                 widget_CCD_BINNING,
                                                 widget_CCD_FRAME_TYPE]),
-                                  widgets.HBox([widget_CCD_EXPOSURE,
+                              widgets.HBox([widget_CCD_EXPOSURE,
                                                 widget_save]), 
-                                  HR3D,
-                                  widget_properties,
-                                  output_configuration, ])
-box_visu = widgets.VBox([widgets.HBox([widget_exposure, widget_range]),
-                         output_visualisation ])
+                              HR3D,
+                              widgets.HBox([widget_exposure, widget_range]),
+                              output_configuration, ])
 
 # Mast Tab
-tab_contents = ['Connect/Disconnect', 'Configuration', 'Visualisation']
+tab_contents = ['CCD', ]
 imx477_tabs = widgets.Tab()
-imx477_tabs.children = [box_connect, box_configuration, box_visu]
-imx477_tabs.titles = [tab_contents[0],tab_contents[1],tab_contents[2], ]
+imx477_tabs.children = [box_configure, ]
+imx477_tabs.titles = [tab_contents[0], ]
 
