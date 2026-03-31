@@ -64,7 +64,7 @@ widget_export.on_click(export_func)
 #####################################################################################
 # Science Programe available
 science_programs = data_interface.scienceprogram_title
-widget_science_program = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(science_programs)], value=3, description='Available:')
+widget_science_program = widgets.Dropdown(options=[(value, i+1) for i, value in enumerate(science_programs)], value=5, description='Available:')
 
 # Valid button
 widget_import = widgets.Button(
