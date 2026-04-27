@@ -1282,14 +1282,19 @@ INSERT INTO "Instrument" ("OBSERVATION_ID","NAME","FILTER","DISPERSER","CAMERA",
  (1208,'UT4','IR-CUT','','uranus-M-imx585',900.0,0.0,1,1,0.085,0.03),
  (1209,'UT1','IR-CUT','','nefertiti3199-imx477',1260.0,0.0,1,1,0.2,0.06),
  (1210,'UT1','IR-CUT','','nefertiti3199-imx477',3240.0,0.0,1,1,0.2,0.06),
- (1211,'UT1','IR-CUT','','nefertiti3199-imx477',1440.0,0.0,1,1,0.2,0.07),
- (1212,'UT1','IR-CUT','','nefertiti3199-imx477',1260.0,0.0,1,1,0.2,0.07),
- (1213,'UT1','IR-CUT','','nefertiti3199-imx477',1500.0,0.0,1,1,0.2,0.07),
+ (1211,'UT1','IR-CUT','','nefertiti3199-imx477',1440.0,0.0,1,1,0.2,0.06),
+ (1212,'UT1','IR-CUT','','nefertiti3199-imx477',1260.0,0.0,1,1,0.2,0.06),
+ (1213,'UT1','IR-CUT','','nefertiti3199-imx477',1500.0,0.0,1,1,0.2,0.06),
  (1214,'UT2','IR-CUT','','taranis5370-imx477',540.0,0.0,1,1,0.085,0.047),
- (1215,'UT1','IR-CUT','','nefertiti3199-imx477',1020.0,0.0,1,1,0.2,0.07),
- (1216,'UT1','IR-CUT','','nefertiti3199-imx477',1920.0,0.0,1,1,0.2,0.07),
- (1217,'UT1','IR-CUT','','nefertiti3199-imx477',1800.0,0.0,1,1,0.2,0.07),
- (1218,'UT2','IR-CUT','','taranis5370-imx477',780.0,0.0,1,1,0.085,0.047);
+ (1215,'UT1','IR-CUT','','nefertiti3199-imx477',1020.0,0.0,1,1,0.2,0.06),
+ (1216,'UT1','IR-CUT','','nefertiti3199-imx477',1920.0,0.0,1,1,0.2,0.06),
+ (1217,'UT1','IR-CUT','','nefertiti3199-imx477',1800.0,0.0,1,1,0.2,0.06),
+ (1218,'UT2','IR-CUT','','taranis5370-imx477',780.0,0.0,1,1,0.085,0.047),
+ (1219,'UT1','IR-CUT','','nefertiti3199-imx477',1500.0,0.0,1,1,0.2,0.06),
+ (1220,'UT1','IR-CUT','','nefertiti3199-imx477',1500.0,0.0,1,1,0.2,0.06),
+ (1221,'UT2','IR-CUT','','taranis5370-imx477',5100.0,0.0,1,1,0.085,0.047),
+ (1222,'UT1','IR-CUT','','nefertiti3199-imx477',1440.0,0.0,1,1,0.2,0.06),
+ (1223,'UT1','IR-CUT','','nefertiti3199-imx477',1440.0,0.0,1,1,0.2,0.06);
 INSERT INTO "Mount" ("NAME","LABEL","LONGITUDE","LATITUDE","ALTITUDE") VALUES ('UT1','AZ-EQ5-GT SynScan GoTo',-0.35,49.35,100.0);
 INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLECTION","PROPOSAL_PI","PRIORITY","STATUS","SCHEDULING","FITS_FILE","NOTE_FILE","CALIBRATION") VALUES (1000,1,'NGC 5350 HII in galaxy in CVn','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2019-05-31T23:36:00','ngc5350-20190531-2336-1x300-f750.fits','fits',1),
  (1000,2,'(9) Metis','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2017-04-23T21:20:00','9-20170423-2120-15x60s-f200.fits','fits',1),
@@ -2508,7 +2513,12 @@ INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLEC
  (1004,1215,'(511) Davida ','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-02-25T22:20:00','511-20260225-2220-17x60s-f200.fits','fits',2),
  (1004,1216,'(508) Princetonia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-03T21:34:00','508-20260303-2134-32x60s-f200.fits','fits',2),
  (1004,1217,'Messier 44 cluster in Cnc','OT_Library_CLUSTER','dtouzan@gmail.com',0,0,'2026-02-24T21:16:00','m44-20260224-2116-60x30s-f200.fits','fits',2),
- (1004,1218,'(1252) Celestia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-03T22:07:00','1252-20260303-2207-26x30s-f85.fits','fits',2);
+ (1004,1218,'(1252) Celestia','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-03T22:07:00','1252-20260303-2207-26x30s-f85.fits','fits',2),
+ (1004,1219,'(2443) Tomeileen','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-04T22:09:00','2443-20260304-2209-25x60s-f200.fits','fits',2),
+ (1004,1220,'(947) Monterosa','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-04T22:09:00','947-20260304-2209-25x60s-f200.fits','fits',2),
+ (1004,1221,'M40 Winnecke 4 stars in UMa','OT_Library_STAR','dtouzan@gmail.com',0,0,'2026-03-04T20:18:00','M40-20260304-2018-85x60s-f85.fits','fits',2),
+ (1004,1222,'(416) Vaticana','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-04T21:13:00','416-20260304-2113-24x60s-f200.fits','fits',2),
+ (1004,1223,'(977) Philippa','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-03-04T19:48:00','977-20260304-1948-24x60s-f200.fits','fits',2);
 INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVER","IMAGE_QUALITY","WATER_VAPOR","ELEVATION_CONSTRAINT","TIMMING_WINDOW") VALUES (1,100,20,100,60,80,'ANY'),
  (956,90,5,90,60,20,'night'),
  (957,90,5,90,60,20,'night'),
@@ -2776,7 +2786,12 @@ INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVE
  (1215,80,5,75,60,20,'night'),
  (1216,80,5,75,60,20,'night'),
  (1217,80,5,75,60,20,'night'),
- (1218,80,5,75,60,20,'night');
+ (1218,80,5,75,60,20,'night'),
+ (1219,80,5,75,60,20,'night'),
+ (1220,80,5,75,60,20,'night'),
+ (1221,80,5,75,60,20,'night'),
+ (1222,80,5,75,60,20,'night'),
+ (1223,80,5,75,60,20,'night');
 INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUES (1,'default','default_observinglog.txt','default observing log file'),
  (956,'log_956','None','default'),
  (957,'log_957','None','default'),
@@ -3045,7 +3060,12 @@ INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUE
  (1215,'log_1215','None','default'),
  (1216,'log_1216','None','default'),
  (1217,'log_1217','None','default'),
- (1218,'log_1218','None','default');
+ (1218,'log_1218','None','default'),
+ (1219,'log_1219','None','default'),
+ (1220,'log_1220','None','default'),
+ (1221,'log_1221','None','default'),
+ (1222,'log_1222','None','default'),
+ (1223,'log_1223','None','default');
 INSERT INTO "ScienceProgram" ("SCIENCE_PROGRAM_ID","TITLE","STATUS","CONTACT","OBSERVING_TIME","TYPE","DATASET") VALUES (1000,'UT1 science program 2016-2023',0,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
  (1001,'UT1 science program 2024',0,'dtouzan@gmail.com',2.46,'science','dataset/archives'),
  (1002,'UT1 science program 2025',0,'dtouzan@gmail.com',3.81,'science','dataset/archives'),
@@ -4268,7 +4288,12 @@ INSERT INTO "Sequence" ("OBSERVATION_ID","TITLE","LABEL","TYPE","TIMELINE_MIN","
  (1215,'sequence','001','light',61096.9305555556,61096.9423611111,'IR-CUT'),
  (1216,'sequence','001','light',61102.8986111111,61102.9208333333,'IR-CUT'),
  (1217,'sequence','001','light',61095.8861111111,61095.9069444444,'IR-CUT'),
- (1218,'sequence','001','light',61102.9215277778,61102.9305555556,'IR-CUT');
+ (1218,'sequence','001','light',61102.9215277778,61102.9305555556,'IR-CUT'),
+ (1219,'sequence','001','light',61103.9229166667,61103.9402777778,'IR-CUT'),
+ (1220,'sequence','001','light',61103.9229166667,61103.9402777778,'IR-CUT'),
+ (1221,'sequence','001','light',61103.8458333333,61103.9048611111,'IR-CUT'),
+ (1222,'sequence','001','light',61103.8840277778,61103.9006944444,'IR-CUT'),
+ (1223,'sequence','001','light',61103.825,61103.8416666667,'IR-CUT');
 INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES (1,'ngc5350','GinPair',208.340096666667,40.3639405555556,'not specified'),
  (2,'9','Asteroid',152.270416666667,19.1741666666667,'not specified'),
  (3,'9','Asteroid',152.47125,18.9888888888889,'not specified'),
@@ -5486,7 +5511,12 @@ INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES
  (1215,'511','Asteroid',163.0275,26.7016666666667,'Asteroid tracking'),
  (1216,'508','Asteroid',164.064583333333,25.8733333333333,'Asteroid tracking'),
  (1217,'m44','OpenCluster',129.993333333333,19.6091666666667,'Region'),
- (1218,'1252','Asteroid',173.35125,29.5313888888889,'Asteroid tracking');
+ (1218,'1252','Asteroid',173.35125,29.5313888888889,'Asteroid tracking'),
+ (1219,'2443','Asteroid',148.47,22.3525,'Asteroid tracking'),
+ (1220,'947','Asteroid',148.7675,22.88,'Asteroid tracking'),
+ (1221,'M40','Unknown',185.55,58.0833333333333,'Region'),
+ (1222,'416','Asteroid',165.140416666667,27.4741666666667,'Asteroid tracking'),
+ (1223,'977','Asteroid',169.897083333333,28.5066666666667,'Asteroid tracking');
 CREATE VIEW camera_header AS SELECT data FROM Header WHERE name = 'camera';
 CREATE VIEW collection_select AS SELECT * FROM Collection;
 CREATE VIEW disperser_header AS SELECT data FROM Header WHERE name = 'disperser';
