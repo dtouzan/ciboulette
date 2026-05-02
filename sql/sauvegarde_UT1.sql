@@ -1332,7 +1332,10 @@ INSERT INTO "Instrument" ("OBSERVATION_ID","NAME","FILTER","DISPERSER","CAMERA",
  (1258,'UT2','IR-CUT','','taranis5370-imx477',4080.0,0.0,1,1,0.085,0.047),
  (1259,'UT2','IR-CUT','','taranis5370-imx477',1140.0,0.0,1,1,0.085,0.047),
  (1260,'UT2','IR-CUT','','taranis5370-imx477',780.0,0.0,1,1,0.085,0.047),
- (1261,'UT4','IR-CUT','','uranus-M-imx585',900.0,0.0,1,1,0.085,0.03);
+ (1261,'UT4','IR-CUT','','uranus-M-imx585',900.0,0.0,1,1,0.085,0.03),
+ (1262,'UT1','IR-CUT','','nefertiti3199-imx477',2880.0,0.0,1,1,0.2,0.06),
+ (1263,'UT2','IR-CUT','','taranis5370-imx477',3420.0,0.0,1,1,0.085,0.047),
+ (1264,'UT1','IR-CUT','','nefertiti3199-imx477',3300.0,0.0,1,1,0.2,0.06);
 INSERT INTO "Mount" ("NAME","LABEL","LONGITUDE","LATITUDE","ALTITUDE") VALUES ('UT1','AZ-EQ5-GT SynScan GoTo',-0.35,49.35,100.0);
 INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLECTION","PROPOSAL_PI","PRIORITY","STATUS","SCHEDULING","FITS_FILE","NOTE_FILE","CALIBRATION") VALUES (1000,1,'NGC 5350 HII in galaxy in CVn','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2019-05-31T23:36:00','ngc5350-20190531-2336-1x300-f750.fits','fits',1),
  (1000,2,'(9) Metis','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2017-04-23T21:20:00','9-20170423-2120-15x60s-f200.fits','fits',1),
@@ -2594,7 +2597,10 @@ INSERT INTO "Observation" ("SCIENCE_PROGRAM_ID","OBSERVATION_ID","TITLE","COLLEC
  (1004,1258,'(511) Davida','OT_Library_ASTEROID','dtouzan@gmail.com',0,0,'2026-04-13T20:15:00','511-20260413-2015-68x60s-f85.fits','fits',2),
  (1004,1259,'(T CrB) hd143454 star in CrB','OT_Library_VARIABLE','dtouzan@gmail.com',0,0,'2026-04-13T22:07:00','hd143454-20260413-2207-19x60s-f85.fits','fits',2),
  (1004,1260,'NGC 2683 galaxy in Lyn','OT_Library_GALAXY','dtouzan@gmail.com',0,0,'2026-04-07T20:39:00','ngc2683-20260407-2039-13x60s-f85.fits','fits',2),
- (1004,1261,'(T CrB) hd143454 star in CrB','OT_Library_VARIABLE','dtouzan@gmail.com',0,0,'2026-04-08T23:02:00','hd143454-20260408-2302-15x60s-f85.fits','fits',2);
+ (1004,1261,'(T CrB) hd143454 star in CrB','OT_Library_VARIABLE','dtouzan@gmail.com',0,0,'2026-04-08T23:02:00','hd143454-20260408-2302-15x60s-f85.fits','fits',2),
+ (1004,1262,'SN 2026fvx supernova in NGC4204 in Dra','OT_Library_SUPERNOVA','dtouzan@gmail.com',0,0,'2026-04-13T20:00:00','sn2026fvx-20260413-2000-48x60s-f200.fits','fits',2),
+ (1004,1263,'SN 2026fvx supernova in NGC4204 in Dra','OT_Library_SUPERNOVA','dtouzan@gmail.com',0,0,'2026-04-11T20:09:00','sn2026fvx-20260411-2009-57x60s-f85.fits','fits',2),
+ (1004,1264,'SN 2026fvx supernova in NGC4204 in Dra','OT_Library_SUPERNOVA','dtouzan@gmail.com',0,0,'2026-04-11T20:28:00','sn2026fvx-20260411-2028-55x60s-f200.fits','fits',2);
 INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVER","IMAGE_QUALITY","WATER_VAPOR","ELEVATION_CONSTRAINT","TIMMING_WINDOW") VALUES (1,100,20,100,60,80,'ANY'),
  (956,90,5,90,60,20,'night'),
  (957,90,5,90,60,20,'night'),
@@ -2906,7 +2912,10 @@ INSERT INTO "ObservingConditions" ("OBSERVATION_ID","SKY_BACKGROUND","CLOUD_COVE
  (1258,80,5,75,60,20,'night'),
  (1259,80,5,75,60,20,'night'),
  (1260,80,5,75,60,20,'night'),
- (1261,80,5,75,60,20,'night');
+ (1261,80,5,75,60,20,'night'),
+ (1262,80,5,75,60,20,'night'),
+ (1263,80,5,75,60,20,'night'),
+ (1264,80,5,75,60,20,'night');
 INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUES (1,'default','default_observinglog.txt','default observing log file'),
  (956,'log_956','None','default'),
  (957,'log_957','None','default'),
@@ -3219,7 +3228,10 @@ INSERT INTO "ObservingLog" ("OBSERVATION_ID","LABEL","FILENAME","COMMENT") VALUE
  (1258,'log_1258','None','default'),
  (1259,'log_1259','None','default'),
  (1260,'log_1260','None','default'),
- (1261,'log_1261','None','default');
+ (1261,'log_1261','None','default'),
+ (1262,'log_1262','None','default'),
+ (1263,'log_1263','None','default'),
+ (1264,'log_1264','None','default');
 INSERT INTO "ScienceProgram" ("SCIENCE_PROGRAM_ID","TITLE","STATUS","CONTACT","OBSERVING_TIME","TYPE","DATASET") VALUES (1000,'UT1 science program 2016-2023',0,'dtouzan@gmail.com',0.0,'science','dataset/archives'),
  (1001,'UT1 science program 2024',0,'dtouzan@gmail.com',2.46,'science','dataset/archives'),
  (1002,'UT1 science program 2025',0,'dtouzan@gmail.com',3.81,'science','dataset/archives'),
@@ -4485,7 +4497,10 @@ INSERT INTO "Sequence" ("OBSERVATION_ID","TITLE","LABEL","TYPE","TIMELINE_MIN","
  (1258,'sequence','001','light',61143.84375,61143.8909722222,'IR-CUT'),
  (1259,'sequence','001','light',61143.9215277778,61143.9347222222,'IR-CUT'),
  (1260,'sequence','001','light',61137.8604166667,61137.8694444444,'IR-CUT'),
- (1261,'sequence','001','light',61138.9597222222,61138.9701388889,'IR-CUT');
+ (1261,'sequence','001','light',61138.9597222222,61138.9701388889,'IR-CUT'),
+ (1262,'sequence','001','light',61143.8333333333,61143.8666666667,'IR-CUT'),
+ (1263,'sequence','001','light',61141.8395833333,61141.8791666667,'IR-CUT'),
+ (1264,'sequence','001','light',61141.8527777778,61141.8909722222,'IR-CUT');
 INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES (1,'ngc5350','GinPair',208.340096666667,40.3639405555556,'not specified'),
  (2,'9','Asteroid',152.270416666667,19.1741666666667,'not specified'),
  (3,'9','Asteroid',152.47125,18.9888888888889,'not specified'),
@@ -5746,7 +5761,10 @@ INSERT INTO "Target" ("OBSERVATION_ID","NAME","CLASS","RA","DEC","NOTES") VALUES
  (1258,'511','Asteroid',156.794583333333,28.5036111111111,'Asteroid tracking'),
  (1259,'hd143454','Symbiotic*',239.875675833333,25.9201702777778,'Variable tracking'),
  (1260,'ngc2683','AGN',133.17211,33.4218325,'Region'),
- (1261,'hd143454','Symbiotic*',239.875675833333,25.9201702777778,'Variable tracking');
+ (1261,'hd143454','Symbiotic*',239.875675833333,25.9201702777778,'Variable tracking'),
+ (1262,'sn2026fvx','Supernova',183.7316,63.7827555555556,'Supernova report'),
+ (1263,'sn2026fvx','Supernova',183.7316,63.7827555555556,'Supernova report'),
+ (1264,'sn2026fvx','Supernova',183.7316,63.7827555555556,'Supernova report');
 CREATE VIEW camera_header AS SELECT data FROM Header WHERE name = 'camera';
 CREATE VIEW collection_select AS SELECT * FROM Collection;
 CREATE VIEW disperser_header AS SELECT data FROM Header WHERE name = 'disperser';
